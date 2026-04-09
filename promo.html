@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Promo | Farmacia Montesano</title>
   <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="mobile.css" />
-  
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
   <style>
     .promo-page{
-  max-width:1200px;
-  margin:auto;
-  padding:18px 18px 120px;
-}
+      max-width:1200px;
+      margin:auto;
+      padding:18px 18px 120px;
+    }
 
     .promo-intro{
       text-align:center;
@@ -32,7 +34,6 @@
       color:#5c6d67;
     }
 
-    /* HERO FLASH */
     .flash-hero{
       display:grid;
       grid-template-columns:1.15fr 1fr;
@@ -163,7 +164,6 @@
       transform:translateY(-1px);
     }
 
-    /* MINI CAROSELLO */
     .promo-strip-wrap{
       margin-bottom:34px;
     }
@@ -189,15 +189,15 @@
     }
 
     .promo-strip{
-  display:flex;
-  gap:14px;
-  overflow-x:auto;
-  padding-bottom:8px;
-  scroll-snap-type:none;
-  -webkit-overflow-scrolling:touch;
-  scroll-behavior:auto;
-}
-    
+      display:flex;
+      gap:14px;
+      overflow-x:auto;
+      padding-bottom:8px;
+      scroll-snap-type:none;
+      -webkit-overflow-scrolling:touch;
+      scroll-behavior:auto;
+    }
+
     .promo-strip::-webkit-scrollbar{
       height:8px;
     }
@@ -271,7 +271,6 @@
       color:#d62828;
     }
 
-    /* TITOLI SEZIONI */
     .promo-section{
       margin-top:34px;
     }
@@ -296,7 +295,6 @@
       color:#688078;
     }
 
-    /* STAGIONALI */
     .seasonal-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -376,11 +374,14 @@
       flex-wrap:wrap;
     }
 
-    /* MESE */
     .month-grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:22px;
+    }
+
+    #offerte-container{
+      display:contents;
     }
 
     .month-card{
@@ -503,6 +504,61 @@
       font-size:16px;
       font-weight:800;
       text-decoration:none;
+    }
+
+    .empty-state{
+      grid-column:1/-1;
+      text-align:center;
+      padding:50px 25px;
+      border-radius:22px;
+      background:linear-gradient(135deg,#f6faf8 0%,#ffffff 100%);
+      border:1px solid #e3efe9;
+      box-shadow:0 14px 32px rgba(0,0,0,0.06);
+      animation:fadeEmpty .5s ease;
+    }
+
+    .empty-icon{
+      font-size:42px;
+      margin-bottom:12px;
+    }
+
+    .empty-state h3{
+      margin:0 0 8px;
+      font-size:24px;
+      font-weight:800;
+      color:#17332c;
+    }
+
+    .empty-state p{
+      margin:0 0 18px;
+      color:#62766f;
+      font-size:15px;
+      min-height:auto;
+    }
+
+    .empty-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:0 18px;
+      border-radius:12px;
+      background:#25D366;
+      color:#fff;
+      font-weight:800;
+      box-shadow:0 10px 20px rgba(37,211,102,0.25);
+      text-decoration:none;
+    }
+
+    @keyframes fadeEmpty{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
     }
 
     @media (max-width: 900px){
@@ -741,84 +797,29 @@
         font-size:15px;
       }
     }
-    .empty-state{
-  grid-column:1/-1;
-  text-align:center;
-  padding:50px 25px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#f6faf8 0%,#ffffff 100%);
-  border:1px solid #e3efe9;
-  box-shadow:0 14px 32px rgba(0,0,0,0.06);
-  animation:fadeEmpty .5s ease;
-}
-
-.empty-icon{
-  font-size:42px;
-  margin-bottom:12px;
-}
-
-.empty-state h3{
-  margin:0 0 8px;
-  font-size:24px;
-  font-weight:800;
-  color:#17332c;
-}
-
-.empty-state p{
-  margin:0 0 18px;
-  color:#62766f;
-  font-size:15px;
-}
-
-.empty-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:44px;
-  padding:0 18px;
-  border-radius:12px;
-  background:#25D366;
-  color:#fff;
-  font-weight:800;
-  box-shadow:0 10px 20px rgba(37,211,102,0.25);
-}
-
-@keyframes fadeEmpty{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
   </style>
 
-  <link rel="stylesheet" href="mobile-only.css" />
-  <link rel="stylesheet" href="app-fixes.css" />
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f8f55">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Montesano">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 </head>
+
 <body class="season-primavera">
   <header class="home-site-header">
-  <div class="home-shell home-nav-wrap">
-    <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
-      <div class="home-brand-logo-box">
-        <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
-      </div>
-    </a>
-  </div>
-</header>
-  
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+    </div>
+  </header>
+
   <div class="promo-page">
     <div class="page-topbar">
       <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="page-back-btn" aria-label="Torna alla home"><span>←</span></a>
@@ -828,7 +829,6 @@
       </div>
     </div>
 
-    <!-- HERO FLASH -->
     <section class="flash-hero">
       <div class="flash-hero-media">
         <img src="promo-flash.jpg" alt="Occasione flash Farmacia Montesano">
@@ -858,7 +858,6 @@
       </div>
     </section>
 
-    <!-- STRIP ORIZZONTALE -->
     <section class="promo-strip-wrap">
       <div class="promo-strip-head">
         <h3>Scorri le occasioni</h3>
@@ -928,7 +927,6 @@
       </div>
     </section>
 
-    <!-- STAGIONALI -->
     <section class="promo-section">
       <div class="promo-section-title">
         <h3>Promo stagionali</h3>
@@ -936,7 +934,6 @@
       </div>
 
       <div class="seasonal-grid">
-
         <article class="seasonal-card">
           <img src="promo-stagionale-1.jpg" alt="Promo stagionale pelle">
           <div class="seasonal-card-content">
@@ -970,128 +967,121 @@
             </div>
           </div>
         </article>
-
       </div>
     </section>
 
-   
-  /* PROMO STAGIONALI */
-  const seasonalGrid = document.querySelector(".seasonal-grid");
-  const seasonalSection = seasonalGrid ? seasonalGrid.closest(".promo-section") : null;
+    <section class="promo-section">
+      <div class="promo-section-title">
+        <h3>Offerte del mese</h3>
+        <p>Una selezione ordinata delle promozioni attive in farmacia.</p>
+      </div>
+      <div class="month-grid">
+        <div id="offerte-container"></div>
+      </div>
+    </section>
 
-  if(seasonalGrid){
-    if(stagionali.length === 0){
-      if(seasonalSection) seasonalSection.style.display = "none";
-    } else {
-      seasonalGrid.innerHTML = "";
+    <div class="promo-final-box">
+      <h3>Vuoi sapere se una promo è disponibile?</h3>
+      <p>Contattaci subito su WhatsApp e ti rispondiamo velocemente.</p>
+      <a href="https://wa.me/393927737079">Apri WhatsApp</a>
+    </div>
+  </div>
 
-      stagionali.forEach(promo => {
-        seasonalGrid.innerHTML += `
-          <article class="seasonal-card">
-            <img src="${promo.immagine || promo.img || ""}" alt="${promo.titolo || ""}">
-            <div class="seasonal-card-content">
-              <span class="seasonal-badge">${promo.badge || "PROMO"}</span>
-              <h4>${promo.titolo || ""}</h4>
-              <p>${promo.descrizione || ""}</p>
-              <div class="seasonal-price">
-                <span class="seasonal-old">${promo.prezzoVecchio || ""}</span>
-                <span class="seasonal-new">${promo.prezzoNuovo || ""}</span>
-              </div>
-              <div class="seasonal-actions">
-                <a href="https://wa.me/393927737079" class="flash-btn primary">WhatsApp</a>
-                <a href="#" class="flash-btn secondary">Scopri</a>
-              </div>
-            </div>
-          </article>
-        `;
+  <script src="site-config.js"></script>
+  <script src="services-data.js"></script>
+  <script src="giornate-data.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
       });
     }
-  }
+  </script>
 
-  /* OFFERTE DEL MESE */
-  const monthGrid = document.querySelector(".month-grid");
-  const monthSection = monthGrid ? monthGrid.closest(".promo-section") : null;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  if(monthGrid){
-    if(mesePromo.length === 0){
-      if(monthSection){
-        const title = monthSection.querySelector(".promo-section-title");
-        if(title) title.style.display = "none";
-      }
-      showEmptyPromoMessage(monthGrid);
-    } else {
-      monthGrid.innerHTML = "";
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
 
-      mesePromo.forEach(promo => {
-        monthGrid.innerHTML += `
-          <article class="month-card">
-            <img src="${promo.immagine || promo.img || ""}" alt="${promo.titolo || ""}">
-            <div class="month-card-content">
-              <span class="month-badge">${promo.badge || "OFFERTA"}</span>
-              <h4>${promo.titolo || ""}</h4>
-              <p>${promo.descrizione || ""}</p>
-              <div class="month-price">
-                <span class="month-old">${promo.prezzoVecchio || ""}</span>
-                <span class="month-new">${promo.prezzoNuovo || ""}</span>
-              </div>
-              <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-            </div>
-          </article>
-        `;
-      });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function showEmptyPromoMessage(container) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🎁</div>
+          <h3>Al momento non ci sono promozioni attive</h3>
+          <p>
+            Le nuove promozioni saranno disponibili a breve.
+            Torna presto oppure contattaci per informazioni.
+          </p>
+          <a href="https://wa.me/393927737079" class="empty-btn">
+            Scrivici su WhatsApp
+          </a>
+        </div>
+      `;
     }
-  }
-});
-</script>
 
-<script src="mobile-only.js"></script>
-<script src="app-fixes.js"></script>
+    async function caricaOfferte() {
+      const container = document.getElementById("offerte-container");
+      if (!container) return;
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js");
-  });
-}
-</script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      container.innerHTML = "";
 
-  const firebaseConfig = {
-  apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-  authDomain: "farmaciamontesano.firebaseapp.com",
-  projectId: "farmaciamontesano",
-  storageBucket: "farmaciamontesano.firebasestorage.app",
-  messagingSenderId: "881461241551",
-  appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
-};
+      try {
+        const querySnapshot = await getDocs(collection(db, "offers"));
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+        if (querySnapshot.empty) {
+          showEmptyPromoMessage(container);
+          return;
+        }
 
-  async function caricaOfferte() {
-    const querySnapshot = await getDocs(collection(db, "offers"));
-    const container = document.getElementById("offerte-container");
+        let html = "";
 
-    container.innerHTML = "";
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
+          if (data.attiva === true) {
+            html += `
+              <article class="month-card">
+                <div class="month-card-content">
+                  <span class="month-badge">OFFERTA</span>
+                  <h4>${data.nome || ""}</h4>
+                  <div class="month-price">
+                    <span class="month-old">€${data.prezzoPrima ?? ""}</span>
+                    <span class="month-new">€${data.prezzoOra ?? ""}</span>
+                  </div>
+                  <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
+                </div>
+              </article>
+            `;
+          }
+        });
 
-      if (true) {
-        container.innerHTML += `
-          <div style="background:white;padding:20px;margin:10px;border-radius:10px;">
-            <h2>${data.nome}</h2>
-            <p><del>${data.prezzoPrima}€</del></p>
-            <p style="color:red;font-size:20px;">${data.prezzoOra}€</p>
-          </div>
-        `;
+        if (html.trim() === "") {
+          showEmptyPromoMessage(container);
+        } else {
+          container.innerHTML = html;
+        }
+      } catch (error) {
+        console.error("Errore caricamento offerte:", error);
+        showEmptyPromoMessage(container);
       }
-    });
-  }
+    }
 
-  caricaOfferte();
-</script>
+    caricaOfferte();
+  </script>
 </body>
 </html>
