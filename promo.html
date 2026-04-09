@@ -980,93 +980,9 @@
         <h3>Offerte del mese</h3>
         <p>Una selezione ordinata delle promozioni attive in farmacia.</p>
       </div>
-
-      <div class="month-grid">
-
-        <article class="month-card">
-          <img src="promo1.jpg" alt="Integratore energia">
-          <div class="month-card-content">
-            <span class="month-badge">OFFERTA</span>
-            <h4>Integratore energia</h4>
-            <p>Supporto utile nei periodi di stanchezza e cambio stagione.</p>
-            <div class="month-price">
-              <span class="month-old">€19,90</span>
-              <span class="month-new">€14,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
-        <article class="month-card">
-          <img src="promo2.jpg" alt="Crema viso">
-          <div class="month-card-content">
-            <span class="month-badge">PELLE</span>
-            <h4>Crema viso</h4>
-            <p>Ideale per idratare e proteggere la pelle ogni giorno.</p>
-            <div class="month-price">
-              <span class="month-old">€24,90</span>
-              <span class="month-new">€18,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
-        <article class="month-card">
-          <img src="promo3.jpg" alt="Fermenti lattici">
-          <div class="month-card-content">
-            <span class="month-badge">INTESTINO</span>
-            <h4>Fermenti lattici</h4>
-            <p>Aiuto quotidiano per equilibrio intestinale e benessere digestivo.</p>
-            <div class="month-price">
-              <span class="month-old">€16,50</span>
-              <span class="month-new">€11,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
-        <article class="month-card">
-          <img src="promo4.jpg" alt="Solare">
-          <div class="month-card-content">
-            <span class="month-badge">ESTATE</span>
-            <h4>Solare alta protezione</h4>
-            <p>Protezione quotidiana per viso e corpo durante l’esposizione al sole.</p>
-            <div class="month-price">
-              <span class="month-old">€22,00</span>
-              <span class="month-new">€16,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
-        <article class="month-card">
-          <img src="promo5.jpg" alt="Shampoo anticaduta">
-          <div class="month-card-content">
-            <span class="month-badge">CAPELLI</span>
-            <h4>Shampoo anticaduta</h4>
-            <p>Formula studiata per capelli fragili e soggetti a caduta stagionale.</p>
-            <div class="month-price">
-              <span class="month-old">€18,90</span>
-              <span class="month-new">€13,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
-        <article class="month-card">
-          <img src="promo6.jpg" alt="Vitamina C">
-          <div class="month-card-content">
-            <span class="month-badge">DIFESE</span>
-            <h4>Vitamina C</h4>
-            <p>Aiuto pratico per sostenere le difese dell’organismo.</p>
-            <div class="month-price">
-              <span class="month-old">€12,90</span>
-              <span class="month-new">€8,90</span>
-            </div>
-            <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
-          </div>
-        </article>
-
+     <div class="month-grid">
+  <div id="offerte-container"></div>
+</div>
       </div>
     </section>
 
@@ -1082,7 +998,49 @@
 <script src="promo-data.js"></script>
 <script src="giornate-data.js"></script>
 <script src="script.js"></script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "QUI_METTI_APIKEY",
+    authDomain: "QUI_METTI_AUTHDOMAIN",
+    projectId: "QUI_METTI_PROJECTID",
+    storageBucket: "QUI_METTI_BUCKET",
+    messagingSenderId: "QUI_METTI_ID",
+    appId: "QUI_METTI_APPID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function caricaOfferte() {
+    const container = document.getElementById("offerte-container");
+    container.innerHTML = "";
+
+    const querySnapshot = await getDocs(collection(db, "offers"));
+
+    querySnapshot.forEach((doc) => {
+      const promo = doc.data();
+
+      container.innerHTML += `
+        <article class="month-card">
+          <div class="month-card-content">
+            <span class="month-badge">OFFERTA</span>
+            <h4>${promo.nome}</h4>
+            <div class="month-price">
+              <span class="month-old">€${promo.prezzoPrima}</span>
+              <span class="month-new">€${promo.prezzoOra}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    });
+  }
+
+  caricaOfferte();
+</script>
+  
 <script>
 function showEmptyPromoMessage(container){
   container.innerHTML = `
@@ -1262,6 +1220,44 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+  const firebaseConfig = {
+  apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+  authDomain: "farmaciamontesano.firebaseapp.com",
+  projectId: "farmaciamontesano",
+  storageBucket: "farmaciamontesano.firebasestorage.app",
+  messagingSenderId: "881461241551",
+  appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function caricaOfferte() {
+    const querySnapshot = await getDocs(collection(db, "offers"));
+    const container = document.getElementById("offerte-container");
+
+    container.innerHTML = "";
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      if (data.attiva) {
+        container.innerHTML += `
+          <div style="background:white;padding:20px;margin:10px;border-radius:10px;">
+            <h2>${data.nome}</h2>
+            <p><del>${data.prezzoPrima}€</del></p>
+            <p style="color:red;font-size:20px;">${data.prezzoOra}€</p>
+          </div>
+        `;
+      }
+    });
+  }
+
+  caricaOfferte();
+</script>
 </body>
 </html>
