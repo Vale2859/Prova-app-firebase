@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Servizi | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="mobile.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --green:#0d7a5f;
+      --green-dark:#085a46;
+      --green-soft:#eaf7f2;
+      --blue-soft:#eef5fb;
+      --peach-soft:#fff4ee;
+      --text:#17332c;
+      --text-soft:#62766f;
+      --white:#ffffff;
+      --border:#e4ede8;
+      --shadow:0 18px 40px rgba(0,0,0,0.08);
+      --shadow-soft:0 10px 24px rgba(0,0,0,0.06);
+    }
+
+    *{ box-sizing:border-box; }
+
+    html{ scroll-behavior:smooth; }
+
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, #f8fcfa 0%, #ffffff 42%),
+        linear-gradient(180deg,#fbfffd 0%,#f2f9f6 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    img{
+      max-width:100%;
+      display:block;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+  .page-shell{
+  width:min(1180px, 94%);
+  margin:0 auto;
+  padding:34px 0 80px;
+  position:relative;
+  z-index:2;
+}
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(70px);
+      opacity:.20;
+      pointer-events:none;
+      z-index:0;
+      animation:floatOrb 11s ease-in-out infinite alternate;
+    }
+
+    .bg-orb.orb-1{
+      width:260px;
+      height:260px;
+      top:60px;
+      left:-90px;
+      background:#93d8be;
+    }
+
+    .bg-orb.orb-2{
+      width:220px;
+      height:220px;
+      top:260px;
+      right:-70px;
+      background:#b7d8ff;
+      animation-duration:13s;
+    }
+
+    .bg-orb.orb-3{
+      width:200px;
+      height:200px;
+      bottom:40px;
+      left:10%;
+      background:#ffd7bf;
+      animation-duration:15s;
+    }
+
+    .page-kicker{
+      text-align:center;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#71857d;
+      margin-bottom:12px;
+    }
+
+    .hero-top{
+      border-radius:30px;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(13,122,95,0.97) 0%, rgba(38,155,122,0.93) 58%, rgba(107,194,165,0.88) 100%);
+      color:#fff;
+      box-shadow:0 24px 56px rgba(13,122,95,0.18);
+      padding:24px 22px;
+      margin-bottom:18px;
+      position:relative;
+    }
+
+    .hero-top::before{
+      content:"";
+      position:absolute;
+      top:-40px;
+      right:-30px;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .hero-copy h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 3vw, 3rem);
+      line-height:.96;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .hero-copy p{
+      margin:0;
+      max-width:650px;
+      font-size:.98rem;
+      line-height:1.55;
+      color:rgba(255,255,255,0.90);
+      font-weight:500;
+    }
+
+    .hero-side{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .hero-mini-panel{
+      width:100%;
+      max-width:360px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:16px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+
+    .hero-mini-label{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:30px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.18);
+      font-size:.74rem;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+
+    .hero-mini-title{
+      font-size:1.2rem;
+      line-height:1.05;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .hero-mini-sub{
+      color:rgba(255,255,255,0.86);
+      font-size:.92rem;
+      line-height:1.45;
+      font-weight:500;
+    }
+
+    .focus-card{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:0;
+      border-radius:28px;
+      overflow:hidden;
+      background:linear-gradient(135deg,#fff7f2 0%,#ffffff 34%,#fef6ef 100%);
+      border:1px solid #f0e5db;
+      box-shadow:var(--shadow);
+      margin-bottom:24px;
+    }
+
+    .focus-copy{
+      padding:24px 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .focus-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      min-height:34px;
+      padding:7px 14px;
+      border-radius:999px;
+      background:#fbe6d9;
+      color:#8c4f2f;
+      font-size:.76rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .focus-copy h2{
+      margin:0 0 10px;
+      font-size:clamp(1.8rem, 2.5vw, 2.5rem);
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .focus-copy p{
+      margin:0 0 14px;
+      color:var(--text-soft);
+      font-size:.98rem;
+      line-height:1.5;
+      font-weight:500;
+    }
+
+    .focus-info{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .focus-pill{
+      min-height:36px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #efe4d9;
+      font-size:.84rem;
+      font-weight:700;
+      color:#5a685f;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .focus-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .focus-btn{
+      min-height:50px;
+      padding:0 18px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.94rem;
+      font-weight:800;
+      transition:transform .2s ease;
+    }
+
+    .focus-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .focus-btn.primary{
+      background:linear-gradient(135deg,#0d7a5f 0%, #219574 100%);
+      color:#fff;
+    }
+
+    .focus-btn.secondary{
+      background:#fff;
+      color:#17332c;
+      border:1px solid #eadfd5;
+    }
+
+    .focus-media{
+      min-height:300px;
+      background:#f6f1eb;
+    }
+
+    .focus-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .section{
+      margin-top:26px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(1.45rem, 2vw, 1.95rem);
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.92rem;
+      font-weight:600;
+      text-align:right;
+    }
+
+    .mixed-grid{
+      display:grid;
+      grid-template-columns:repeat(12, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 38px rgba(0,0,0,0.10);
+    }
+
+    .card.big{
+      grid-column:span 6;
+    }
+
+    .card.medium{
+      grid-column:span 3;
+    }
+
+    .card.wide{
+      grid-column:span 4;
+    }
+
+    .card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+      background:#f4f6f5;
+    }
+
+    .card.big img{
+      height:210px;
+    }
+
+    .card-body{
+      padding:16px;
+    }
+
+    .card-tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:28px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#eef8f4;
+      color:var(--green-dark);
+      font-size:.72rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-size:1.18rem;
+      line-height:1.08;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .card.big h3{
+      font-size:1.4rem;
+    }
+
+    .card p{
+      margin:0 0 12px;
+      color:var(--text-soft);
+      font-size:.92rem;
+      line-height:1.45;
+      font-weight:500;
+    }
+
+    .card-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .card-meta span{
+      min-height:32px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#f7fbf9;
+      border:1px solid #e7efe9;
+      font-size:.78rem;
+      font-weight:700;
+      color:#4f655d;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .card-btn{
+      width:100%;
+      min-height:42px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.90rem;
+      font-weight:800;
+      background:linear-gradient(135deg,#0d7a5f 0%, #219574 100%);
+      color:#fff;
+    }
+
+    .compact-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .compact-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:var(--shadow-soft);
+      padding:16px;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+
+    .compact-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 18px 30px rgba(0,0,0,0.10);
+    }
+
+    .compact-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:var(--green-soft);
+      display:grid;
+      place-items:center;
+      font-size:1.1rem;
+      margin-bottom:10px;
+    }
+
+    .compact-card h3{
+      margin:0 0 6px;
+      font-size:1rem;
+      line-height:1.1;
+      font-weight:900;
+    }
+
+    .compact-card p{
+      margin:0 0 10px;
+      color:var(--text-soft);
+      font-size:.86rem;
+      line-height:1.4;
+      font-weight:500;
+    }
+
+    .compact-btn{
+      width:100%;
+      min-height:38px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.84rem;
+      font-weight:800;
+      background:#f3faf7;
+      color:#17332c;
+      border:1px solid #dfece7;
+    }
+
+    .final-box{
+      margin-top:30px;
+      padding:22px 20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#f3faf7 0%,#ffffff 100%);
+      border:1px solid #dfece7;
+      box-shadow:var(--shadow-soft);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .final-box h3{
+      margin:0 0 8px;
+      font-size:1.5rem;
+      line-height:1.05;
+      font-weight:900;
+    }
+
+    .final-box p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.95rem;
+      line-height:1.5;
+      font-weight:500;
+      max-width:700px;
+    }
+
+    .final-btn{
+      min-height:52px;
+      padding:0 18px;
+      border-radius:14px;
+      background:#25D366;
+      color:#fff;
+      font-size:.94rem;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      box-shadow:0 14px 26px rgba(37,211,102,0.20);
+    }
+
+    @keyframes floatOrb{
+      from{ transform:translateY(0) translateX(0) scale(1); }
+      to{ transform:translateY(-24px) translateX(18px) scale(1.08); }
+    }
+
+    @media (max-width: 1000px){
+      .hero-grid,
+      .focus-card{
+        grid-template-columns:1fr;
+      }
+
+      .hero-side{
+        justify-content:flex-start;
+      }
+
+      .card.big{
+        grid-column:span 12;
+      }
+
+      .card.medium{
+        grid-column:span 6;
+      }
+
+      .card.wide{
+        grid-column:span 6;
+      }
+
+      .compact-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .section-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .section-head p{
+        text-align:left;
+      }
+
+      .final-box{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+
+    @media (max-width: 640px){
+      .page-shell{
+        width:100%;
+        padding:18px 12px 70px;
+      }
+
+      .hero-top{
+        padding:20px 16px 16px;
+        border-radius:24px;
+      }
+
+      .hero-copy h1{
+        font-size:1.95rem;
+      }
+
+      .hero-copy p{
+        font-size:.93rem;
+      }
+
+      .hero-mini-panel{
+        max-width:none;
+        border-radius:18px;
+        padding:14px;
+      }
+
+      .focus-card{
+        border-radius:22px;
+      }
+
+      .focus-copy{
+        padding:18px 16px;
+      }
+
+      .focus-media{
+        min-height:220px;
+      }
+
+      .mixed-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .card.big,
+      .card.medium,
+      .card.wide{
+        grid-column:span 2;
+      }
+
+      .card img{
+        height:140px;
+      }
+
+      .card.big img{
+        height:180px;
+      }
+
+      .card-body{
+        padding:14px;
+      }
+
+      .card h3{
+        font-size:1.05rem;
+      }
+
+      .card.big h3{
+        font-size:1.2rem;
+      }
+
+      .card p{
+        font-size:.86rem;
+      }
+
+      .compact-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .compact-card{
+        border-radius:18px;
+        padding:14px;
+      }
+
+      .compact-card h3{
+        font-size:.95rem;
+      }
+
+      .compact-card p{
+        font-size:.82rem;
+      }
+
+      .final-box{
+        border-radius:20px;
+        padding:18px 16px;
+      }
+
+      .final-box h3{
+        font-size:1.3rem;
+      }
+
+      .final-btn{
+        width:100%;
+      }
+    }
+    .services-head-center{
+  margin-top:10px;
+  margin-bottom:18px;
+}
+
+.services-cards-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:18px;
+}
+
+.service-pretty-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+
+.service-pretty-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 38px rgba(0,0,0,0.10);
+}
+
+.service-pretty-image{
+  position:relative;
+  height:210px;
+  overflow:hidden;
+  background:#f4f6f5;
+}
+
+.service-pretty-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.service-pretty-arrow{
+  position:absolute;
+  left:50%;
+  bottom:-22px;
+  transform:translateX(-50%);
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#1fb14f;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4rem;
+  font-weight:900;
+  border:6px solid #eef5f0;
+  box-shadow:0 10px 20px rgba(31,177,79,0.22);
+}
+
+.service-pretty-body{
+  padding:34px 18px 18px;
+  text-align:center;
+}
+
+.service-pretty-body h3{
+  margin:0 0 10px;
+  font-size:1.28rem;
+  line-height:1.1;
+  font-weight:900;
+  letter-spacing:-0.02em;
+}
+
+.service-pretty-body p{
+  margin:0 0 14px;
+  color:var(--text-soft);
+  font-size:.92rem;
+  line-height:1.5;
+  font-weight:600;
+}
+
+.service-pretty-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 16px;
+  border-radius:12px;
+  background:#f3faf7;
+  color:#17332c;
+  border:1px solid #dfece7;
+  font-size:.88rem;
+  font-weight:800;
+}
+
+@media (max-width:1000px){
+  .services-cards-grid{
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width:640px){
+  .services-cards-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .service-pretty-image{
+    height:180px;
+  }
+
+  .service-pretty-body h3{
+    font-size:1.12rem;
+  }
+
+  .service-pretty-body p{
+    font-size:.86rem;
+  }
+}
+    <!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Servizi | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="style.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --green:#0d7a5f;
+      --green-dark:#085a46;
+      --green-soft:#eaf7f2;
+      --blue-soft:#eef5fb;
+      --peach-soft:#fff4ee;
+      --text:#17332c;
+      --text-soft:#62766f;
+      --white:#ffffff;
+      --border:#e4ede8;
+      --shadow:0 18px 40px rgba(0,0,0,0.08);
+      --shadow-soft:0 10px 24px rgba(0,0,0,0.06);
+    }
+
+    *{ box-sizing:border-box; }
+
+    html{ scroll-behavior:smooth; }
+
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, #f8fcfa 0%, #ffffff 42%),
+        linear-gradient(180deg,#fbfffd 0%,#f2f9f6 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    img{
+      max-width:100%;
+      display:block;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+  .page-shell{
+  width:min(1180px, 94%);
+  margin:0 auto;
+  padding:34px 0 80px;
+  position:relative;
+  z-index:2;
+}
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(70px);
+      opacity:.20;
+      pointer-events:none;
+      z-index:0;
+      animation:floatOrb 11s ease-in-out infinite alternate;
+    }
+
+    .bg-orb.orb-1{
+      width:260px;
+      height:260px;
+      top:60px;
+      left:-90px;
+      background:#93d8be;
+    }
+
+    .bg-orb.orb-2{
+      width:220px;
+      height:220px;
+      top:260px;
+      right:-70px;
+      background:#b7d8ff;
+      animation-duration:13s;
+    }
+
+    .bg-orb.orb-3{
+      width:200px;
+      height:200px;
+      bottom:40px;
+      left:10%;
+      background:#ffd7bf;
+      animation-duration:15s;
+    }
+
+    .page-kicker{
+      text-align:center;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#71857d;
+      margin-bottom:12px;
+    }
+
+    .hero-top{
+      border-radius:30px;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(13,122,95,0.97) 0%, rgba(38,155,122,0.93) 58%, rgba(107,194,165,0.88) 100%);
+      color:#fff;
+      box-shadow:0 24px 56px rgba(13,122,95,0.18);
+      padding:24px 22px;
+      margin-bottom:18px;
+      position:relative;
+    }
+
+    .hero-top::before{
+      content:"";
+      position:absolute;
+      top:-40px;
+      right:-30px;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .hero-copy h1{
+      margin:0 0 10px;
+      font-size:clamp(2rem, 3vw, 3rem);
+      line-height:.96;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .hero-copy p{
+      margin:0;
+      max-width:650px;
+      font-size:.98rem;
+      line-height:1.55;
+      color:rgba(255,255,255,0.90);
+      font-weight:500;
+    }
+
+    .hero-side{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .hero-mini-panel{
+      width:100%;
+      max-width:360px;
+      border-radius:22px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:16px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+
+    .hero-mini-label{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:30px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.18);
+      font-size:.74rem;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+
+    .hero-mini-title{
+      font-size:1.2rem;
+      line-height:1.05;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .hero-mini-sub{
+      color:rgba(255,255,255,0.86);
+      font-size:.92rem;
+      line-height:1.45;
+      font-weight:500;
+    }
+
+    .focus-card{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:0;
+      border-radius:28px;
+      overflow:hidden;
+      background:linear-gradient(135deg,#fff7f2 0%,#ffffff 34%,#fef6ef 100%);
+      border:1px solid #f0e5db;
+      box-shadow:var(--shadow);
+      margin-bottom:24px;
+    }
+
+    .focus-copy{
+      padding:24px 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .focus-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      min-height:34px;
+      padding:7px 14px;
+      border-radius:999px;
+      background:#fbe6d9;
+      color:#8c4f2f;
+      font-size:.76rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .focus-copy h2{
+      margin:0 0 10px;
+      font-size:clamp(1.8rem, 2.5vw, 2.5rem);
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .focus-copy p{
+      margin:0 0 14px;
+      color:var(--text-soft);
+      font-size:.98rem;
+      line-height:1.5;
+      font-weight:500;
+    }
+
+    .focus-info{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .focus-pill{
+      min-height:36px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #efe4d9;
+      font-size:.84rem;
+      font-weight:700;
+      color:#5a685f;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .focus-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .focus-btn{
+      min-height:50px;
+      padding:0 18px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.94rem;
+      font-weight:800;
+      transition:transform .2s ease;
+    }
+
+    .focus-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .focus-btn.primary{
+      background:linear-gradient(135deg,#0d7a5f 0%, #219574 100%);
+      color:#fff;
+    }
+
+    .focus-btn.secondary{
+      background:#fff;
+      color:#17332c;
+      border:1px solid #eadfd5;
+    }
+
+    .focus-media{
+      min-height:300px;
+      background:#f6f1eb;
+    }
+
+    .focus-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .section{
+      margin-top:26px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(1.45rem, 2vw, 1.95rem);
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.92rem;
+      font-weight:600;
+      text-align:right;
+    }
+
+    .mixed-grid{
+      display:grid;
+      grid-template-columns:repeat(12, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 38px rgba(0,0,0,0.10);
+    }
+
+    .card.big{
+      grid-column:span 6;
+    }
+
+    .card.medium{
+      grid-column:span 3;
+    }
+
+    .card.wide{
+      grid-column:span 4;
+    }
+
+    .card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+      background:#f4f6f5;
+    }
+
+    .card.big img{
+      height:210px;
+    }
+
+    .card-body{
+      padding:16px;
+    }
+
+    .card-tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:28px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#eef8f4;
+      color:var(--green-dark);
+      font-size:.72rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-size:1.18rem;
+      line-height:1.08;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .card.big h3{
+      font-size:1.4rem;
+    }
+
+    .card p{
+      margin:0 0 12px;
+      color:var(--text-soft);
+      font-size:.92rem;
+      line-height:1.45;
+      font-weight:500;
+    }
+
+    .card-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .card-meta span{
+      min-height:32px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#f7fbf9;
+      border:1px solid #e7efe9;
+      font-size:.78rem;
+      font-weight:700;
+      color:#4f655d;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .card-btn{
+      width:100%;
+      min-height:42px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.90rem;
+      font-weight:800;
+      background:linear-gradient(135deg,#0d7a5f 0%, #219574 100%);
+      color:#fff;
+    }
+
+    .compact-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .compact-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:var(--shadow-soft);
+      padding:16px;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+
+    .compact-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 18px 30px rgba(0,0,0,0.10);
+    }
+
+    .compact-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:var(--green-soft);
+      display:grid;
+      place-items:center;
+      font-size:1.1rem;
+      margin-bottom:10px;
+    }
+
+    .compact-card h3{
+      margin:0 0 6px;
+      font-size:1rem;
+      line-height:1.1;
+      font-weight:900;
+    }
+
+    .compact-card p{
+      margin:0 0 10px;
+      color:var(--text-soft);
+      font-size:.86rem;
+      line-height:1.4;
+      font-weight:500;
+    }
+
+    .compact-btn{
+      width:100%;
+      min-height:38px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.84rem;
+      font-weight:800;
+      background:#f3faf7;
+      color:#17332c;
+      border:1px solid #dfece7;
+    }
+
+    .final-box{
+      margin-top:30px;
+      padding:22px 20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#f3faf7 0%,#ffffff 100%);
+      border:1px solid #dfece7;
+      box-shadow:var(--shadow-soft);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .final-box h3{
+      margin:0 0 8px;
+      font-size:1.5rem;
+      line-height:1.05;
+      font-weight:900;
+    }
+
+    .final-box p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.95rem;
+      line-height:1.5;
+      font-weight:500;
+      max-width:700px;
+    }
+
+    .final-btn{
+      min-height:52px;
+      padding:0 18px;
+      border-radius:14px;
+      background:#25D366;
+      color:#fff;
+      font-size:.94rem;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      box-shadow:0 14px 26px rgba(37,211,102,0.20);
+    }
+
+    @keyframes floatOrb{
+      from{ transform:translateY(0) translateX(0) scale(1); }
+      to{ transform:translateY(-24px) translateX(18px) scale(1.08); }
+    }
+
+    @media (max-width: 1000px){
+      .hero-grid,
+      .focus-card{
+        grid-template-columns:1fr;
+      }
+
+      .hero-side{
+        justify-content:flex-start;
+      }
+
+      .card.big{
+        grid-column:span 12;
+      }
+
+      .card.medium{
+        grid-column:span 6;
+      }
+
+      .card.wide{
+        grid-column:span 6;
+      }
+
+      .compact-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .section-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .section-head p{
+        text-align:left;
+      }
+
+      .final-box{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+
+    @media (max-width: 640px){
+      .page-shell{
+        width:100%;
+        padding:18px 12px 70px;
+      }
+
+      .hero-top{
+        padding:20px 16px 16px;
+        border-radius:24px;
+      }
+
+      .hero-copy h1{
+        font-size:1.95rem;
+      }
+
+      .hero-copy p{
+        font-size:.93rem;
+      }
+
+      .hero-mini-panel{
+        max-width:none;
+        border-radius:18px;
+        padding:14px;
+      }
+
+      .focus-card{
+        border-radius:22px;
+      }
+
+      .focus-copy{
+        padding:18px 16px;
+      }
+
+      .focus-media{
+        min-height:220px;
+      }
+
+      .mixed-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .card.big,
+      .card.medium,
+      .card.wide{
+        grid-column:span 2;
+      }
+
+      .card img{
+        height:140px;
+      }
+
+      .card.big img{
+        height:180px;
+      }
+
+      .card-body{
+        padding:14px;
+      }
+
+      .card h3{
+        font-size:1.05rem;
+      }
+
+      .card.big h3{
+        font-size:1.2rem;
+      }
+
+      .card p{
+        font-size:.86rem;
+      }
+
+      .compact-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .compact-card{
+        border-radius:18px;
+        padding:14px;
+      }
+
+      .compact-card h3{
+        font-size:.95rem;
+      }
+
+      .compact-card p{
+        font-size:.82rem;
+      }
+
+      .final-box{
+        border-radius:20px;
+        padding:18px 16px;
+      }
+
+      .final-box h3{
+        font-size:1.3rem;
+      }
+
+      .final-btn{
+        width:100%;
+      }
+    }
+    .services-head-center{
+  margin-top:10px;
+  margin-bottom:18px;
+}
+
+.services-cards-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:18px;
+}
+
+.service-pretty-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+
+.service-pretty-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 38px rgba(0,0,0,0.10);
+}
+
+.service-pretty-image{
+  position:relative;
+  height:210px;
+  overflow:hidden;
+  background:#f4f6f5;
+}
+
+.service-pretty-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.service-pretty-arrow{
+  position:absolute;
+  left:50%;
+  bottom:-22px;
+  transform:translateX(-50%);
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#1fb14f;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.4rem;
+  font-weight:900;
+  border:6px solid #eef5f0;
+  box-shadow:0 10px 20px rgba(31,177,79,0.22);
+}
+
+.service-pretty-body{
+  padding:34px 18px 18px;
+  text-align:center;
+}
+
+.service-pretty-body h3{
+  margin:0 0 10px;
+  font-size:1.28rem;
+  line-height:1.1;
+  font-weight:900;
+  letter-spacing:-0.02em;
+}
+
+.service-pretty-body p{
+  margin:0 0 14px;
+  color:var(--text-soft);
+  font-size:.92rem;
+  line-height:1.5;
+  font-weight:600;
+}
+
+.service-pretty-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 16px;
+  border-radius:12px;
+  background:#f3faf7;
+  color:#17332c;
+  border:1px solid #dfece7;
+  font-size:.88rem;
+  font-weight:800;
+}
+
+@media (max-width:1000px){
+  .services-cards-grid{
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width:640px){
+  .services-cards-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .service-pretty-image{
+    height:180px;
+  }
+
+  .service-pretty-body h3{
+    font-size:1.12rem;
+  }
+
+  .service-pretty-body p{
+    font-size:.86rem;
+  }
+}
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body class="season-primavera">
+ <header class="home-site-header">
+    <div class="home-shell home-nav-wrap">
+    <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+  </div>
+  </header>
+  
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <main class="page-shell">
+    <div class="page-topbar">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="page-back-btn" aria-label="Torna alla home"><span>←</span></a>
+      <div class="page-topbar-copy">
+        <h1>Servizi</h1>
+        <p>I servizi della farmacia, semplici e sempre a portata di mano.</p>
+      </div>
+    </div>
+
+    <section class="focus-card">
+      <div class="focus-copy">
+        <div class="focus-badge">Servizio del momento</div>
+        <h2>La farmacia ti consiglia questo mese l’analisi tricologica</h2>
+        <p>
+          Un controllo breve e utile per capire meglio la salute del cuoio capelluto
+          e ricevere un consiglio personalizzato sulla caduta dei capelli.
+        </p>
+
+        <div class="focus-info">
+          <span class="focus-pill">⏱️ Circa 10 minuti</span>
+          <span class="focus-pill">📍 In farmacia</span>
+          <span class="focus-pill">💬 Consiglio mirato</span>
+        </div>
+
+        <div class="focus-actions">
+          <a href="https://wa.me/393927737079" class="focus-btn primary">Chiedi info su WhatsApp</a>
+          <a href="#analisi-benessere" class="focus-btn secondary">Scopri i servizi</a>
+        </div>
+      </div>
+
+      <div class="focus-media">
+        <img src="trico.jpg" alt="Analisi tricologica Farmacia Montesano">
+      </div>
+    </section>
+
+  <section class="section" id="tutti-servizi">
+  <div class="section-head services-head-center">
+    <div>
+      <h2>Tutti i servizi della farmacia</h2>
+      <p>Scopri i servizi disponibili in Farmacia Montesano.</p>
+    </div>
+  </div>
+
+  <div class="services-cards-grid" id="allServicesGrid"></div>
+<section class="final-box">
+  <div>
+    <h3>Non sai quale servizio scegliere?</h3>
+    <p>
+      Scrivici su WhatsApp oppure passa in farmacia:
+      ti aiutiamo a capire quale controllo può essere più utile per te.
+    </p>
+  </div>
+
+  <a href="https://wa.me/393927737079" class="final-btn">Contattaci su WhatsApp</a>
+</section>
+
+  </main>
+<script src="site-config.js"></script>
+<script src="services-data.js"></script>
+<script src="promo-data.js"></script>
+<script src="giornate-data.js"></script>
+
+<script>
+function getActiveServices(){
+  const source =
+    window.ServicesData ||
+    window.servicesData ||
+    [];
+
+  return source.filter(service =>
+    service &&
+    (service.attivo === true || service.attiva === true)
+  );
+}
+
+function normalizeServiceImage(service){
+  return service.immagine || service.img || "";
+}
+
+function normalizeServiceDescription(service){
+  return service.descrizione || service.testo || "";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const activeServices = getActiveServices();
+  const focusService = activeServices.find(service => service.tipo === "focus");
+
+  /* FOCUS CARD */
+  const focusCard = document.querySelector(".focus-card");
+
+  if (focusCard) {
+    if (focusService) {
+      const badge = focusCard.querySelector(".focus-badge");
+      const title = focusCard.querySelector(".focus-copy h2");
+      const desc = focusCard.querySelector(".focus-copy p");
+      const infoWrap = focusCard.querySelector(".focus-info");
+      const img = focusCard.querySelector(".focus-media img");
+
+      if (badge) badge.textContent = focusService.badge || "Servizio del momento";
+      if (title) title.textContent = focusService.titolo || "";
+      if (desc) desc.textContent = normalizeServiceDescription(focusService);
+      if (img) {
+        img.src = normalizeServiceImage(focusService);
+        img.alt = focusService.titolo || "Servizio in evidenza";
+      }
+
+      if (infoWrap) {
+        infoWrap.innerHTML = "";
+        (focusService.info || focusService.meta || []).forEach(item => {
+          infoWrap.innerHTML += `<span class="focus-pill">${item}</span>`;
+        });
+      }
+    } else {
+      focusCard.style.display = "none";
+    }
+  }
+
+  /* TUTTI I SERVIZI */
+  const allServicesGrid = document.getElementById("allServicesGrid");
+  if (allServicesGrid) {
+    const servicesToShow = activeServices.filter(service => service.tipo !== "focus");
+
+    if (!servicesToShow.length) {
+      allServicesGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          background:#fff;
+          border:1px solid #e4ede8;
+          border-radius:22px;
+          box-shadow:0 10px 24px rgba(0,0,0,0.06);
+          padding:22px 18px;
+          text-align:center;
+          color:#62766f;
+          font-weight:700;
+        ">
+          Al momento non sono disponibili servizi.
+        </div>
+      `;
+    } else {
+      allServicesGrid.innerHTML = "";
+
+      servicesToShow.forEach(service => {
+        allServicesGrid.innerHTML += `
+          <article class="service-pretty-card">
+            <div class="service-pretty-image">
+              <img src="${normalizeServiceImage(service)}" alt="${service.titolo || ""}">
+              <div class="service-pretty-arrow">→</div>
+            </div>
+
+            <div class="service-pretty-body">
+              <h3>${service.titolo || ""}</h3>
+              <p>${normalizeServiceDescription(service)}</p>
+              <a class="service-pretty-btn" href="https://wa.me/393927737079">Scopri di più</a>
+            </div>
+          </article>
+        `;
+      });
+    }
+  }
+});
+</script>
+  @media (max-width: 768px) {
+  .home-site-header {
+    padding: 10px 0 !important;
+  }
+
+  .home-shell.home-nav-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  .-nav,
+  .home-nav-actions {
+    display: none !important;
+  }
+
+  .home-brand {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+  }
+
+  .home-brand-logo-box {
+    margin: 0 auto !important;
+  }
+
+  .home-brand-logo {
+    display: block !important;
+    height: 58px !important;
+    width: auto !important;
+    max-width: 160px !important;
+    margin: 0 auto !important;
+  }
+}
+</style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body class="season-primavera">
+ <header class="home-site-header">
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+
+     <nav class="-nav">
+  <a href="index.html" onclick="if(history.length>1){history.back();return false;}">Home</a>
+  <a href="chi-siamo.html">Chi siamo</a>
+  <a class="active" href="servizi.html">Servizi</a>
+  <a href="promo.html">Promo</a>
+  <a href="giornate.html">Beauty</a>
+  <a href="turno.html">Turni</a>
+  <a href="contatti.html">Contatti</a>
+</nav>
+
+      <div class="home-nav-actions">
+        <button class="home-search-btn" type="button" aria-label="Cerca">⌕</button>
+        <a href="giornate.html" class="home-cta-btn">Prenota ora <span>➜</span></a>
+      </div>
+    </div>
+  </header>
+  
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <main class="page-shell">
+
+    <section class="focus-card">
+      <div class="focus-copy">
+        <div class="focus-badge">Servizio del momento</div>
+        <h2>La farmacia ti consiglia questo mese l’analisi tricologica</h2>
+        <p>
+          Un controllo breve e utile per capire meglio la salute del cuoio capelluto
+          e ricevere un consiglio personalizzato sulla caduta dei capelli.
+        </p>
+
+        <div class="focus-info">
+          <span class="focus-pill">⏱️ Circa 10 minuti</span>
+          <span class="focus-pill">📍 In farmacia</span>
+          <span class="focus-pill">💬 Consiglio mirato</span>
+        </div>
+
+        <div class="focus-actions">
+          <a href="https://wa.me/393927737079" class="focus-btn primary">Chiedi info su WhatsApp</a>
+          <a href="#analisi-benessere" class="focus-btn secondary">Scopri i servizi</a>
+        </div>
+      </div>
+
+      <div class="focus-media">
+        <img src="trico.jpg" alt="Analisi tricologica Farmacia Montesano">
+      </div>
+    </section>
+
+  <section class="section" id="tutti-servizi">
+  <div class="section-head services-head-center">
+    <div>
+      <h2>Tutti i servizi della farmacia</h2>
+      <p>Scopri i servizi disponibili in Farmacia Montesano.</p>
+    </div>
+  </div>
+
+  <div class="services-cards-grid" id="allServicesGrid"></div>
+<section class="final-box">
+  <div>
+    <h3>Non sai quale servizio scegliere?</h3>
+    <p>
+      Scrivici su WhatsApp oppure passa in farmacia:
+      ti aiutiamo a capire quale controllo può essere più utile per te.
+    </p>
+  </div>
+
+  <a href="https://wa.me/393927737079" class="final-btn">Contattaci su WhatsApp</a>
+</section>
+
+  </main>
+<script src="site-config.js"></script>
+<script src="services-data.js"></script>
+<script src="promo-data.js"></script>
+<script src="giornate-data.js"></script>
+
+<script>
+function getActiveServices(){
+  const source =
+    window.ServicesData ||
+    window.servicesData ||
+    [];
+
+  return source.filter(service =>
+    service &&
+    (service.attivo === true || service.attiva === true)
+  );
+}
+
+function normalizeServiceImage(service){
+  return service.immagine || service.img || "";
+}
+
+function normalizeServiceDescription(service){
+  return service.descrizione || service.testo || "";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const activeServices = getActiveServices();
+  const focusService = activeServices.find(service => service.tipo === "focus");
+
+  /* FOCUS CARD */
+  const focusCard = document.querySelector(".focus-card");
+
+  if (focusCard) {
+    if (focusService) {
+      const badge = focusCard.querySelector(".focus-badge");
+      const title = focusCard.querySelector(".focus-copy h2");
+      const desc = focusCard.querySelector(".focus-copy p");
+      const infoWrap = focusCard.querySelector(".focus-info");
+      const img = focusCard.querySelector(".focus-media img");
+
+      if (badge) badge.textContent = focusService.badge || "Servizio del momento";
+      if (title) title.textContent = focusService.titolo || "";
+      if (desc) desc.textContent = normalizeServiceDescription(focusService);
+      if (img) {
+        img.src = normalizeServiceImage(focusService);
+        img.alt = focusService.titolo || "Servizio in evidenza";
+      }
+
+      if (infoWrap) {
+        infoWrap.innerHTML = "";
+        (focusService.info || focusService.meta || []).forEach(item => {
+          infoWrap.innerHTML += `<span class="focus-pill">${item}</span>`;
+        });
+      }
+    } else {
+      focusCard.style.display = "none";
+    }
+  }
+
+  /* TUTTI I SERVIZI */
+  const allServicesGrid = document.getElementById("allServicesGrid");
+  if (allServicesGrid) {
+    const servicesToShow = activeServices.filter(service => service.tipo !== "focus");
+
+    if (!servicesToShow.length) {
+      allServicesGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          background:#fff;
+          border:1px solid #e4ede8;
+          border-radius:22px;
+          box-shadow:0 10px 24px rgba(0,0,0,0.06);
+          padding:22px 18px;
+          text-align:center;
+          color:#62766f;
+          font-weight:700;
+        ">
+          Al momento non sono disponibili servizi.
+        </div>
+      `;
+    } else {
+      allServicesGrid.innerHTML = "";
+
+      servicesToShow.forEach(service => {
+        allServicesGrid.innerHTML += `
+          <article class="service-pretty-card">
+            <div class="service-pretty-image">
+              <img src="${normalizeServiceImage(service)}" alt="${service.titolo || ""}">
+              <div class="service-pretty-arrow">→</div>
+            </div>
+
+            <div class="service-pretty-body">
+              <h3>${service.titolo || ""}</h3>
+              <p>${normalizeServiceDescription(service)}</p>
+              <a class="service-pretty-btn" href="https://wa.me/393927737079">Scopri di più</a>
+            </div>
+          </article>
+        `;
+      });
+    }
+  }
+});
+</script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>

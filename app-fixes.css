@@ -1,0 +1,234 @@
+
+/* Fix premium mobile app */
+html,body{overflow-x:hidden!important;}
+@media (max-width:640px){
+  body{-webkit-text-size-adjust:100%;}
+}
+
+/* pagine con solo logo in alto */
+body.page-logo-only .home-desktop-nav,
+body.page-logo-only .-nav,
+body.page-logo-only nav,
+body.page-logo-only .home-nav-actions{
+  display:none !important;
+}
+body.page-logo-only .home-shell.home-nav-wrap{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:0 !important;
+}
+body.page-logo-only .home-brand{
+  margin:0 auto !important;
+}
+body.page-logo-only .home-brand-logo{
+  display:block !important;
+  height:58px !important;
+  width:auto !important;
+  max-width:180px !important;
+  margin:0 auto !important;
+}
+
+/* turno: togli hero grande */
+body.page-turno .hero-top{display:none !important;}
+body.page-turno .turni-shell{padding-top:22px !important;}
+body.page-turno .page-kicker{margin-bottom:18px !important;}
+
+/* servizi: banner sottile servizio del momento */
+body.page-servizi .focus-card{
+  display:block !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  margin-bottom:18px !important;
+}
+body.page-servizi .focus-media,
+body.page-servizi .focus-actions,
+body.page-servizi .focus-info,
+body.page-servizi .focus-copy p{display:none !important;}
+body.page-servizi .focus-copy{padding:0 !important;}
+body.page-servizi .focus-copy .focus-badge{
+  display:block !important;
+  width:100% !important;
+  border-radius:999px !important;
+  padding:10px 16px !important;
+  font-size:.84rem !important;
+  text-align:center !important;
+  margin:0 0 8px 0 !important;
+}
+body.page-servizi .focus-copy h2{
+  margin:0 !important;
+  padding:10px 16px !important;
+  font-size:1.1rem !important;
+  line-height:1.15 !important;
+  border:1px solid #eadfd8 !important;
+  background:#fff !important;
+  border-radius:18px !important;
+  text-align:center !important;
+}
+
+/* fortuna responsive */
+body.page-fortuna .page{max-width:430px !important;}
+body.page-fortuna .wheel-card{overflow:hidden !important;}
+body.page-fortuna .wheel-shell{padding-left:0 !important; padding-right:0 !important;}
+body.page-fortuna .wheel-outer{
+  width:min(78vw,320px) !important;
+  height:min(78vw,320px) !important;
+}
+@media (max-width:390px){
+  body.page-fortuna .wheel-outer{width:min(74vw,292px) !important;height:min(74vw,292px) !important;}
+  body.page-fortuna .wheel-center{width:96px !important;height:96px !important;font-size:1.55rem !important;}
+}
+
+/* Mia mobile */
+@media (max-width:640px){
+  .home-right-column{order:-1 !important;}
+  .home-mia-wrap{padding-top:8px !important;}
+  .home-mia-trigger{display:flex !important;justify-content:center !important;width:100% !important;}
+  .home-mia-portrait{max-height:250px !important;object-fit:contain !important;}
+  .home-mia-bubble{
+    position:relative !important;
+    z-index:6 !important;
+    opacity:1;
+    visibility:visible;
+  }
+  .home-mia-wrap:not(.is-bubble-visible) .home-mia-bubble{
+    opacity:0;
+    visibility:hidden;
+  }
+}
+
+
+body.page-logo-only .home-site-header{padding-top:14px !important;}
+body.page-logo-only .home-brand-logo-box{display:flex !important;justify-content:center !important;align-items:center !important;}
+body.page-logo-only .home-brand-logo-box img{height:62px !important;width:auto !important;max-width:190px !important;}
+body.page-servizi .focus-copy h2{font-size:1rem !important;letter-spacing:.08em !important;}
+
+
+/* TOP BAR CON FRECCIA */
+.page-topbar{
+  display:flex;
+  align-items:flex-start;
+  gap:24px;
+  margin:0 0 26px;
+}
+.page-topbar .page-back-btn{
+  width:92px;
+  height:92px;
+  border-radius:28px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#173c36;
+  font-size:54px;
+  font-weight:400;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  flex:0 0 auto;
+}
+.page-topbar .page-back-btn span{
+  line-height:1;
+  transform:translateY(-2px);
+}
+.page-topbar-copy h1{
+  margin:0 0 10px;
+  font-size:clamp(2.2rem,4vw,4.2rem);
+  line-height:.95;
+  color:#16362f;
+}
+.page-topbar-copy p{
+  margin:0;
+  color:#687772;
+  font-size:clamp(1rem,1.8vw,1.45rem);
+  line-height:1.35;
+  font-weight:700;
+  max-width:700px;
+}
+@media (max-width:640px){
+  .page-topbar{
+    gap:18px;
+    margin:0 0 22px;
+  }
+  .page-topbar .page-back-btn{
+    width:84px;
+    height:84px;
+    border-radius:26px;
+    font-size:48px;
+  }
+}
+
+
+/* FIX FRECCIA PIU PICCOLA */
+.page-back-btn{
+  width:60px !important;
+  height:60px !important;
+  font-size:30px !important;
+  border-radius:18px !important;
+}
+
+/* FIX FRECCIA UNIFORME */
+.page-back-btn{
+  width:55px !important;
+  height:55px !important;
+  border-radius:16px !important;
+  font-size:26px !important;
+}
+
+.page-back-btn{
+  width:50px !important;
+  height:50px !important;
+  font-size:24px !important;
+  border-radius:14px !important;
+}
+
+/* Store-ready arrow size */
+.page-back-btn{
+  width:48px !important;
+  height:48px !important;
+  border-radius:14px !important;
+  font-size:22px !important;
+  min-width:48px !important;
+  min-height:48px !important;
+}
+
+html, body{
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* final back button size */
+.page-back-btn, .back-btn{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  font-size:22px !important;
+  border-radius:14px !important;
+}
+
+/* premium white icon app already via manifest files */
+
+/* back button uniform */
+.page-back-btn,
+.back-btn,
+.icon-btn[aria-label="Indietro"]{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  border-radius:14px !important;
+  font-size:22px !important;
+}
+
+/* performance hints */
+img{
+  content-visibility:auto;
+}
+.home-hero-slider img,
+img.home-brand-logo,
+img.home-brand-logo-box,
+.card img{
+  image-rendering:auto;
+}

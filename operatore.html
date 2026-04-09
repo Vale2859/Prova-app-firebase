@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Operatore | Farmacia Montesano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <style>
+    :root{
+      --bg:#eef2ee; --panel:#ffffff; --panel-2:#f7f8f5; --text:#1e2b25; --muted:#6d7c74;
+      --green:#1d8b58; --green-2:#2fa66f; --green-soft:#e8f6ee; --blue:#193e6e; --blue-2:#24518e;
+      --gold:#dbc78d; --line:#d9e0da; --danger:#c84b4b; --shadow:0 16px 34px rgba(23,38,29,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--text)}
+    body{min-width:1200px}
+    .app{width:min(1700px, calc(100vw - 36px)); margin:18px auto 26px; background:#f6f8f4; border:1px solid #d9e1db; border-radius:32px; overflow:hidden; box-shadow:0 26px 50px rgba(26,40,31,.12)}
+    .top{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 24px; background:linear-gradient(135deg,#ffffff 0%,#f4f6f2 100%); border-bottom:1px solid var(--line)}
+    .brand{display:flex; align-items:center; gap:16px}
+    .brand img{height:52px; width:auto; display:block}
+    .brand-copy{display:flex; flex-direction:column}
+    .brand-title{font-size:1.4rem; font-weight:900; letter-spacing:-.03em}
+    .brand-sub{font-size:.92rem; color:var(--muted); font-weight:700}
+    .stats-strip{background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%); color:#fff; padding:12px 18px; border-radius:18px; font-weight:900; font-size:1rem; min-width:260px; text-align:center; box-shadow:0 12px 24px rgba(24,111,73,.22)}
+    .user-pill{padding:11px 14px; border-radius:16px; background:#fff; border:1px solid var(--line); font-weight:800; min-width:230px; text-align:right}
+    .layout{display:grid; grid-template-columns:265px 1fr 340px; gap:20px; padding:24px}
+    .sidebar,.report{background:var(--panel); border-radius:26px; box-shadow:var(--shadow); border:1px solid var(--line); overflow:hidden}
+    .panel{background:var(--panel); border-radius:26px; box-shadow:var(--shadow); border:1px solid var(--line); overflow:hidden}
+    .side-head{padding:18px 18px 14px; background:linear-gradient(180deg,var(--blue) 0%, var(--blue-2) 100%); color:#fff; font-size:1.12rem; font-weight:900; letter-spacing:.02em}
+    .menu-group-title{padding:14px 18px 10px; font-size:.82rem; font-weight:900; color:#456; letter-spacing:.10em; text-transform:uppercase; background:#f8fbff; border-top:1px solid #dbe6f5}
+    .menu-item{padding:14px 18px; border-top:1px solid #edf2f0; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:space-between}
+    .menu-item.active{background:linear-gradient(135deg,rgba(31,118,77,.10), rgba(47,166,111,.10)); color:var(--green)}
+    .menu-badge{background:#eef5ff; color:#32517f; border-radius:999px; padding:4px 8px; font-size:.78rem; font-weight:900}
+    .main{display:flex; flex-direction:column; gap:16px}
+    .main-head{padding:20px 22px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between}
+    .main-title{font-size:1.35rem; font-weight:900; letter-spacing:-.03em}
+    .main-sub{font-size:.95rem; color:var(--muted); font-weight:700; margin-top:4px}
+    .workspace{padding:20px 22px 24px}
+    .toolbar{display:grid; grid-template-columns:1fr 1fr auto; gap:12px; margin-bottom:16px}
+    .tool-btn{min-height:58px; border:none; border-radius:18px; font-weight:900; font-size:1rem; cursor:pointer}
+    .tool-green{background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%); color:#fff}
+    .tool-blue{background:linear-gradient(135deg,var(--blue) 0%, #3b6dac 100%); color:#fff}
+    .tool-ghost{background:#f2f5f2; border:1px solid var(--line); color:#27352f}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px}
+    .field-card{background:#fafbf8; border:1px solid var(--line); border-radius:22px; overflow:hidden}
+    .field-label{padding:14px 16px 10px; font-size:1rem; font-weight:900; color:#32413a}
+    .field-body{padding:0 16px 16px}
+    .money-wrap,.simple-wrap{position:relative}
+    .prefix{position:absolute; left:18px; top:50%; transform:translateY(-50%); font-size:1.4rem; font-weight:900; color:#435149}
+    .input-xl,.input-lg,.select-lg{width:100%; min-height:64px; border:1px solid var(--line); border-radius:18px; background:#fff; padding:0 18px; font-size:1.45rem; font-weight:800; color:#24322d; outline:none}
+    .input-xl.money{padding-left:52px; text-align:right}
+    .input-lg{font-size:1.06rem; min-height:58px}
+    .select-lg{font-size:1.02rem}
+    .input-xl:focus,.input-lg:focus,.select-lg:focus{border-color:#b9cbbc; box-shadow:0 0 0 4px rgba(29,139,88,.10)}
+    .card-row{display:grid; grid-template-columns:1fr 74px; gap:12px; margin-bottom:16px}
+    .icon-btn{border:none; border-radius:18px; min-height:64px; background:#eff4f1; border:1px solid var(--line); font-size:1.6rem; cursor:pointer}
+    .client-box{display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:16px}
+    .client-card{background:linear-gradient(135deg,#ffffff 0%, #f7faf8 100%); border:1px solid var(--line); border-radius:24px; padding:18px}
+    .client-small{display:flex; gap:14px; align-items:flex-start}
+    .avatar{width:62px;height:62px;border-radius:18px;background:var(--green-soft);display:grid;place-items:center;font-size:1.7rem;font-weight:900;color:var(--green)}
+    .client-name{font-size:1.45rem;font-weight:900;letter-spacing:-.03em;margin:0}
+    .client-meta{margin:6px 0 0;color:var(--muted);font-size:.98rem;font-weight:700;line-height:1.45}
+    .chip-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .chip{padding:8px 12px;border-radius:999px;background:#f3f6f3;border:1px solid var(--line);font-size:.88rem;font-weight:800;color:#405048}
+    .points-card{display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(135deg,#f8fcfa 0%, #eef9f2 100%); border:1px solid #d8eadf; border-radius:24px; padding:18px}
+    .points-title{font-size:.86rem; text-transform:uppercase; letter-spacing:.10em; color:#587163; font-weight:900}
+    .points-value{font-size:3.2rem; line-height:1; font-weight:900; color:var(--green); margin:8px 0 6px}
+    .points-sub{font-size:1rem; color:#4d6358; font-weight:800}
+    .summary{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px}
+    .sum-card{background:#f8faf8; border:1px solid var(--line); border-radius:18px; padding:14px}
+    .sum-label{font-size:.84rem; color:#697971; font-weight:800; text-transform:uppercase; letter-spacing:.08em}
+    .sum-value{margin-top:6px; font-size:1.6rem; font-weight:900; color:#1f2e27}
+    .quick-row{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px}
+    .quick-btn{min-height:54px; border:none; border-radius:16px; background:#eff5f0; color:#244536; font-weight:900; font-size:1.05rem; cursor:pointer}
+    .send-row{display:grid; grid-template-columns:1fr auto; gap:14px; align-items:end}
+    .send-btn{min-width:220px; min-height:66px; border:none; border-radius:18px; background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%); color:#fff; font-size:1.18rem; font-weight:900; cursor:pointer; box-shadow:0 14px 24px rgba(29,139,88,.22)}
+    .status{margin-top:14px; padding:14px 16px; border-radius:16px; background:#f7faf8; border:1px solid var(--line); font-weight:800; color:#506159}
+    .report-head{padding:18px 18px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between}
+    .report-title{font-size:1.22rem; font-weight:900}
+    .report-section{padding:14px 18px 4px}
+    .report-sub{font-size:.94rem; font-weight:900; color:#405149; margin:0 0 10px}
+    .report-list{display:flex; flex-direction:column; gap:8px}
+    .report-item{display:grid; grid-template-columns:24px 1fr auto; gap:10px; align-items:center; padding:10px 12px; border-radius:14px; background:#f7f8f5; border:1px solid #edf1ec; font-weight:800}
+    .report-rank{color:#6d7c74}
+    .report-num{color:#1f2e27}
+    .report-link{margin:14px 18px 18px; min-height:48px; width:calc(100% - 36px); border:none; border-radius:16px; background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%); color:#fff; font-weight:900; cursor:pointer}
+    .admin-only.hidden{display:none !important}
+    .overlay{position:fixed; inset:0; background:rgba(19,30,24,.60); display:grid; place-items:center; z-index:50; padding:20px}
+    .overlay.hidden{display:none}
+    .overlay-card{width:min(560px,100%); background:#fff; border-radius:26px; box-shadow:0 30px 60px rgba(0,0,0,.20); padding:24px}
+    .overlay-title{margin:0 0 8px; font-size:1.5rem; font-weight:900}
+    .overlay-text{margin:0 0 16px; color:var(--muted); font-weight:700; line-height:1.5}
+    .overlay-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .overlay-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:14px}
+    .overlay-btn{min-height:48px; padding:0 18px; border:none; border-radius:14px; font-weight:900; cursor:pointer}
+    .overlay-btn.primary{background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%); color:#fff}
+    .overlay-btn.ghost{background:#f2f4f1; color:#24322d}
+    .list-scroll{max-height:320px; overflow:auto; margin-top:14px; border:1px solid var(--line); border-radius:18px; background:#fafbf9}
+    .list-row{padding:12px 14px; border-bottom:1px solid #edf1ec; display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .list-row:last-child{border-bottom:none}
+    .list-title{font-weight:900}
+    .list-meta{font-size:.9rem; color:var(--muted); font-weight:700; margin-top:3px}
+    .tag{padding:6px 10px; border-radius:999px; font-size:.78rem; font-weight:900}
+    .tag.admin{background:#fff3d9; color:#936a10}
+    .tag.operatore{background:#e9f5ef; color:#0f8f55}
+    .mini-actions{display:flex; gap:8px}
+    .mini-btn{min-height:34px; padding:0 10px; border:none; border-radius:10px; font-size:.82rem; font-weight:900; cursor:pointer}
+    .mini-btn.danger{background:#fff0f0; color:var(--danger)}
+    .mini-btn.light{background:#edf4ef; color:#295640}
+  </style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body>
+  <div class="overlay" id="badgeOverlay">
+    <div class="overlay-card">
+      <h2 class="overlay-title" id="badgeTitle">Scansiona badge operatore</h2>
+      <p class="overlay-text" id="badgeText">Per accedere alla piattaforma, ogni dipendente deve leggere il proprio badge. Dopo ogni invio, la schermata si riblocca e richiede di nuovo il badge.</p>
+      <div id="badgeLoginBox">
+        <input class="input-lg" id="badgeInput" placeholder="Badge dipendente" autocomplete="off" />
+        <div class="overlay-actions">
+          <button class="overlay-btn primary" onclick="unlockWithBadge()">Entra</button>
+        </div>
+      </div>
+      <div id="firstAdminBox" class="hidden">
+        <div class="overlay-grid">
+          <input class="input-lg" id="firstNome" placeholder="Nome titolare" />
+          <input class="input-lg" id="firstCognome" placeholder="Cognome titolare" />
+          <input class="input-lg" id="firstBadge" placeholder="Badge titolare" />
+          <select class="select-lg" id="firstRole"><option value="admin">Titolare / Admin</option></select>
+        </div>
+        <div class="overlay-actions">
+          <button class="overlay-btn primary" onclick="createFirstAdmin()">Crea primo titolare</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="rubricaOverlay">
+    <div class="overlay-card" style="width:min(760px,100%);">
+      <h2 class="overlay-title">Rubrica clienti</h2>
+      <p class="overlay-text">Cerca il cliente per nome, telefono o codice tessera e selezionalo per compilare automaticamente il numero card.</p>
+      <input class="input-lg" id="rubricaSearch" placeholder="Cerca cliente..." />
+      <div class="list-scroll" id="rubricaList"></div>
+      <div class="overlay-actions">
+        <button class="overlay-btn ghost" onclick="closeRubrica()">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="operatorsOverlay">
+    <div class="overlay-card" style="width:min(900px,100%);">
+      <h2 class="overlay-title">Gestione dipendenti</h2>
+      <p class="overlay-text">Solo il badge titolare può vedere e modificare questo pannello. Qui puoi aggiungere dipendenti, assegnare il ruolo e controllare velocemente chi è autorizzato a lavorare.</p>
+      <div class="overlay-grid">
+        <input class="input-lg" id="newNome" placeholder="Nome" />
+        <input class="input-lg" id="newCognome" placeholder="Cognome" />
+        <input class="input-lg" id="newBadge" placeholder="Badge" />
+        <select class="select-lg" id="newRole"><option value="operatore">Operatore</option><option value="admin">Titolare / Admin</option></select>
+      </div>
+      <div class="overlay-actions">
+        <button class="overlay-btn ghost" onclick="closeOperatorsManager()">Chiudi</button>
+        <button class="overlay-btn primary" onclick="addOperator()">Aggiungi dipendente</button>
+      </div>
+      <div class="list-scroll" id="operatorsList"></div>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="top">
+      <div class="brand">
+        <img src="logo.png" alt="Farmacia Montesano" />
+        <div class="brand-copy">
+          <div class="brand-title">Operatore Fidelity</div>
+          <div class="brand-sub">Gestione punti, tessere clienti e controllo banco</div>
+        </div>
+      </div>
+      <div class="stats-strip">Clienti fidelizzati oggi: <span id="todayCount">0</span></div>
+      <div class="user-pill" id="activeUserPill">Badge: -</div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="side-head">Gestione tessera clienti</div>
+        <div class="menu-group-title">Fidelity</div>
+        <div class="menu-item active" onclick="scrollToSection('section-accumulo')">Accumulo <span class="menu-badge">Banco</span></div>
+        <div class="menu-item" onclick="scrollToSection('section-cliente')">Anagrafica card</div>
+        <div class="menu-group-title">Operazioni extra</div>
+        <div class="menu-item" onclick="scrollToSection('section-operazione')">Trasferimento punti</div>
+        <div class="menu-item" onclick="scrollToSection('section-cliente')">Card famiglia</div>
+        <div class="menu-group-title admin-only hidden" id="menuAdminTitle">Controllo titolari</div>
+        <div class="menu-item admin-only hidden" id="menuEmployees" onclick="openOperatorsManager()">Gestione dipendenti</div>
+        <div class="menu-item admin-only hidden" id="menuReports">Report operatori</div>
+      </aside>
+
+      <main class="main">
+        <section class="panel" id="section-accumulo">
+          <div class="main-head">
+            <div>
+              <div class="main-title">Accredito punti</div>
+              <div class="main-sub">Stessa logica di lavoro di UniClub, ma più veloce, più pulita e più chiara.</div>
+            </div>
+            <button class="tool-btn tool-ghost" onclick="relockOperator()">Cambio badge</button>
+          </div>
+
+          <div class="workspace">
+            <div class="toolbar">
+              <button class="tool-btn tool-green" onclick="openRubrica()">Rubrica clienti</button>
+              <button class="tool-btn tool-blue" onclick="assignWelcomePoints()">Assegna punti benvenuto</button>
+              <button class="tool-btn tool-ghost" onclick="resetOperation()">Pulisci</button>
+            </div>
+
+            <div class="grid-2" id="section-operazione">
+              <div class="field-card">
+                <div class="field-label">Importo</div>
+                <div class="field-body">
+                  <div class="money-wrap">
+                    <span class="prefix">€</span>
+                    <input id="amountInput" class="input-xl money" type="number" min="0" step="0.01" placeholder="0,00" />
+                  </div>
+                </div>
+              </div>
+              <div class="field-card">
+                <div class="field-label">Punti extra e causale</div>
+                <div class="field-body" style="display:grid; grid-template-columns:150px 1fr; gap:12px;">
+                  <input id="extraPointsInput" class="input-lg" type="number" min="0" step="1" placeholder="0" />
+                  <select id="reasonInput" class="select-lg">
+                    <option value="">Seleziona causale</option>
+                    <option value="acquisto">Acquisto</option>
+                    <option value="bonus">Bonus</option>
+                    <option value="promo">Promo</option>
+                    <option value="rettifica">Rettifica</option>
+                    <option value="omaggio">Omaggio</option>
+                    <option value="altro">Altro</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-row">
+              <input id="cardInput" class="input-lg" placeholder="Numero card cliente" autocomplete="off" />
+              <button class="icon-btn" title="Apri rubrica" onclick="openRubrica()">📇</button>
+            </div>
+
+            <div class="client-box" id="section-cliente">
+              <div class="client-card">
+                <div class="client-small">
+                  <div class="avatar" id="clientAvatar">CL</div>
+                  <div>
+                    <h2 class="client-name" id="clientName">Nessun cliente selezionato</h2>
+                    <p class="client-meta" id="clientMeta">Inserisci il numero card, usa la pistola barcode o apri la rubrica clienti.</p>
+                  </div>
+                </div>
+                <div class="chip-row">
+                  <div class="chip" id="chipCard">Card: -</div>
+                  <div class="chip" id="chipType">Tipo: singola</div>
+                  <div class="chip" id="chipOperator">Operatore: -</div>
+                </div>
+              </div>
+              <div class="points-card">
+                <div>
+                  <div class="points-title">Punti attuali</div>
+                  <div class="points-value" id="clientPoints">0</div>
+                  <div class="points-sub" id="clientLevel">Livello Bronze</div>
+                </div>
+                <svg id="clientBarcode" style="width:100%;height:86px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px"></svg>
+              </div>
+            </div>
+
+            <div class="summary">
+              <div class="sum-card"><div class="sum-label">Punti da importo</div><div class="sum-value" id="purchasePoints">0</div></div>
+              <div class="sum-card"><div class="sum-label">Punti extra</div><div class="sum-value" id="extraPointsView">0</div></div>
+              <div class="sum-card"><div class="sum-label">Totale da inviare</div><div class="sum-value" id="totalPoints">0</div></div>
+            </div>
+
+            <div class="quick-row">
+              <button class="quick-btn" onclick="setExtraQuick(5)">+5</button>
+              <button class="quick-btn" onclick="setExtraQuick(10)">+10</button>
+              <button class="quick-btn" onclick="setExtraQuick(20)">+20</button>
+              <button class="quick-btn" onclick="setExtraQuick(50)">+50</button>
+            </div>
+
+            <div class="send-row">
+              <div class="status" id="statusBox">Attendi badge operatore e poi compila importo, numero card e causale.</div>
+              <button class="send-btn" onclick="submitOperation()">Invia</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="report admin-only hidden" id="adminReportPanel">
+        <div class="report-head">
+          <div class="report-title">Report veloci</div>
+          <div class="menu-badge">Solo titolare</div>
+        </div>
+        <div class="report-section">
+          <p class="report-sub">Top 10 clienti per punti</p>
+          <div class="report-list" id="topPointsList"></div>
+        </div>
+        <div class="report-section">
+          <p class="report-sub">Top 10 clienti per spesa</p>
+          <div class="report-list" id="topSpendList"></div>
+        </div>
+        <div class="report-section">
+          <p class="report-sub">Media scontrino operatori</p>
+          <div class="report-list" id="operatorAvgList"></div>
+        </div>
+        <button class="report-link" onclick="openOperatorsManager()">Gestione dipendenti</button>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    let activeOperator = null;
+    let selectedClient = null;
+    let selectedSource = null;
+
+    const badgeOverlay = document.getElementById('badgeOverlay');
+    const badgeInput = document.getElementById('badgeInput');
+    const firstAdminBox = document.getElementById('firstAdminBox');
+    const badgeLoginBox = document.getElementById('badgeLoginBox');
+
+    function fmt(n){ return new Intl.NumberFormat('it-IT').format(Number(n||0)); }
+    function money(n){ return new Intl.NumberFormat('it-IT', {style:'currency', currency:'EUR'}).format(Number(n||0)); }
+    function norm(v){ return String(v||'').trim(); }
+    function normCode(v){ return String(v||'').trim().toUpperCase(); }
+    function todayKey(){ return new Date().toISOString().slice(0,10); }
+    function calcPurchasePoints(amount){ amount=Number(amount||0); return amount>0 ? Math.floor(amount) : 0; }
+    function level(points){ points=Number(points||0); if(points>=3000) return 'Diamond'; if(points>=1000) return 'Gold'; return 'Bronze'; }
+
+    function getOperators(){ try{ const raw=localStorage.getItem('farmaciaOperatori'); const arr=raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(e){ return []; } }
+    function saveOperators(arr){ localStorage.setItem('farmaciaOperatori', JSON.stringify(arr)); }
+    function normalizeOperators(){ const ops=getOperators(); if(!ops.length) return; let changed=false; if(!ops.some(o=>o.ruolo==='admin')){ ops[0].ruolo='admin'; changed=true }
+    }
+    function getOperatorLog(){ try{ const raw=localStorage.getItem('farmaciaOperatorLog'); const arr=raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(e){ return []; } }
+    function saveOperatorLog(arr){ localStorage.setItem('farmaciaOperatorLog', JSON.stringify(arr)); }
+    function getMultiClients(){ try{ const raw=localStorage.getItem('farmaciaClienti'); const arr=raw?JSON.parse(raw):[]; return Array.isArray(arr)?arr:[]; }catch(e){ return []; } }
+    function saveMultiClients(arr){ localStorage.setItem('farmaciaClienti', JSON.stringify(arr)); }
+    function getSingleClientData(){ try{ const profileRaw=localStorage.getItem('farmaciaProfileData'); if(!profileRaw) return null; const profile=JSON.parse(profileRaw); const pointsRaw=localStorage.getItem('farmaciaPuntiData'); const pointsData=pointsRaw?JSON.parse(pointsRaw):{}; return { profile, pointsData }; }catch(e){ return null; } }
+
+    function buildUnifiedClients(){
+      const list=[];
+      const multi=getMultiClients();
+      multi.forEach(c=>list.push({
+        source:'multi',
+        id:c.id || (c.clientId||c.clientCode),
+        name:c.name||'', surname:c.surname||'', email:c.email||'', phone:c.phone||'',
+        clientCode:c.clientCode || c.clientId || '', clientId:c.clientId || c.clientCode || '',
+        points:Number(c.points||0), level:c.level || level(c.points||0), spesaTotale:Number(c.spesaTotale||c.totalSpent||0),
+        cardType:c.cardType || 'singola', familyName:c.familyName || '', raw:c
+      }));
+      const single=getSingleClientData();
+      if(single && single.profile){
+        const p=single.profile, pd=single.pointsData||{};
+        list.push({
+          source:'single', id:p.clientId||p.clientCode||'single', name:p.name||'', surname:p.surname||'', email:p.email||'', phone:p.phone||'',
+          clientCode:p.clientCode||p.clientId||'', clientId:p.clientId||p.clientCode||'', points:Number(p.points ?? pd.points ?? 0),
+          level:p.level || pd.level || level(p.points ?? pd.points ?? 0), spesaTotale:Number(p.spesaTotale||0), cardType:p.cardType || 'singola', familyName:p.familyName || '', raw:{profile:p, pointsData:pd}
+        });
+      }
+      // dedupe by clientCode
+      const seen=new Set();
+      return list.filter(c=>{ const k=c.clientCode||c.phone||c.email; if(!k||seen.has(k)) return false; seen.add(k); return true; });
+    }
+
+    function ensureAdmin(){
+      const ops=getOperators();
+      if(!ops.length){ badgeLoginBox.classList.add('hidden'); firstAdminBox.classList.remove('hidden'); return; }
+      let changed=false;
+      ops.forEach((o,i)=>{ if(!o.ruolo){ o.ruolo = i===0 && !ops.some(x=>x.ruolo==='admin') ? 'admin' : 'operatore'; changed=true; } });
+      if(!ops.some(o=>o.ruolo==='admin')){ ops[0].ruolo='admin'; changed=true; }
+      if(changed) saveOperators(ops);
+      firstAdminBox.classList.add('hidden'); badgeLoginBox.classList.remove('hidden');
+    }
+
+    function createFirstAdmin(){
+      const nome=norm(document.getElementById('firstNome').value);
+      const cognome=norm(document.getElementById('firstCognome').value);
+      const badge=normCode(document.getElementById('firstBadge').value);
+      if(!nome||!cognome||!badge){ alert('Compila nome, cognome e badge del titolare.'); return; }
+      const arr=[{id:'op_'+Date.now(), nome, cognome, badge, ruolo:'admin', createdAt:new Date().toISOString()}];
+      saveOperators(arr); ensureAdmin(); renderOperatorList(); alert('Primo titolare creato.');
+    }
+
+    function unlockWithBadge(){
+      const badge=normCode(badgeInput.value);
+      if(!badge){ alert('Inserisci o scansiona il badge dipendente.'); return; }
+      const op=getOperators().find(o=>normCode(o.badge)===badge);
+      if(!op){ alert('Badge non riconosciuto.'); return; }
+      activeOperator=op; badgeInput.value=''; badgeOverlay.classList.add('hidden'); renderOperatorState(); updateStatus(); document.getElementById('amountInput').focus();
+    }
+    function relockOperator(){ activeOperator=null; selectedClient=null; selectedSource=null; badgeOverlay.classList.remove('hidden'); renderOperatorState(); resetOperation(false); ensureAdmin(); }
+
+    function renderOperatorState(){
+      const pill=document.getElementById('activeUserPill');
+      const isAdmin=!!(activeOperator && activeOperator.ruolo==='admin');
+      pill.textContent = activeOperator ? `${activeOperator.nome} ${activeOperator.cognome} · ${activeOperator.badge} · ${activeOperator.ruolo==='admin'?'Titolare':'Operatore'}` : 'Badge: -';
+      document.querySelectorAll('.admin-only').forEach(el=> el.classList.toggle('hidden', !isAdmin));
+      document.getElementById('chipOperator').textContent = 'Operatore: ' + (activeOperator ? `${activeOperator.nome} ${activeOperator.cognome}` : '-');
+      if(isAdmin){ renderReports(); }
+    }
+
+    function renderOperatorList(){
+      const wrap=document.getElementById('operatorsList');
+      const ops=getOperators();
+      wrap.innerHTML = ops.map(op=>`<div class="list-row"><div><div class="list-title">${op.nome} ${op.cognome}</div><div class="list-meta">Badge: ${op.badge}</div></div><div class="mini-actions"><span class="tag ${op.ruolo==='admin'?'admin':'operatore'}">${op.ruolo==='admin'?'Titolare':'Operatore'}</span>${activeOperator&&activeOperator.ruolo==='admin'?`<button class="mini-btn danger" onclick="removeOperator('${op.id}')">Rimuovi</button>`:''}</div></div>`).join('') || '<div class="list-row"><div class="list-title">Nessun dipendente salvato.</div></div>';
+    }
+    function openOperatorsManager(){ if(!(activeOperator&&activeOperator.ruolo==='admin')){ alert('Questa sezione è accessibile solo con il badge titolare.'); return; } document.getElementById('operatorsOverlay').classList.remove('hidden'); renderOperatorList(); }
+    function closeOperatorsManager(){ document.getElementById('operatorsOverlay').classList.add('hidden'); }
+    function addOperator(){ if(!(activeOperator&&activeOperator.ruolo==='admin')) return; const nome=norm(document.getElementById('newNome').value); const cognome=norm(document.getElementById('newCognome').value); const badge=normCode(document.getElementById('newBadge').value); const ruolo=document.getElementById('newRole').value; if(!nome||!cognome||!badge){ alert('Compila nome, cognome e badge.'); return; } const ops=getOperators(); if(ops.some(o=>normCode(o.badge)===badge)){ alert('Esiste già un dipendente con questo badge.'); return; } ops.push({id:'op_'+Date.now(), nome, cognome, badge, ruolo, createdAt:new Date().toISOString()}); saveOperators(ops); ['newNome','newCognome','newBadge'].forEach(id=>document.getElementById(id).value=''); document.getElementById('newRole').value='operatore'; renderOperatorList(); }
+    function removeOperator(id){ if(!(activeOperator&&activeOperator.ruolo==='admin')) return; let ops=getOperators(); const target=ops.find(o=>o.id===id); if(!target) return; if(target.ruolo==='admin' && ops.filter(o=>o.ruolo==='admin').length===1){ alert('Deve restare almeno un titolare abilitato.'); return; } ops=ops.filter(o=>o.id!==id); saveOperators(ops); renderOperatorList(); }
+
+    function openRubrica(){ document.getElementById('rubricaOverlay').classList.remove('hidden'); renderRubrica(''); document.getElementById('rubricaSearch').value=''; document.getElementById('rubricaSearch').focus(); }
+    function closeRubrica(){ document.getElementById('rubricaOverlay').classList.add('hidden'); }
+    function renderRubrica(query){ query=normCode(query); const list=buildUnifiedClients().filter(c=>{ const txt=`${c.name} ${c.surname} ${c.phone} ${c.clientCode} ${c.email}`.toUpperCase(); return !query || txt.includes(query); }); document.getElementById('rubricaList').innerHTML = list.map(c=>`<div class="list-row" onclick="pickClient('${c.clientCode}')"><div><div class="list-title">${(c.name+' '+c.surname).trim()||'Cliente'}</div><div class="list-meta">${c.clientCode||'-'} · ${c.phone||'nessun telefono'} · ${fmt(c.points)} punti</div></div><button class="mini-btn light" type="button">Seleziona</button></div>`).join('') || '<div class="list-row"><div class="list-title">Nessun cliente trovato.</div></div>'; }
+    document.getElementById('rubricaSearch').addEventListener('input',e=>renderRubrica(e.target.value));
+
+    function findClientByCode(query){ query=normCode(query); const list=buildUnifiedClients(); return list.find(c=>normCode(c.clientCode)===query || normCode(c.clientId)===query || normCode(c.phone)===query || (`${c.name} ${c.surname}`).trim().toUpperCase()===query); }
+    function pickClient(code){ document.getElementById('cardInput').value=code; closeRubrica(); searchClient(); }
+    function searchClient(){ const q=normCode(document.getElementById('cardInput').value); if(!q){ alert('Inserisci o scansiona il numero card cliente.'); return; } const c=findClientByCode(q); if(!c){ alert('Cliente non trovato.'); return; } selectedClient=c; selectedSource=c.source; renderClient(); updateStatus(); }
+    document.getElementById('cardInput').addEventListener('keydown', function(e){ if(e.key==='Enter'){ searchClient(); } });
+    badgeInput.addEventListener('keydown', function(e){ if(e.key==='Enter') unlockWithBadge(); });
+
+    function renderClient(){
+      const name=(selectedClient ? `${selectedClient.name||''} ${selectedClient.surname||''}`.trim() : '') || 'Nessun cliente selezionato';
+      document.getElementById('clientName').textContent=name;
+      document.getElementById('clientMeta').textContent = selectedClient ? `${selectedClient.phone||'nessun telefono'} · ${selectedClient.email||'nessuna email'}${selectedClient.familyName?` · ${selectedClient.familyName}`:''}` : 'Inserisci il numero card, usa la pistola barcode o apri la rubrica clienti.';
+      document.getElementById('chipCard').textContent = 'Card: ' + (selectedClient ? (selectedClient.clientCode||'-') : '-');
+      document.getElementById('chipType').textContent = 'Tipo: ' + (selectedClient ? (selectedClient.cardType||'singola') : 'singola');
+      document.getElementById('clientPoints').textContent = selectedClient ? fmt(selectedClient.points||0) : '0';
+      document.getElementById('clientLevel').textContent = 'Livello ' + (selectedClient ? (selectedClient.level||level(selectedClient.points||0)) : 'Bronze');
+      document.getElementById('clientAvatar').textContent = selectedClient ? ((selectedClient.name||'C')[0]+(selectedClient.surname||'L')[0]).toUpperCase() : 'CL';
+      
+    }
+
+    function setExtraQuick(v){ document.getElementById('extraPointsInput').value = Number(document.getElementById('extraPointsInput').value||0) + v; updateStatus(); }
+    function assignWelcomePoints(){ document.getElementById('extraPointsInput').value = 50; document.getElementById('reasonInput').value='bonus'; updateStatus(); }
+    function resetOperation(clearClient=true){ document.getElementById('amountInput').value=''; document.getElementById('extraPointsInput').value=''; document.getElementById('reasonInput').value=''; document.getElementById('cardInput').value=''; if(clearClient){ selectedClient=null; selectedSource=null; renderClient(); } updateStatus(); }
+
+    function updateStatus(){
+      const amount=Number(document.getElementById('amountInput').value||0); const extra=Number(document.getElementById('extraPointsInput').value||0); const reason=document.getElementById('reasonInput').value; const purchase=calcPurchasePoints(amount); const total=purchase+extra;
+      document.getElementById('purchasePoints').textContent=fmt(purchase); document.getElementById('extraPointsView').textContent=fmt(extra); document.getElementById('totalPoints').textContent=fmt(total);
+      const box=document.getElementById('statusBox');
+      if(!activeOperator){ box.textContent='Attendi badge dipendente per sbloccare la schermata.'; return; }
+      if(!selectedClient){ box.textContent='Seleziona il cliente dalla tessera o dalla rubrica clienti.'; return; }
+      if(amount<=0 && extra<=0){ box.textContent='Inserisci importo o punti extra da assegnare.'; return; }
+      if(extra>0 && !reason){ box.textContent='Se inserisci punti extra devi scegliere una causale.'; return; }
+      box.textContent=`Operazione pronta: verranno inviati ${fmt(total)} punti a ${selectedClient.name||'Cliente'}.`; }
+    ['amountInput','extraPointsInput','reasonInput'].forEach(id=>document.getElementById(id).addEventListener('input', updateStatus));
+
+    function writeBackClient(updated){
+      if(selectedSource==='multi'){
+        const arr=getMultiClients(); const idx=arr.findIndex(c=>normCode(c.clientCode||c.clientId)===normCode(updated.clientCode)); if(idx!==-1){ arr[idx]={...arr[idx], points:updated.points, level:updated.level, spesaTotale:updated.spesaTotale}; saveMultiClients(arr); }
+      } else if(selectedSource==='single'){
+        const profile=JSON.parse(localStorage.getItem('farmaciaProfileData')||'{}');
+        const punti=JSON.parse(localStorage.getItem('farmaciaPuntiData')||'{}');
+        profile.points=updated.points; profile.level=updated.level; profile.spesaTotale=updated.spesaTotale;
+        punti.points=updated.points; punti.level=updated.level;
+        localStorage.setItem('farmaciaProfileData', JSON.stringify(profile));
+        localStorage.setItem('farmaciaPuntiData', JSON.stringify(punti));
+      }
+    }
+
+    function saveLog(entry){ const arr=getOperatorLog(); arr.unshift(entry); saveOperatorLog(arr); }
+    function submitOperation(){
+      if(!activeOperator){ alert('Serve il badge dipendente.'); return; }
+      if(!selectedClient){ alert('Seleziona il cliente.'); return; }
+      const amount=Number(document.getElementById('amountInput').value||0); const extra=Number(document.getElementById('extraPointsInput').value||0); const reason=document.getElementById('reasonInput').value; const purchase=calcPurchasePoints(amount); const total=purchase+extra;
+      if(amount<=0 && extra<=0){ alert('Inserisci importo o punti extra.'); return; }
+      if(extra>0 && !reason){ alert('Seleziona una causale per i punti extra.'); return; }
+      const updated={...selectedClient};
+      updated.spesaTotale=Number(updated.spesaTotale||0)+amount; updated.points=Number(updated.points||0)+total; updated.level=level(updated.points);
+      writeBackClient(updated);
+      saveLog({ id:'log_'+Date.now(), dataIso:new Date().toISOString(), data:new Date().toLocaleString('it-IT'), operatore:`${activeOperator.nome} ${activeOperator.cognome}`, badge:activeOperator.badge, ruolo:activeOperator.ruolo, cliente:updated.clientCode, clienteNome:`${updated.name||''} ${updated.surname||''}`.trim(), importo:amount, puntiAcquisto:purchase, puntiExtra:extra, totalePunti:total, causale:reason || (amount>0?'acquisto':'bonus') });
+      alert(`Operazione completata: +${fmt(total)} punti.`);
+      relockOperator(); renderReports(); }
+
+    function renderReports(){
+      const logs=getOperatorLog(); document.getElementById('todayCount').textContent = logs.filter(l=>(l.dataIso||'').slice(0,10)===todayKey()).length;
+      const clients=buildUnifiedClients();
+      const topPoints=[...clients].sort((a,b)=>Number(b.points||0)-Number(a.points||0)).slice(0,10);
+      const topSpend=[...clients].sort((a,b)=>Number(b.spesaTotale||0)-Number(a.spesaTotale||0)).slice(0,10);
+      document.getElementById('topPointsList').innerHTML = topPoints.map((c,i)=>`<div class="report-item"><div class="report-rank">${i+1}</div><div>${(c.name+' '+c.surname).trim()||'Cliente'}</div><div class="report-num">${fmt(c.points)} pt</div></div>`).join('') || '<div class="report-item"><div></div><div>Nessun dato</div><div></div></div>';
+      document.getElementById('topSpendList').innerHTML = topSpend.map((c,i)=>`<div class="report-item"><div class="report-rank">${i+1}</div><div>${(c.name+' '+c.surname).trim()||'Cliente'}</div><div class="report-num">${money(c.spesaTotale)}</div></div>`).join('') || '<div class="report-item"><div></div><div>Nessun dato</div><div></div></div>';
+      const ops={}; logs.forEach(l=>{ const k=l.badge||'ND'; ops[k]=ops[k]||{nome:l.operatore||k, totaleImporto:0, operazioni:0}; ops[k].totaleImporto += Number(l.importo||0); ops[k].operazioni +=1; });
+      const avg=Object.values(ops).map(o=>({...o, media:o.operazioni?o.totaleImporto/o.operazioni:0})).sort((a,b)=>b.media-a.media).slice(0,10);
+      document.getElementById('operatorAvgList').innerHTML = avg.map((o,i)=>`<div class="report-item"><div class="report-rank">${i+1}</div><div>${o.nome}</div><div class="report-num">${money(o.media)}</div></div>`).join('') || '<div class="report-item"><div></div><div>Nessun dato</div><div></div></div>';
+    }
+
+
+    function scrollToSection(id){
+      const el=document.getElementById(id);
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    }
+
+    ensureAdmin(); renderOperatorState(); renderClient(); updateStatus(); renderReports(); renderOperatorList();
+  </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fidelity | Farmacia Montesano</title>
+  <script src="auth.js"></script>
+  <script src="punti.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#e7f5ef;
+      --green-4:#eef8f4;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+
+      --bronze-1:#b77b48;
+      --bronze-2:#8e5a2f;
+
+      --gold-1:#efd37a;
+      --gold-2:#b98921;
+
+      --diamond-1:#a9e6f8;
+      --diamond-2:#4aa9c8;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit}
+
+    .page{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:14px 14px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .back-btn{
+      width: 50px;
+      height: 50px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size: 22px;
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 44px;
+    }
+
+    .title-wrap{
+      flex:1;
+      min-width:0;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.75rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .page-subtitle{
+      margin:5px 0 0;
+      font-size:.95rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .fidelity-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:30px;
+      color:#fff;
+      box-shadow:0 24px 40px rgba(13,122,95,0.18);
+      padding:18px;
+      margin-bottom:16px;
+      background:linear-gradient(135deg,#0f6f57 0%, #198266 52%, #58a895 100%);
+    }
+
+    .fidelity-card::before{
+      content:"";
+      position:absolute;
+      right:-30px;
+      top:-18px;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 72%);
+      pointer-events:none;
+    }
+
+    .card-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .brand-wrap{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.14);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      flex:0 0 52px;
+    }
+
+    .brand-icon img{
+      width:34px;
+      height:34px;
+      object-fit:contain;
+    }
+
+    .brand-title{
+      margin:0;
+      font-size:1.18rem;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .brand-subtitle{
+      margin:5px 0 0;
+      font-size:.92rem;
+      line-height:1.2;
+      color:rgba(255,255,255,0.92);
+      font-weight:500;
+    }
+
+    .level-badge{
+      min-width:90px;
+      min-height:90px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:10px;
+      font-weight:900;
+      line-height:1.05;
+      border:3px solid rgba(255,255,255,0.35);
+      box-shadow:0 10px 18px rgba(0,0,0,0.12);
+      color:#fff;
+      flex:0 0 auto;
+    }
+
+    .level-badge.bronze{
+      background:radial-gradient(circle at 30% 25%, #d9a275 0%, var(--bronze-1) 45%, var(--bronze-2) 100%);
+    }
+
+    .level-badge.gold{
+      background:radial-gradient(circle at 30% 25%, #fff1a8 0%, var(--gold-1) 32%, #d3a53a 70%, var(--gold-2) 100%);
+      color:#4d3602;
+    }
+
+    .level-badge.diamond{
+      background:radial-gradient(circle at 30% 25%, #f4fdff 0%, var(--diamond-1) 35%, #7fd0eb 70%, var(--diamond-2) 100%);
+      color:#0f4760;
+    }
+
+    .level-badge span{
+      display:block;
+      font-size:.72rem;
+      letter-spacing:.02em;
+    }
+
+    .level-badge strong{
+      display:block;
+      margin-top:4px;
+      font-size:1.02rem;
+    }
+
+    .barcode-box{
+      position:relative;
+      z-index:2;
+      background:#fff;
+      border-radius:26px;
+      padding:16px 16px 14px;
+      box-shadow:0 16px 30px rgba(0,0,0,0.10);
+      margin-bottom:14px;
+    }
+
+    .barcode-label{
+      margin:0 0 8px;
+      text-align:center;
+      color:var(--green);
+      font-size:1rem;
+      font-weight:900;
+      letter-spacing:.03em;
+    }
+
+    .barcode-svg{
+      display:block;
+      width:100%;
+      height:92px;
+      background:#fff;
+      border-radius:16px;
+    }
+
+    .client-code{
+      margin:10px 0 6px;
+      text-align:center;
+      color:#1a2f5d;
+      font-size:2rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .barcode-note{
+      margin:0;
+      text-align:center;
+      color:#687973;
+      font-size:.95rem;
+      line-height:1.35;
+      font-weight:500;
+    }
+
+    .card-stats{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:10px;
+    }
+
+    .stat-box{
+      background:rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:20px;
+      padding:14px;
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+    }
+
+    .stat-label{
+      margin:0 0 6px;
+      font-size:.82rem;
+      font-weight:700;
+      opacity:.9;
+      line-height:1.2;
+    }
+
+    .stat-value-big{
+      margin:0;
+      font-size:2.7rem;
+      line-height:.9;
+      font-weight:900;
+      letter-spacing:-0.08em;
+    }
+
+    .stat-value{
+      margin:0;
+      font-size:1.02rem;
+      line-height:1.2;
+      font-weight:900;
+    }
+
+    .progress-card{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .progress-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .progress-title{
+      margin:0;
+      font-size:1.18rem;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .progress-sub{
+      margin:6px 0 0;
+      color:var(--text-soft);
+      font-size:.92rem;
+      line-height:1.35;
+      font-weight:600;
+    }
+
+    .level-pill{
+      min-height:34px;
+      padding:7px 12px;
+      border-radius:999px;
+      background:var(--green-4);
+      color:var(--green);
+      font-size:.9rem;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .progress-track{
+      width:100%;
+      height:16px;
+      border-radius:999px;
+      background:#e6ece9;
+      overflow:hidden;
+      margin-bottom:10px;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#16795f 0%, #2ba27c 100%);
+      transition:width .35s ease;
+    }
+
+    .progress-foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--text-soft);
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .section{
+      margin-top:18px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:1.5rem;
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .section-link{
+      color:var(--green);
+      font-size:.95rem;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .cards-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .info-card{
+      background:linear-gradient(180deg, #ffffff 0%, #f6fbf8 100%);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      min-height:128px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .info-label{
+      margin:0 0 8px;
+      font-size:.88rem;
+      color:var(--text-soft);
+      font-weight:700;
+      line-height:1.25;
+    }
+
+    .gain{
+      margin:0;
+      font-size:1.2rem;
+      font-weight:900;
+      color:var(--green);
+      line-height:1;
+    }
+
+    .gain.minus{
+      color:#b34a4a;
+    }
+
+    .gain small{
+      font-size:.92rem;
+      font-weight:800;
+    }
+
+    .date{
+      margin-top:8px;
+      font-size:.86rem;
+      color:var(--text-soft);
+      font-weight:600;
+    }
+
+    .activity-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .activity-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .activity-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:1.3rem;
+      background:var(--green-3);
+      flex:0 0 48px;
+    }
+
+    .activity-text{
+      min-width:0;
+      flex:1;
+    }
+
+    .activity-name{
+      margin:0 0 4px;
+      font-size:1rem;
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .activity-meta{
+      margin:0;
+      font-size:.88rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .activity-points{
+      flex:0 0 auto;
+      font-size:.98rem;
+      font-weight:900;
+      color:var(--green);
+      white-space:nowrap;
+    }
+
+    .empty-card{
+      background:linear-gradient(180deg, #ffffff 0%, #f6fbf8 100%);
+      border:1px dashed #d8e4de;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .empty-card-title{
+      margin:0 0 8px;
+      font-size:1.08rem;
+      line-height:1.1;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .empty-card-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.94rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    .big-cta{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:58px;
+      width:100%;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(135deg, #1e8b6c 0%, #69b09d 100%);
+      color:#fff;
+      font-size:1.05rem;
+      font-weight:900;
+      box-shadow:0 18px 34px rgba(30,139,108,0.2);
+      cursor:pointer;
+    }
+
+    .small-note{
+      margin:14px 4px 0;
+      font-size:.86rem;
+      line-height:1.45;
+      color:var(--text-soft);
+      font-weight:600;
+      text-align:center;
+    }
+
+    .full-code-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,20,16,0.72);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .full-code-overlay.open{
+      display:flex;
+    }
+
+    .full-code-card{
+      width:min(100%, 420px);
+      background:#fff;
+      border-radius:28px;
+      padding:20px;
+      box-shadow:0 24px 46px rgba(0,0,0,0.18);
+    }
+
+    .full-code-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .full-code-title{
+      margin:0;
+      font-size:1.5rem;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .close-btn{
+      width:40px;
+      height:40px;
+      border:none;
+      border-radius:12px;
+      background:#f2f4f3;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .full-code-label{
+      margin:0 0 10px;
+      color:var(--green);
+      text-align:center;
+      font-size:1rem;
+      font-weight:900;
+    }
+
+    .full-code-id{
+      margin:14px 0 10px;
+      text-align:center;
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-0.05em;
+      color:#1a2f5d;
+    }
+
+    .full-code-note{
+      margin:0;
+      text-align:center;
+      color:var(--text-soft);
+      font-size:.95rem;
+      line-height:1.35;
+      font-weight:600;
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .page-title{font-size:1.65rem}
+      .client-code{font-size:1.75rem}
+      .level-badge{
+        min-width:82px;
+        min-height:82px;
+      }
+      .stat-value-big{font-size:2.35rem}
+      .section-title{font-size:1.38rem}
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <div class="title-wrap">
+        <h1 class="page-title">Fidelity</h1>
+        <p class="page-subtitle">La tua card personale, i punti e la tua attività</p>
+      </div>
+    </div>
+
+    <section class="fidelity-card">
+      <div class="card-head">
+        <div class="brand-wrap">
+          <div class="brand-icon">
+            <img src="logo.png" alt="Logo Farmacia Montesano" onerror="this.style.display='none'">
+          </div>
+          <div>
+            <h2 class="brand-title">Tessera Fedeltà</h2>
+            <p class="brand-subtitle">Farmacia Montesano</p>
+          </div>
+        </div>
+
+        <div class="level-badge bronze" id="levelBadge">
+          <div>
+            <span>LIVELLO</span>
+            <strong>BRONZE</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="barcode-box">
+        <p class="barcode-label">CODICE CLIENTE</p>
+        <svg id="barcodeSvg" class="barcode-svg" viewBox="0 0 360 92" preserveAspectRatio="none"></svg>
+        <p class="client-code" id="clientCodeText">FM00000000</p>
+        <p class="barcode-note">Mostra questo codice alla cassa per accumulare punti</p>
+      </div>
+
+      <div class="card-stats">
+        <div class="stat-box">
+          <p class="stat-label">Punti disponibili</p>
+          <p class="stat-value-big" id="pointsValue">0</p>
+        </div>
+
+        <div class="stat-box">
+          <p class="stat-label">Prossimo premio</p>
+          <p class="stat-value" id="nextReward">Primo premio disponibile</p>
+          <div style="height:10px"></div>
+          <p class="stat-label">Ti mancano</p>
+          <p class="stat-value" id="pointsMissing">1.000 punti</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="progress-card">
+      <div class="progress-head">
+        <div>
+          <h3 class="progress-title">Progressione livello</h3>
+          <p class="progress-sub" id="progressText">Ti mancano 1.000 punti al livello Gold</p>
+        </div>
+        <div class="level-pill" id="currentLevelPill">Bronze</div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="progress-foot">
+        <span id="currentLevelLabel">Bronze</span>
+        <span id="nextLevelLabel">Gold</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h3 class="section-title">La tua attività</h3>
+        <a href="attivita.html" class="section-link">Vedi tutto</a>
+      </div>
+
+      <div id="activityCards"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h3 class="section-title">Ultime operazioni</h3>
+        <a href="attivita.html" class="section-link">Storico</a>
+      </div>
+
+      <div id="activityList"></div>
+    </section>
+
+    <button class="big-cta" onclick="openCodeOverlay()">
+      <span>▦</span>
+      <span>Mostra codice in cassa</span>
+    </button>
+
+    <p class="small-note">
+      I livelli, i punti e i premi si aggiorneranno automaticamente man mano che userai il programma fedeltà.
+    </p>
+  </main>
+
+  <div class="full-code-overlay" id="fullCodeOverlay">
+    <div class="full-code-card">
+      <div class="full-code-head">
+        <h3 class="full-code-title">Mostra in cassa</h3>
+        <button class="close-btn" onclick="closeCodeOverlay()">×</button>
+      </div>
+
+      <p class="full-code-label">CODICE CLIENTE</p>
+      <svg id="barcodeSvgLarge" class="barcode-svg" viewBox="0 0 360 92" preserveAspectRatio="none"></svg>
+      <p class="full-code-id" id="clientCodeTextLarge">FM00000000</p>
+      <p class="full-code-note">Mostra questo codice al personale della farmacia per il caricamento dei punti.</p>
+    </div>
+  </div>
+
+  <script>
+    const emptyFidelityData = {
+      clientCode: "FM00000000",
+      points: 0,
+      level: "Bronze",
+      nextReward: "Primo premio disponibile",
+      missing: 1000,
+      activities: [],
+      operations: []
+    };
+
+    const LEVELS = [
+      { key: "Bronze", min: 0, max: 999, next: "Gold" },
+      { key: "Gold", min: 1000, max: 2999, next: "Diamond" },
+      { key: "Diamond", min: 3000, max: Infinity, next: null }
+    ];
+
+    function formatPoints(num) {
+      return new Intl.NumberFormat("it-IT").format(num);
+    }
+
+    function loadFidelityData() {
+      try {
+        const profileRaw = localStorage.getItem("farmaciaProfileData");
+        const pointsRaw = localStorage.getItem("farmaciaPuntiData");
+
+        const profileData = profileRaw ? JSON.parse(profileRaw) : {};
+        const pointsData = pointsRaw ? JSON.parse(pointsRaw) : {};
+
+        return {
+          ...emptyFidelityData,
+          clientCode: profileData.clientCode || profileData.clientId || emptyFidelityData.clientCode,
+          points: Number(profileData.points ?? pointsData.points ?? 0),
+          level: profileData.level || pointsData.level || "Bronze",
+          nextReward: pointsData.nextReward || "Primo premio disponibile",
+          missing: Number(pointsData.missing ?? 1000),
+          activities: Array.isArray(pointsData.activities) ? pointsData.activities : [],
+          operations: Array.isArray(pointsData.operations) ? pointsData.operations : []
+        };
+      } catch (e) {
+        return emptyFidelityData;
+      }
+    }
+
+    function getLevelInfo(points) {
+      const level = LEVELS.find(l => points >= l.min && points <= l.max) || LEVELS[0];
+
+      let progress = 100;
+      let missing = 0;
+      let next = level.next;
+
+      if (level.key === "Bronze") {
+        progress = Math.min(100, (points / 1000) * 100);
+        missing = Math.max(0, 1000 - points);
+      } else if (level.key === "Gold") {
+        progress = Math.min(100, ((points - 1000) / 2000) * 100);
+        missing = Math.max(0, 3000 - points);
+      } else {
+        progress = 100;
+        missing = 0;
+        next = null;
+      }
+
+      return { ...level, progress, missing, next };
+    }
+
+    function renderBadge(levelKey) {
+      const badge = document.getElementById("levelBadge");
+      if (!badge) return;
+
+      badge.className = "level-badge " + String(levelKey || "Bronze").toLowerCase();
+      badge.innerHTML = `
+        <div>
+          <span>LIVELLO</span>
+          <strong>${String(levelKey).toUpperCase()}</strong>
+        </div>
+      `;
+    }
+
+    function renderBarcode(svgId, code) {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      try {
+        JsBarcode(svg, String(code || '').trim(), {
+          format: "CODE128",
+          lineColor: "#000000",
+          background: "#ffffff",
+          width: 2,
+          height: 58,
+          margin: 10,
+          displayValue: false
+        });
+      } catch (e) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+      }
+    }
+
+    function renderActivityCards(activities) {
+      const wrap = document.getElementById("activityCards");
+      if (!wrap) return;
+
+      if (!activities.length) {
+        wrap.innerHTML = `
+          <div class="empty-card">
+            <p class="empty-card-title">Nessuna attività disponibile</p>
+            <p class="empty-card-text">
+              Quando farai i tuoi primi acquisti o riceverai bonus, li vedrai qui.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = `
+        <div class="cards-2">
+          ${activities.slice(0, 2).map(item => `
+            <article class="info-card">
+              <div>
+                <p class="info-label">${item.label}</p>
+                <p class="gain ${item.points < 0 ?"minus" : ""}">
+                  ${item.points > 0 ? "+" : ""}${formatPoints(item.points)} <small>punti</small>
+                </p>
+              </div>
+              <p class="date">${item.date || ""}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderOperations(operations) {
+      const wrap = document.getElementById("activityList");
+      if (!wrap) return;
+
+      if (!operations.length) {
+        wrap.innerHTML = `
+          <div class="empty-card">
+            <p class="empty-card-title">Non ci sono ancora operazioni</p>
+            <p class="empty-card-text">
+              Lo storico completo apparirà qui dopo i primi movimenti punti.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = `
+        <div class="activity-list">
+          ${operations.slice(0, 3).map(item => `
+            <article class="activity-item">
+              <div class="activity-icon">${item.icon || "★"}</div>
+              <div class="activity-text">
+                <p class="activity-name">${item.name || "Operazione"}</p>
+                <p class="activity-meta">${item.meta || ""}</p>
+              </div>
+              <div class="activity-points">${item.points > 0 ? "+" : ""}${formatPoints(item.points || 0)}</div>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderFidelity() {
+      const data = loadFidelityData();
+      const points = Number(data.points || 0);
+      const levelInfo = getLevelInfo(points);
+
+      document.getElementById("clientCodeText").textContent = data.clientCode;
+      document.getElementById("clientCodeTextLarge").textContent = data.clientCode;
+      document.getElementById("pointsValue").textContent = formatPoints(points);
+      document.getElementById("nextReward").textContent = data.nextReward || "Primo premio disponibile";
+      document.getElementById("pointsMissing").textContent =
+        levelInfo.next ? `${formatPoints(levelInfo.missing)} punti` : "Livello max";
+
+      renderBadge(levelInfo.key);
+      renderBarcode("barcodeSvg", data.clientCode);
+      renderBarcode("barcodeSvgLarge", data.clientCode);
+
+      document.getElementById("currentLevelPill").textContent = levelInfo.key;
+      document.getElementById("currentLevelLabel").textContent = levelInfo.key;
+      document.getElementById("nextLevelLabel").textContent = levelInfo.next || "Top";
+      document.getElementById("progressBar").style.width = `${levelInfo.progress}%`;
+
+      const progressText = document.getElementById("progressText");
+      if (levelInfo.next) {
+        progressText.textContent = `Ti mancano ${formatPoints(levelInfo.missing)} punti al livello ${levelInfo.next}`;
+      } else {
+        progressText.textContent = "Hai raggiunto il livello massimo disponibile";
+      }
+
+      renderActivityCards(data.activities || []);
+      renderOperations(data.operations || []);
+    }
+
+    function openCodeOverlay() {
+      document.getElementById("fullCodeOverlay").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeCodeOverlay() {
+      document.getElementById("fullCodeOverlay").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("fullCodeOverlay").addEventListener("click", function(e){
+      if (e.target === this) closeCodeOverlay();
+    });
+
+    renderFidelity();
+  </script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>

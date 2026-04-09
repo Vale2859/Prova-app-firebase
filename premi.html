@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Premi | Farmacia Montesano</title>
+  <script src="auth.js"></script>
+  <script src="punti.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#dff2eb;
+      --green-4:#eef8f4;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+      --danger:#c94646;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit}
+
+    .page{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:14px 14px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .icon-btn{
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size:22px;
+      color:var(--text);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      flex:0 0 44px;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.8rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      text-align:center;
+      flex:1;
+    }
+
+    .points-box{
+      background:linear-gradient(135deg,#0f6f57 0%, #259373 100%);
+      border-radius:22px;
+      box-shadow:0 20px 36px rgba(13,122,95,0.18);
+      color:#fff;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+      width:max-content;
+      min-width:205px;
+      max-width:100%;
+    }
+
+    .points-icon{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.16);
+      display:grid;
+      place-items:center;
+      font-size:1.35rem;
+      flex:0 0 46px;
+    }
+
+    .points-label{
+      margin:0 0 4px;
+      font-size:.92rem;
+      font-weight:700;
+      opacity:.92;
+      line-height:1.15;
+    }
+
+    .points-value{
+      margin:0;
+      font-size:2.2rem;
+      line-height:.9;
+      font-weight:900;
+      letter-spacing:-0.06em;
+    }
+
+    .intro-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-bottom:14px;
+    }
+
+    .intro-title{
+      margin:0 0 8px;
+      font-size:1.18rem;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .intro-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.96rem;
+      line-height:1.55;
+      font-weight:600;
+    }
+
+    .filter-bar{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      margin-bottom:14px;
+      scrollbar-width:none;
+    }
+
+    .filter-bar::-webkit-scrollbar{display:none}
+
+    .filter-pill{
+      min-height:38px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      font-size:.92rem;
+      font-weight:800;
+      color:var(--text);
+      white-space:nowrap;
+      cursor:pointer;
+    }
+
+    .filter-pill.active{
+      background:var(--green);
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .reward-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .reward-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .reward-inner{
+      display:grid;
+      grid-template-columns:120px 1fr;
+      min-height:170px;
+    }
+
+    .reward-media{
+      background:#eef3f1;
+      min-height:100%;
+    }
+
+    .reward-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .reward-body{
+      padding:16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .reward-name{
+      margin:0;
+      font-size:1.16rem;
+      line-height:1.08;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:.94rem;
+      font-weight:800;
+      width:max-content;
+    }
+
+    .status-ready{
+      background:#e7f7ef;
+      color:var(--green);
+    }
+
+    .status-missing{
+      background:#edf3ef;
+      color:#2d6157;
+    }
+
+    .reward-points{
+      margin:0;
+      font-size:1.1rem;
+      line-height:1;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .reward-action{
+      margin-top:2px;
+      min-height:48px;
+      border:none;
+      border-radius:16px;
+      font-size:1rem;
+      font-weight:900;
+      cursor:pointer;
+      width:100%;
+    }
+
+    .btn-ready{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+      box-shadow:0 14px 26px rgba(26,139,108,0.16);
+    }
+
+    .btn-missing{
+      background:linear-gradient(180deg,#eaf3ee 0%, #e3eee8 100%);
+      color:var(--green);
+    }
+
+    .section{
+      margin-top:18px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:1.42rem;
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .redeemed-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .redeemed-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .redeemed-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:var(--green-3);
+      display:grid;
+      place-items:center;
+      font-size:1.3rem;
+      flex:0 0 48px;
+    }
+
+    .redeemed-text{
+      min-width:0;
+      flex:1;
+    }
+
+    .redeemed-name{
+      margin:0 0 4px;
+      font-size:1rem;
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .redeemed-meta{
+      margin:0;
+      font-size:.88rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .empty-card{
+      background:linear-gradient(180deg, #ffffff 0%, #f6fbf8 100%);
+      border:1px dashed #d8e4de;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .empty-card-title{
+      margin:0 0 8px;
+      font-size:1.08rem;
+      line-height:1.1;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .empty-card-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.94rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    .note{
+      margin:16px 4px 0;
+      color:var(--text-soft);
+      font-size:.88rem;
+      line-height:1.45;
+      font-weight:600;
+      text-align:center;
+    }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,20,16,0.64);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .modal-overlay.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(100%, 410px);
+      background:#fff;
+      border-radius:28px;
+      padding:20px;
+      box-shadow:0 24px 48px rgba(0,0,0,0.18);
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .modal-title{
+      margin:0;
+      font-size:1.45rem;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .modal-close{
+      width:40px;
+      height:40px;
+      border:none;
+      border-radius:12px;
+      background:#f2f4f3;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-text{
+      margin:0 0 14px;
+      color:var(--text-soft);
+      font-size:.98rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .modal-btn{
+      flex:1;
+      min-height:48px;
+      border:none;
+      border-radius:14px;
+      font-size:.98rem;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .modal-btn.primary{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+    }
+
+    .modal-btn.secondary{
+      background:#eef3f1;
+      color:var(--text);
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .page-title{font-size:1.65rem}
+      .reward-inner{
+        grid-template-columns:110px 1fr;
+        min-height:162px;
+      }
+      .reward-name{font-size:1.08rem}
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="icon-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <h1 class="page-title">Premi</h1>
+      <button class="icon-btn" aria-label="Notifiche">🔔</button>
+    </div>
+
+    <section class="points-box">
+      <div class="points-icon">★</div>
+      <div>
+        <p class="points-label">Punti Disponibili</p>
+        <p class="points-value" id="pointsValue">0</p>
+      </div>
+    </section>
+
+    <section class="intro-card">
+      <h2 class="intro-title">Riscatta i tuoi vantaggi</h2>
+      <p class="intro-text">
+        Accumula punti con la tua fidelity e sblocca premi, voucher, prodotti beauty e vantaggi esclusivi della farmacia.
+      </p>
+    </section>
+
+    <div class="filter-bar">
+      <button class="filter-pill active" data-filter="all">Tutti</button>
+      <button class="filter-pill" data-filter="beauty">Beauty</button>
+      <button class="filter-pill" data-filter="benessere">Benessere</button>
+      <button class="filter-pill" data-filter="voucher">Voucher</button>
+    </div>
+
+    <section class="reward-list" id="rewardList"></section>
+
+    <section class="section">
+      <div class="section-head">
+        <h3 class="section-title">Premi riscattati</h3>
+      </div>
+      <div id="redeemedWrap"></div>
+    </section>
+
+    <p class="note">
+      I premi possono cambiare in base alla disponibilità, alle promozioni e alle iniziative della Farmacia Montesano.
+    </p>
+  </main>
+
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title" id="modalRewardTitle">Premio</h3>
+        <button class="modal-close" onclick="closeRewardModal()">×</button>
+      </div>
+      <p class="modal-text" id="modalRewardText">
+        Qui potrai confermare il riscatto del premio.
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeRewardModal()">Chiudi</button>
+        <button class="modal-btn primary" id="modalConfirmBtn">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fallbackRewardsData = {
+      points: 0,
+      redeemed: [],
+      rewards: [
+        {
+          id: 1,
+          category: "voucher",
+          title: "Voucher Beauty Spa",
+          pointsRequired: 3300,
+          image: "images/premio-voucher.jpg",
+          fallback: "images/beauty.jpg"
+        },
+        {
+          id: 2,
+          category: "beauty",
+          title: "Omaggio prodotti dermocosmesi",
+          pointsRequired: 4500,
+          image: "images/premio-dermocosmesi.jpg",
+          fallback: "images/premi.jpg"
+        },
+        {
+          id: 3,
+          category: "beauty",
+          title: "Set doccia e profumo",
+          pointsRequired: 5000,
+          image: "images/premio-buono.jpg",
+          fallback: "images/premi.jpg"
+        },
+        {
+          id: 4,
+          category: "benessere",
+          title: "Tisana benessere bio",
+          pointsRequired: 6000,
+          image: "images/premio-tisana.jpg",
+          fallback: "images/premi.jpg"
+        }
+      ]
+    };
+
+    function formatNumber(num) {
+      return new Intl.NumberFormat("it-IT").format(num);
+    }
+
+    function loadRewardsData() {
+      try {
+        const rewardsRaw = localStorage.getItem("farmaciaRewardsData");
+        const profileRaw = localStorage.getItem("farmaciaProfileData");
+        const pointsRaw = localStorage.getItem("farmaciaPuntiData");
+
+        const rewardsData = rewardsRaw ? JSON.parse(rewardsRaw) : {};
+        const profileData = profileRaw ? JSON.parse(profileRaw) : {};
+        const pointsData = pointsRaw ? JSON.parse(pointsRaw) : {};
+
+        return {
+          points: Number(profileData.points ?? pointsData.points ?? rewardsData.points ?? 0),
+          rewards: Array.isArray(rewardsData.rewards) ? rewardsData.rewards : fallbackRewardsData.rewards,
+          redeemed: Array.isArray(rewardsData.redeemed) ? rewardsData.redeemed : []
+        };
+      } catch (e) {
+        return fallbackRewardsData;
+      }
+    }
+
+    let currentFilter = "all";
+    let currentData = loadRewardsData();
+
+    function buildRewardCard(item, currentPoints) {
+      const missing = Math.max(item.pointsRequired - currentPoints, 0);
+      const isReady = currentPoints >= item.pointsRequired;
+
+      return `
+        <article class="reward-card" data-category="${item.category}">
+          <div class="reward-inner">
+            <div class="reward-media">
+              <img src="${item.image}" alt="${item.title}" onerror="this.onerror=null;this.src='${item.fallback}';">
+            </div>
+
+            <div class="reward-body">
+              <div>
+                <h3 class="reward-name">${item.title}</h3>
+                <div style="height:10px"></div>
+                ${
+                  isReady
+                    ? `<span class="status-pill status-ready">Pronto al riscatto!</span>`
+                    : `<span class="status-pill status-missing">${formatNumber(missing)} punti mancanti</span>`
+                }
+                <div style="height:14px"></div>
+                <p class="reward-points">${formatNumber(item.pointsRequired)} punti</p>
+              </div>
+
+              <button
+                class="reward-action ${isReady ?"btn-ready" : "btn-missing"}"
+                onclick="openRewardModal('${item.title.replace(/'/g, "\\'")}', ${isReady}, ${item.pointsRequired})"
+              >
+                ${isReady ? "Riscatta ora" : `${formatNumber(missing)} punti mancanti`}
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderRewards() {
+      const list = document.getElementById("rewardList");
+      const points = currentData.points || 0;
+      document.getElementById("pointsValue").textContent = formatNumber(points);
+
+      let rewards = currentData.rewards || [];
+      if (currentFilter !== "all") {
+        rewards = rewards.filter(item => item.category === currentFilter);
+      }
+
+      list.innerHTML = rewards.map(item => buildRewardCard(item, points)).join("");
+    }
+
+    function renderRedeemed() {
+      const wrap = document.getElementById("redeemedWrap");
+      const redeemed = currentData.redeemed || [];
+
+      if (!redeemed.length) {
+        wrap.innerHTML = `
+          <div class="empty-card">
+            <p class="empty-card-title">Non hai ancora riscattato premi</p>
+            <p class="empty-card-text">
+              Continua ad accumulare punti con la tua fidelity per sbloccare i primi vantaggi.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = `
+        <div class="redeemed-list">
+          ${redeemed.map(item => `
+            <article class="redeemed-item">
+              <div class="redeemed-icon">${item.icon || "🎁"}</div>
+              <div class="redeemed-text">
+                <p class="redeemed-name">${item.name || "Premio riscattato"}</p>
+                <p class="redeemed-meta">${item.meta || ""}</p>
+              </div>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll(".filter-pill").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filter);
+      });
+      renderRewards();
+    }
+
+    document.querySelectorAll(".filter-pill").forEach(btn => {
+      btn.addEventListener("click", () => setFilter(btn.dataset.filter));
+    });
+
+    function openRewardModal(title, isReady, pointsRequired) {
+      const modal = document.getElementById("rewardModal");
+      const modalTitle = document.getElementById("modalRewardTitle");
+      const modalText = document.getElementById("modalRewardText");
+      const confirmBtn = document.getElementById("modalConfirmBtn");
+
+      modalTitle.textContent = title;
+
+      if (isReady) {
+        modalText.textContent = `Hai abbastanza punti per riscattare "${title}". In seguito collegheremo questo pulsante al riscatto reale del premio.`;
+        confirmBtn.textContent = "Conferma";
+        confirmBtn.disabled = false;
+        confirmBtn.style.opacity = "1";
+      } else {
+        const missing = Math.max(pointsRequired - currentData.points, 0);
+        modalText.textContent = `Per "${title}" ti mancano ancora ${formatNumber(missing)} punti. Continua ad accumulare punti in farmacia per sbloccarlo.`;
+        confirmBtn.textContent = "Non disponibile";
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = "0.6";
+      }
+
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeRewardModal() {
+      document.getElementById("rewardModal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("rewardModal").addEventListener("click", function(e){
+      if (e.target === this) closeRewardModal();
+    });
+
+    renderRewards();
+    renderRedeemed();
+  </script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>

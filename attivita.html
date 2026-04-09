@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Attività | Farmacia Montesano</title>
+  <script src="auth.js"></script>
+  <script src="punti.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#e7f5ef;
+      --red:#b34a4a;
+      --red-soft:#fff1f1;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit}
+
+    .page{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:14px 14px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .back-btn{
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size:22px;
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 44px;
+    }
+
+    .title-wrap{
+      flex:1;
+      min-width:0;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.75rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .page-subtitle{
+      margin:5px 0 0;
+      font-size:.95rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .summary-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-bottom:16px;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .summary-box{
+      border-radius:18px;
+      padding:14px;
+      background:linear-gradient(180deg,#f7fbf9 0%, #f1f8f4 100%);
+      border:1px solid #dfece6;
+    }
+
+    .summary-label{
+      margin:0 0 6px;
+      font-size:.84rem;
+      color:var(--text-soft);
+      font-weight:700;
+    }
+
+    .summary-value{
+      margin:0;
+      font-size:1.6rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.05em;
+    }
+
+    .filters{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      margin-bottom:14px;
+      scrollbar-width:none;
+    }
+
+    .filters::-webkit-scrollbar{display:none}
+
+    .filter-btn{
+      min-height:38px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      font-size:.92rem;
+      font-weight:800;
+      color:var(--text);
+      white-space:nowrap;
+      cursor:pointer;
+    }
+
+    .filter-btn.active{
+      background:var(--green);
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .activity-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .activity-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .activity-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:var(--green-3);
+      display:grid;
+      place-items:center;
+      font-size:1.3rem;
+      flex:0 0 48px;
+    }
+
+    .activity-text{
+      min-width:0;
+      flex:1;
+    }
+
+    .activity-name{
+      margin:0 0 4px;
+      font-size:1rem;
+      font-weight:900;
+      line-height:1.1;
+    }
+
+    .activity-meta{
+      margin:0;
+      font-size:.88rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .activity-points{
+      flex:0 0 auto;
+      font-size:1rem;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .activity-points.positive{
+      color:var(--green);
+    }
+
+    .activity-points.negative{
+      color:var(--red);
+    }
+
+    .empty-card{
+      background:linear-gradient(180deg, #ffffff 0%, #f6fbf8 100%);
+      border:1px dashed #d8e4de;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .empty-card-title{
+      margin:0 0 8px;
+      font-size:1.08rem;
+      line-height:1.1;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .empty-card-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.94rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .page-title{font-size:1.65rem}
+      .summary-value{font-size:1.4rem}
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <div class="title-wrap">
+        <h1 class="page-title">Attività</h1>
+        <p class="page-subtitle">Tutte le operazioni della tua fidelity</p>
+      </div>
+    </div>
+
+    <section class="summary-card">
+      <div class="summary-grid">
+        <div class="summary-box">
+          <p class="summary-label">Totale operazioni</p>
+          <p class="summary-value" id="totalOperations">0</p>
+        </div>
+        <div class="summary-box">
+          <p class="summary-label">Saldo attuale</p>
+          <p class="summary-value" id="currentPoints">0</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Tutte</button>
+      <button class="filter-btn" data-filter="positive">Punti guadagnati</button>
+      <button class="filter-btn" data-filter="negative">Punti usati</button>
+    </div>
+
+    <section id="activityWrap"></section>
+  </main>
+
+  <script>
+    const emptyOperationsData = {
+      points: 0,
+      operations: []
+    };
+
+    function formatPoints(num) {
+      return new Intl.NumberFormat("it-IT").format(num);
+    }
+
+    function loadOperationsData() {
+      try {
+        const pointsRaw = localStorage.getItem("farmaciaPuntiData");
+        const profileRaw = localStorage.getItem("farmaciaProfileData");
+
+        const pointsData = pointsRaw ? JSON.parse(pointsRaw) : {};
+        const profileData = profileRaw ? JSON.parse(profileRaw) : {};
+
+        return {
+          points: Number(profileData.points ?? pointsData.points ?? 0),
+          operations: Array.isArray(pointsData.operations) ? pointsData.operations : []
+        };
+      } catch (e) {
+        return emptyOperationsData;
+      }
+    }
+
+    let currentFilter = "all";
+    let currentData = loadOperationsData();
+
+    function getFilteredOperations() {
+      const ops = currentData.operations || [];
+
+      if (currentFilter === "positive") {
+        return ops.filter(item => Number(item.points || 0) > 0);
+      }
+
+      if (currentFilter === "negative") {
+        return ops.filter(item => Number(item.points || 0) < 0);
+      }
+
+      return ops;
+    }
+
+    function renderSummary() {
+      document.getElementById("totalOperations").textContent = formatPoints((currentData.operations || []).length);
+      document.getElementById("currentPoints").textContent = formatPoints(currentData.points || 0);
+    }
+
+    function renderOperations() {
+      const wrap = document.getElementById("activityWrap");
+      const operations = getFilteredOperations();
+
+      if (!operations.length) {
+        wrap.innerHTML = `
+          <div class="empty-card">
+            <p class="empty-card-title">Nessuna operazione disponibile</p>
+            <p class="empty-card-text">
+              Quando userai la tua fidelity e inizierai ad accumulare o spendere punti, troverai qui tutto lo storico completo.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      wrap.innerHTML = `
+        <div class="activity-list">
+          ${operations.map(item => `
+            <article class="activity-item">
+              <div class="activity-icon">${item.icon || "★"}</div>
+              <div class="activity-text">
+                <p class="activity-name">${item.name || "Operazione"}</p>
+                <p class="activity-meta">${item.meta || ""}</p>
+              </div>
+              <div class="activity-points ${Number(item.points || 0) >= 0 ?"positive" : "negative"}">
+                ${Number(item.points || 0) > 0 ? "+" : ""}${formatPoints(Number(item.points || 0))}
+              </div>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filter);
+      });
+      renderOperations();
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => setFilter(btn.dataset.filter));
+    });
+
+    renderSummary();
+    renderOperations();
+  </script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>
