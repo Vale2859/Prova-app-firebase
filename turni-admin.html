@@ -2,113 +2,89 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Turni</title>
 
 <style>
-body{
-  font-family:-apple-system;
-  background:#f5f5f5;
-  margin:0;
-  padding:20px;
+body {
+  font-family: Arial;
+  text-align: center;
+  padding: 20px;
 }
 
-.container{
-  max-width:600px;
-  margin:auto;
+input {
+  padding: 10px;
+  margin: 5px;
+  width: 220px;
 }
 
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  margin-bottom:15px;
-}
-
-input{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-}
-
-button{
-  padding:10px;
-  width:100%;
-  border:none;
-  background:#0f8f55;
-  color:#fff;
-  border-radius:10px;
-  font-weight:700;
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+  background: #0a7c4a;
+  color: white;
+  font-weight: bold;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="container">
+<h2>Gestione Turni</h2>
 
-<h2>Modifica turni</h2>
+<input type="date" id="data"><br>
+<input type="text" id="turno" placeholder="Nome farmacia"><br>
+<input type="text" id="appoggio" placeholder="Appoggio"><br>
 
-<div class="card">
-<input id="data" type="date">
-<input id="turno" placeholder="Farmacia di turno">
-<input id="appoggio" placeholder="Appoggio">
+<br>
+
 <button onclick="salva()">Salva</button>
-</div>
+<button onclick="carica()">Carica</button>
+<button onclick="elimina()">Elimina</button>
 
-<div id="lista"></div>
+<script type="module">
+import { db, ref, set, get, remove } from './firebase.js';
 
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<script>
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-  authDomain: "farmaciamontesano.firebaseapp.com",
-  projectId: "farmaciamontesano"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-async function salva(){
+window.salva = async function() {
   const data = document.getElementById("data").value;
   const turno = document.getElementById("turno").value;
   const appoggio = document.getElementById("appoggio").value;
 
-  await db.collection("turniOverrides").doc(data).set({
-    turno,
-    appoggio
+  if (!data || !turno) {
+    alert("Compila data e turno");
+    return;
+  }
+
+  await set(ref(db, "turni/" + data), {
+    turno: turno,
+    appoggio: appoggio
   });
 
   alert("Salvato!");
 }
 
-async function carica(){
-  const snap = await db.collection("turniOverrides").get();
+window.carica = async function() {
+  const data = document.getElementById("data").value;
 
-  let html="";
+  const snap = await get(ref(db, "turni/" + data));
+  const t = snap.val();
 
-  snap.forEach(doc=>{
-    const d = doc.data();
-
-    html += `
-      <div class="card">
-        <strong>${doc.id}</strong><br>
-        ${d.turno}<br>
-        Appoggio: ${d.appoggio || "-"}
-      </div>
-    `;
-  });
-
-  document.getElementById("lista").innerHTML = html;
+  if (t) {
+    document.getElementById("turno").value = t.turno;
+    document.getElementById("appoggio").value = t.appoggio || "";
+  } else {
+    alert("Nessun turno trovato");
+  }
 }
 
-carica();
+window.elimina = async function() {
+  const data = document.getElementById("data").value;
 
+  await remove(ref(db, "turni/" + data));
+
+  alert("Eliminato!");
+}
 </script>
 
 </body>
