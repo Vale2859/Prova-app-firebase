@@ -186,15 +186,6 @@
 
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f8f55">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Montesano">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 </head>
 <body>
   <main class="page">
@@ -233,10 +224,9 @@
 
   <script type="module">
     import {
-      auth,
-      signInWithEmailAndPassword,
-      onAuthStateChanged
+      signInWithEmailAndPassword
     } from "./firebase.js";
+    import { auth } from "./firebase.js";
 
     const emailEl = document.getElementById("email");
     const passwordEl = document.getElementById("password");
@@ -253,12 +243,6 @@
       statusBox.className = `status ${type}`;
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = getRedirectTarget();
-      }
-    });
-
     loginBtn.addEventListener("click", async () => {
       const email = emailEl.value.trim();
       const password = passwordEl.value;
@@ -273,7 +257,6 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        showStatus("Accesso effettuato.", "ok");
         window.location.href = getRedirectTarget();
       } catch (error) {
         console.error(error);
@@ -286,13 +269,5 @@
 
   <script src="mobile-only.js"></script>
   <script src="app-fixes.js"></script>
-
-  <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js");
-    });
-  }
-  </script>
 </body>
 </html>
