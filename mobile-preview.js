@@ -46,6 +46,27 @@
     beautyBadge: "2"
   };
 
+  const firebaseSession = {
+    user: null,
+    ready: false
+  };
+
+  import("./firebase.js")
+    .then(({ auth, onAuthStateChanged }) => {
+      onAuthStateChanged(auth, (user) => {
+        firebaseSession.user = user || null;
+        firebaseSession.ready = true;
+        if (typeof window.__refreshPrivateCardsState === "function") window.__refreshPrivateCardsState();
+        if (typeof window.__refreshMiaBubble === "function") window.__refreshMiaBubble();
+      });
+    })
+    .catch((error) => {
+      console.error("Firebase mobile preview auth error:", error);
+      firebaseSession.ready = true;
+      if (typeof window.__refreshPrivateCardsState === "function") window.__refreshPrivateCardsState();
+      if (typeof window.__refreshMiaBubble === "function") window.__refreshMiaBubble();
+    });
+
   const existingLogo = document.querySelector(
     "header img, .logo img, .navbar-brand img, .brand img, img[alt*='logo' i]"
   );
@@ -380,8 +401,6 @@
         background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.26) 100%);
       }
 
-
-
       body.mobile-preview-mode .private-card-link {
         position: relative;
       }
@@ -617,7 +636,7 @@
         }
 
         body.mobile-preview-mode .mobile-preview-bubble {
-          width: 59%;
+          width: 58%;
           left: 12px;
           top: 12px;
           padding: 10px 10px 12px;
@@ -631,9 +650,18 @@
           font-size: 12px;
         }
 
+        body.mobile-preview-mode .mobile-preview-mia {
+          width: 42%;
+        }
+
+        body.mobile-preview-mode .mobile-preview-actions {
+          gap: 7px;
+        }
+
         body.mobile-preview-mode .mobile-preview-action {
           min-height: 46px;
           font-size: 12px;
+          padding: 0 6px;
         }
 
         body.mobile-preview-mode .mobile-preview-slider-page .mobile-preview-grid {
@@ -641,9 +669,15 @@
         }
 
         body.mobile-preview-mode .mobile-preview-card {
-          min-height: 118px;
-          height: 118px;
+          min-height: 120px;
+          height: 120px;
           border-radius: 18px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-card-content {
+          left: 10px;
+          right: 10px;
+          bottom: 9px;
         }
 
         body.mobile-preview-mode .mobile-preview-card-title {
@@ -653,91 +687,83 @@
         body.mobile-preview-mode .mobile-preview-card-text {
           font-size: 11px;
         }
+
+        body.mobile-preview-mode .mobile-preview-badge {
+          width: 28px;
+          height: 28px;
+          font-size: 15px;
+        }
       }
     }
   `;
   document.head.appendChild(style);
 
   document.body.classList.add("mobile-preview-mode");
-
   Array.from(document.body.children).forEach((child) => {
-    if (
-      child.tagName !== "SCRIPT" &&
-      child.tagName !== "STYLE" &&
-      child.id !== "mobile-preview-root"
-    ) {
-      child.classList.add("mobile-preview-original-hide");
+    if (child.id !== "mobile-preview-root" && child.id !== "mobile-preview-style") {
+      if (child.tagName !== "SCRIPT" && child.tagName !== "STYLE" && child.tagName !== "LINK") {
+        child.classList.add("mobile-preview-original-hide");
+      }
     }
   });
-
-  const oldRoot = document.getElementById("mobile-preview-root");
-  if (oldRoot) oldRoot.remove();
 
   const root = document.createElement("div");
   root.id = "mobile-preview-root";
   root.className = "mobile-preview-root";
-
   root.innerHTML = `
-    <div class="mobile-preview-topbar">
+    <header class="mobile-preview-topbar">
       <div class="mobile-preview-topbar-inner glass-card">
-        <img src="${logoSrc}" alt="Logo Farmacia Montesano">
+        <img src="${logoSrc}" alt="Farmacia Montesano" />
       </div>
-    </div>
+    </header>
 
-    <div class="mobile-preview-statusbar">
+    <section class="mobile-preview-statusbar">
       <div class="mobile-preview-statusbar-inner glass-card">
         <span class="status-dot" id="mobilePreviewStatusDot"></span>
         <div class="status-fixed" id="mobilePreviewStatusLabel">Siamo aperti</div>
         <div class="status-marquee">
-          <div class="status-marquee-track" id="mobilePreviewStatusDetail">Chiudiamo alle 20:00 • Chiudiamo alle 20:00 • </div>
+          <div class="status-marquee-track" id="mobilePreviewStatusDetail">
+            Chiudiamo alle 13:00 • Chiudiamo alle 13:00 •
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <a href="${CONFIG.miaLink}" class="mobile-preview-hero" id="mobilePreviewHero" aria-label="Apri assistente Mia">
-      <div class="mobile-preview-hero-bg" id="mobilePreviewHeroBg">
-        <div class="mobile-preview-hero-slide is-active" style="background-image:url('${CONFIG.heroImages[0]}')"></div>
-        <div class="mobile-preview-hero-slide" style="background-image:url('${CONFIG.heroImages[1]}')"></div>
-        <div class="mobile-preview-hero-slide" style="background-image:url('${CONFIG.heroImages[2]}')"></div>
+    <a class="mobile-preview-hero" href="${CONFIG.miaLink}" id="mobilePreviewHero">
+      <div class="mobile-preview-hero-bg">
+        ${CONFIG.heroImages.map((img, index) => `
+          <div
+            class="mobile-preview-hero-slide ${index === 0 ? "is-active" : ""}"
+            style="background-image:url('${img}')"
+          ></div>
+        `).join("")}
       </div>
 
       <div class="mobile-preview-bubble" id="mobilePreviewBubble">
-        <h2 class="mobile-preview-bubble-title" id="mobilePreviewBubbleTitle">Ciao cliente, sono Mia</h2>
-        <p class="mobile-preview-bubble-subtitle" id="mobilePreviewBubbleSubtitle">Ti aiuto a prenotare<br>esami e servizi in farmacia</p>
+        <h2 class="mobile-preview-bubble-title" id="mobilePreviewBubbleTitle">Buongiorno</h2>
+        <p class="mobile-preview-bubble-subtitle" id="mobilePreviewBubbleSubtitle">
+          Sono Mia. Posso aiutarti con servizi, prenotazioni e informazioni della farmacia
+        </p>
       </div>
 
       <div class="mobile-preview-mia">
-        <img
-          src="${miaSrc}"
-          alt="MIA assistente farmacia"
-          onerror="this.onerror=null;this.src='mia.png?v=2';this.style.display='block';"
-        >
+        <img src="${miaSrc}" alt="Mia assistente" />
       </div>
     </a>
 
-    <section class="mobile-preview-actions" aria-label="Azioni rapide">
-      <a href="tel:${CONFIG.phone}" class="mobile-preview-action action-call">
-        <span class="icon">📞</span>
-        <span>Chiama</span>
+    <section class="mobile-preview-actions">
+      <a class="mobile-preview-action action-call" href="tel:${CONFIG.phone}">
+        <span class="icon">📞</span><span>Chiama</span>
       </a>
-
-      <a
-        href="https://wa.me/${CONFIG.whatsapp}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mobile-preview-action action-whatsapp"
-      >
-        <span class="icon">💬</span>
-        <span>WhatsApp</span>
+      <a class="mobile-preview-action action-whatsapp" href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">
+        <span class="icon">💬</span><span>WhatsApp</span>
       </a>
-
-      <a href="${CONFIG.prenotaLink}" class="mobile-preview-action action-book">
-        <span class="icon">🗓️</span>
-        <span>Prenota</span>
+      <a class="mobile-preview-action action-book" href="${CONFIG.prenotaLink}">
+        <span class="icon">🗓️</span><span>Prenota</span>
       </a>
     </section>
 
-    <section class="mobile-preview-slider" aria-label="Collegamenti rapidi">
+    <section class="mobile-preview-slider">
       <div class="mobile-preview-slider-track" id="mobilePreviewSliderTrack">
 
         <div class="mobile-preview-slider-page">
@@ -746,16 +772,16 @@
               <img src="${CONFIG.cardImages.servizi}" alt="Servizi">
               <div class="mobile-preview-card-content">
                 <h3 class="mobile-preview-card-title">Servizi</h3>
-                <p class="mobile-preview-card-text">Esami e consulenze</p>
+                <p class="mobile-preview-card-text">Scopri i servizi attivi</p>
               </div>
             </a>
 
             <a href="${CONFIG.promoLink}" class="mobile-preview-card">
-              <img src="${CONFIG.cardImages.promo}" alt="Offerte">
+              <img src="${CONFIG.cardImages.promo}" alt="Promo">
               <span class="mobile-preview-badge">${CONFIG.promoBadge}</span>
               <div class="mobile-preview-card-content">
-                <h3 class="mobile-preview-card-title">Offerte</h3>
-                <p class="mobile-preview-card-text">Promozioni</p>
+                <h3 class="mobile-preview-card-title">Promo</h3>
+                <p class="mobile-preview-card-text">Offerte del momento</p>
               </div>
             </a>
 
@@ -882,18 +908,30 @@
   const privateModal = document.getElementById("privateAccessModal");
   const privateModalClose = document.getElementById("privateAccessClose");
   const privateLinks = document.querySelectorAll(".private-card-link");
+  const privateLoginBtn = document.querySelector(".private-access-btn-login");
+  const privateRegisterBtn = document.querySelector(".private-access-btn-register");
+  let pendingPrivateTarget = CONFIG.profiloLink;
 
   function refreshPrivateCardsState() {
-    const isLogged = localStorage.getItem("farmaciaLoggedIn") === "true";
-    const user = localStorage.getItem("farmaciaCurrentUser");
     privateLinks.forEach((link) => {
-      link.classList.toggle("is-unlocked", !!(isLogged && user));
+      link.classList.toggle("is-unlocked", !!firebaseSession.user);
     });
   }
+  window.__refreshPrivateCardsState = refreshPrivateCardsState;
   refreshPrivateCardsState();
 
-  function openPrivateModal() {
+  function openPrivateModal(target) {
     if (!privateModal) return;
+    pendingPrivateTarget = target || CONFIG.profiloLink;
+
+    if (privateLoginBtn) {
+      privateLoginBtn.href = `${CONFIG.loginLink}?redirect=${encodeURIComponent(pendingPrivateTarget)}`;
+    }
+
+    if (privateRegisterBtn) {
+      privateRegisterBtn.href = `${CONFIG.registerLink}?redirect=${encodeURIComponent(pendingPrivateTarget)}`;
+    }
+
     privateModal.classList.add("open");
     document.body.style.overflow = "hidden";
   }
@@ -902,6 +940,18 @@
     if (!privateModal) return;
     privateModal.classList.remove("open");
     document.body.style.overflow = "";
+  }
+
+  async function waitForAuthReady() {
+    if (firebaseSession.ready) return;
+    await new Promise((resolve) => {
+      const timer = setInterval(() => {
+        if (firebaseSession.ready) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 50);
+    });
   }
 
   if (privateModalClose) {
@@ -917,18 +967,18 @@
   }
 
   privateLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      const isLogged = localStorage.getItem("farmaciaLoggedIn");
-      const user = localStorage.getItem("farmaciaCurrentUser");
-      const target = this.getAttribute("data-private-target");
+    link.addEventListener("click", async function (e) {
+      e.preventDefault();
+      const target = this.getAttribute("data-private-target") || CONFIG.profiloLink;
 
-      if (isLogged === "true" && user && target) {
+      await waitForAuthReady();
+
+      if (firebaseSession.user) {
         window.location.href = target;
         return;
       }
 
-      e.preventDefault();
-      openPrivateModal();
+      openPrivateModal(target);
     });
   });
 
@@ -951,17 +1001,32 @@
     if (!hero || !bubble || !title || !subtitle) return;
 
     function getUser() {
-      try { return JSON.parse(localStorage.getItem('farmaciaCurrentUser') || 'null'); } catch (e) { return null; }
+      return firebaseSession.user || null;
     }
 
     function getFirstName() {
       const user = getUser();
-      const raw = user && (user.name || user.nome) ? String(user.name || user.nome).trim() : '';
+      const raw = user && user.displayName ? String(user.displayName).trim() : '';
       return raw ? raw.split(/\s+/)[0] : '';
     }
 
     function isLogged() {
-      return localStorage.getItem('farmaciaLoggedIn') === 'true' && !!getUser();
+      return !!getUser();
+    }
+
+    window.__refreshMiaBubble = function() {
+      const firstName = getFirstName();
+      const logged = isLogged();
+      const seenInitialNow = sessionStorage.getItem('mobileMiaSeenInitial') === 'true';
+      if (seenInitialNow) {
+        title.textContent = logged ? `${firstName || 'Cliente'}` : 'Mia';
+        subtitle.innerHTML = logged
+          ? 'Resto a tua disposizione per qualsiasi esigenza'
+          : 'Resto a disposizione per informazioni, servizi e prenotazioni';
+      } else {
+        title.textContent = logged ? `Buongiorno ${firstName || 'Cliente'}` : 'Buongiorno';
+        subtitle.innerHTML = 'Sono Mia. Posso aiutarti con servizi, prenotazioni e informazioni della farmacia';
+      }
     }
 
     const seenInitial = sessionStorage.getItem('mobileMiaSeenInitial') === 'true';
