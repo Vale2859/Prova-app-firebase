@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Promo | Farmacia Montesano</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile.css" />
   <link rel="stylesheet" href="mobile-only.css" />
@@ -34,6 +35,7 @@
       color:#5c6d67;
     }
 
+    /* HERO FLASH */
     .flash-hero{
       display:grid;
       grid-template-columns:1.15fr 1fr;
@@ -164,6 +166,7 @@
       transform:translateY(-1px);
     }
 
+    /* MINI CAROSELLO */
     .promo-strip-wrap{
       margin-bottom:34px;
     }
@@ -230,6 +233,7 @@
       height:130px;
       object-fit:cover;
       display:block;
+      background:#eef2ef;
     }
 
     .promo-mini-content{
@@ -271,6 +275,7 @@
       color:#d62828;
     }
 
+    /* TITOLI SEZIONI */
     .promo-section{
       margin-top:34px;
     }
@@ -295,6 +300,7 @@
       color:#688078;
     }
 
+    /* STAGIONALI */
     .seasonal-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -320,6 +326,7 @@
       height:230px;
       object-fit:cover;
       display:block;
+      background:#eef2ef;
     }
 
     .seasonal-card-content{
@@ -374,14 +381,11 @@
       flex-wrap:wrap;
     }
 
+    /* MESE */
     .month-grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:22px;
-    }
-
-    #offerte-container{
-      display:contents;
     }
 
     .month-card{
@@ -403,6 +407,7 @@
       height:180px;
       object-fit:cover;
       display:block;
+      background:#eef2ef;
     }
 
     .month-card-content{
@@ -533,7 +538,6 @@
       margin:0 0 18px;
       color:#62766f;
       font-size:15px;
-      min-height:auto;
     }
 
     .empty-btn{
@@ -829,17 +833,16 @@
       </div>
     </div>
 
+    <!-- HERO FLASH -->
     <section class="flash-hero">
       <div class="flash-hero-media">
-        <img src="promo-flash.jpg" alt="Occasione flash Farmacia Montesano">
+        <img src="" alt="Occasione flash Farmacia Montesano">
       </div>
 
       <div class="flash-hero-content">
         <span class="flash-badge">OCCASIONE FLASH</span>
         <h2>-30% Capelli</h2>
-        <p>
-          Promo speciale per pochi giorni su prodotti selezionati per il benessere e la forza dei capelli.
-        </p>
+        <p>Promo speciale per pochi giorni su prodotti selezionati per il benessere e la forza dei capelli.</p>
 
         <div class="flash-meta">
           ⚡ Solo per pochi giorni<br>
@@ -858,126 +861,34 @@
       </div>
     </section>
 
+    <!-- STRIP ORIZZONTALE -->
     <section class="promo-strip-wrap">
       <div class="promo-strip-head">
         <h3>Scorri le occasioni</h3>
         <p>Una selezione veloce delle promo più interessanti.</p>
       </div>
 
-      <div class="promo-strip" id="promoStrip">
-        <article class="promo-mini-card">
-          <img src="promo1.jpg" alt="Promo energia">
-          <div class="promo-mini-content">
-            <span class="promo-mini-badge">ENERGIA</span>
-            <h4>Integratore energia</h4>
-            <div class="promo-mini-price">
-              <span class="promo-mini-old">€19,90</span>
-              <span class="promo-mini-new">€14,90</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="promo-mini-card">
-          <img src="promo2.jpg" alt="Promo crema viso">
-          <div class="promo-mini-content">
-            <span class="promo-mini-badge">PELLE</span>
-            <h4>Crema viso</h4>
-            <div class="promo-mini-price">
-              <span class="promo-mini-old">€24,90</span>
-              <span class="promo-mini-new">€18,90</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="promo-mini-card">
-          <img src="promo3.jpg" alt="Promo fermenti">
-          <div class="promo-mini-content">
-            <span class="promo-mini-badge">INTESTINO</span>
-            <h4>Fermenti lattici</h4>
-            <div class="promo-mini-price">
-              <span class="promo-mini-old">€16,50</span>
-              <span class="promo-mini-new">€11,90</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="promo-mini-card">
-          <img src="promo4.jpg" alt="Promo solare">
-          <div class="promo-mini-content">
-            <span class="promo-mini-badge">ESTATE</span>
-            <h4>Solare alta protezione</h4>
-            <div class="promo-mini-price">
-              <span class="promo-mini-old">€22,00</span>
-              <span class="promo-mini-new">€16,90</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="promo-mini-card">
-          <img src="promo5.jpg" alt="Promo capelli">
-          <div class="promo-mini-content">
-            <span class="promo-mini-badge">CAPELLI</span>
-            <h4>Shampoo anticaduta</h4>
-            <div class="promo-mini-price">
-              <span class="promo-mini-old">€18,90</span>
-              <span class="promo-mini-new">€13,90</span>
-            </div>
-          </div>
-        </article>
-      </div>
+      <div class="promo-strip" id="promoStrip"></div>
     </section>
 
-    <section class="promo-section">
+    <!-- STAGIONALI -->
+    <section class="promo-section" id="stagionaliSection">
       <div class="promo-section-title">
         <h3>Promo stagionali</h3>
         <p>Le offerte più importanti del periodo, messe bene in evidenza.</p>
       </div>
 
-      <div class="seasonal-grid">
-        <article class="seasonal-card">
-          <img src="promo-stagionale-1.jpg" alt="Promo stagionale pelle">
-          <div class="seasonal-card-content">
-            <span class="seasonal-badge">PELLE</span>
-            <h4>Skincare stagione</h4>
-            <p>Prodotti selezionati per proteggere e idratare la pelle nel cambio stagione.</p>
-            <div class="seasonal-price">
-              <span class="seasonal-old">€24,90</span>
-              <span class="seasonal-new">€17,90</span>
-            </div>
-            <div class="seasonal-actions">
-              <a href="https://wa.me/393927737079" class="flash-btn primary">WhatsApp</a>
-              <a href="#" class="flash-btn secondary">Scopri</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="seasonal-card">
-          <img src="promo-stagionale-2.jpg" alt="Promo stagionale difese">
-          <div class="seasonal-card-content">
-            <span class="seasonal-badge">DIFESE</span>
-            <h4>Difese immunitarie</h4>
-            <p>Offerta dedicata a integratori e supporti stagionali per l’organismo.</p>
-            <div class="seasonal-price">
-              <span class="seasonal-old">€18,90</span>
-              <span class="seasonal-new">€13,90</span>
-            </div>
-            <div class="seasonal-actions">
-              <a href="https://wa.me/393927737079" class="flash-btn primary">WhatsApp</a>
-              <a href="#" class="flash-btn secondary">Scopri</a>
-            </div>
-          </div>
-        </article>
-      </div>
+      <div class="seasonal-grid"></div>
     </section>
 
-    <section class="promo-section">
+    <!-- OFFERTE DEL MESE -->
+    <section class="promo-section" id="meseSection">
       <div class="promo-section-title">
         <h3>Offerte del mese</h3>
         <p>Una selezione ordinata delle promozioni attive in farmacia.</p>
       </div>
-      <div class="month-grid">
-        <div id="offerte-container"></div>
-      </div>
+
+      <div class="month-grid"></div>
     </section>
 
     <div class="promo-final-box">
@@ -989,6 +900,7 @@
 
   <script src="site-config.js"></script>
   <script src="services-data.js"></script>
+  <script src="promo-data.js"></script>
   <script src="giornate-data.js"></script>
   <script src="script.js"></script>
   <script src="mobile-only.js"></script>
@@ -1018,70 +930,165 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    function showEmptyPromoMessage(container) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">🎁</div>
-          <h3>Al momento non ci sono promozioni attive</h3>
-          <p>
-            Le nuove promozioni saranno disponibili a breve.
-            Torna presto oppure contattaci per informazioni.
-          </p>
-          <a href="https://wa.me/393927737079" class="empty-btn">
-            Scrivici su WhatsApp
-          </a>
-        </div>
-      `;
-    }
+    async function caricaOfferteFirebase() {
+      const querySnapshot = await getDocs(collection(db, "offers"));
 
-    async function caricaOfferte() {
-      const container = document.getElementById("offerte-container");
-      if (!container) return;
+      const offerte = [];
 
-      container.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
 
-      try {
-        const querySnapshot = await getDocs(collection(db, "offers"));
+        if (data.attiva === true) {
+          offerte.push({
+            id: doc.id,
+            tipo: data.tipo || "mese",
+            titolo: data.titolo || data.nome || "",
+            nome: data.nome || data.titolo || "",
+            descrizione: data.descrizione || "",
+            badge: data.badge || "OFFERTA",
+            prezzoVecchio: data.prezzoPrima ? `€${data.prezzoPrima}` : "",
+            prezzoNuovo: data.prezzoOra ? `€${data.prezzoOra}` : "",
+            immagine: data.immagine || data.imageUrl || "",
+            dataInizio: data.dataInizio || "",
+            dataFine: data.dataFine || ""
+          });
+        }
+      });
 
-        if (querySnapshot.empty) {
-          showEmptyPromoMessage(container);
-          return;
+      const flashPromo = offerte.find(p => p.tipo === "flash");
+      const stripPromo = offerte.filter(p => p.tipo === "strip");
+      const stagionali = offerte.filter(p => p.tipo === "stagionale");
+      const mesePromo = offerte.filter(p => p.tipo === "mese");
+
+      // FLASH HERO
+      const flashHero = document.querySelector(".flash-hero");
+      if (flashPromo) {
+        const flashImg = document.querySelector(".flash-hero-media img");
+        const flashTitle = document.querySelector(".flash-hero-content h2");
+        const flashDesc = document.querySelector(".flash-hero-content p");
+        const flashOld = document.querySelector(".flash-old");
+        const flashNew = document.querySelector(".flash-new");
+        const flashBadge = document.querySelector(".flash-badge");
+
+        if (flashImg) {
+          flashImg.src = flashPromo.immagine || "";
+          flashImg.alt = flashPromo.titolo || "Promo flash";
         }
 
-        let html = "";
+        if (flashTitle) flashTitle.innerText = flashPromo.titolo || "";
+        if (flashDesc) flashDesc.innerText = flashPromo.descrizione || "";
+        if (flashOld) flashOld.innerText = flashPromo.prezzoVecchio || "";
+        if (flashNew) flashNew.innerText = flashPromo.prezzoNuovo || "";
+        if (flashBadge) flashBadge.innerText = flashPromo.badge || "OCCASIONE FLASH";
+      } else {
+        if (flashHero) flashHero.style.display = "none";
+      }
 
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
+      // STRIP
+      const strip = document.getElementById("promoStrip");
+      const stripWrap = document.querySelector(".promo-strip-wrap");
 
-          if (data.attiva === true) {
-            html += `
+      if (strip) {
+        if (stripPromo.length === 0) {
+          if (stripWrap) stripWrap.style.display = "none";
+        } else {
+          strip.innerHTML = "";
+
+          stripPromo.forEach(promo => {
+            strip.innerHTML += `
+              <article class="promo-mini-card">
+                <img src="${promo.immagine || ""}" alt="${promo.titolo || ""}">
+                <div class="promo-mini-content">
+                  <span class="promo-mini-badge">${promo.badge || "PROMO"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <div class="promo-mini-price">
+                    <span class="promo-mini-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="promo-mini-new">${promo.prezzoNuovo || ""}</span>
+                  </div>
+                </div>
+              </article>
+            `;
+          });
+        }
+      }
+
+      // STAGIONALI
+      const seasonalGrid = document.querySelector(".seasonal-grid");
+      const seasonalSection = document.getElementById("stagionaliSection");
+
+      if (seasonalGrid) {
+        if (stagionali.length === 0) {
+          if (seasonalSection) seasonalSection.style.display = "none";
+        } else {
+          seasonalGrid.innerHTML = "";
+
+          stagionali.forEach(promo => {
+            seasonalGrid.innerHTML += `
+              <article class="seasonal-card">
+                <img src="${promo.immagine || ""}" alt="${promo.titolo || ""}">
+                <div class="seasonal-card-content">
+                  <span class="seasonal-badge">${promo.badge || "PROMO"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <p>${promo.descrizione || ""}</p>
+                  <div class="seasonal-price">
+                    <span class="seasonal-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="seasonal-new">${promo.prezzoNuovo || ""}</span>
+                  </div>
+                  <div class="seasonal-actions">
+                    <a href="https://wa.me/393927737079" class="flash-btn primary">WhatsApp</a>
+                    <a href="#" class="flash-btn secondary">Scopri</a>
+                  </div>
+                </div>
+              </article>
+            `;
+          });
+        }
+      }
+
+      // OFFERTE DEL MESE
+      const monthGrid = document.querySelector(".month-grid");
+      const monthSection = document.getElementById("meseSection");
+
+      if (monthGrid) {
+        if (mesePromo.length === 0) {
+          if (monthSection) {
+            const title = monthSection.querySelector(".promo-section-title");
+            if (title) title.style.display = "none";
+          }
+
+          monthGrid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🎁</div>
+              <h3>Al momento non ci sono promozioni attive</h3>
+              <p>Le nuove promozioni saranno disponibili a breve. Torna presto oppure contattaci per informazioni.</p>
+              <a href="https://wa.me/393927737079" class="empty-btn">Scrivici su WhatsApp</a>
+            </div>
+          `;
+        } else {
+          monthGrid.innerHTML = "";
+
+          mesePromo.forEach(promo => {
+            monthGrid.innerHTML += `
               <article class="month-card">
+                <img src="${promo.immagine || ''}" alt="${promo.titolo || ''}">
                 <div class="month-card-content">
-                  <span class="month-badge">OFFERTA</span>
-                  <h4>${data.nome || ""}</h4>
+                  <span class="month-badge">${promo.badge || "OFFERTA"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <p>${promo.descrizione || ""}</p>
                   <div class="month-price">
-                    <span class="month-old">€${data.prezzoPrima ?? ""}</span>
-                    <span class="month-new">€${data.prezzoOra ?? ""}</span>
+                    <span class="month-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="month-new">${promo.prezzoNuovo || ""}</span>
                   </div>
                   <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
                 </div>
               </article>
             `;
-          }
-        });
-
-        if (html.trim() === "") {
-          showEmptyPromoMessage(container);
-        } else {
-          container.innerHTML = html;
+          });
         }
-      } catch (error) {
-        console.error("Errore caricamento offerte:", error);
-        showEmptyPromoMessage(container);
       }
     }
 
-    caricaOfferte();
+    caricaOfferteFirebase();
   </script>
 </body>
 </html>
