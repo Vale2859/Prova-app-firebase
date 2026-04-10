@@ -2,163 +2,100 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Farmacie di turno | Matera</title>
-
-<link rel="stylesheet" href="style.css">
+<title>Farmacia di turno</title>
 
 <style>
-body{
-  font-family: -apple-system, sans-serif;
-  background: linear-gradient(135deg,#eaf4ef,#f7fbf9);
-  margin:0;
+body {
+  font-family: Arial;
+  background: #f2f2f2;
+  text-align: center;
 }
 
-.container{
-  max-width:600px;
-  margin:auto;
-  padding:20px;
+.box {
+  background: white;
+  margin: 15px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.card{
-  background:#fff;
-  border-radius:25px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+.turno {
+  font-size: 28px;
+  font-weight: bold;
+  color: #0a7c4a;
 }
 
-.badge{
-  display:inline-block;
-  background:#dff3ea;
-  padding:6px 14px;
-  border-radius:999px;
-  font-weight:700;
-  margin-bottom:10px;
+.appoggio {
+  color: #666;
 }
 
-.title{
-  font-size:32px;
-  font-weight:900;
-  margin:10px 0;
-}
-
-.subtitle{
-  color:#666;
-}
-
-.btn{
-  display:block;
-  width:100%;
-  text-align:center;
-  padding:14px;
-  border-radius:15px;
-  background:#eaf4ef;
-  margin-top:10px;
-  font-weight:700;
-  text-decoration:none;
-  color:#000;
-}
-
-.list-card{
-  background:#fff;
-  border-radius:20px;
-  padding:15px;
-  margin-bottom:15px;
-}
-
-.date{
-  font-size:14px;
-  color:#777;
-}
-
-.appoggio{
-  margin-top:8px;
-  font-weight:600;
-  color:#555;
+.prossimi div {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="container">
-
-<h2>Farmacie di turno a Matera</h2>
-
-<div id="oggi" class="card"></div>
-
-<h3>Prossimi 7 turni</h3>
-<div id="lista"></div>
-
+<div class="box">
+  <h2>Farmacia di turno</h2>
+  <div id="turno" class="turno">-</div>
+  <div id="appoggio" class="appoggio"></div>
 </div>
 
-<script src="turni_2026_matera.js"></script>
+<div class="box">
+  <h3>Prossimi 7 turni</h3>
+  <div id="prossimi" class="prossimi"></div>
+</div>
 
-<script>
+<script type="module">
+import { db, ref, get } from './firebase.js';
 
-function formatDate(date){
-  return date.toISOString().split("T")[0];
+function getData(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return d.toISOString().split('T')[0];
 }
 
-function getOggi(){
-  const oggi = new Date();
-  return formatDate(oggi);
-}
+async function caricaTurno() {
+  const oggi = getData();
 
-function trovaTurno(data){
-  return TURNI_2026.find(t => t.data === data);
-}
+  const snap = await get(ref(db, "turni/" + oggi));
+  const t = snap.val();
 
-function renderOggi(){
-  const oggi = getOggi();
-  const turno = trovaTurno(oggi);
-
-  if(!turno){
-    document.getElementById("oggi").innerHTML = "Nessun turno trovato";
-    return;
+  if (t) {
+    document.getElementById("turno").innerText = t.turno;
+    document.getElementById("appoggio").innerText =
+      t.appoggio ? "Appoggio: " + t.appoggio : "";
+  } else {
+    document.getElementById("turno").innerText = "Nessun turno";
   }
-
-  document.getElementById("oggi").innerHTML = `
-    <div class="badge">Farmacia di turno</div>
-    <div class="title">${turno.turno}</div>
-    <div class="subtitle">Farmacia principale della giornata</div>
-
-    ${turno.appoggio ? `<div class="appoggio">Appoggio: ${turno.appoggio}</div>` : ""}
-
-    <a class="btn" href="#">Apri Maps</a>
-  `;
 }
 
-function renderLista(){
-  const oggi = new Date();
-  let html = "";
+async function caricaProssimi() {
+  const box = document.getElementById("prossimi");
 
-  for(let i=1;i<=7;i++){
-    const data = new Date();
-    data.setDate(oggi.getDate()+i);
+  for (let i = 1; i <= 7; i++) {
+    const data = getData(i);
 
-    const giorno = formatDate(data);
-    const turno = trovaTurno(giorno);
+    const snap = await get(ref(db, "turni/" + data));
+    const t = snap.val();
 
-    if(turno){
-      html += `
-        <div class="list-card">
-          <div class="date">${giorno}</div>
-          <div class="title" style="font-size:22px">${turno.turno}</div>
-          ${turno.appoggio ? `<div class="appoggio">Appoggio: ${turno.appoggio}</div>` : ""}
+    if (t) {
+      box.innerHTML += `
+        <div>
+          <strong>${data}</strong><br>
+          ${t.turno}
+          ${t.appoggio ? `<br><small>Appoggio: ${t.appoggio}</small>` : ""}
         </div>
       `;
     }
   }
-
-  document.getElementById("lista").innerHTML = html;
 }
 
-renderOggi();
-renderLista();
-
+caricaTurno();
+caricaProssimi();
 </script>
 
 </body>
