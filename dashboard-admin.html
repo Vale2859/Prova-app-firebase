@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard Admin | Farmacia Montesano</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mobile.css" />
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f8f55" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Montesano Admin" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+
+  <style>
+    :root{
+      --admin-bg: linear-gradient(180deg, #f5f7f6 0%, #eef4f1 100%);
+      --admin-card: rgba(255,255,255,0.86);
+      --admin-card-strong: rgba(255,255,255,0.96);
+      --admin-border: rgba(20, 55, 48, 0.08);
+      --admin-text: #16372f;
+      --admin-muted: #6f817b;
+      --admin-green-1: #2f7f5f;
+      --admin-green-2: #86c58b;
+      --admin-shadow: 0 18px 44px rgba(16, 49, 39, 0.08);
+      --admin-radius-xl: 30px;
+      --admin-radius-lg: 24px;
+      --admin-radius-md: 20px;
+    }
+
+    *{
+      box-sizing: border-box;
+    }
+
+    html, body{
+      margin: 0;
+      padding: 0;
+    }
+
+    body{
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: var(--admin-bg);
+      color: var(--admin-text);
+    }
+
+    .admin-shell{
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 18px 16px 100px;
+    }
+
+    .admin-top{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .admin-brand-card,
+    .admin-status-card,
+    .admin-hero,
+    .admin-card{
+      border: 1px solid var(--admin-border);
+      box-shadow: var(--admin-shadow);
+    }
+
+    .admin-brand-card{
+      background: var(--admin-card-strong);
+      border-radius: 34px;
+      padding: 22px 20px;
+    }
+
+    .admin-logo{
+      width: 100%;
+      max-width: 270px;
+      display: block;
+    }
+
+    .admin-status-card{
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      padding: 15px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-status-dot{
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #db8e86;
+      box-shadow: 0 0 0 7px rgba(219,142,134,0.15);
+      flex-shrink: 0;
+    }
+
+    .admin-status-text{
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .admin-status-text strong{
+      font-size: 16px;
+      color: var(--admin-text);
+    }
+
+    .admin-status-text span{
+      font-size: 14px;
+      color: var(--admin-muted);
+    }
+
+    .admin-hero{
+      background: rgba(255,255,255,0.74);
+      backdrop-filter: blur(16px);
+      border-radius: var(--admin-radius-xl);
+      padding: 22px 18px;
+      margin-bottom: 20px;
+    }
+
+    .admin-hero h1{
+      margin: 0 0 10px;
+      font-size: 40px;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: #10352e;
+    }
+
+    .admin-hero p{
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--admin-muted);
+      max-width: 650px;
+    }
+
+    .admin-grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .admin-card{
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+
+    .admin-card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 22px 48px rgba(17,49,40,0.11);
+      border-color: rgba(47,127,95,0.18);
+    }
+
+    .admin-card-image-wrap{
+      position: relative;
+      padding: 12px 12px 0;
+    }
+
+    .admin-card-image{
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 22px;
+      display: block;
+      background: #e8efeb;
+    }
+
+    .admin-card-badge{
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .03em;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+
+    .badge-offerte{ background:#f58aa0; }
+    .badge-servizi{ background:#76c4d1; }
+    .badge-beauty{ background:#b199f0; }
+    .badge-turni{ background:#87bf7d; }
+
+    .admin-card-body{
+      padding: 14px 14px 16px;
+    }
+
+    .admin-card h2{
+      margin: 0 0 6px;
+      font-size: 26px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #133930;
+    }
+
+    .admin-card p{
+      margin: 0 0 14px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--admin-muted);
+      min-height: 64px;
+    }
+
+    .admin-card-action{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--admin-green-1) 0%, var(--admin-green-2) 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 12px 24px rgba(73, 165, 120, 0.22);
+    }
+
+    @media (max-width: 640px){
+      .admin-shell{
+        padding: 16px 12px 90px;
+      }
+
+      .admin-brand-card{
+        padding: 18px 16px;
+        border-radius: 28px;
+      }
+
+      .admin-logo{
+        max-width: 235px;
+      }
+
+      .admin-status-card{
+        border-radius: 22px;
+        padding: 14px 15px;
+      }
+
+      .admin-hero{
+        padding: 18px 16px;
+        border-radius: 24px;
+      }
+
+      .admin-hero h1{
+        font-size: 30px;
+      }
+
+      .admin-hero p{
+        font-size: 15px;
+      }
+
+      .admin-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .admin-card{
+        border-radius: 22px;
+      }
+
+      .admin-card-image-wrap{
+        padding: 10px 10px 0;
+      }
+
+      .admin-card-image{
+        height: 125px;
+        border-radius: 18px;
+      }
+
+      .admin-card-badge{
+        top: 18px;
+        right: 18px;
+        min-width: 34px;
+        height: 34px;
+        font-size: 10px;
+        padding: 0 10px;
+      }
+
+      .admin-card-body{
+        padding: 12px 12px 14px;
+      }
+
+      .admin-card h2{
+        font-size: 20px;
+      }
+
+      .admin-card p{
+        font-size: 14px;
+        min-height: 78px;
+      }
+
+      .admin-card-action{
+        width: 100%;
+        min-height: 42px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="admin-shell">
+
+    <header class="admin-top">
+      <div class="admin-brand-card">
+        <img src="logo.png" alt="Logo Farmacia Montesano" class="admin-logo" />
+      </div>
+
+      <div class="admin-status-card">
+        <div class="admin-status-dot"></div>
+        <div class="admin-status-text">
+          <strong>Dashboard Admin</strong>
+          <span>Gestisci offerte, servizi, beauty e turni in un unico posto.</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="admin-hero">
+      <h1>Controllo contenuti</h1>
+      <p>Apri la sezione che vuoi aggiornare. Ogni area avrà la sua pagina dedicata di modifica, collegata a Firebase.</p>
+    </section>
+
+    <section class="admin-grid">
+
+      <a href="offerte-admin.html" class="admin-card">
+        <div class="admin-card-image-wrap">
+          <img src="promo-card.jpg" alt="Offerte" class="admin-card-image" />
+          <span class="admin-card-badge badge-offerte">PROMO</span>
+        </div>
+        <div class="admin-card-body">
+          <h2>Offerte</h2>
+          <p>Gestisci promozioni, immagini, prezzi, visibilità e validità.</p>
+          <span class="admin-card-action">Apri sezione</span>
+        </div>
+      </a>
+
+      <a href="servizi-admin.html" class="admin-card">
+        <div class="admin-card-image-wrap">
+          <img src="servizi-card.jpg" alt="Servizi" class="admin-card-image" />
+          <span class="admin-card-badge badge-servizi">SERVIZI</span>
+        </div>
+        <div class="admin-card-body">
+          <h2>Servizi</h2>
+          <p>Modifica nome, descrizione, immagine e visibilità dei servizi.</p>
+          <span class="admin-card-action">Apri sezione</span>
+        </div>
+      </a>
+
+      <a href="beauty-admin.html" class="admin-card">
+        <div class="admin-card-image-wrap">
+          <img src="beauty-card.jpg" alt="Giornate Beauty" class="admin-card-image" />
+          <span class="admin-card-badge badge-beauty">BEAUTY</span>
+        </div>
+        <div class="admin-card-body">
+          <h2>Giornate Beauty</h2>
+          <p>Gestisci eventi, date, immagini, descrizioni e pubblicazione.</p>
+          <span class="admin-card-action">Apri sezione</span>
+        </div>
+      </a>
+
+      <a href="turni-admin.html" class="admin-card">
+        <div class="admin-card-image-wrap">
+          <img src="turni-card.jpg" alt="Farmacie di turno" class="admin-card-image" />
+          <span class="admin-card-badge badge-turni">TURNI</span>
+        </div>
+        <div class="admin-card-body">
+          <h2>Farmacie di turno</h2>
+          <p>Controlla calendario, cambi rapidi, scambi e inserimenti manuali.</p>
+          <span class="admin-card-action">Apri sezione</span>
+        </div>
+      </a>
+
+    </section>
+
+  </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
+  </script>
+</body>
+</html>
