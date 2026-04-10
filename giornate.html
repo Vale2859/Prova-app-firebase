@@ -3,466 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Beauty Specialist | Farmacia Montesano</title>
+  <title>Giornate Beauty | Farmacia Montesano</title>
+
   <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="mobile.css" />
-  
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
   <style>
     .beauty-page{
-  max-width:1200px;
-  margin:auto;
-  padding:18px 18px 120px;
-}
-
-    .beauty-intro{
-      text-align:center;
-      margin-bottom:24px;
+      max-width:1200px;
+      margin:auto;
+      padding:18px 18px 120px;
     }
 
-    .beauty-intro h1{
-      margin:0 0 10px;
-      font-size:42px;
-      line-height:1.05;
-      color:#17332c;
+    .beauty-section{
+      margin-top:14px;
     }
 
-    .beauty-intro p{
-      margin:0;
-      font-size:18px;
-      color:#5c6d67;
-    }
-
-    /* HERO EVENTO */
-    .beauty-hero{
-      display:grid;
-      grid-template-columns:1.1fr 1fr;
-      gap:0;
-      background:#fff;
-      border-radius:28px;
-      overflow:hidden;
-      box-shadow:0 18px 40px rgba(0,0,0,0.10);
-      margin-bottom:28px;
-      border:1px solid #eee5ea;
-      animation:beautyGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes beautyGlow{
-      0%{ box-shadow:0 18px 40px rgba(0,0,0,0.10); }
-      100%{ box-shadow:0 24px 52px rgba(189,115,150,0.16); }
-    }
-
-    .beauty-hero-media{
-      min-height:380px;
-      background:#f7f2f5;
-    }
-
-    .beauty-hero-media img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .beauty-hero-content{
-      padding:34px 30px;
-      background:linear-gradient(135deg,#fff7fb 0%,#fff 100%);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-    }
-
-    .beauty-badge{
-      display:inline-block;
-      width:max-content;
-      padding:8px 14px;
-      border-radius:999px;
-      background:#c25d8f;
-      color:#fff;
-      font-size:13px;
-      font-weight:800;
-      letter-spacing:.04em;
-      margin-bottom:16px;
-    }
-
-    .beauty-hero-content h2{
-      margin:0 0 12px;
-      font-size:42px;
+    .beauty-section h2{
+      margin:0 0 8px;
+      font-size:34px;
       line-height:1.02;
       color:#17332c;
+      letter-spacing:-.03em;
     }
 
-    .beauty-hero-content p{
-      margin:0 0 16px;
+    .beauty-section p{
+      margin:0 0 18px;
       font-size:18px;
-      line-height:1.5;
-      color:#5c6d67;
-      max-width:500px;
+      line-height:1.45;
+      color:#6e817b;
     }
 
-    .beauty-meta{
-      font-size:15px;
-      line-height:1.7;
-      color:#6b7671;
-      margin-bottom:18px;
-    }
-
-    .beauty-highlight{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:20px;
-    }
-
-    .beauty-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:38px;
-      padding:0 14px;
-      border-radius:999px;
-      background:#f7eef3;
-      color:#8b3f69;
-      font-size:14px;
-      font-weight:700;
-    }
-
-    .beauty-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-
-    .beauty-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:54px;
-      padding:0 20px;
-      border-radius:14px;
-      font-size:16px;
-      font-weight:800;
-      text-decoration:none;
-      transition:.2s ease;
-    }
-
-    .beauty-btn.primary{
-      background:#2e8b57;
-      color:#fff;
-    }
-
-    .beauty-btn.primary:hover{
-      background:#256f46;
-      transform:translateY(-1px);
-    }
-
-    .beauty-btn.secondary{
-      background:#f3edf1;
-      color:#17332c;
-    }
-
-    .beauty-btn.secondary:hover{
-      background:#e9dfe6;
-      transform:translateY(-1px);
-    }
-
-    /* STRIP EVENTI */
-    .beauty-strip-wrap{
-      margin-bottom:34px;
-    }
-
-    .beauty-strip-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:14px;
-    }
-
-    .beauty-strip-head h3{
-      margin:0;
-      font-size:28px;
-      color:#17332c;
-    }
-
-    .beauty-strip-head p{
-      margin:0;
-      font-size:15px;
-      color:#688078;
-    }
-
-    .beauty-strip{
-      display:flex;
-      gap:14px;
-      overflow-x:auto;
-      padding-bottom:8px;
-      scroll-snap-type:none;
-      -webkit-overflow-scrolling:touch;
-      scroll-behavior:auto;
-    }
-
-    .beauty-strip::-webkit-scrollbar{
-      height:8px;
-    }
-
-    .beauty-strip::-webkit-scrollbar-thumb{
-      background:#e3d3dd;
-      border-radius:999px;
-    }
-
-    .beauty-mini-card{
-      min-width:230px;
-      max-width:230px;
-      background:#fff;
-      border-radius:18px;
-      overflow:hidden;
-      box-shadow:0 10px 22px rgba(0,0,0,0.08);
-      border:1px solid #eee5ea;
-      transition:.2s ease;
-      flex-shrink:0;
-    }
-
-    .beauty-mini-card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 14px 28px rgba(0,0,0,0.10);
-    }
-
-    .beauty-mini-card img{
-      width:100%;
-      height:135px;
-      object-fit:cover;
-      display:block;
-    }
-
-    .beauty-mini-content{
-      padding:14px;
-    }
-
-    .beauty-mini-date{
-      display:inline-block;
-      padding:5px 10px;
-      border-radius:999px;
-      background:#f8edf4;
-      color:#9a4f78;
-      font-size:11px;
-      font-weight:800;
-      margin-bottom:8px;
-    }
-
-    .beauty-mini-content h4{
-      margin:0 0 6px;
-      font-size:18px;
-      line-height:1.15;
-      color:#17332c;
-    }
-
-    .beauty-mini-content p{
-      margin:0;
-      font-size:14px;
-      line-height:1.4;
-      color:#5c6d67;
-    }
-
-    /* SEZIONI */
-    .beauty-section{
-      margin-top:34px;
-    }
-
-    .beauty-section-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:18px;
-    }
-
-    .beauty-section-title h3{
-      margin:0;
-      font-size:30px;
-      color:#17332c;
-    }
-
-    .beauty-section-title p{
-      margin:0;
-      font-size:15px;
-      color:#688078;
-    }
-
-    /* EVENTI IN PROGRAMMA */
     .beauty-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:24px;
+      gap:22px;
     }
 
     .beauty-card{
       background:#fff;
-      border-radius:24px;
+      border-radius:28px;
       overflow:hidden;
-      box-shadow:0 14px 32px rgba(0,0,0,0.08);
-      border:1px solid #eee5ea;
+      border:1px solid #e6eeea;
+      box-shadow:0 14px 34px rgba(0,0,0,.07);
       transition:transform .2s ease, box-shadow .2s ease;
     }
 
     .beauty-card:hover{
       transform:translateY(-4px);
-      box-shadow:0 18px 36px rgba(0,0,0,0.11);
+      box-shadow:0 18px 38px rgba(0,0,0,.1);
     }
 
-    .beauty-card img{
+    .beauty-card-image{
       width:100%;
-      height:230px;
+      height:260px;
       object-fit:cover;
       display:block;
+      background:#eef3f0;
     }
 
-    .beauty-card-content{
-      padding:20px;
+    .beauty-card-body{
+      padding:20px 18px 22px;
     }
 
-    .beauty-card-top{
-      display:flex;
+    .beauty-date{
+      display:inline-flex;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      min-height:34px;
+      padding:0 14px;
+      border-radius:999px;
+      background:#efe6f8;
+      color:#7d4ca6;
+      font-size:14px;
+      font-weight:800;
       margin-bottom:10px;
     }
 
-    .beauty-card-date{
-      display:inline-block;
-      padding:7px 12px;
-      border-radius:999px;
-      background:#f8edf4;
-      color:#9a4f78;
-      font-size:12px;
-      font-weight:800;
-    }
-
-    .beauty-card-spots{
-      font-size:13px;
-      font-weight:800;
-      color:#d62828;
-    }
-
-    .beauty-card h4{
-      margin:0 0 8px;
+    .beauty-card-title{
+      margin:0 0 10px;
       font-size:28px;
-      line-height:1.1;
+      line-height:1.08;
       color:#17332c;
     }
 
-    .beauty-card p{
-      margin:0 0 14px;
-      font-size:16px;
-      color:#5c6d67;
-      line-height:1.45;
-    }
-
-    .beauty-card-list{
-      margin:0 0 14px;
-      padding:0;
-      list-style:none;
-    }
-
-    .beauty-card-list li{
-      margin-bottom:6px;
-      font-size:15px;
-      color:#5c6d67;
-    }
-
-    .beauty-card-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* PERCHÉ PARTECIPARE */
-    .beauty-why{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:20px;
-    }
-
-    .beauty-why-card{
-      background:#fff;
-      border-radius:22px;
-      padding:24px 20px;
-      border:1px solid #eee5ea;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-      text-align:center;
-    }
-
-    .beauty-why-icon{
-      font-size:36px;
-      margin-bottom:12px;
-    }
-
-    .beauty-why-card h4{
-      margin:0 0 8px;
-      font-size:22px;
-      color:#17332c;
-    }
-
-    .beauty-why-card p{
+    .beauty-card-text{
       margin:0;
-      font-size:15px;
-      color:#5c6d67;
-      line-height:1.45;
+      font-size:17px;
+      line-height:1.48;
+      color:#61746d;
     }
 
-    .beauty-final-box{
-      margin-top:36px;
-      padding:24px;
-      border-radius:22px;
-      background:linear-gradient(135deg,#fff4f8 0%,#ffffff 100%);
-      border:1px solid #eadbe4;
+    .beauty-empty{
+      width:100%;
       text-align:center;
+      padding:42px 20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#f7fbf9 0%, #ffffff 100%);
+      border:1px solid #e4efe9;
+      color:#61746d;
+      box-shadow:0 12px 30px rgba(0,0,0,.05);
     }
 
-    .beauty-final-box h3{
-      margin:0 0 8px;
-      font-size:30px;
+    .beauty-empty strong{
+      display:block;
+      margin-bottom:8px;
+      font-size:24px;
       color:#17332c;
-    }
-
-    .beauty-final-box p{
-      margin:0 0 16px;
-      font-size:16px;
-      color:#5c6d67;
-    }
-
-    .beauty-final-box a{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:50px;
-      padding:0 22px;
-      border-radius:12px;
-      background:#25D366;
-      color:#fff;
-      font-size:16px;
-      font-weight:800;
-      text-decoration:none;
     }
 
     @media (max-width: 900px){
-      .beauty-hero{
-        grid-template-columns:1fr;
-      }
-
-      .beauty-hero-media{
-        min-height:220px;
-      }
-
-      .beauty-hero-content h2{
-        font-size:36px;
-      }
-
       .beauty-grid{
         grid-template-columns:1fr;
       }
 
-      .beauty-why{
-        grid-template-columns:1fr;
+      .beauty-card-image{
+        height:220px;
       }
     }
 
@@ -471,581 +128,170 @@
         padding:22px 12px 120px;
       }
 
-      .beauty-intro{
-        margin-bottom:18px;
+      .beauty-section h2{
+        font-size:26px;
       }
 
-      .beauty-intro h1{
-        font-size:30px;
-      }
-
-      .beauty-intro p{
-        font-size:15px;
-      }
-
-      .beauty-hero{
-        border-radius:20px;
-        margin-bottom:22px;
-      }
-
-      .beauty-hero-media{
-        min-height:190px;
-      }
-
-      .beauty-hero-content{
-        padding:18px 14px;
-      }
-
-      .beauty-badge{
-        font-size:12px;
-        padding:7px 12px;
-        margin-bottom:12px;
-      }
-
-      .beauty-hero-content h2{
-        font-size:28px;
-      }
-
-      .beauty-hero-content p{
-        font-size:15px;
-        margin-bottom:12px;
-      }
-
-      .beauty-meta{
-        font-size:13px;
+      .beauty-section p{
+        font-size:16px;
         margin-bottom:14px;
       }
 
-      .beauty-actions{
-        flex-direction:column;
+      .beauty-grid{
+        gap:14px;
       }
 
-      .beauty-btn{
-        width:100%;
+      .beauty-card{
+        border-radius:22px;
       }
 
-      .beauty-strip-wrap{
-        margin-bottom:26px;
+      .beauty-card-image{
+        height:180px;
       }
 
-      .beauty-strip-head{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:6px;
-        margin-bottom:10px;
+      .beauty-card-body{
+        padding:14px 14px 16px;
       }
 
-      .beauty-strip-head h3{
+      .beauty-card-title{
         font-size:22px;
       }
 
-      .beauty-mini-card{
-        min-width:180px;
-        max-width:180px;
-      }
-
-      .beauty-mini-card img{
-        height:110px;
-      }
-
-      .beauty-mini-content{
-        padding:12px;
-      }
-
-      .beauty-mini-content h4{
-        font-size:16px;
-      }
-
-      .beauty-section{
-        margin-top:24px;
-      }
-
-      .beauty-section-title{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:6px;
-        margin-bottom:12px;
-      }
-
-      .beauty-section-title h3{
-        font-size:22px;
-      }
-
-      .beauty-section-title p{
-        font-size:14px;
-      }
-
-      .beauty-card img{
-        height:170px;
-      }
-
-      .beauty-card-content{
-        padding:14px;
-      }
-
-      .beauty-card h4{
-        font-size:22px;
-      }
-
-      .beauty-card p{
-        font-size:15px;
-      }
-
-      .beauty-card-actions{
-        flex-direction:column;
-      }
-
-      .beauty-why-card{
-        padding:18px 14px;
-      }
-
-      .beauty-why-card h4{
-        font-size:20px;
-      }
-
-      .beauty-final-box{
-        margin-top:28px;
-        padding:18px 14px;
-      }
-
-      .beauty-final-box h3{
-        font-size:22px;
-      }
-
-      .beauty-final-box p{
+      .beauty-card-text{
         font-size:15px;
       }
     }
-    .empty-state{
-  grid-column:1/-1;
-  text-align:center;
-  padding:50px 25px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#f6faf8 0%,#ffffff 100%);
-  border:1px solid #e3efe9;
-  box-shadow:0 14px 32px rgba(0,0,0,0.06);
-  animation:fadeEmpty .5s ease;
-}
-
-.empty-icon{
-  font-size:42px;
-  margin-bottom:12px;
-}
-
-.empty-state h3{
-  margin:0 0 8px;
-  font-size:24px;
-  font-weight:800;
-  color:#17332c;
-}
-
-.empty-state p{
-  margin:0 0 18px;
-  color:#62766f;
-  font-size:15px;
-}
-
-.empty-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:44px;
-  padding:0 18px;
-  border-radius:12px;
-  background:#25D366;
-  color:#fff;
-  font-weight:800;
-  box-shadow:0 10px 20px rgba(37,211,102,0.25);
-}
-
-@keyframes fadeEmpty{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
   </style>
 
-  <link rel="stylesheet" href="mobile-only.css" />
-  <link rel="stylesheet" href="app-fixes.css" />
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f8f55">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Montesano">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 </head>
+
 <body class="season-primavera">
   <header class="home-site-header">
-  <div class="home-shell home-nav-wrap">
-    <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
-      <div class="home-brand-logo-box">
-        <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
-      </div>
-    </a>
-  </div>
-</header>
-  
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+    </div>
+  </header>
+
   <div class="beauty-page">
     <div class="page-topbar">
       <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="page-back-btn" aria-label="Torna alla home"><span>←</span></a>
       <div class="page-topbar-copy">
-        <h1>Beauty Specialist</h1>
-        <p>Eventi esclusivi, consulenze personalizzate e giornate dedicate alla bellezza in Farmacia Montesano.</p>
+        <h1>Giornate Beauty</h1>
+        <p>Scopri gli eventi beauty e le giornate speciali della Farmacia Montesano.</p>
       </div>
     </div>
 
-    <!-- HERO -->
-    <section class="beauty-hero">
-      <div class="beauty-hero-media">
-        <img src="beauty-hero.jpg" alt="Beauty Specialist Farmacia Montesano">
-      </div>
+    <section class="beauty-section" id="beautySection">
+      <h2>Eventi in farmacia</h2>
+      <p>Prenota la tua esperienza beauty direttamente in farmacia.</p>
 
-      <div class="beauty-hero-content">
-        <span class="beauty-badge">EVENTO IN EVIDENZA</span>
-        <h2>Beauty Day Caudalie</h2>
-        <p>
-          Una giornata speciale dedicata alla cura della pelle con consulenza personalizzata,
-          prodotti selezionati e omaggi esclusivi.
-        </p>
-
-        <div class="beauty-meta">
-          📅 27 Marzo<br>
-          📍 In farmacia<br>
-          ⏱ Consulenze su appuntamento
-        </div>
-
-        <div class="beauty-highlight">
-          <span class="beauty-pill">✨ Analisi pelle</span>
-          <span class="beauty-pill">🎁 Omaggi esclusivi</span>
-          <span class="beauty-pill">💄 Consigli personalizzati</span>
-        </div>
-
-        <div class="beauty-actions">
-          <a href="https://wa.me/393927737079" class="beauty-btn primary">Prenota su WhatsApp</a>
-          <a href="#" class="beauty-btn secondary">Chiedi informazioni</a>
-        </div>
-      </div>
+      <div class="beauty-grid" id="beautyGrid"></div>
     </section>
-
-    <!-- STRIP SCORREVOLE -->
-    <section class="beauty-strip-wrap">
-      <div class="beauty-strip-head">
-        <h3>Scorri i prossimi eventi</h3>
-        <p>Una panoramica veloce delle giornate beauty in programma.</p>
-      </div>
-
-      <div class="beauty-strip" id="beautyStrip">
-        <article class="beauty-mini-card">
-          <img src="beauty1.jpg" alt="Evento Caudalie">
-          <div class="beauty-mini-content">
-            <span class="beauty-mini-date">27 MARZO</span>
-            <h4>Caudalie</h4>
-            <p>Consulenza viso personalizzata e omaggi esclusivi.</p>
-          </div>
-        </article>
-
-        <article class="beauty-mini-card">
-          <img src="beauty2.jpg" alt="Evento Uriage">
-          <div class="beauty-mini-content">
-            <span class="beauty-mini-date">12 APRILE</span>
-            <h4>Uriage</h4>
-            <p>Skincare dedicata alle esigenze della pelle sensibile.</p>
-          </div>
-        </article>
-
-        <article class="beauty-mini-card">
-          <img src="beauty3.jpg" alt="Evento Vichy">
-          <div class="beauty-mini-content">
-            <span class="beauty-mini-date">30 APRILE</span>
-            <h4>Vichy</h4>
-            <p>Routine viso e trattamenti consigliati dalla specialist.</p>
-          </div>
-        </article>
-
-        <article class="beauty-mini-card">
-          <img src="beauty4.jpg" alt="Evento anti-age">
-          <div class="beauty-mini-content">
-            <span class="beauty-mini-date">10 MAGGIO</span>
-            <h4>Anti-age Day</h4>
-            <p>Consigli mirati per pelle matura e segni del tempo.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- EVENTI IN PROGRAMMA -->
-    <section class="beauty-section">
-      <div class="beauty-section-title">
-        <h3>Eventi in programma</h3>
-        <p>Le giornate beauty più attese, con posti limitati e consulenze dedicate.</p>
-      </div>
-
-      <div class="beauty-grid">
-
-        <article class="beauty-card">
-          <img src="beauty-event1.jpg" alt="Beauty Day Caudalie">
-          <div class="beauty-card-content">
-            <div class="beauty-card-top">
-              <span class="beauty-card-date">27 MARZO</span>
-              <span class="beauty-card-spots">Posti limitati</span>
-            </div>
-            <h4>Beauty Day Caudalie</h4>
-            <p>Una giornata dedicata alla bellezza del viso con consulenza personalizzata in farmacia.</p>
-            <ul class="beauty-card-list">
-              <li>✨ Analisi della pelle</li>
-              <li>🎁 Omaggio dedicato</li>
-              <li>💄 Consigli skincare su misura</li>
-            </ul>
-            <div class="beauty-card-actions">
-              <a href="https://wa.me/393927737079" class="beauty-btn primary">Prenota</a>
-              <a href="#" class="beauty-btn secondary">Scopri di più</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="beauty-card">
-          <img src="beauty-event2.jpg" alt="Skincare Specialist Day">
-          <div class="beauty-card-content">
-            <div class="beauty-card-top">
-              <span class="beauty-card-date">12 APRILE</span>
-              <span class="beauty-card-spots">Ultimi posti</span>
-            </div>
-            <h4>Skincare Specialist Day</h4>
-            <p>Evento dedicato a chi desidera una routine viso più adatta alle proprie esigenze.</p>
-            <ul class="beauty-card-list">
-              <li>💆 Consulenza dedicata</li>
-              <li>🧴 Scelta prodotti personalizzata</li>
-              <li>🎁 Promo speciali evento</li>
-            </ul>
-            <div class="beauty-card-actions">
-              <a href="https://wa.me/393927737079" class="beauty-btn primary">Prenota</a>
-              <a href="#" class="beauty-btn secondary">Scopri di più</a>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- PERCHE' PARTECIPARE -->
-    <section class="beauty-section">
-      <div class="beauty-section-title">
-        <h3>Perché partecipare</h3>
-        <p>Un’esperienza pensata per valorizzare il benessere e la bellezza della pelle.</p>
-      </div>
-
-      <div class="beauty-why">
-        <article class="beauty-why-card">
-          <div class="beauty-why-icon">✨</div>
-          <h4>Consulenza personalizzata</h4>
-          <p>Ogni cliente riceve indicazioni mirate in base alle esigenze della propria pelle.</p>
-        </article>
-
-        <article class="beauty-why-card">
-          <div class="beauty-why-icon">🎁</div>
-          <h4>Omaggi esclusivi</h4>
-          <p>Durante le giornate beauty sono previsti omaggi e vantaggi dedicati.</p>
-        </article>
-
-        <article class="beauty-why-card">
-          <div class="beauty-why-icon">💄</div>
-          <h4>Prodotti giusti</h4>
-          <p>Scopri i trattamenti più adatti per valorizzare il tuo viso con il consiglio giusto.</p>
-        </article>
-      </div>
-    </section>
-
-    <div class="beauty-final-box">
-      <h3>Prenota il tuo posto</h3>
-      <p>Le consulenze con Beauty Specialist sono su appuntamento. Contattaci subito su WhatsApp.</p>
-      <a href="https://wa.me/393927737079">Apri WhatsApp</a>
-    </div>
-
   </div>
-<script src="site-config.js"></script>
-<script src="services-data.js"></script>
-<script src="promo-data.js"></script>
-<script src="giornate-data.js"></script>
-<script src="script.js"></script>
 
-<script>
-function showEmptyBeautyMessage(container){
-  container.innerHTML = `
-    <div class="empty-state">
-      <div class="empty-icon">✨</div>
-      <h3>Al momento non sono previste giornate Beauty Specialist</h3>
-      <p>
-        Stiamo preparando i prossimi eventi dedicati alla bellezza.
-        Torna presto oppure contattaci per informazioni.
-      </p>
-      <a href="https://wa.me/393927737079" class="empty-btn">
-        Scrivici su WhatsApp
-      </a>
-    </div>
-  `;
-}
+  <script src="site-config.js"></script>
+  <script src="services-data.js"></script>
+  <script src="promo-data.js"></script>
+  <script src="giornate-data.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
 
-function normalizeDate(dateStr){
-  if(!dateStr) return null;
-  const d = new Date(dateStr + "T00:00:00");
-  return isNaN(d.getTime()) ? null : d;
-}
-
-function isGiornataActive(giornata){
-  if(!giornata) return false;
-  if(!(giornata.attiva === true || giornata.attivo === true)) return false;
-
-  const start = normalizeDate(giornata.dataInizio);
-  const end = normalizeDate(giornata.dataFine);
-
-  if(!start || !end) return true;
-
-  const oggi = new Date();
-  oggi.setHours(0,0,0,0);
-
-  return oggi >= start && oggi <= end;
-}
-
-function formatDateItalian(dateStr){
-  const d = normalizeDate(dateStr);
-  if(!d) return "";
-  return d.toLocaleDateString("it-IT", {
-    day: "numeric",
-    month: "long"
-  }).toUpperCase();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const giornateAttive = (window.GiornateData || []).filter(isGiornataActive);
-
-  const heroGiornata = giornateAttive.find(g => g.tipo === "hero") || giornateAttive[0];
-  const stripGiornate = giornateAttive.filter(g => g.tipo === "strip");
-  const eventiGiornate = giornateAttive.filter(g => g.tipo === "evento");
-
-  /* HERO */
-  const beautyHero = document.querySelector(".beauty-hero");
-
-  if(heroGiornata){
-    const heroImg = document.querySelector(".beauty-hero-media img");
-    const heroTitle = document.querySelector(".beauty-hero-content h2");
-    const heroDesc = document.querySelector(".beauty-hero-content p");
-    const heroMeta = document.querySelector(".beauty-meta");
-    const heroBadge = document.querySelector(".beauty-badge");
-    const heroHighlights = document.querySelector(".beauty-highlight");
-
-    if(heroImg){
-      heroImg.src = heroGiornata.immagine || heroGiornata.img || "";
-      heroImg.alt = heroGiornata.titolo || "Beauty event";
-    }
-
-    if(heroTitle) heroTitle.innerText = heroGiornata.titolo || "";
-    if(heroDesc) heroDesc.innerText = heroGiornata.descrizione || "";
-    if(heroBadge) heroBadge.innerText = heroGiornata.badge || "EVENTO IN EVIDENZA";
-
-    if(heroMeta){
-      heroMeta.innerHTML = `
-        📅 ${formatDateItalian(heroGiornata.dataEvento)}<br>
-        📍 In farmacia<br>
-        ⏱ Su appuntamento
-      `;
-    }
-
-    if(heroHighlights){
-      heroHighlights.innerHTML = "";
-      (heroGiornata.highlight || []).forEach(item => {
-        heroHighlights.innerHTML += `<span class="beauty-pill">${item}</span>`;
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
       });
     }
-  } else {
-    if(beautyHero) beautyHero.style.display = "none";
-  }
+  </script>
 
-  /* STRIP */
-  const beautyStrip = document.getElementById("beautyStrip");
-  const beautyStripWrap = document.querySelector(".beauty-strip-wrap");
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  if(beautyStrip){
-    if(stripGiornate.length === 0){
-      if(beautyStripWrap) beautyStripWrap.style.display = "none";
-    } else {
-      beautyStrip.innerHTML = "";
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
 
-      stripGiornate.forEach(giornata => {
-        beautyStrip.innerHTML += `
-          <article class="beauty-mini-card">
-            <img src="${giornata.immagine || giornata.img || ""}" alt="${giornata.titolo || ""}">
-            <div class="beauty-mini-content">
-              <span class="beauty-mini-date">${formatDateItalian(giornata.dataEvento)}</span>
-              <h4>${giornata.titolo || ""}</h4>
-              <p>${giornata.descrizione || ""}</p>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function caricaBeautyFirebase() {
+      const querySnapshot = await getDocs(collection(db, "beauty"));
+      const eventi = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        if (data.attivo === true) {
+          eventi.push({
+            id: doc.id,
+            titolo: data.titolo || data.nome || "",
+            descrizione: data.descrizione || "",
+            data: data.data || "",
+            immagine: data.immagine || data.imageUrl || "",
+            ordine: typeof data.ordine === "number" ? data.ordine : 999
+          });
+        }
+      });
+
+      eventi.sort((a, b) => a.ordine - b.ordine);
+
+      renderBeauty(eventi);
+    }
+
+    function renderBeauty(eventi) {
+      const grid = document.getElementById("beautyGrid");
+      const section = document.getElementById("beautySection");
+
+      if (!grid) return;
+
+      if (eventi.length === 0) {
+        if (section) {
+          section.innerHTML = `
+            <div class="beauty-empty">
+              <strong>Al momento non ci sono giornate beauty visibili</strong>
+              Torna presto oppure contattaci in farmacia per maggiori informazioni.
             </div>
-          </article>
-        `;
-      });
-    }
-  }
-
-  /* EVENTI IN PROGRAMMA */
-  const beautyGrid = document.querySelector(".beauty-grid");
-  const beautyGridSection = beautyGrid ? beautyGrid.closest(".beauty-section") : null;
-
-  if(beautyGrid){
-    if(eventiGiornate.length === 0){
-      if(beautyGridSection){
-        const title = beautyGridSection.querySelector(".beauty-section-title");
-        if(title) title.style.display = "none";
+          `;
+        }
+        return;
       }
 
-      showEmptyBeautyMessage(beautyGrid);
-    } else {
-      beautyGrid.innerHTML = "";
+      grid.innerHTML = "";
 
-      eventiGiornate.forEach(giornata => {
-        beautyGrid.innerHTML += `
+      eventi.forEach(evento => {
+        grid.innerHTML += `
           <article class="beauty-card">
-            <img src="${giornata.immagine || giornata.img || ""}" alt="${giornata.titolo || ""}">
-            <div class="beauty-card-content">
-              <div class="beauty-card-top">
-                <span class="beauty-card-date">${formatDateItalian(giornata.dataEvento)}</span>
-                <span class="beauty-card-spots">${giornata.posti || "Posti limitati"}</span>
-              </div>
-              <h4>${giornata.titolo || ""}</h4>
-              <p>${giornata.descrizione || ""}</p>
-              <ul class="beauty-card-list">
-                ${((giornata.lista || []).map(item => `<li>${item}</li>`).join(""))}
-              </ul>
-              <div class="beauty-card-actions">
-                <a href="https://wa.me/393927737079" class="beauty-btn primary">Prenota</a>
-                <a href="#" class="beauty-btn secondary">Scopri di più</a>
-              </div>
+            <img src="${evento.immagine || ''}" alt="${evento.titolo || ''}" class="beauty-card-image">
+            <div class="beauty-card-body">
+              ${evento.data ? `<span class="beauty-date">${evento.data}</span>` : ``}
+              <h3 class="beauty-card-title">${evento.titolo || ""}</h3>
+              <p class="beauty-card-text">${evento.descrizione || ""}</p>
             </div>
           </article>
         `;
       });
     }
-  }
-});
-</script>
 
-<script src="mobile-only.js"></script>
-<script src="app-fixes.js"></script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js");
-  });
-}
-</script>
-
+    caricaBeautyFirebase();
+  </script>
 </body>
 </html>
