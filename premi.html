@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Premi | Farmacia Montesano</title>
-  <script src="auth.js"></script>
-  <script src="punti.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -475,15 +473,14 @@
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f8f55">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Montesano">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 </head>
 <body>
   <main class="page">
@@ -545,10 +542,23 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import {
+      auth,
+      firestore,
+      onAuthStateChanged,
+      doc,
+      getDoc
+    } from "./firebase.js";
+
+    import {
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const fallbackRewardsData = {
-      points: 0,
-      redeemed: [],
       rewards: [
         {
           id: 1,
@@ -589,28 +599,52 @@
       return new Intl.NumberFormat("it-IT").format(num);
     }
 
-    function loadRewardsData() {
-      try {
-        const rewardsRaw = localStorage.getItem("farmaciaRewardsData");
-        const profileRaw = localStorage.getItem("farmaciaProfileData");
-        const pointsRaw = localStorage.getItem("farmaciaPuntiData");
-
-        const rewardsData = rewardsRaw ? JSON.parse(rewardsRaw) : {};
-        const profileData = profileRaw ? JSON.parse(profileRaw) : {};
-        const pointsData = pointsRaw ? JSON.parse(pointsRaw) : {};
-
-        return {
-          points: Number(profileData.points ?? pointsData.points ?? rewardsData.points ?? 0),
-          rewards: Array.isArray(rewardsData.rewards) ? rewardsData.rewards : fallbackRewardsData.rewards,
-          redeemed: Array.isArray(rewardsData.redeemed) ? rewardsData.redeemed : []
-        };
-      } catch (e) {
-        return fallbackRewardsData;
-      }
-    }
-
     let currentFilter = "all";
-    let currentData = loadRewardsData();
+    let currentData = {
+      points: 0,
+      rewards: fallbackRewardsData.rewards,
+      redeemed: []
+    };
+
+    async function loadUserData(uid) {
+      const userRef = doc(firestore, "users", uid);
+      const userSnap = await getDoc(userRef);
+      const profile = userSnap.exists() ? userSnap.data() : {};
+
+      const rewardsCol = collection(firestore, "users", uid, "reward_redemptions");
+      let redeemed = [];
+
+      try {
+        const rewardsQuery = query(rewardsCol, orderBy("date", "desc"));
+        const rewardsSnap = await getDocs(rewardsQuery);
+        redeemed = [];
+        rewardsSnap.forEach((docSnap) => {
+          redeemed.push({
+            id: docSnap.id,
+            ...docSnap.data()
+          });
+        });
+      } catch (e) {
+        try {
+          const rewardsSnap = await getDocs(rewardsCol);
+          redeemed = [];
+          rewardsSnap.forEach((docSnap) => {
+            redeemed.push({
+              id: docSnap.id,
+              ...docSnap.data()
+            });
+          });
+        } catch (err) {
+          redeemed = [];
+        }
+      }
+
+      return {
+        points: Number(profile.punti || 0),
+        rewards: fallbackRewardsData.rewards,
+        redeemed
+      };
+    }
 
     function buildRewardCard(item, currentPoints) {
       const missing = Math.max(item.pointsRequired - currentPoints, 0);
@@ -637,7 +671,7 @@
               </div>
 
               <button
-                class="reward-action ${isReady ?"btn-ready" : "btn-missing"}"
+                class="reward-action ${isReady ? "btn-ready" : "btn-missing"}"
                 onclick="openRewardModal('${item.title.replace(/'/g, "\\'")}', ${isReady}, ${item.pointsRequired})"
               >
                 ${isReady ? "Riscatta ora" : `${formatNumber(missing)} punti mancanti`}
@@ -683,8 +717,8 @@
             <article class="redeemed-item">
               <div class="redeemed-icon">${item.icon || "🎁"}</div>
               <div class="redeemed-text">
-                <p class="redeemed-name">${item.name || "Premio riscattato"}</p>
-                <p class="redeemed-meta">${item.meta || ""}</p>
+                <p class="redeemed-name">${item.name || item.title || "Premio riscattato"}</p>
+                <p class="redeemed-meta">${item.meta || item.date || ""}</p>
               </div>
             </article>
           `).join("")}
@@ -704,7 +738,7 @@
       btn.addEventListener("click", () => setFilter(btn.dataset.filter));
     });
 
-    function openRewardModal(title, isReady, pointsRequired) {
+    window.openRewardModal = function(title, isReady, pointsRequired) {
       const modal = document.getElementById("rewardModal");
       const modalTitle = document.getElementById("modalRewardTitle");
       const modalText = document.getElementById("modalRewardText");
@@ -727,31 +761,49 @@
 
       modal.classList.add("open");
       document.body.style.overflow = "hidden";
-    }
+    };
 
-    function closeRewardModal() {
+    window.closeRewardModal = function() {
       document.getElementById("rewardModal").classList.remove("open");
       document.body.style.overflow = "";
-    }
+    };
 
     document.getElementById("rewardModal").addEventListener("click", function(e){
       if (e.target === this) closeRewardModal();
     });
 
-    renderRewards();
-    renderRedeemed();
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html?redirect=premi.html";
+        return;
+      }
+
+      try {
+        currentData = await loadUserData(user.uid);
+      } catch (error) {
+        console.error("Errore caricamento premi:", error);
+        currentData = {
+          points: 0,
+          rewards: fallbackRewardsData.rewards,
+          redeemed: []
+        };
+      }
+
+      renderRewards();
+      renderRedeemed();
+    });
   </script>
 
-<script src="mobile-only.js"></script>
-<script src="app-fixes.js"></script>
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js");
-  });
-}
-</script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js");
+    });
+  }
+  </script>
 
 </body>
 </html>
