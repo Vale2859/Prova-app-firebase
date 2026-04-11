@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operatori | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --line:#e4ece8;
+      --text:#17352f;
+      --muted:#6c7c76;
+      --green:#0d7a5f;
+      --green2:#1b8b6d;
+      --blue:#2f6f94;
+      --gold:#b87900;
+      --red:#c94646;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      background:linear-gradient(180deg,#f7faf8 0%, #eff4f1 100%);
+      color:var(--text);
+    }
+    .page{
+      max-width:1440px;
+      margin:24px auto;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.07);
+      overflow:hidden;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 28px;
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .brand img{height:54px;width:auto;display:block}
+    .menu{
+      display:flex;
+      gap:34px;
+      align-items:center;
+      font-size:18px;
+      font-weight:700;
+    }
+    .menu button{
+      background:none;
+      border:none;
+      color:#334944;
+      padding:0 0 10px;
+      border-bottom:4px solid transparent;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .menu button.active{
+      color:var(--green);
+      border-bottom-color:var(--green);
+    }
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .top-actions button{
+      border:none;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .operator-pill{
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      padding:0 14px;
+      border-radius:999px;
+      background:#eef8f4;
+      color:var(--green);
+      font-weight:800;
+      border:1px solid #d7ebe2;
+    }
+    .content{padding:26px}
+    .layout{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+    .sidebar-card,.main-card,.stat-card,.panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .sidebar-card{
+      padding:18px;
+      position:sticky;
+      top:20px;
+    }
+    .sidebar-title,.panel-title{
+      margin:0 0 14px;
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+    }
+    .vip-list,.top-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .vip-item,.top-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fcfdfc;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .vip-item:hover,.top-item:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(0,0,0,0.05);
+    }
+    .vip-name,.top-name{
+      font-size:15px;
+      font-weight:800;
+      line-height:1.1;
+      margin-bottom:4px;
+    }
+    .vip-sub,.top-sub{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:600;
+    }
+    .vip-points,.top-points{
+      font-size:15px;
+      font-weight:900;
+      color:var(--green);
+      white-space:nowrap;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-bottom:22px;
+    }
+    .stats.report-stats{grid-template-columns:repeat(6,1fr)}
+    .stat-card{padding:20px 22px}
+    .stat-label{
+      font-size:15px;
+      color:#586b66;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .stat-value{
+      font-size:44px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.05em;
+    }
+    .main-card{padding:28px 30px;min-height:500px}
+    .view{display:none}
+    .view.active{display:block}
+    .accumulo-panel{
+      max-width:740px;
+      margin:10px auto 0;
+      padding:22px 28px 26px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fcfdfc;
+      box-shadow:0 10px 24px rgba(0,0,0,0.04);
+    }
+    .field{margin-bottom:16px}
+    .field label{
+      display:block;
+      font-size:17px;
+      font-weight:900;
+      margin-bottom:10px;
+      letter-spacing:-0.02em;
+    }
+    .row{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .row .grow{flex:1}
+    input,select{
+      width:100%;
+      min-height:58px;
+      border:1px solid #d7e3de;
+      border-radius:14px;
+      padding:0 16px;
+      font-size:16px;
+      font-weight:600;
+      color:var(--text);
+      outline:none;
+      background:#fff;
+      font-family:inherit;
+    }
+    input:focus,select:focus{
+      border-color:#86b9a9;
+      box-shadow:0 0 0 4px rgba(13,122,95,0.08);
+    }
+    .archive-btn{
+      min-width:150px;
+      min-height:58px;
+      border:none;
+      border-radius:14px;
+      background:#eef3f1;
+      color:var(--text);
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+      border:1px solid #dbe6e1;
+    }
+    .send-wrap{margin-top:18px}
+    .send-btn,.filter-btn{
+      width:100%;
+      min-height:64px;
+      border:none;
+      border-radius:16px;
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 18px 34px rgba(26,139,108,0.18);
+      font-family:inherit;
+    }
+    .filter-btn{
+      min-height:52px;
+      font-size:16px;
+      border-radius:14px;
+      box-shadow:none;
+    }
+    .helper{
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+      text-align:center;
+    }
+    .success-bar{
+      margin-top:14px;
+      min-height:52px;
+      border-radius:14px;
+      background:#ebf8f1;
+      color:#1b7b5f;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      font-weight:800;
+      padding:0 14px;
+      text-align:center;
+    }
+    .success-bar.show{display:flex}
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr 220px;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .toolbar.report-toolbar{
+      grid-template-columns:180px 180px 1fr 140px;
+    }
+    .table-wrap{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+    th,td{
+      padding:14px 12px;
+      text-align:left;
+      border-bottom:1px solid #edf2ef;
+      vertical-align:middle;
+    }
+    th{
+      font-size:13px;
+      color:#61746e;
+      font-weight:800;
+      background:#fbfcfb;
+    }
+    td{
+      font-size:14px;
+      font-weight:600;
+    }
+    tr:last-child td{border-bottom:none}
+    .status,.badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .status-waiting,.badge-gold{background:#fff3df;color:var(--gold)}
+    .status-approved,.badge-green{background:#e8f7ef;color:var(--green)}
+    .status-delivered,.badge-blue{background:#e6f4fb;color:var(--blue)}
+    .status-rejected,.badge-red{background:#fff0f0;color:var(--red)}
+    .badge-gray{background:#eef3f1;color:#48605a}
+    .client-name{font-size:16px;font-weight:800;margin-bottom:4px}
+    .client-sub{font-size:13px;color:var(--muted);font-weight:600}
+    .action-group{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .action-btn{
+      min-height:42px;
+      border:none;
+      border-radius:12px;
+      padding:0 14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .btn-approve{background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);color:#fff}
+    .btn-deliver{background:#e6f4fb;color:#2e7194;border:1px solid #cfe6f3}
+    .btn-reject{background:#fff0f0;color:var(--red);border:1px solid #f3d5d5}
+    .section-gap{margin-top:20px}
+    .grid{
+      display:grid;
+      grid-template-columns:340px 1fr;
+      gap:20px;
+      margin-bottom:20px;
+    }
+    .panel{padding:18px}
+    .chart-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      margin-top:20px;
+    }
+    .chart-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      min-height:360px;
+    }
+    .chart-title{
+      margin:0 0 12px;
+      font-size:16px;
+      font-weight:900;
+    }
+    .empty{
+      padding:34px 18px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .client-modal,.confirm-modal,.vip-modal,.badge-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(9,20,17,0.55);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index:9999;
+    }
+    .client-modal.open,.confirm-modal.open,.vip-modal.open,.badge-modal.open{
+      display:flex;
+    }
+    .modal-card{
+      width:min(100%, 560px);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.18);
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 20px;
+      border-bottom:1px solid var(--line);
+    }
+    .modal-title{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+    .close-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:#f2f5f4;
+      font-size:24px;
+      cursor:pointer;
+      color:#22433b;
+    }
+    .modal-body{padding:18px 20px 20px}
+    .search-input{margin-bottom:14px}
+    .search-input input{min-height:54px;font-size:16px}
+    .client-list{
+      max-height:340px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .client-option{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fcfdfc;
+      cursor:pointer;
+    }
+    .client-option:hover{background:#f6fbf8}
+    .client-card{
+      font-size:14px;
+      font-weight:900;
+      color:var(--green);
+      white-space:nowrap;
+    }
+    .modal-text{
+      font-size:17px;
+      line-height:1.55;
+      color:#3d5550;
+      font-weight:600;
+      margin:0 0 18px;
+    }
+    .confirm-value{
+      font-size:44px;
+      line-height:1;
+      font-weight:900;
+      color:var(--green);
+      margin:0 0 18px;
+      letter-spacing:-0.04em;
+    }
+    .modal-actions{
+      display:flex;
+      gap:12px;
+    }
+    .modal-actions button{
+      flex:1;
+      min-height:54px;
+      border:none;
+      border-radius:14px;
+      font-size:17px;
+      font-weight:900;
+      cursor:pointer;
+      font-family:inherit;
+    }
+    .btn-cancel{background:#eef3f1;color:var(--text)}
+    .btn-confirm{background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);color:#fff}
+    .vip-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:8px;
+    }
+    .vip-box{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fbfcfb;
+    }
+    .vip-box-label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .vip-box-value{
+      font-size:24px;
+      font-weight:900;
+      line-height:1.05;
+    }
+    .badge-live{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#eef8f4;
+      color:var(--green);
+      font-weight:800;
+      text-align:center;
+      display:none;
+    }
+    .badge-live.show{display:block}
+    @media (max-width: 1280px){
+      .stats.report-stats{grid-template-columns:repeat(3,1fr)}
+      .grid,.chart-grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 1180px){
+      .layout{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .toolbar,.toolbar.report-toolbar{grid-template-columns:1fr}
+      .sidebar-card{position:static}
+    }
+    @media (max-width: 900px){
+      .table-wrap{overflow:auto}
+      table{min-width:900px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <img src="logo.png" alt="Logo Farmacia Montesano">
+      </div>
+
+      <nav class="menu">
+        <button class="tab-btn active" data-view="accumuloView">Accumulo</button>
+        <button class="tab-btn" data-view="premiView">Richieste Premi</button>
+        <button class="tab-btn" data-view="reportView">Report</button>
+      </nav>
+
+      <div class="top-actions">
+        <div class="operator-pill" id="operatorPill">Operatore: nessuno</div>
+        <button type="button" id="forceBadgeBtn">Passa badge</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="layout">
+        <aside class="sidebar-card">
+          <h3 class="sidebar-title">Top 5 clienti annuali</h3>
+          <div class="vip-list" id="vipList"></div>
+        </aside>
+
+        <main>
+          <section class="view active" id="accumuloView">
+            <div class="stats">
+              <div class="stat-card">
+                <div class="stat-label">Clienti passati oggi</div>
+                <div class="stat-value" id="statClients">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Punti assegnati oggi</div>
+                <div class="stat-value" id="statPoints">0</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Parafarmaco oggi</div>
+                <div class="stat-value" id="statRevenue">0,00 €</div>
+              </div>
+            </div>
+
+            <div class="main-card">
+              <div class="accumulo-panel">
+                <div class="field">
+                  <label for="cardNumber">Numero card</label>
+                  <div class="row">
+                    <div class="grow">
+                      <input id="cardNumber" type="text" placeholder="Inserisci o leggi la card" />
+                    </div>
+                    <button class="archive-btn" type="button" id="openArchiveBtn">Archivio</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="importo">Importo</label>
+                  <input id="importo" type="number" step="0.01" min="0" placeholder="€ 0,00" />
+                </div>
+
+                <div class="send-wrap">
+                  <button class="send-btn" type="button" id="sendBtn">Invia</button>
+                </div>
+
+                <div class="helper">
+                  Regola punti: ogni 0,50 € di parafarmaco = 1 punto
+                </div>
+
+                <div class="success-bar" id="successBar">
+                  Operazione registrata correttamente.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="premiView">
+            <div class="main-card">
+              <div class="toolbar">
+                <input id="requestSearchInput" type="text" placeholder="Cerca cliente, card o premio..." />
+                <select id="statusFilter">
+                  <option value="all">Tutti gli stati</option>
+                  <option value="in_attesa">In attesa</option>
+                  <option value="approvata">Approvata</option>
+                  <option value="consegnata">Consegnata</option>
+                  <option value="rifiutata">Rifiutata</option>
+                </select>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Premio</th>
+                      <th>Punti spesi</th>
+                      <th>Data richiesta</th>
+                      <th>Stato</th>
+                      <th>Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody id="requestsBody">
+                    <tr><td colspan="6" class="empty">Caricamento richieste...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="reportView">
+            <div class="toolbar report-toolbar">
+              <input type="date" id="fromDate" />
+              <input type="date" id="toDate" />
+              <input type="text" id="searchText" placeholder="Cerca cliente o numero card" />
+              <button class="filter-btn" id="applyFiltersBtn">Filtra</button>
+            </div>
+
+            <div class="stats report-stats">
+              <div class="stat-card"><div class="stat-label">Parafarmaco</div><div class="stat-value" id="totRevenue">0,00 €</div></div>
+              <div class="stat-card"><div class="stat-label">Punti assegnati</div><div class="stat-value" id="totPoints">0</div></div>
+              <div class="stat-card"><div class="stat-label">Clienti attivi</div><div class="stat-value" id="totClients">0</div></div>
+              <div class="stat-card"><div class="stat-label">Premi richiesti</div><div class="stat-value" id="totRequests">0</div></div>
+              <div class="stat-card"><div class="stat-label">Premi approvati</div><div class="stat-value" id="totApproved">0</div></div>
+              <div class="stat-card"><div class="stat-label">Premi consegnati</div><div class="stat-value" id="totDelivered">0</div></div>
+            </div>
+
+            <div class="chart-grid">
+              <div class="chart-box">
+                <h3 class="chart-title">Punti per giorno</h3>
+                <canvas id="pointsByDayChart"></canvas>
+              </div>
+              <div class="chart-box">
+                <h3 class="chart-title">Parafarmaco per giorno</h3>
+                <canvas id="revenueByDayChart"></canvas>
+              </div>
+              <div class="chart-box">
+                <h3 class="chart-title">Accumuli per operatore</h3>
+                <canvas id="operatorPointsChart"></canvas>
+              </div>
+              <div class="chart-box">
+                <h3 class="chart-title">Richieste premi per stato</h3>
+                <canvas id="rewardStatusChart"></canvas>
+              </div>
+            </div>
+
+            <div class="grid section-gap">
+              <div class="panel">
+                <h3 class="panel-title">Top clienti</h3>
+                <div class="top-list" id="reportTopClientsList"></div>
+              </div>
+
+              <div class="panel">
+                <h3 class="panel-title">Movimenti punti</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Card</th>
+                        <th>Punti</th>
+                        <th>Importo</th>
+                        <th>Operatore</th>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                      </tr>
+                    </thead>
+                    <tbody id="movementsBody">
+                      <tr><td colspan="7" class="empty">Caricamento movimenti...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel section-gap">
+              <h3 class="panel-title">Richieste premi</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Card</th>
+                      <th>Premio</th>
+                      <th>Punti spesi</th>
+                      <th>Stato</th>
+                      <th>Operatore</th>
+                      <th>Data richiesta</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportRequestsBody">
+                    <tr><td colspan="7" class="empty">Caricamento richieste...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="client-modal" id="clientModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Archivio clienti</h3>
+        <button class="close-btn" type="button" id="closeClientModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-input">
+          <input id="clientSearch" type="text" placeholder="Cerca per nome, telefono o numero card" />
+        </div>
+        <div class="client-list" id="clientList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-modal" id="confirmModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Attenzione</h3>
+        <button class="close-btn" type="button" id="closeConfirmModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text">Hai inserito un importo elevato. Vuoi confermare davvero questo importo?</p>
+        <p class="confirm-value" id="confirmAmountValue">€ 0,00</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" type="button" id="cancelConfirmBtn">Annulla</button>
+          <button class="btn-confirm" type="button" id="confirmSendBtn">Conferma</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vip-modal" id="vipModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Dettaglio cliente VIP</h3>
+        <button class="close-btn" type="button" id="closeVipModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text" id="vipName" style="margin-bottom:16px;font-size:24px;font-weight:900;color:#17352f;"></p>
+        <div class="vip-grid">
+          <div class="vip-box"><div class="vip-box-label">Numero card</div><div class="vip-box-value" id="vipCard"></div></div>
+          <div class="vip-box"><div class="vip-box-label">Punti annuali</div><div class="vip-box-value" id="vipPoints"></div></div>
+          <div class="vip-box"><div class="vip-box-label">Passaggi annuali</div><div class="vip-box-value" id="vipOrders"></div></div>
+          <div class="vip-box"><div class="vip-box-label">Premi riscattati</div><div class="vip-box-value" id="vipPrizes"></div></div>
+          <div class="vip-box" style="grid-column:1 / -1;"><div class="vip-box-label">Spesa annua parafarmaco</div><div class="vip-box-value" id="vipSpent"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="badge-modal" id="badgeModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Passa badge operatore</h3>
+        <button class="close-btn" type="button" id="closeBadgeModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text">Prima di assegnare i punti, l’operatore deve passare il proprio badge.</p>
+        <div class="field" style="margin-bottom:0;">
+          <label for="badgeCodeInput">Badge</label>
+          <input id="badgeCodeInput" type="text" placeholder="Passa o inserisci il badge operatore" />
+        </div>
+        <div class="modal-actions" style="margin-top:16px;">
+          <button class="btn-cancel" type="button" id="cancelBadgeBtn">Chiudi</button>
+          <button class="btn-confirm" type="button" id="confirmBadgeBtn">Conferma badge</button>
+        </div>
+        <div class="badge-live" id="badgeLiveMsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      firestore,
+      doc,
+      getDoc,
+      setDoc,
+      updateDoc,
+      collection,
+      getDocs
+    } from "./firebase.js";
+
+    import {
+      addDoc,
+      increment
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    const views = document.querySelectorAll(".view");
+
+    const cardNumber = document.getElementById("cardNumber");
+    const importo = document.getElementById("importo");
+    const sendBtn = document.getElementById("sendBtn");
+    const successBar = document.getElementById("successBar");
+    const statClients = document.getElementById("statClients");
+    const statPoints = document.getElementById("statPoints");
+    const statRevenue = document.getElementById("statRevenue");
+
+    const clientModal = document.getElementById("clientModal");
+    const openArchiveBtn = document.getElementById("openArchiveBtn");
+    const closeClientModal = document.getElementById("closeClientModal");
+    const clientSearch = document.getElementById("clientSearch");
+    const clientList = document.getElementById("clientList");
+
+    const confirmModal = document.getElementById("confirmModal");
+    const closeConfirmModal = document.getElementById("closeConfirmModal");
+    const cancelConfirmBtn = document.getElementById("cancelConfirmBtn");
+    const confirmSendBtn = document.getElementById("confirmSendBtn");
+    const confirmAmountValue = document.getElementById("confirmAmountValue");
+
+    const vipModal = document.getElementById("vipModal");
+    const closeVipModal = document.getElementById("closeVipModal");
+    const vipList = document.getElementById("vipList");
+
+    const requestSearchInput = document.getElementById("requestSearchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const requestsBody = document.getElementById("requestsBody");
+
+    const fromDate = document.getElementById("fromDate");
+    const toDate = document.getElementById("toDate");
+    const searchText = document.getElementById("searchText");
+    const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+    const totRevenue = document.getElementById("totRevenue");
+    const totPoints = document.getElementById("totPoints");
+    const totClients = document.getElementById("totClients");
+    const totRequests = document.getElementById("totRequests");
+    const totApproved = document.getElementById("totApproved");
+    const totDelivered = document.getElementById("totDelivered");
+    const reportTopClientsList = document.getElementById("reportTopClientsList");
+    const movementsBody = document.getElementById("movementsBody");
+    const reportRequestsBody = document.getElementById("reportRequestsBody");
+
+    const operatorPill = document.getElementById("operatorPill");
+    const forceBadgeBtn = document.getElementById("forceBadgeBtn");
+    const badgeModal = document.getElementById("badgeModal");
+    const closeBadgeModal = document.getElementById("closeBadgeModal");
+    const badgeCodeInput = document.getElementById("badgeCodeInput");
+    const confirmBadgeBtn = document.getElementById("confirmBadgeBtn");
+    const cancelBadgeBtn = document.getElementById("cancelBadgeBtn");
+    const badgeLiveMsg = document.getElementById("badgeLiveMsg");
+
+    let allClients = [];
+    let allRequests = [];
+    let allMovements = [];
+    let currentOperator = null;
+    let pointsByDayChart = null;
+    let revenueByDayChart = null;
+    let operatorPointsChart = null;
+    let rewardStatusChart = null;
+
+    function openModal(modal){ modal.classList.add("open"); }
+    function closeModal(modal){ modal.classList.remove("open"); }
+    function formatEuro(value){ return Number(value || 0).toLocaleString("it-IT",{style:"currency",currency:"EUR"}); }
+    function normalizeText(value){ return String(value || "").toLowerCase().trim(); }
+
+    function formatDate(value){
+      if (!value) return "-";
+      const d = new Date(value);
+      if (isNaN(d.getTime())) return value;
+      return d.toLocaleString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    }
+
+    function getTodayKey(){
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+
+    function inDateRange(isoValue){
+      if (!isoValue) return true;
+      const value = new Date(isoValue);
+      if (isNaN(value.getTime())) return true;
+      const from = fromDate.value ? new Date(fromDate.value + "T00:00:00") : null;
+      const to = toDate.value ? new Date(toDate.value + "T23:59:59") : null;
+      if (from && value < from) return false;
+      if (to && value > to) return false;
+      return true;
+    }
+
+    function statusBadge(status){
+      switch(status){
+        case "approvata": return `<span class="status status-approved">Approvata</span>`;
+        case "consegnata": return `<span class="status status-delivered">Consegnata</span>`;
+        case "rifiutata": return `<span class="status status-rejected">Rifiutata</span>`;
+        default: return `<span class="status status-waiting">In attesa</span>`;
+      }
+    }
+
+    function switchView(targetId){
+      tabBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.view === targetId));
+      views.forEach(view => view.classList.toggle("active", view.id === targetId));
+    }
+
+    function setOperatorBadge(operator){
+      currentOperator = operator;
+      operatorPill.textContent = operator ? `Operatore: ${operator.nome}` : "Operatore: nessuno";
+    }
+
+    async function validateBadge(code){
+      const clean = String(code || "").trim().toUpperCase();
+      if (!clean) return null;
+      const badgeRef = doc(firestore, "operator_badges", clean);
+      const badgeSnap = await getDoc(badgeRef);
+      if (!badgeSnap.exists()) return null;
+      return { badge: clean, ...badgeSnap.data() };
+    }
+
+    async function confirmOperatorBadge(){
+      const code = badgeCodeInput.value.trim().toUpperCase();
+      if (!code) {
+        badgeLiveMsg.textContent = "Inserisci o passa un badge valido.";
+        badgeLiveMsg.classList.add("show");
+        return;
+      }
+
+      const operator = await validateBadge(code);
+      if (!operator) {
+        badgeLiveMsg.textContent = "Badge non riconosciuto.";
+        badgeLiveMsg.classList.add("show");
+        return;
+      }
+
+      setOperatorBadge(operator);
+      badgeLiveMsg.textContent = `Badge riconosciuto: ${operator.nome}`;
+      badgeLiveMsg.classList.add("show");
+
+      setTimeout(() => {
+        badgeLiveMsg.classList.remove("show");
+        badgeCodeInput.value = "";
+        closeModal(badgeModal);
+      }, 700);
+    }
+
+    function requireBadgeBeforeSend(){
+      if (currentOperator) return true;
+      openModal(badgeModal);
+      badgeCodeInput.focus();
+      return false;
+    }
+
+    function clearOperatorAfterOperation(){
+      setOperatorBadge(null);
+      badgeCodeInput.value = "";
+      setTimeout(() => {
+        openModal(badgeModal);
+        badgeCodeInput.focus();
+      }, 350);
+    }
+
+    function findClientByCard(card){
+      const normalized = String(card || "").trim().toUpperCase();
+      return allClients.find(client => {
+        const c1 = String(client.clientCode || "").trim().toUpperCase();
+        const c2 = String(client.fidelityCard || "").trim().toUpperCase();
+        return normalized && (normalized === c1 || normalized === c2);
+      });
+    }
+
+    function renderVipSidebar(items){
+      vipList.innerHTML = items.map(client => {
+        const fullName = `${client.nome || ""} ${client.cognome || ""}`.trim() || "Cliente";
+        const card = client.clientCode || client.fidelityCard || "-";
+        const annualPoints = Number(client.puntiAnnuali || client.punti || 0);
+
+        return `
+          <div class="vip-item"
+            data-name="${fullName}"
+            data-card="${card}"
+            data-points="${annualPoints}"
+            data-orders="${client.passaggiAnnuali || 0}"
+            data-prizes="${client.premiRiscattati || 0}"
+            data-spent="${client.spesaAnnua || "0,00 €"}"
+          >
+            <div class="vip-left">
+              <div class="vip-name">${fullName}</div>
+              <div class="vip-sub">Card: ${card}</div>
+            </div>
+            <div class="vip-points">${annualPoints} pt</div>
+          </div>
+        `;
+      }).join("");
+
+      vipList.querySelectorAll(".vip-item").forEach(item => {
+        item.addEventListener("click", () => {
+          document.getElementById("vipName").textContent = item.dataset.name || "";
+          document.getElementById("vipCard").textContent = item.dataset.card || "";
+          document.getElementById("vipPoints").textContent = `${item.dataset.points || 0} pt`;
+          document.getElementById("vipOrders").textContent = item.dataset.orders || "0";
+          document.getElementById("vipPrizes").textContent = item.dataset.prizes || "0";
+          document.getElementById("vipSpent").textContent = item.dataset.spent || "0,00 €";
+          openModal(vipModal);
+        });
+      });
+    }
+
+    function buildClientOption(client){
+      const fullName = `${client.nome || ""} ${client.cognome || ""}`.trim() || "Cliente";
+      const tel = client.telefono || "Telefono non disponibile";
+      const card = client.clientCode || client.fidelityCard || "-";
+      return `
+        <div class="client-option" data-card="${card}">
+          <div>
+            <div class="client-name">${fullName}</div>
+            <div class="client-sub">${tel}</div>
+          </div>
+          <div class="client-card">${card}</div>
+        </div>
+      `;
+    }
+
+    function renderClientList(items){
+      clientList.innerHTML = items.map(buildClientOption).join("");
+      clientList.querySelectorAll(".client-option").forEach(item => {
+        item.addEventListener("click", () => {
+          cardNumber.value = item.dataset.card || "";
+          closeModal(clientModal);
+        });
+      });
+    }
+
+    async function loadAccumuloStats(){
+      const todayKey = getTodayKey();
+      const statRef = doc(firestore, "operator_stats", todayKey);
+      const statSnap = await getDoc(statRef);
+
+      if (statSnap.exists()) {
+        const data = statSnap.data();
+        statClients.textContent = data.clientiPassati || 0;
+        statPoints.textContent = data.puntiAssegnati || 0;
+        statRevenue.textContent = formatEuro(data.parafarmacoTotale || 0);
+      } else {
+        statClients.textContent = "0";
+        statPoints.textContent = "0";
+        statRevenue.textContent = "0,00 €";
+      }
+    }
+
+    async function saveAccumulo(){
+      if (!requireBadgeBeforeSend()) return;
+
+      const card = cardNumber.value.trim();
+      const amount = Number(importo.value || 0);
+
+      if (!card) {
+        alert("Inserisci un numero card.");
+        return;
+      }
+      if (!amount || amount <= 0) {
+        alert("Inserisci un importo valido.");
+        return;
+      }
+
+      const client = findClientByCard(card);
+      if (!client) {
+        alert("Cliente non trovato in archivio.");
+        return;
+      }
+
+      const points = Math.floor(amount / 0.5);
+      const todayKey = getTodayKey();
+      const operatorName = currentOperator?.nome || "Operatore";
+      const operatorBadge = currentOperator?.badge || "";
+
+      const userRef = doc(firestore, "users", client.uid);
+      await updateDoc(userRef, {
+        punti: increment(points),
+        puntiAnnuali: increment(points),
+        spesaAnnuaNumero: increment(amount),
+        spesaAnnua: formatEuro((Number(client.spesaAnnuaNumero || 0) + amount)),
+        passaggiAnnuali: increment(1)
+      });
+
+      const movementRef = collection(firestore, "users", client.uid, "fidelity_movements");
+      await addDoc(movementRef, {
+        tipo: "acquisto",
+        descrizione: "Accumulo punti acquisto parafarmaco",
+        punti: points,
+        importoParafarmaco: amount,
+        card: client.clientCode || client.fidelityCard || "",
+        operatoreNome: operatorName,
+        operatoreBadge: operatorBadge,
+        data: new Date().toLocaleString("it-IT"),
+        timestampIso: new Date().toISOString()
+      });
+
+      const statRef = doc(firestore, "operator_stats", todayKey);
+      const statSnap = await getDoc(statRef);
+      if (statSnap.exists()) {
+        await updateDoc(statRef, {
+          clientiPassati: increment(1),
+          puntiAssegnati: increment(points),
+          parafarmacoTotale: increment(amount)
+        });
+      } else {
+        await setDoc(statRef, {
+          clientiPassati: 1,
+          puntiAssegnati: points,
+          parafarmacoTotale: amount,
+          data: todayKey
+        });
+      }
+
+      successBar.textContent = `Operazione registrata da ${operatorName}: ${formatEuro(amount)} • ${points} punti assegnati.`;
+      successBar.classList.add("show");
+      setTimeout(() => successBar.classList.remove("show"), 3200);
+
+      cardNumber.value = "";
+      importo.value = "";
+      closeModal(confirmModal);
+
+      await refreshAllData();
+      clearOperatorAfterOperation();
+    }
+
+    function renderRequestsTable(){
+      const q = normalizeText(requestSearchInput.value);
+      const status = statusFilter.value;
+
+      const filtered = allRequests.filter(item => {
+        const text = `${item.clienteNome || ""} ${item.card || ""} ${item.premioNome || ""}`.toLowerCase();
+        const matchText = text.includes(q);
+        const matchStatus = status === "all" ? true : item.status === status;
+        return matchText && matchStatus;
+      });
+
+      if (!filtered.length) {
+        requestsBody.innerHTML = `<tr><td colspan="6" class="empty">Nessuna richiesta trovata.</td></tr>`;
+        return;
+      }
+
+      requestsBody.innerHTML = filtered.map(item => `
+        <tr>
+          <td>
+            <div class="client-name">${item.clienteNome || "Cliente"}</div>
+            <div class="client-sub">${item.card || "-"}</div>
+          </td>
+          <td>${item.premioNome || "-"}</td>
+          <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+          <td>${formatDate(item.createdAt)}</td>
+          <td>${statusBadge(item.status)}</td>
+          <td>${buildRequestActions(item)}</td>
+        </tr>
+      `).join("");
+
+      requestsBody.querySelectorAll("[data-action]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await handleRequestAction(btn.dataset.id, btn.dataset.action);
+        });
+      });
+    }
+
+    function buildRequestActions(item){
+      if (item.status === "in_attesa") {
+        return `
+          <div class="action-group">
+            <button class="action-btn btn-approve" data-action="approve" data-id="${item.id}">Approva</button>
+            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
+          </div>
+        `;
+      }
+
+      if (item.status === "approvata") {
+        return `
+          <div class="action-group">
+            <button class="action-btn btn-deliver" data-action="deliver" data-id="${item.id}">Consegnata</button>
+            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
+          </div>
+        `;
+      }
+
+      return `<span class="badge badge-gray">Nessuna azione</span>`;
+    }
+
+    async function handleRequestAction(id, action){
+      if (!requireBadgeBeforeSend()) return;
+
+      const requestRef = doc(firestore, "reward_requests", id);
+      const requestSnap = await getDoc(requestRef);
+      if (!requestSnap.exists()) return;
+
+      const requestData = requestSnap.data();
+      const uid = requestData.uid || null;
+      const pointsSpent = Number(requestData.puntiSpesi || 0);
+      const operatorName = currentOperator?.nome || "Operatore";
+      const operatorBadge = currentOperator?.badge || "";
+
+      if (action === "approve") {
+        await updateDoc(requestRef, {
+          status: "approvata",
+          approvedAt: new Date().toISOString(),
+          approvedByName: operatorName,
+          approvedByBadge: operatorBadge
+        });
+
+        if (uid) {
+          const userRef = doc(firestore, "users", uid);
+          await updateDoc(userRef, {
+            punti: increment(-pointsSpent)
+          });
+
+          const movementRef = collection(firestore, "users", uid, "fidelity_movements");
+          await addDoc(movementRef, {
+            tipo: "premio_scalato",
+            descrizione: `Scalati punti per premio: ${requestData.premioNome || "Premio"}`,
+            punti: -pointsSpent,
+            importoParafarmaco: 0,
+            card: requestData.card || "",
+            operatoreNome: operatorName,
+            operatoreBadge: operatorBadge,
+            data: new Date().toLocaleString("it-IT"),
+            timestampIso: new Date().toISOString()
+          });
+        }
+      }
+
+      if (action === "deliver") {
+        await updateDoc(requestRef, {
+          status: "consegnata",
+          deliveredAt: new Date().toISOString(),
+          deliveredByName: operatorName,
+          deliveredByBadge: operatorBadge
+        });
+
+        if (uid) {
+          const userRef = doc(firestore, "users", uid);
+          await updateDoc(userRef, {
+            premiRiscattati: increment(1)
+          });
+        }
+      }
+
+      if (action === "reject") {
+        await updateDoc(requestRef, {
+          status: "rifiutata",
+          rejectedAt: new Date().toISOString(),
+          rejectedByName: operatorName,
+          rejectedByBadge: operatorBadge
+        });
+      }
+
+      await refreshAllData();
+      clearOperatorAfterOperation();
+    }
+
+    function renderReport(){
+      const filteredMovements = allMovements.filter(row => {
+        if (!inDateRange(row.date)) return false;
+        const q = normalizeText(searchText.value);
+        if (!q) return true;
+        return `${row.clientName} ${row.card}`.toLowerCase().includes(q);
+      });
+
+      const filteredRequests = allRequests.filter(row => {
+        if (!inDateRange(row.createdAt)) return false;
+        const q = normalizeText(searchText.value);
+        if (!q) return true;
+        return `${row.clienteNome} ${row.card}`.toLowerCase().includes(q);
+      });
+
+      const filteredUsers = allClients.filter(user => {
+        const q = normalizeText(searchText.value);
+        if (!q) return true;
+        const name = `${user.nome || ""} ${user.cognome || ""}`.trim();
+        const card = user.clientCode || user.fidelityCard || "-";
+        return `${name} ${card}`.toLowerCase().includes(q);
+      });
+
+      const totalRevenueValue = filteredMovements.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      const totalPointsValue = filteredMovements.reduce((sum, row) => sum + Number(row.points || 0), 0);
+      const uniqueClients = new Set(filteredMovements.map(row => row.uid)).size;
+      const totalRequestsValue = filteredRequests.length;
+      const totalApprovedValue = filteredRequests.filter(r => r.status === "approvata").length;
+      const totalDeliveredValue = filteredRequests.filter(r => r.status === "consegnata").length;
+
+      totRevenue.textContent = formatEuro(totalRevenueValue);
+      totPoints.textContent = totalPointsValue.toLocaleString("it-IT");
+      totClients.textContent = uniqueClients.toLocaleString("it-IT");
+      totRequests.textContent = totalRequestsValue.toLocaleString("it-IT");
+      totApproved.textContent = totalApprovedValue.toLocaleString("it-IT");
+      totDelivered.textContent = totalDeliveredValue.toLocaleString("it-IT");
+
+      renderReportTopClients(filteredUsers);
+      renderReportMovements(filteredMovements.sort((a,b) => new Date(b.date) - new Date(a.date)));
+      renderReportRequests(filteredRequests.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)));
+      renderCharts(filteredMovements, filteredRequests);
+    }
+
+    function renderReportTopClients(users){
+      const top = [...users]
+        .sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0))
+        .slice(0,5);
+
+      if (!top.length) {
+        reportTopClientsList.innerHTML = `<div class="empty">Nessun cliente disponibile.</div>`;
+        return;
+      }
+
+      reportTopClientsList.innerHTML = top.map(user => {
+        const name = `${user.nome || ""} ${user.cognome || ""}`.trim() || "Cliente";
+        const card = user.clientCode || user.fidelityCard || "-";
+        const points = Number(user.puntiAnnuali || user.punti || 0);
+
+        return `
+          <div class="top-item">
+            <div class="top-left">
+              <div class="top-name">${name}</div>
+              <div class="top-sub">Card: ${card}</div>
+            </div>
+            <div class="top-points">${points} pt</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderReportMovements(rows){
+      if (!rows.length) {
+        movementsBody.innerHTML = `<tr><td colspan="7" class="empty">Nessun movimento trovato.</td></tr>`;
+        return;
+      }
+
+      movementsBody.innerHTML = rows.map(row => `
+        <tr>
+          <td>${row.clientName}</td>
+          <td>${row.card}</td>
+          <td><span class="badge badge-green">${row.points}</span></td>
+          <td>${formatEuro(row.amount)}</td>
+          <td>${row.operatorName || "-"}</td>
+          <td><span class="badge badge-gray">${row.type}</span></td>
+          <td>${formatDate(row.date)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderReportRequests(rows){
+      if (!rows.length) {
+        reportRequestsBody.innerHTML = `<tr><td colspan="7" class="empty">Nessuna richiesta trovata.</td></tr>`;
+        return;
+      }
+
+      reportRequestsBody.innerHTML = rows.map(row => `
+        <tr>
+          <td>${row.clienteNome || "Cliente"}</td>
+          <td>${row.card || "-"}</td>
+          <td>${row.premioNome || "-"}</td>
+          <td>${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+          <td>${statusBadge(row.status)}</td>
+          <td>${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
+          <td>${formatDate(row.createdAt)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function destroyChart(instance){
+      if (instance) instance.destroy();
+    }
+
+    function renderCharts(filteredMovements, filteredRequests){
+      const dayPoints = {};
+      const dayRevenue = {};
+      const operatorPoints = {};
+      const rewardStatus = {
+        in_attesa: 0,
+        approvata: 0,
+        consegnata: 0,
+        rifiutata: 0
+      };
+
+      filteredMovements.forEach(row => {
+        const d = row.date ? row.date.slice(0,10) : "senza data";
+        dayPoints[d] = (dayPoints[d] || 0) + Number(row.points || 0);
+        dayRevenue[d] = (dayRevenue[d] || 0) + Number(row.amount || 0);
+        const op = row.operatorName || "Senza operatore";
+        operatorPoints[op] = (operatorPoints[op] || 0) + Number(row.points || 0);
+      });
+
+      filteredRequests.forEach(row => {
+        rewardStatus[row.status || "in_attesa"] = (rewardStatus[row.status || "in_attesa"] || 0) + 1;
+      });
+
+      const pointLabels = Object.keys(dayPoints).sort();
+      const revenueLabels = Object.keys(dayRevenue).sort();
+      const operatorLabels = Object.keys(operatorPoints);
+      const rewardLabels = ["In attesa", "Approvate", "Consegnate", "Rifiutate"];
+
+      destroyChart(pointsByDayChart);
+      destroyChart(revenueByDayChart);
+      destroyChart(operatorPointsChart);
+      destroyChart(rewardStatusChart);
+
+      pointsByDayChart = new Chart(document.getElementById("pointsByDayChart"), {
+        type: "line",
+        data: {
+          labels: pointLabels,
+          datasets: [{
+            label: "Punti",
+            data: pointLabels.map(k => dayPoints[k]),
+            tension: 0.35
+          }]
+        },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      revenueByDayChart = new Chart(document.getElementById("revenueByDayChart"), {
+        type: "bar",
+        data: {
+          labels: revenueLabels,
+          datasets: [{
+            label: "Parafarmaco",
+            data: revenueLabels.map(k => dayRevenue[k])
+          }]
+        },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      operatorPointsChart = new Chart(document.getElementById("operatorPointsChart"), {
+        type: "bar",
+        data: {
+          labels: operatorLabels,
+          datasets: [{
+            label: "Punti assegnati",
+            data: operatorLabels.map(k => operatorPoints[k])
+          }]
+        },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      rewardStatusChart = new Chart(document.getElementById("rewardStatusChart"), {
+        type: "doughnut",
+        data: {
+          labels: rewardLabels,
+          datasets: [{
+            data: [
+              rewardStatus.in_attesa || 0,
+              rewardStatus.approvata || 0,
+              rewardStatus.consegnata || 0,
+              rewardStatus.rifiutata || 0
+            ]
+          }]
+        },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+    }
+
+    async function loadClientsAndMovements(){
+      const usersSnap = await getDocs(collection(firestore, "users"));
+      const clients = [];
+      const movements = [];
+
+      for (const userDoc of usersSnap.docs) {
+        const userData = userDoc.data();
+        const uid = userDoc.id;
+
+        clients.push({ uid, ...userData });
+
+        const movSnap = await getDocs(collection(firestore, "users", uid, "fidelity_movements"));
+        movSnap.forEach(movDoc => {
+          const mov = movDoc.data();
+          movements.push({
+            uid,
+            clientName: `${userData.nome || ""} ${userData.cognome || ""}`.trim() || "Cliente",
+            card: userData.clientCode || userData.fidelityCard || "-",
+            points: Number(mov.punti || 0),
+            amount: Number(mov.importoParafarmaco || 0),
+            type: mov.tipo || "-",
+            operatorName: mov.operatoreNome || "-",
+            operatorBadge: mov.operatoreBadge || "-",
+            date: mov.timestampIso || mov.data || ""
+          });
+        });
+      }
+
+      allClients = clients;
+      allMovements = movements;
+
+      const topClients = [...allClients]
+        .sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0))
+        .slice(0,5);
+
+      renderVipSidebar(topClients);
+      renderClientList(allClients);
+    }
+
+    async function loadRequests(){
+      const reqSnap = await getDocs(collection(firestore, "reward_requests"));
+      allRequests = reqSnap.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+      }));
+    }
+
+    async function refreshAllData(){
+      await loadClientsAndMovements();
+      await loadRequests();
+      await loadAccumuloStats();
+      renderRequestsTable();
+      renderReport();
+    }
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener("click", () => switchView(btn.dataset.view));
+    });
+
+    openArchiveBtn.addEventListener("click", () => openModal(clientModal));
+    closeClientModal.addEventListener("click", () => closeModal(clientModal));
+    closeConfirmModal.addEventListener("click", () => closeModal(confirmModal));
+    cancelConfirmBtn.addEventListener("click", () => closeModal(confirmModal));
+    closeVipModal.addEventListener("click", () => closeModal(vipModal));
+    closeBadgeModal.addEventListener("click", () => closeModal(badgeModal));
+    cancelBadgeBtn.addEventListener("click", () => closeModal(badgeModal));
+    forceBadgeBtn.addEventListener("click", () => {
+      openModal(badgeModal);
+      badgeCodeInput.focus();
+    });
+    confirmBadgeBtn.addEventListener("click", confirmOperatorBadge);
+    badgeCodeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") confirmOperatorBadge();
+    });
+
+    clientModal.addEventListener("click", (e) => { if (e.target === clientModal) closeModal(clientModal); });
+    confirmModal.addEventListener("click", (e) => { if (e.target === confirmModal) closeModal(confirmModal); });
+    vipModal.addEventListener("click", (e) => { if (e.target === vipModal) closeModal(vipModal); });
+    badgeModal.addEventListener("click", (e) => { if (e.target === badgeModal) closeModal(badgeModal); });
+
+    clientSearch.addEventListener("input", () => {
+      const q = clientSearch.value.trim().toLowerCase();
+      const filtered = allClients.filter(client => {
+        const fullName = `${client.nome || ""} ${client.cognome || ""}`.toLowerCase();
+        const tel = String(client.telefono || "").toLowerCase();
+        const card = String(client.clientCode || client.fidelityCard || "").toLowerCase();
+        return fullName.includes(q) || tel.includes(q) || card.includes(q);
+      });
+      renderClientList(filtered);
+    });
+
+    sendBtn.addEventListener("click", async () => {
+      if (!requireBadgeBeforeSend()) return;
+      const amount = Number(importo.value || 0);
+      if (amount >= 100) {
+        confirmAmountValue.textContent = formatEuro(amount);
+        openModal(confirmModal);
+        return;
+      }
+      await saveAccumulo();
+    });
+
+    confirmSendBtn.addEventListener("click", async () => {
+      await saveAccumulo();
+    });
+
+    requestSearchInput.addEventListener("input", renderRequestsTable);
+    statusFilter.addEventListener("change", renderRequestsTable);
+
+    applyFiltersBtn.addEventListener("click", renderReport);
+    searchText.addEventListener("input", renderReport);
+
+    await refreshAllData();
+    openModal(badgeModal);
+  </script>
+</body>
+</html>
