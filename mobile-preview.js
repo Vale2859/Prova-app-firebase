@@ -924,13 +924,13 @@
     if (!privateModal) return;
     pendingPrivateTarget = target || CONFIG.profiloLink;
 
-    if (privateLoginBtn) {
-      privateLoginBtn.href = `${CONFIG.loginLink}?redirect=${encodeURIComponent(pendingPrivateTarget)}`;
-    }
+   if (privateLoginBtn) {
+  privateLoginBtn.href = CONFIG.loginLink;
+}
 
-    if (privateRegisterBtn) {
-      privateRegisterBtn.href = `${CONFIG.registerLink}?redirect=${encodeURIComponent(pendingPrivateTarget)}`;
-    }
+if (privateRegisterBtn) {
+  privateRegisterBtn.href = CONFIG.registerLink;
+}
 
     privateModal.classList.add("open");
     document.body.style.overflow = "hidden";
