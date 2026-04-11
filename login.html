@@ -257,7 +257,7 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = getRedirectTarget();
+        window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);
         showStatus("Accesso non riuscito. Controlla email e password.", "error");
