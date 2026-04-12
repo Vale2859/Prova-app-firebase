@@ -481,6 +481,7 @@
   <meta name="apple-mobile-web-app-title" content="Montesano">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
   <main class="page">
@@ -543,6 +544,31 @@
     </div>
   </div>
 
+
+
+  <div class="modal-overlay" id="voucherModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Voucher premio</h3>
+        <button class="modal-close" onclick="closeVoucherModal()">×</button>
+      </div>
+      <p class="modal-text" id="voucherModalText">Mostra questo voucher in farmacia per il ritiro.</p>
+      <div style="background:#f8fbfa;border:1px solid #e4ece8;border-radius:20px;padding:18px;text-align:center;">
+        <img src="logo.png" alt="Logo Farmacia Montesano" style="width:180px;max-width:100%;margin:0 auto 12px;display:block;">
+        <p style="margin:0 0 8px;font-size:14px;color:#6c7c76;font-weight:700;">Voucher ritiro premio</p>
+        <p id="voucherRewardName" style="margin:0 0 12px;font-size:24px;font-weight:900;color:#17352f;line-height:1.1;">Premio</p>
+        <div style="background:#fff;border:1px solid #e4ece8;border-radius:18px;padding:16px;">
+          <svg id="voucherBarcodeSvg" style="width:100%;height:92px;"></svg>
+          <p id="voucherCodeText" style="margin:10px 0 0;font-size:16px;font-weight:900;letter-spacing:.12em;color:#17352f;word-break:break-word;">-</p>
+        </div>
+        <p id="voucherStatusText" style="margin:14px 0 0;font-size:14px;color:#6c7c76;font-weight:700;">Voucher attivo</p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeVoucherModal()">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import {
       auth,
@@ -550,6 +576,7 @@
       onAuthStateChanged,
       doc,
       getDoc,
+      updateDoc,
       collection,
       getDocs
     } from "./firebase.js";
@@ -557,7 +584,8 @@
     import {
       addDoc,
       query,
-      orderBy
+      orderBy,
+      increment
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const fallbackRewardsData = {
@@ -603,20 +631,15 @@
     async function loadUserData(uid) {
       const profile = await loadUserProfile(uid);
       const groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
-      const rewardsCol = collection(firestore, "users", uid, "reward_redemptions");
-      let redeemed = [];
-      try {
-        const rewardsQuery = query(rewardsCol, orderBy("date", "desc"));
-        const rewardsSnap = await getDocs(rewardsQuery);
-        rewardsSnap.forEach((docSnap) => redeemed.push({ id: docSnap.id, ...docSnap.data() }));
-      } catch (e) {
-        try {
-          const rewardsSnap = await getDocs(rewardsCol);
-          rewardsSnap.forEach((docSnap) => redeemed.push({ id: docSnap.id, ...docSnap.data() }));
-        } catch (err) {
-          redeemed = [];
-        }
-      }
+      const redeemed = [];
+      const reqSnap = await getDocs(collection(firestore, "reward_requests"));
+      reqSnap.forEach((docSnap) => {
+        const d = docSnap.data();
+        if (d.uid !== uid) return;
+        if (!["voucher_emesso", "consegnata"].includes(d.status)) return;
+        redeemed.push({ id: docSnap.id, ...d });
+      });
+      redeemed.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
       return {
         profile,
         group: groupData,
@@ -632,7 +655,7 @@
       snap.forEach((docSnap) => {
         const d = docSnap.data();
         const sameReward = d.premioId === rewardId;
-        const stillOpen = d.status === "in_attesa" || d.status === "approvata";
+        const stillOpen = d.status === "voucher_emesso";
         if (!sameReward || !stillOpen) return;
         if (groupData) {
           if (d.requestType === "group" && d.groupId === groupData.id) found = true;
@@ -643,6 +666,10 @@
       return found;
     }
 
+    function generateVoucherCode() {
+      return `VCH-${Date.now()}-${Math.floor(Math.random()*9000+1000)}`;
+    }
+
     async function createRewardRequest(user, profile, groupData, reward) {
       const fullName = `${profile?.nome || ""} ${profile?.cognome || ""}`.trim() || user.displayName || "Cliente";
       const card = profile?.clientCode || profile?.fidelityCard || "-";
@@ -650,7 +677,29 @@
       const rewardPoints = Number(reward.pointsRequired || 0);
       if (availablePoints < rewardPoints) throw new Error("Punti insufficienti per richiedere questo premio.");
       const alreadyPending = await hasPendingRewardRequest(user, reward.id, groupData);
-      if (alreadyPending) throw new Error("Esiste già una richiesta aperta per questo premio.");
+      if (alreadyPending) throw new Error("Esiste già un voucher attivo per questo premio.");
+
+      if (groupData) {
+        await updateDoc(doc(firestore, "groups", groupData.id), {
+          totalPoints: increment(-rewardPoints)
+        });
+      } else {
+        await updateDoc(doc(firestore, "users", user.uid), {
+          punti: increment(-rewardPoints)
+        });
+      }
+
+      await addDoc(collection(firestore, "users", user.uid, "fidelity_movements"), {
+        tipo: groupData ? "premio_gruppo_scalato" : "premio_scalato",
+        descrizione: `Scalati punti per premio: ${reward.title}`,
+        punti: -rewardPoints,
+        importoParafarmaco: 0,
+        card,
+        data: new Date().toLocaleString("it-IT"),
+        timestampIso: new Date().toISOString()
+      });
+
+      const voucherCode = generateVoucherCode();
       await addDoc(collection(firestore, "reward_requests"), {
         uid: user.uid,
         clienteNome: fullName,
@@ -663,12 +712,22 @@
         premioNome: reward.title,
         puntiSpesi: rewardPoints,
         saldoRiferimento: availablePoints,
-        status: "in_attesa",
+        status: "voucher_emesso",
+        voucherCode,
+        voucherActive: true,
         createdAt: new Date().toISOString(),
-        approvedAt: "", approvedByName: "", approvedByBadge: "",
+        requestedAt: new Date().toISOString(),
         deliveredAt: "", deliveredByName: "", deliveredByBadge: "",
         rejectedAt: "", rejectedByName: "", rejectedByBadge: ""
       });
+
+      return {
+        rewardName: reward.title,
+        voucherCode,
+        status: "voucher_emesso",
+        createdAt: new Date().toISOString(),
+        pointsSpent: rewardPoints
+      };
     }
 
     function buildRewardCard(item, currentPoints) {
@@ -696,6 +755,37 @@
         </article>`;
     }
 
+
+    function openVoucherModal(item) {
+      const modal = document.getElementById("voucherModal");
+      const name = item.premioNome || item.name || item.title || "Premio";
+      const code = item.voucherCode || item.code || "-";
+      const requested = item.createdAt ? new Date(item.createdAt).toLocaleString("it-IT") : "-";
+      const delivered = item.deliveredAt ? new Date(item.deliveredAt).toLocaleString("it-IT") : null;
+      document.getElementById("voucherRewardName").textContent = name;
+      document.getElementById("voucherCodeText").textContent = code;
+      document.getElementById("voucherModalText").textContent = "Mostra questo voucher in farmacia per il ritiro.";
+      document.getElementById("voucherStatusText").textContent = delivered ? `Voucher utilizzato • richiesto ${requested} • erogato ${delivered}` : `Voucher attivo • richiesto ${requested}`;
+      try {
+        JsBarcode("#voucherBarcodeSvg", String(code), {
+          format: "CODE128",
+          lineColor: "#17352f",
+          background: "#ffffff",
+          width: 2,
+          height: 62,
+          margin: 8,
+          displayValue: false
+        });
+      } catch (e) {}
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    window.closeVoucherModal = function() {
+      document.getElementById("voucherModal").classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
     function renderRewards() {
       const list = document.getElementById("rewardList");
       const points = currentData.points || 0;
@@ -721,14 +811,21 @@
       wrap.innerHTML = `
         <div class="redeemed-list">
           ${redeemed.map(item => `
-            <article class="redeemed-item">
-              <div class="redeemed-icon">${item.icon || "🎁"}</div>
+            <article class="redeemed-item redeemed-clickable" data-redeemed-id="${item.id}" style="cursor:pointer;">
+              <div class="redeemed-icon">${item.status === "consegnata" ? "✅" : "🎁"}</div>
               <div class="redeemed-text">
-                <p class="redeemed-name">${item.name || item.title || "Premio riscattato"}</p>
-                <p class="redeemed-meta">${item.meta || item.date || ""}</p>
+                <p class="redeemed-name">${item.premioNome || item.name || item.title || "Premio riscattato"}</p>
+                <p class="redeemed-meta">${item.status === "consegnata" ? "Ritirato" : "Voucher disponibile"} • ${item.voucherCode || ""}</p>
               </div>
             </article>`).join("")}
         </div>`;
+
+      wrap.querySelectorAll(".redeemed-clickable").forEach(el => {
+        el.addEventListener("click", () => {
+          const item = redeemed.find(r => r.id === el.dataset.redeemedId);
+          if (item) openVoucherModal(item);
+        });
+      });
     }
 
     function setFilter(filter) {
@@ -743,9 +840,13 @@
       const user = auth.currentUser;
       if (!user) return;
       try {
-        await createRewardRequest(user, currentData.profile, currentData.group, selectedReward);
+        const voucherData = await createRewardRequest(user, currentData.profile, currentData.group, selectedReward);
         closeRewardModal();
-        alert("Richiesta premio inviata correttamente.");
+        currentData = await loadUserData(user.uid);
+        renderRewards();
+        renderRedeemed();
+        bindRewardButtons();
+        openVoucherModal(voucherData);
       } catch (error) {
         alert(error.message || "Errore durante la richiesta del premio.");
       }
@@ -797,6 +898,10 @@
     document.getElementById("modalConfirmBtn").addEventListener("click", requestSelectedReward);
     document.getElementById("rewardModal").addEventListener("click", function(e){
       if (e.target === this) closeRewardModal();
+    });
+
+    document.getElementById("voucherModal").addEventListener("click", function(e){
+      if (e.target === this) closeVoucherModal();
     });
 
     onAuthStateChanged(auth, async (user) => {

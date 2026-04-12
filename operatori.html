@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root{
       --bg:#f4f7f5;
@@ -824,11 +825,22 @@
                 <input id="requestSearchInput" type="text" placeholder="Cerca cliente, card o premio..." />
                 <select id="statusFilter">
                   <option value="all">Tutti gli stati</option>
-                  <option value="in_attesa">In attesa</option>
-                  <option value="approvata">Approvata</option>
-                  <option value="consegnata">Consegnata</option>
-                  <option value="rifiutata">Rifiutata</option>
+                  <option value="voucher_emesso">Voucher emessi</option>
+                  <option value="consegnata">Consegnati</option>
+                  <option value="rifiutata">Annullati</option>
                 </select>
+              </div>
+
+
+              <div class="panel" style="margin-bottom:18px;">
+                <h3 class="panel-title" style="margin-bottom:12px;">Riscatto voucher premio</h3>
+                <div class="row" style="align-items:stretch;flex-wrap:wrap;">
+                  <div class="grow">
+                    <input id="voucherCodeInput" type="text" placeholder="Passa o inserisci il codice voucher" />
+                  </div>
+                  <button class="archive-btn" type="button" id="redeemVoucherBtn">Valida voucher</button>
+                </div>
+                <div class="success-bar" id="voucherResultBar" style="margin-top:12px;"></div>
               </div>
 
               <div class="table-wrap">
@@ -841,12 +853,13 @@
                       <th>Premio</th>
                       <th>Punti spesi</th>
                       <th>Data richiesta</th>
+                      <th>Voucher</th>
                       <th>Stato</th>
                       <th>Azioni</th>
                     </tr>
                   </thead>
                   <tbody id="requestsBody">
-                    <tr><td colspan="6" class="empty">Caricamento richieste...</td></tr>
+                    <tr><td colspan="9" class="empty">Caricamento richieste...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -931,6 +944,7 @@
                       <th>Punti spesi</th>
                       <th>Stato</th>
                       <th>Operatore</th>
+                      <th>Voucher</th>
                       <th>Data richiesta</th>
                     </tr>
                   </thead>
@@ -1059,6 +1073,9 @@
     const requestSearchInput = document.getElementById("requestSearchInput");
     const statusFilter = document.getElementById("statusFilter");
     const requestsBody = document.getElementById("requestsBody");
+    const voucherCodeInput = document.getElementById("voucherCodeInput");
+    const redeemVoucherBtn = document.getElementById("redeemVoucherBtn");
+    const voucherResultBar = document.getElementById("voucherResultBar");
     const fromDate = document.getElementById("fromDate");
     const toDate = document.getElementById("toDate");
     const searchText = document.getElementById("searchText");
@@ -1131,10 +1148,10 @@
 
     function statusBadge(status){
       switch(status){
-        case "approvata": return `<span class="status status-approved">Approvata</span>`;
+        case "voucher_emesso": return `<span class="status status-approved">Voucher emesso</span>`;
         case "consegnata": return `<span class="status status-delivered">Consegnata</span>`;
-        case "rifiutata": return `<span class="status status-rejected">Rifiutata</span>`;
-        default: return `<span class="status status-waiting">In attesa</span>`;
+        case "rifiutata": return `<span class="status status-rejected">Annullata</span>`;
+        default: return `<span class="status status-waiting">In lavorazione</span>`;
       }
     }
 
@@ -1400,41 +1417,32 @@
       const status = statusFilter.value;
 
       const filtered = allRequests.filter(item => {
-        const text = `${item.clienteNome || ""} ${item.card || ""} ${item.premioNome || ""} ${item.groupName || ""} ${item.requestType || ""}`.toLowerCase();
+        const text = `${item.clienteNome || ""} ${item.card || ""} ${item.premioNome || ""} ${item.groupName || ""} ${item.requestType || ""} ${item.voucherCode || ""}`.toLowerCase();
         const matchText = text.includes(q);
         const matchStatus = status === "all" ? true : item.status === status;
         return matchText && matchStatus;
       });
 
       if (!filtered.length) {
-        requestsBody.innerHTML = `
-          <tr>
-            <td colspan="8" class="empty">Nessuna richiesta trovata.</td>
-          </tr>
-        `;
+        requestsBody.innerHTML = `<tr><td colspan="9" class="empty">Nessuna richiesta trovata.</td></tr>`;
         return;
       }
 
       requestsBody.innerHTML = filtered.map(item => {
         const requestTypeLabel = item.requestType === "group" ? "Gruppo" : "Personale";
-        const groupLabel = item.requestType === "group"
-          ? `${item.groupName || "Gruppo"} • ${item.memberCount || 0} membri`
-          : "—";
-
+        const groupLabel = item.requestType === "group" ? `${item.groupName || "Gruppo"} • ${item.memberCount || 0} membri` : "—";
         return `
-        <tr>
-          <td>
-            <div class="client-name">${item.clienteNome || "Cliente"}</div>
-            <div class="client-sub">${item.card || "-"}</div>
-          </td>
-          <td>${requestTypeLabel}</td>
-          <td>${groupLabel}</td>
-          <td>${item.premioNome || "-"}</td>
-          <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
-          <td>${formatDate(item.createdAt)}</td>
-          <td>${statusBadge(item.status)}</td>
-          <td>${buildRequestActions(item)}</td>
-        </tr>`;
+          <tr>
+            <td><div class="client-name">${item.clienteNome || "Cliente"}</div><div class="client-sub">${item.card || "-"}</div></td>
+            <td>${requestTypeLabel}</td>
+            <td>${groupLabel}</td>
+            <td>${item.premioNome || "-"}</td>
+            <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+            <td>${formatDate(item.createdAt)}</td>
+            <td><span class="badge badge-gray">${item.voucherCode || "-"}</span></td>
+            <td>${statusBadge(item.status)}</td>
+            <td>${buildRequestActions(item)}</td>
+          </tr>`;
       }).join("");
 
       requestsBody.querySelectorAll("[data-action]").forEach(btn => {
@@ -1445,19 +1453,11 @@
     }
 
     function buildRequestActions(item){
-      if (item.status === "in_attesa") {
+      if (item.status === "voucher_emesso") {
         return `
           <div class="action-group">
-            <button class="action-btn btn-approve" data-action="approve" data-id="${item.id}">Approva</button>
-            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
-          </div>`;
-      }
-
-      if (item.status === "approvata") {
-        return `
-          <div class="action-group">
-            <button class="action-btn btn-deliver" data-action="deliver" data-id="${item.id}">Consegnata</button>
-            <button class="action-btn btn-reject" data-action="reject_after_approval" data-id="${item.id}">Rifiuta</button>
+            <button class="action-btn btn-deliver" data-action="deliver" data-id="${item.id}">Riscatta ora</button>
+            <button class="action-btn btn-reject" data-action="cancel_voucher" data-id="${item.id}">Annulla</button>
           </div>`;
       }
 
@@ -1466,11 +1466,9 @@
 
     async function handleRequestAction(id, action){
       if (!requireBadgeBeforeSend()) return;
-
       const requestRef = doc(firestore, "reward_requests", id);
       const requestSnap = await getDoc(requestRef);
       if (!requestSnap.exists()) return;
-
       const requestData = requestSnap.data();
       const uid = requestData.uid || null;
       const pointsSpent = Number(requestData.puntiSpesi || 0);
@@ -1479,98 +1477,35 @@
       const operatorName = currentOperator?.nome || "Operatore";
       const operatorBadge = currentOperator?.badge || "";
 
-      if (action === "approve") {
-        if (requestType === "group") {
-          if (!groupId) return alert("Gruppo non valido.");
-          await updateDoc(doc(firestore, "groups", groupId), {
-            totalPoints: increment(-pointsSpent)
-          });
-        } else {
-          if (!uid) return alert("Utente non valido.");
-          await updateDoc(doc(firestore, "users", uid), {
-            punti: increment(-pointsSpent)
-          });
-        }
-
-        await updateDoc(requestRef, {
-          status: "approvata",
-          approvedAt: new Date().toISOString(),
-          approvedByName: operatorName,
-          approvedByBadge: operatorBadge
-        });
-
-        if (uid) {
-          await addDoc(collection(firestore, "users", uid, "fidelity_movements"), {
-            tipo: requestType === "group" ? "premio_gruppo_scalato" : "premio_scalato",
-            descrizione: `Scalati punti per premio: ${requestData.premioNome || "Premio"}`,
-            punti: -pointsSpent,
-            importoParafarmaco: 0,
-            card: requestData.card || "",
-            operatoreNome: operatorName,
-            operatoreBadge: operatorBadge,
-            data: new Date().toLocaleString("it-IT"),
-            timestampIso: new Date().toISOString()
-          });
-        }
-      }
-
       if (action === "deliver") {
+        if (requestData.status === "consegnata") {
+          alert("Voucher già utilizzato.");
+          return;
+        }
         await updateDoc(requestRef, {
           status: "consegnata",
+          voucherActive: false,
           deliveredAt: new Date().toISOString(),
           deliveredByName: operatorName,
           deliveredByBadge: operatorBadge
         });
-
         if (uid) {
-          await updateDoc(doc(firestore, "users", uid), {
-            premiRiscattati: increment(1)
-          });
-          try {
-            await addDoc(collection(firestore, "users", uid, "reward_redemptions"), {
-              name: requestData.premioNome || "Premio",
-              title: requestData.premioNome || "Premio",
-              icon: "🎁",
-              date: new Date().toLocaleDateString("it-IT"),
-              meta: `Consegnato il ${new Date().toLocaleDateString("it-IT")}`
-            });
-          } catch (e) {}
+          await updateDoc(doc(firestore, "users", uid), { premiRiscattati: increment(1) });
         }
       }
 
-      if (action === "reject") {
-        await updateDoc(requestRef, {
-          status: "rifiutata",
-          rejectedAt: new Date().toISOString(),
-          rejectedByName: operatorName,
-          rejectedByBadge: operatorBadge
-        });
-      }
-
-      if (action === "reject_after_approval") {
+      if (action === "cancel_voucher") {
         if (requestType === "group") {
           if (!groupId) return alert("Gruppo non valido.");
-          await updateDoc(doc(firestore, "groups", groupId), {
-            totalPoints: increment(pointsSpent)
-          });
+          await updateDoc(doc(firestore, "groups", groupId), { totalPoints: increment(pointsSpent) });
         } else {
           if (!uid) return alert("Utente non valido.");
-          await updateDoc(doc(firestore, "users", uid), {
-            punti: increment(pointsSpent)
-          });
+          await updateDoc(doc(firestore, "users", uid), { punti: increment(pointsSpent) });
         }
-
-        await updateDoc(requestRef, {
-          status: "rifiutata",
-          rejectedAt: new Date().toISOString(),
-          rejectedByName: operatorName,
-          rejectedByBadge: operatorBadge
-        });
-
         if (uid) {
           await addDoc(collection(firestore, "users", uid, "fidelity_movements"), {
             tipo: requestType === "group" ? "restituzione_punti_gruppo" : "restituzione_punti",
-            descrizione: `Restituiti punti per richiesta rifiutata: ${requestData.premioNome || "Premio"}`,
+            descrizione: `Restituiti punti per voucher annullato: ${requestData.premioNome || "Premio"}`,
             punti: pointsSpent,
             importoParafarmaco: 0,
             card: requestData.card || "",
@@ -1580,10 +1515,49 @@
             timestampIso: new Date().toISOString()
           });
         }
+        await updateDoc(requestRef, {
+          status: "rifiutata",
+          voucherActive: false,
+          rejectedAt: new Date().toISOString(),
+          rejectedByName: operatorName,
+          rejectedByBadge: operatorBadge
+        });
       }
 
       await refreshAllData();
       clearOperatorAfterOperation();
+    }
+
+
+    async function redeemVoucherByCode() {
+      if (!requireBadgeBeforeSend()) return;
+      const code = String(voucherCodeInput.value || "").trim();
+      if (!code) return alert("Inserisci o passa un codice voucher.");
+      const reqSnap = await getDocs(collection(firestore, "reward_requests"));
+      let found = null;
+      reqSnap.forEach((docSnap) => {
+        const d = docSnap.data();
+        if (!found && String(d.voucherCode || "").trim() === code) found = { id: docSnap.id, ...d };
+      });
+      if (!found) {
+        voucherResultBar.textContent = "Voucher non trovato.";
+        voucherResultBar.classList.add("show");
+        return;
+      }
+      if (found.status === "consegnata") {
+        voucherResultBar.textContent = `Voucher già usato • ${found.clienteNome} • ${found.premioNome} • erogato ${formatDate(found.deliveredAt)}`;
+        voucherResultBar.classList.add("show");
+        return;
+      }
+      if (found.status === "rifiutata") {
+        voucherResultBar.textContent = `Voucher annullato • ${found.clienteNome} • ${found.premioNome}`;
+        voucherResultBar.classList.add("show");
+        return;
+      }
+      await handleRequestAction(found.id, "deliver");
+      voucherResultBar.textContent = `Voucher valido • ${found.clienteNome} • ${found.premioNome} • ${Number(found.puntiSpesi||0).toLocaleString("it-IT")} pt`;
+      voucherResultBar.classList.add("show");
+      voucherCodeInput.value = "";
     }
 
     function renderReport(){
@@ -1613,7 +1587,7 @@
       const totalPointsValue = filteredMovements.reduce((sum, row) => sum + Number(row.points || 0), 0);
       const uniqueClients = new Set(filteredMovements.map(row => row.uid)).size;
       const totalRequestsValue = filteredRequests.length;
-      const totalApprovedValue = filteredRequests.filter(r => r.status === "approvata").length;
+      const totalApprovedValue = filteredRequests.filter(r => r.status === "voucher_emesso").length;
       const totalDeliveredValue = filteredRequests.filter(r => r.status === "consegnata").length;
 
       totRevenue.textContent = formatEuro(totalRevenueValue);
@@ -1674,7 +1648,7 @@
 
     function renderReportRequests(rows){
       if (!rows.length) {
-        reportRequestsBody.innerHTML = `<tr><td colspan="8" class="empty">Nessuna richiesta trovata.</td></tr>`;
+        reportRequestsBody.innerHTML = `<tr><td colspan="9" class="empty">Nessuna richiesta trovata.</td></tr>`;
         return;
       }
 
@@ -1706,7 +1680,7 @@
       const dayPoints = {};
       const dayRevenue = {};
       const operatorPoints = {};
-      const rewardStatus = { in_attesa:0, approvata:0, consegnata:0, rifiutata:0 };
+      const rewardStatus = { voucher_emesso:0, consegnata:0, rifiutata:0 };
 
       filteredMovements.forEach(row => {
         const d = row.date ? row.date.slice(0,10) : "senza data";
@@ -1717,7 +1691,7 @@
       });
 
       filteredRequests.forEach(row => {
-        rewardStatus[row.status || "in_attesa"] = (rewardStatus[row.status || "in_attesa"] || 0) + 1;
+        rewardStatus[row.status || "voucher_emesso"] = (rewardStatus[row.status || "voucher_emesso"] || 0) + 1;
       });
 
       const pointLabels = Object.keys(dayPoints).sort();
@@ -1763,8 +1737,8 @@
           labels: rewardLabels,
           datasets: [{
             data: [
-              rewardStatus.in_attesa || 0,
-              rewardStatus.approvata || 0,
+              rewardStatus.voucher_emesso || 0,
+              0,
               rewardStatus.consegnata || 0,
               rewardStatus.rifiutata || 0
             ]
@@ -1826,7 +1800,7 @@
         console.error("Errore refresh operatori:", error);
         requestsBody.innerHTML = `<tr><td colspan="8" class="empty">Errore caricamento dati operatori.</td></tr>`;
         movementsBody.innerHTML = `<tr><td colspan="7" class="empty">Errore caricamento movimenti.</td></tr>`;
-        reportRequestsBody.innerHTML = `<tr><td colspan="7" class="empty">Errore caricamento richieste.</td></tr>`;
+        reportRequestsBody.innerHTML = `<tr><td colspan="9" class="empty">Errore caricamento richieste.</td></tr>`;
       } finally {
         setPageBusy(false);
       }
@@ -1888,6 +1862,8 @@
 
     requestSearchInput.addEventListener("input", renderRequestsTable);
     statusFilter.addEventListener("change", renderRequestsTable);
+    redeemVoucherBtn.addEventListener("click", redeemVoucherByCode);
+    voucherCodeInput.addEventListener("keydown", (e) => { if (e.key === "Enter") redeemVoucherByCode(); });
 
     applyFiltersBtn.addEventListener("click", renderReport);
     searchText.addEventListener("input", renderReport);
