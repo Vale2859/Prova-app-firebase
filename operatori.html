@@ -717,6 +717,29 @@
       input,select{font-size:16px;}
     }
 
+  
+    @media (max-width: 560px){
+      .content{padding:14px;}
+      .main-card,.panel,.sidebar-card{padding:16px;}
+      .stat-card{padding:16px 18px;}
+      .stat-value{font-size:34px;}
+      .accumulo-panel{padding:16px; margin-top:0;}
+      .row{flex-direction:column; align-items:stretch;}
+      .archive-btn{width:100%; min-width:0;}
+      input,select{min-height:54px; font-size:15px;}
+      .send-btn{min-height:58px; font-size:20px;}
+      .toolbar{gap:10px;}
+      .table-wrap{border-radius:16px;}
+      table{min-width:760px;}
+      .modal-card{width:min(100%, 94vw); border-radius:20px;}
+      .modal-head{padding:14px 16px;}
+      .modal-body{padding:14px 16px 16px;}
+      .modal-actions{flex-direction:column;}
+      .operator-pill{justify-content:center; width:100%;}
+      .top-actions{flex-direction:column; align-items:stretch;}
+      .top-actions button{width:100%;}
+    }
+
   </style>
 </head>
 <body>
@@ -997,9 +1020,6 @@
 
   <script type="module">
     import {
-      auth,
-      onAuthStateChanged,
-      signInAnonymously,
       firestore,
       doc,
       getDoc,
@@ -1071,22 +1091,10 @@
     let operatorPointsChart = null;
     let rewardStatusChart = null;
 
-    let firebaseReady = false;
+    let firebaseReady = true;
 
     async function ensureFirebaseAuth() {
-      if (auth.currentUser) {
-        firebaseReady = true;
-        return auth.currentUser;
-      }
-      try {
-        const user = await signInAnonymously(auth);
-        firebaseReady = true;
-        return user.user || user;
-      } catch (error) {
-        console.error("Errore autenticazione operatore:", error);
-        alert("Impossibile collegarsi a Firebase. Controlla i domini autorizzati e le regole di accesso.");
-        throw error;
-      }
+      return true;
     }
 
     function setPageBusy(isBusy) {
@@ -1809,7 +1817,6 @@
     async function refreshAllData(){
       try {
         setPageBusy(true);
-        await ensureFirebaseAuth();
         await loadClientsAndMovements();
         await loadRequests();
         await loadAccumuloStats();
@@ -1886,7 +1893,6 @@
     searchText.addEventListener("input", renderReport);
 
     try {
-      await ensureFirebaseAuth();
       await refreshAllData();
     } catch (error) {
       console.error(error);

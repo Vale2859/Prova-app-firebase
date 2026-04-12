@@ -224,9 +224,9 @@
 
   <script type="module">
     import {
+      auth,
       signInWithEmailAndPassword
     } from "./firebase.js";
-    import { auth } from "./firebase.js";
 
     const emailEl = document.getElementById("email");
     const passwordEl = document.getElementById("password");
@@ -260,7 +260,19 @@
         window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);
-        showStatus("Accesso non riuscito. Controlla email e password.", "error");
+        let message = "Accesso non riuscito. Controlla email e password.";
+        if (error?.code === "auth/invalid-credential" || error?.code === "auth/user-not-found" || error?.code === "auth/wrong-password") {
+          message = "Email o password non corretti.";
+        } else if (error?.code === "auth/too-many-requests") {
+          message = "Troppi tentativi. Riprova più tardi.";
+        } else if (error?.code === "auth/network-request-failed") {
+          message = "Connessione assente o instabile.";
+        } else if (error?.code === "auth/unauthorized-domain") {
+          message = "Questo dominio non è autorizzato in Firebase Authentication.";
+        } else if (error?.code === "auth/operation-not-allowed") {
+          message = "Metodo email/password non attivo su Firebase Authentication.";
+        }
+        showStatus(message, "error");
       } finally {
         loginBtn.disabled = false;
       }

@@ -300,13 +300,34 @@
           clientCode,
           fidelityCard: clientCode,
           punti: 0,
+          groupId: null,
+          groupRole: null,
+          premiRiscattati: 0,
+          puntiAnnuali: 0,
+          passaggiAnnuali: 0,
+          spesaAnnuaNumero: 0,
+          spesaAnnua: "0,00 €",
           createdAt: new Date().toISOString()
         });
 
         window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);
-        showStatus("Registrazione non riuscita. Controlla i dati inseriti.", "error");
+        let message = "Registrazione non riuscita. Controlla i dati inseriti.";
+        if (error?.code === "auth/email-already-in-use") {
+          message = "Questa email è già registrata.";
+        } else if (error?.code === "auth/invalid-email") {
+          message = "Email non valida.";
+        } else if (error?.code === "auth/weak-password") {
+          message = "Password troppo debole. Usa almeno 6 caratteri.";
+        } else if (error?.code === "auth/network-request-failed") {
+          message = "Connessione assente o instabile.";
+        } else if (error?.code === "auth/unauthorized-domain") {
+          message = "Questo dominio non è autorizzato in Firebase Authentication.";
+        } else if (error?.code === "auth/operation-not-allowed") {
+          message = "Metodo email/password non attivo su Firebase Authentication.";
+        }
+        showStatus(message, "error");
       } finally {
         registerBtn.disabled = false;
       }
