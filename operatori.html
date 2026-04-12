@@ -679,6 +679,44 @@
       .table-wrap{overflow:auto}
       table{min-width:900px}
     }
+    @media (max-width: 900px){
+      .page{margin:0;border-radius:0;border-left:none;border-right:none;min-height:100vh;}
+      .content{padding:16px;}
+      .topbar{padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+      .brand{width:100%;display:flex;justify-content:center;}
+      .brand img{height:48px;}
+      .menu{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+      .menu button{padding:10px 6px;border-bottom-width:3px;font-size:15px;line-height:1.2;}
+      .top-actions{width:100%;justify-content:space-between;flex-wrap:wrap;}
+      .operator-pill{flex:1 1 100%;justify-content:center;}
+      .top-actions button{flex:1 1 calc(50% - 6px);min-height:44px;}
+      .layout{grid-template-columns:1fr;}
+      .sidebar-card{position:static;order:2;}
+      .main-card{padding:18px 16px;}
+      .stats{grid-template-columns:1fr;gap:12px;}
+      .stats.report-stats{grid-template-columns:1fr 1fr;}
+      .stat-card{padding:18px;}
+      .stat-value{font-size:40px;}
+      .accumulo-panel{margin:0;padding:18px 14px;}
+      .row{flex-direction:column;align-items:stretch;}
+      .archive-btn{width:100%;min-width:0;}
+      .toolbar,.toolbar.report-toolbar{grid-template-columns:1fr;}
+      .chart-grid{grid-template-columns:1fr;}
+      .chart-box{min-height:300px;}
+      .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
+      table{min-width:880px;}
+      .modal-card{width:min(100%, 95vw);max-height:85vh;overflow:auto;}
+    }
+    @media (max-width: 560px){
+      .stats.report-stats{grid-template-columns:1fr;}
+      .vip-grid{grid-template-columns:1fr;}
+      .modal-actions{flex-direction:column;}
+      .modal-actions button{width:100%;}
+      .client-option,.vip-item,.top-item{align-items:flex-start;flex-direction:column;}
+      .client-card,.vip-points,.top-points{white-space:normal;}
+      input,select{font-size:16px;}
+    }
+
   </style>
 </head>
 <body>
@@ -697,6 +735,7 @@
       <div class="top-actions">
         <div class="operator-pill" id="operatorPill">Operatore: nessuno</div>
         <button type="button" id="forceBadgeBtn">Passa badge</button>
+        <button type="button" id="exitOperatorsBtn">Esci</button>
       </div>
     </div>
 
@@ -1802,9 +1841,6 @@
       badgeCodeInput.focus();
     });
     exitOperatorsBtn?.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
-    exitOperatorsBtn.addEventListener("click", () => {
       window.location.href = "index.html";
     });
     confirmBadgeBtn.addEventListener("click", confirmOperatorBadge);
