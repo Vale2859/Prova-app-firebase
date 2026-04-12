@@ -338,6 +338,88 @@
       display:none;
     }
 
+
+    .group-inline-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,20,16,0.66);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .modal-overlay.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(100%, 430px);
+      background:#fff;
+      border-radius:28px;
+      padding:22px 20px;
+      box-shadow:0 24px 48px rgba(0,0,0,0.18);
+      border:1px solid var(--border);
+    }
+
+    .modal-title{
+      margin:0 0 10px;
+      font-size:1.5rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-text{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.55;
+      font-weight:600;
+    }
+
+    .modal-actions{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .modal-btn{
+      flex:1;
+      min-height:48px;
+      border:none;
+      border-radius:14px;
+      font-size:.98rem;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .modal-btn.secondary{
+      background:#eef3f1;
+      color:var(--text);
+    }
+
+    .modal-btn.primary{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+    }
+
+    .modal-btn.danger{
+      background:linear-gradient(135deg,#c94646 0%, #de6b6b 100%);
+      color:#fff;
+    }
+
     @media (max-width: 640px){
       .title-block h1{
         font-size:34px;
@@ -399,6 +481,10 @@
         <h2 class="hero-name" id="heroUserName">Cliente</h2>
         <p class="hero-card-number" id="heroCardNumber">Tessera: non assegnata</p>
         <p class="hero-card-number hidden" id="heroGroupInfo">Gruppo attivo • 0 tessere associate</p>
+        <div id="groupActions" class="group-inline-actions hidden">
+          <button class="btn btn-primary" id="openGroupBtn" type="button">Vedi gruppo</button>
+          <button class="btn" id="leaveGroupBtn" type="button" style="background:#eef3f1;color:#17352f;">Esci dal gruppo</button>
+        </div>
 
         <div class="points-box">
           <div class="points-label">Punti attuali</div>
@@ -455,6 +541,30 @@
     </section>
   </div>
 
+  <div class="modal-overlay" id="groupModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Membri del gruppo</h3>
+      <p class="modal-text" id="groupModalText">Caricamento...</p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" id="closeGroupModalBtn" type="button">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="leaveGroupModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Uscire dal gruppo?</h3>
+      <p class="modal-text">
+        Uscendo dal gruppo, i punti già presenti nel gruppo resteranno nel gruppo.
+        Da questo momento i tuoi nuovi punti torneranno personali.
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" id="cancelLeaveGroupBtn" type="button">Annulla</button>
+        <button class="modal-btn danger" id="confirmLeaveGroupBtn" type="button">Esci</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import {
       auth,
@@ -491,6 +601,15 @@
     const groupActive = document.getElementById("groupActive");
     const groupInfoText = document.getElementById("groupInfoText");
     const inviteRequestsList = document.getElementById("inviteRequestsList");
+    const groupActions = document.getElementById("groupActions");
+    const openGroupBtn = document.getElementById("openGroupBtn");
+    const leaveGroupBtn = document.getElementById("leaveGroupBtn");
+    const groupModal = document.getElementById("groupModal");
+    const groupModalText = document.getElementById("groupModalText");
+    const closeGroupModalBtn = document.getElementById("closeGroupModalBtn");
+    const leaveGroupModal = document.getElementById("leaveGroupModal");
+    const cancelLeaveGroupBtn = document.getElementById("cancelLeaveGroupBtn");
+    const confirmLeaveGroupBtn = document.getElementById("confirmLeaveGroupBtn");
 
     async function loadUserProfile(uid) {
       const userRef = doc(firestore, "users", uid);
@@ -650,9 +769,41 @@
         const memberCount = Number(groupData.memberCount || (Array.isArray(groupData.members) ? groupData.members.length : 0) || 0);
         heroGroupInfo.textContent = `Gruppo attivo • ${memberCount} tessere associate`;
         heroGroupInfo.classList.remove("hidden");
+        groupActions.classList.remove("hidden");
       } else {
+        heroGroupInfo.textContent = "";
         heroGroupInfo.classList.add("hidden");
+        groupActions.classList.add("hidden");
       }
+    }
+
+    function openGroupDetails(groupData) {
+      if (!groupData) return;
+      const members = Array.isArray(groupData.members) ? groupData.members : [];
+      const membersHtml = members.map(member => `• ${member.nome || "Cliente"} — ${member.clientCode || "-"}`).join("<br>");
+      groupModalText.innerHTML = `<strong>${groupData.name || "Gruppo punti"}</strong><br><br>${membersHtml || "Nessun membro"}<br><br><strong>Totale punti gruppo:</strong> ${Number(groupData.totalPoints || 0)}`;
+      groupModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    async function leaveCurrentGroup(user, profile, groupData) {
+      if (!groupData || !profile?.groupId) return;
+      const groupRef = doc(firestore, "groups", profile.groupId);
+      const userRef = doc(firestore, "users", user.uid);
+      const currentMembers = Array.isArray(groupData.members) ? groupData.members : [];
+      const nextMembers = currentMembers.filter(member => member.uid !== user.uid);
+      if (nextMembers.length === 0) {
+        await updateDoc(userRef, { groupId: null, groupRole: null });
+        return;
+      }
+      const isOwner = groupData.ownerUid === user.uid;
+      const nextOwnerUid = isOwner ? nextMembers[0]?.uid || null : groupData.ownerUid;
+      await updateDoc(groupRef, {
+        members: nextMembers,
+        memberCount: nextMembers.length,
+        ownerUid: nextOwnerUid
+      });
+      await updateDoc(userRef, { groupId: null, groupRole: null });
     }
 
     function renderMovements(movements) {
@@ -693,6 +844,31 @@
         </article>`).join("");
     }
 
+
+    closeGroupModalBtn?.addEventListener("click", () => {
+      groupModal.classList.remove("open");
+      document.body.style.overflow = "";
+    });
+
+    cancelLeaveGroupBtn?.addEventListener("click", () => {
+      leaveGroupModal.classList.remove("open");
+      document.body.style.overflow = "";
+    });
+
+    groupModal?.addEventListener("click", function(e){
+      if (e.target === this) {
+        groupModal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+    });
+
+    leaveGroupModal?.addEventListener("click", function(e){
+      if (e.target === this) {
+        leaveGroupModal.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+    });
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         guestBox.classList.remove("hidden");
@@ -701,13 +877,22 @@
       }
       guestBox.classList.add("hidden");
       fidelityContent.classList.remove("hidden");
+
       let profile = await loadUserProfile(user.uid);
       let movements = await loadMovements(user.uid);
       let groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
-      renderProfile(user, profile, groupData);
-      renderMovements(movements);
-      refreshGroupPanel(profile, groupData);
-      renderReceivedInvites(await loadReceivedInvites(user.uid));
+
+      const refreshView = async () => {
+        profile = await loadUserProfile(user.uid);
+        movements = await loadMovements(user.uid);
+        groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
+        renderProfile(user, profile, groupData);
+        renderMovements(movements);
+        refreshGroupPanel(profile, groupData);
+        renderReceivedInvites(await loadReceivedInvites(user.uid));
+      };
+
+      await refreshView();
 
       createGroupBtn.onclick = async () => {
         try {
@@ -717,12 +902,11 @@
           if (!invitedUser) return alert("Nessun utente trovato con questo ID cliente.");
           await createGroupInvite(user, profile, invitedUser);
           alert("Invito inviato correttamente.");
-          profile = await loadUserProfile(user.uid);
-          groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
-          renderProfile(user, profile, groupData);
-          refreshGroupPanel(profile, groupData);
           inviteClientCode.value = "";
-        } catch (error) { alert(error.message || "Errore durante l'invio dell'invito."); }
+          await refreshView();
+        } catch (error) {
+          alert(error.message || "Errore durante l'invio dell'invito.");
+        }
       };
 
       inviteMoreBtn.onclick = async () => {
@@ -734,7 +918,9 @@
           await createGroupInvite(user, profile, invitedUser);
           alert("Invito inviato correttamente.");
           inviteMoreClientCode.value = "";
-        } catch (error) { alert(error.message || "Errore durante l'invio dell'invito."); }
+        } catch (error) {
+          alert(error.message || "Errore durante l'invio dell'invito.");
+        }
       };
 
       inviteRequestsList.onclick = async (e) => {
@@ -744,14 +930,30 @@
           if (acceptBtn) await acceptGroupInvite(acceptBtn.dataset.id, user, profile);
           else if (rejectBtn) await rejectGroupInvite(rejectBtn.dataset.id);
           else return;
-          profile = await loadUserProfile(user.uid);
-          groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
-          movements = await loadMovements(user.uid);
-          renderProfile(user, profile, groupData);
-          renderMovements(movements);
-          refreshGroupPanel(profile, groupData);
-          renderReceivedInvites(await loadReceivedInvites(user.uid));
-        } catch (error) { alert(error.message || "Operazione non riuscita."); }
+          await refreshView();
+        } catch (error) {
+          alert(error.message || "Operazione non riuscita.");
+        }
+      };
+
+      openGroupBtn.onclick = () => {
+        openGroupDetails(groupData);
+      };
+
+      leaveGroupBtn.onclick = () => {
+        leaveGroupModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      };
+
+      confirmLeaveGroupBtn.onclick = async () => {
+        try {
+          await leaveCurrentGroup(user, profile, groupData);
+          leaveGroupModal.classList.remove("open");
+          document.body.style.overflow = "";
+          await refreshView();
+        } catch (error) {
+          alert(error.message || "Errore durante l'uscita dal gruppo.");
+        }
       };
     });
   </script>
