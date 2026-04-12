@@ -516,6 +516,155 @@
       display:none;
     }
     .badge-live.show{display:block}
+
+    @media (max-width: 820px){
+      body{
+        background:#eff4f1;
+      }
+      .page{
+        max-width:100%;
+        margin:0;
+        border-radius:0;
+        border:none;
+        box-shadow:none;
+      }
+      .topbar{
+        flex-direction:column;
+        align-items:stretch;
+        gap:14px;
+        padding:16px 14px;
+        position:sticky;
+        top:0;
+        z-index:40;
+      }
+      .brand{
+        display:flex;
+        justify-content:center;
+      }
+      .brand img{
+        height:46px;
+      }
+      .menu{
+        gap:12px;
+        overflow:auto;
+        padding-bottom:4px;
+        scrollbar-width:none;
+      }
+      .menu::-webkit-scrollbar{
+        display:none;
+      }
+      .menu button{
+        flex:0 0 auto;
+        font-size:16px;
+        padding-bottom:8px;
+      }
+      .top-actions{
+        flex-direction:row;
+        justify-content:space-between;
+        gap:8px;
+      }
+      .operator-pill{
+        min-height:40px;
+        font-size:13px;
+        padding:0 12px;
+      }
+      .top-actions button{
+        min-height:40px;
+        padding:0 12px;
+        font-size:13px;
+      }
+      .content{
+        padding:14px;
+      }
+      .sidebar-card,
+      .main-card,
+      .stat-card,
+      .panel{
+        border-radius:20px;
+      }
+      .main-card{
+        padding:18px 14px;
+        min-height:auto;
+      }
+      .accumulo-panel{
+        max-width:none;
+        margin:0;
+        padding:16px 14px 18px;
+      }
+      .row{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .archive-btn,
+      .send-btn{
+        width:100%;
+      }
+      input,select{
+        min-height:52px;
+        font-size:16px;
+      }
+      .stat-card{
+        padding:16px 18px;
+      }
+      .stat-value{
+        font-size:36px;
+      }
+      .table-wrap{
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      .table-wrap table{
+        min-width:860px;
+      }
+      .chart-box{
+        min-height:280px;
+        padding:14px;
+      }
+      .modal-card{
+        width:min(100%, 94vw);
+        border-radius:20px;
+      }
+      .modal-head{
+        padding:14px 16px;
+      }
+      .modal-body{
+        padding:14px 16px 16px;
+      }
+      .vip-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 480px){
+      .content{
+        padding:12px;
+      }
+      .brand img{
+        height:40px;
+      }
+      .menu button{
+        font-size:15px;
+      }
+      .stat-value{
+        font-size:32px;
+      }
+      .field label,
+      .panel-title,
+      .sidebar-title,
+      .chart-title{
+        font-size:15px;
+      }
+      .client-name{
+        font-size:15px;
+      }
+      .action-group{
+        flex-direction:column;
+      }
+      .action-btn{
+        width:100%;
+      }
+    }
+
     @media (max-width: 1280px){
       .stats.report-stats{grid-template-columns:repeat(3,1fr)}
       .grid,.chart-grid{grid-template-columns:1fr}
