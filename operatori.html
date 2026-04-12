@@ -809,6 +809,9 @@
 
   <script type="module">
     import {
+      auth,
+      onAuthStateChanged,
+      signInAnonymously,
       firestore,
       doc,
       getDoc,
@@ -879,6 +882,28 @@
     let revenueByDayChart = null;
     let operatorPointsChart = null;
     let rewardStatusChart = null;
+
+    let firebaseReady = false;
+
+    async function ensureFirebaseAuth() {
+      if (auth.currentUser) {
+        firebaseReady = true;
+        return auth.currentUser;
+      }
+      try {
+        const user = await signInAnonymously(auth);
+        firebaseReady = true;
+        return user.user || user;
+      } catch (error) {
+        console.error("Errore autenticazione operatore:", error);
+        alert("Impossibile collegarsi a Firebase. Controlla i domini autorizzati e le regole di accesso.");
+        throw error;
+      }
+    }
+
+    function setPageBusy(isBusy) {
+      document.body.style.cursor = isBusy ? "progress" : "";
+    }
 
     function openModal(modal){ modal.classList.add("open"); }
     function closeModal(modal){ modal.classList.remove("open"); }
@@ -1594,11 +1619,22 @@
     }
 
     async function refreshAllData(){
-      await loadClientsAndMovements();
-      await loadRequests();
-      await loadAccumuloStats();
-      renderRequestsTable();
-      renderReport();
+      try {
+        setPageBusy(true);
+        await ensureFirebaseAuth();
+        await loadClientsAndMovements();
+        await loadRequests();
+        await loadAccumuloStats();
+        renderRequestsTable();
+        renderReport();
+      } catch (error) {
+        console.error("Errore refresh operatori:", error);
+        requestsBody.innerHTML = `<tr><td colspan="8" class="empty">Errore caricamento dati operatori.</td></tr>`;
+        movementsBody.innerHTML = `<tr><td colspan="7" class="empty">Errore caricamento movimenti.</td></tr>`;
+        reportRequestsBody.innerHTML = `<tr><td colspan="7" class="empty">Errore caricamento richieste.</td></tr>`;
+      } finally {
+        setPageBusy(false);
+      }
     }
 
     tabBtns.forEach(btn => {
@@ -1615,6 +1651,9 @@
     forceBadgeBtn.addEventListener("click", () => {
       openModal(badgeModal);
       badgeCodeInput.focus();
+    });
+    exitOperatorsBtn?.addEventListener("click", () => {
+      window.location.href = "index.html";
     });
     exitOperatorsBtn.addEventListener("click", () => {
       window.location.href = "index.html";
@@ -1661,7 +1700,12 @@
     applyFiltersBtn.addEventListener("click", renderReport);
     searchText.addEventListener("input", renderReport);
 
-    await refreshAllData();
+    try {
+      await ensureFirebaseAuth();
+      await refreshAllData();
+    } catch (error) {
+      console.error(error);
+    }
     openModal(badgeModal);
   </script>
 </body>

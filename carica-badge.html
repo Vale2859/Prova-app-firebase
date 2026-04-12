@@ -200,6 +200,8 @@
 
   <script type="module">
     import {
+      auth,
+      signInAnonymously,
       firestore,
       doc,
       setDoc,
@@ -230,6 +232,7 @@
         return;
       }
 
+      await ensureFirebaseAuth();
       await setDoc(doc(firestore, "operator_badges", cleanCode), {
         nome: cleanName,
         ruolo: cleanRole,
@@ -245,7 +248,13 @@
       await loadBadges();
     }
 
+    async function ensureFirebaseAuth(){
+      if (auth.currentUser) return;
+      await signInAnonymously(auth);
+    }
+
     async function loadBadges(){
+      await ensureFirebaseAuth();
       const snap = await getDocs(collection(firestore, "operator_badges"));
 
       if (snap.empty) {
@@ -288,6 +297,7 @@
         ];
 
         for (const item of demoBadges) {
+          await ensureFirebaseAuth();
           await setDoc(doc(firestore, "operator_badges", item.code), {
             nome: item.nome,
             ruolo: item.ruolo,
