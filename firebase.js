@@ -1,13 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  remove
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
+import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -16,7 +8,6 @@ import {
   onAuthStateChanged,
   updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 import {
   getFirestore,
   doc,
@@ -27,7 +18,6 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔐 CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
   authDomain: "farmaciamontesano.firebaseapp.com",
@@ -38,35 +28,26 @@ const firebaseConfig = {
   databaseURL: "https://farmaciamontesano-default-rtdb.firebaseio.com"
 };
 
-// 🚀 INIZIALIZZA FIREBASE
 const app = initializeApp(firebaseConfig);
 
-// 🔗 SERVIZI
 const db = getDatabase(app);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-// 📦 EXPORT COMPLETO (QUESTO ERA IL PROBLEMA!)
 export {
   app,
-
-  // Realtime DB
   db,
   ref,
   set,
   get,
   remove,
-
-  // Auth
   auth,
+  firestore,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   updateProfile,
-
-  // Firestore
-  firestore,
   doc,
   setDoc,
   getDoc,

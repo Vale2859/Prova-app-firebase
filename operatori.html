@@ -625,6 +625,8 @@
                   <thead>
                     <tr>
                       <th>Cliente</th>
+                      <th>Tipo</th>
+                      <th>Gruppo</th>
                       <th>Premio</th>
                       <th>Punti spesi</th>
                       <th>Data richiesta</th>
@@ -712,7 +714,8 @@
                   <thead>
                     <tr>
                       <th>Cliente</th>
-                      <th>Card</th>
+                      <th>Tipo</th>
+                      <th>Gruppo</th>
                       <th>Premio</th>
                       <th>Punti spesi</th>
                       <th>Stato</th>
@@ -822,7 +825,6 @@
 
     const tabBtns = document.querySelectorAll(".tab-btn");
     const views = document.querySelectorAll(".view");
-
     const cardNumber = document.getElementById("cardNumber");
     const importo = document.getElementById("importo");
     const sendBtn = document.getElementById("sendBtn");
@@ -830,27 +832,22 @@
     const statClients = document.getElementById("statClients");
     const statPoints = document.getElementById("statPoints");
     const statRevenue = document.getElementById("statRevenue");
-
     const clientModal = document.getElementById("clientModal");
     const openArchiveBtn = document.getElementById("openArchiveBtn");
     const closeClientModal = document.getElementById("closeClientModal");
     const clientSearch = document.getElementById("clientSearch");
     const clientList = document.getElementById("clientList");
-
     const confirmModal = document.getElementById("confirmModal");
     const closeConfirmModal = document.getElementById("closeConfirmModal");
     const cancelConfirmBtn = document.getElementById("cancelConfirmBtn");
     const confirmSendBtn = document.getElementById("confirmSendBtn");
     const confirmAmountValue = document.getElementById("confirmAmountValue");
-
     const vipModal = document.getElementById("vipModal");
     const closeVipModal = document.getElementById("closeVipModal");
     const vipList = document.getElementById("vipList");
-
     const requestSearchInput = document.getElementById("requestSearchInput");
     const statusFilter = document.getElementById("statusFilter");
     const requestsBody = document.getElementById("requestsBody");
-
     const fromDate = document.getElementById("fromDate");
     const toDate = document.getElementById("toDate");
     const searchText = document.getElementById("searchText");
@@ -864,9 +861,9 @@
     const reportTopClientsList = document.getElementById("reportTopClientsList");
     const movementsBody = document.getElementById("movementsBody");
     const reportRequestsBody = document.getElementById("reportRequestsBody");
-
     const operatorPill = document.getElementById("operatorPill");
     const forceBadgeBtn = document.getElementById("forceBadgeBtn");
+    const exitOperatorsBtn = document.getElementById("exitOperatorsBtn");
     const badgeModal = document.getElementById("badgeModal");
     const closeBadgeModal = document.getElementById("closeBadgeModal");
     const badgeCodeInput = document.getElementById("badgeCodeInput");
@@ -946,14 +943,12 @@
         badgeLiveMsg.classList.add("show");
         return;
       }
-
       const operator = await validateBadge(code);
       if (!operator) {
         badgeLiveMsg.textContent = "Badge non riconosciuto.";
         badgeLiveMsg.classList.add("show");
         return;
       }
-
       setOperatorBadge(operator);
       badgeLiveMsg.textContent = `Badge riconosciuto: ${operator.nome}`;
       badgeLiveMsg.classList.add("show");
@@ -989,13 +984,19 @@
         return normalized && (normalized === c1 || normalized === c2);
       });
     }
+    async function loadGroup(groupId){
+      if (!groupId) return null;
+      const groupRef = doc(firestore, "groups", groupId);
+      const groupSnap = await getDoc(groupRef);
+      return groupSnap.exists() ? { id: groupSnap.id, ...groupSnap.data() } : null;
+    }
+
 
     function renderVipSidebar(items){
       vipList.innerHTML = items.map(client => {
         const fullName = `${client.nome || ""} ${client.cognome || ""}`.trim() || "Cliente";
         const card = client.clientCode || client.fidelityCard || "-";
         const annualPoints = Number(client.puntiAnnuali || client.punti || 0);
-
         return `
           <div class="vip-item"
             data-name="${fullName}"
@@ -1056,7 +1057,6 @@
       const todayKey = getTodayKey();
       const statRef = doc(firestore, "operator_stats", todayKey);
       const statSnap = await getDoc(statRef);
-
       if (statSnap.exists()) {
         const data = statSnap.data();
         statClients.textContent = data.clientiPassati || 0;
@@ -1079,12 +1079,14 @@
         alert("Inserisci un numero card.");
         return;
       }
+
       if (!amount || amount <= 0) {
         alert("Inserisci un importo valido.");
         return;
       }
 
       const client = findClientByCard(card);
+
       if (!client) {
         alert("Cliente non trovato in archivio.");
         return;
@@ -1094,20 +1096,42 @@
       const todayKey = getTodayKey();
       const operatorName = currentOperator?.nome || "Operatore";
       const operatorBadge = currentOperator?.badge || "";
-
       const userRef = doc(firestore, "users", client.uid);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.exists() ? userSnap.data() : client;
+
+      if (userData.groupId) {
+        const groupRef = doc(firestore, "groups", userData.groupId);
+        await updateDoc(groupRef, {
+          totalPoints: increment(points)
+        });
+
+        await addDoc(collection(firestore, "groups", userData.groupId, "movements"), {
+          tipo: "accumulo",
+          punti: points,
+          importoParafarmaco: amount,
+          uidSource: client.uid,
+          sourceName: `${client.nome || ""} ${client.cognome || ""}`.trim() || "Cliente",
+          operatoreNome: operatorName,
+          operatoreBadge: operatorBadge,
+          timestampIso: new Date().toISOString()
+        });
+      } else {
+        await updateDoc(userRef, {
+          punti: increment(points)
+        });
+      }
+
       await updateDoc(userRef, {
-        punti: increment(points),
         puntiAnnuali: increment(points),
         spesaAnnuaNumero: increment(amount),
-        spesaAnnua: formatEuro((Number(client.spesaAnnuaNumero || 0) + amount)),
+        spesaAnnua: formatEuro((Number(userData.spesaAnnuaNumero || 0) + amount)),
         passaggiAnnuali: increment(1)
       });
 
-      const movementRef = collection(firestore, "users", client.uid, "fidelity_movements");
-      await addDoc(movementRef, {
-        tipo: "acquisto",
-        descrizione: "Accumulo punti acquisto parafarmaco",
+      await addDoc(collection(firestore, "users", client.uid, "fidelity_movements"), {
+        tipo: userData.groupId ? "accumulo_gruppo" : "acquisto",
+        descrizione: userData.groupId ? "Accumulo punti gruppo acquisto parafarmaco" : "Accumulo punti acquisto parafarmaco",
         punti: points,
         importoParafarmaco: amount,
         card: client.clientCode || client.fidelityCard || "",
@@ -1119,6 +1143,7 @@
 
       const statRef = doc(firestore, "operator_stats", todayKey);
       const statSnap = await getDoc(statRef);
+
       if (statSnap.exists()) {
         await updateDoc(statRef, {
           clientiPassati: increment(1),
@@ -1136,7 +1161,10 @@
 
       successBar.textContent = `Operazione registrata da ${operatorName}: ${formatEuro(amount)} • ${points} punti assegnati.`;
       successBar.classList.add("show");
-      setTimeout(() => successBar.classList.remove("show"), 3200);
+
+      setTimeout(() => {
+        successBar.classList.remove("show");
+      }, 3200);
 
       cardNumber.value = "";
       importo.value = "";
@@ -1146,35 +1174,47 @@
       clearOperatorAfterOperation();
     }
 
-    function renderRequestsTable(){
+    function renderRequestsTable() {
       const q = normalizeText(requestSearchInput.value);
       const status = statusFilter.value;
 
       const filtered = allRequests.filter(item => {
-        const text = `${item.clienteNome || ""} ${item.card || ""} ${item.premioNome || ""}`.toLowerCase();
+        const text = `${item.clienteNome || ""} ${item.card || ""} ${item.premioNome || ""} ${item.groupName || ""} ${item.requestType || ""}`.toLowerCase();
         const matchText = text.includes(q);
         const matchStatus = status === "all" ? true : item.status === status;
         return matchText && matchStatus;
       });
 
       if (!filtered.length) {
-        requestsBody.innerHTML = `<tr><td colspan="6" class="empty">Nessuna richiesta trovata.</td></tr>`;
+        requestsBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="empty">Nessuna richiesta trovata.</td>
+          </tr>
+        `;
         return;
       }
 
-      requestsBody.innerHTML = filtered.map(item => `
+      requestsBody.innerHTML = filtered.map(item => {
+        const requestTypeLabel = item.requestType === "group" ? "Gruppo" : "Personale";
+        const groupLabel = item.requestType === "group"
+          ? `${item.groupName || "Gruppo"} • ${item.memberCount || 0} membri`
+          : "—";
+
+        return `
         <tr>
           <td>
             <div class="client-name">${item.clienteNome || "Cliente"}</div>
             <div class="client-sub">${item.card || "-"}</div>
           </td>
+          <td>${requestTypeLabel}</td>
+          <td>${groupLabel}</td>
           <td>${item.premioNome || "-"}</td>
           <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
           <td>${formatDate(item.createdAt)}</td>
           <td>${statusBadge(item.status)}</td>
           <td>${buildRequestActions(item)}</td>
-        </tr>
-      `).join("");
+        </tr>`;
+      }).join("");
 
       requestsBody.querySelectorAll("[data-action]").forEach(btn => {
         btn.addEventListener("click", async () => {
@@ -1189,17 +1229,15 @@
           <div class="action-group">
             <button class="action-btn btn-approve" data-action="approve" data-id="${item.id}">Approva</button>
             <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
-          </div>
-        `;
+          </div>`;
       }
 
       if (item.status === "approvata") {
         return `
           <div class="action-group">
             <button class="action-btn btn-deliver" data-action="deliver" data-id="${item.id}">Consegnata</button>
-            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
-          </div>
-        `;
+            <button class="action-btn btn-reject" data-action="reject_after_approval" data-id="${item.id}">Rifiuta</button>
+          </div>`;
       }
 
       return `<span class="badge badge-gray">Nessuna azione</span>`;
@@ -1215,10 +1253,24 @@
       const requestData = requestSnap.data();
       const uid = requestData.uid || null;
       const pointsSpent = Number(requestData.puntiSpesi || 0);
+      const requestType = requestData.requestType || "personal";
+      const groupId = requestData.groupId || null;
       const operatorName = currentOperator?.nome || "Operatore";
       const operatorBadge = currentOperator?.badge || "";
 
       if (action === "approve") {
+        if (requestType === "group") {
+          if (!groupId) return alert("Gruppo non valido.");
+          await updateDoc(doc(firestore, "groups", groupId), {
+            totalPoints: increment(-pointsSpent)
+          });
+        } else {
+          if (!uid) return alert("Utente non valido.");
+          await updateDoc(doc(firestore, "users", uid), {
+            punti: increment(-pointsSpent)
+          });
+        }
+
         await updateDoc(requestRef, {
           status: "approvata",
           approvedAt: new Date().toISOString(),
@@ -1227,14 +1279,8 @@
         });
 
         if (uid) {
-          const userRef = doc(firestore, "users", uid);
-          await updateDoc(userRef, {
-            punti: increment(-pointsSpent)
-          });
-
-          const movementRef = collection(firestore, "users", uid, "fidelity_movements");
-          await addDoc(movementRef, {
-            tipo: "premio_scalato",
+          await addDoc(collection(firestore, "users", uid, "fidelity_movements"), {
+            tipo: requestType === "group" ? "premio_gruppo_scalato" : "premio_scalato",
             descrizione: `Scalati punti per premio: ${requestData.premioNome || "Premio"}`,
             punti: -pointsSpent,
             importoParafarmaco: 0,
@@ -1256,10 +1302,18 @@
         });
 
         if (uid) {
-          const userRef = doc(firestore, "users", uid);
-          await updateDoc(userRef, {
+          await updateDoc(doc(firestore, "users", uid), {
             premiRiscattati: increment(1)
           });
+          try {
+            await addDoc(collection(firestore, "users", uid, "reward_redemptions"), {
+              name: requestData.premioNome || "Premio",
+              title: requestData.premioNome || "Premio",
+              icon: "🎁",
+              date: new Date().toLocaleDateString("it-IT"),
+              meta: `Consegnato il ${new Date().toLocaleDateString("it-IT")}`
+            });
+          } catch (e) {}
         }
       }
 
@@ -1270,6 +1324,41 @@
           rejectedByName: operatorName,
           rejectedByBadge: operatorBadge
         });
+      }
+
+      if (action === "reject_after_approval") {
+        if (requestType === "group") {
+          if (!groupId) return alert("Gruppo non valido.");
+          await updateDoc(doc(firestore, "groups", groupId), {
+            totalPoints: increment(pointsSpent)
+          });
+        } else {
+          if (!uid) return alert("Utente non valido.");
+          await updateDoc(doc(firestore, "users", uid), {
+            punti: increment(pointsSpent)
+          });
+        }
+
+        await updateDoc(requestRef, {
+          status: "rifiutata",
+          rejectedAt: new Date().toISOString(),
+          rejectedByName: operatorName,
+          rejectedByBadge: operatorBadge
+        });
+
+        if (uid) {
+          await addDoc(collection(firestore, "users", uid, "fidelity_movements"), {
+            tipo: requestType === "group" ? "restituzione_punti_gruppo" : "restituzione_punti",
+            descrizione: `Restituiti punti per richiesta rifiutata: ${requestData.premioNome || "Premio"}`,
+            punti: pointsSpent,
+            importoParafarmaco: 0,
+            card: requestData.card || "",
+            operatoreNome: operatorName,
+            operatoreBadge: operatorBadge,
+            data: new Date().toLocaleString("it-IT"),
+            timestampIso: new Date().toISOString()
+          });
+        }
       }
 
       await refreshAllData();
@@ -1320,10 +1409,7 @@
     }
 
     function renderReportTopClients(users){
-      const top = [...users]
-        .sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0))
-        .slice(0,5);
-
+      const top = [...users].sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0)).slice(0,5);
       if (!top.length) {
         reportTopClientsList.innerHTML = `<div class="empty">Nessun cliente disponibile.</div>`;
         return;
@@ -1367,21 +1453,28 @@
 
     function renderReportRequests(rows){
       if (!rows.length) {
-        reportRequestsBody.innerHTML = `<tr><td colspan="7" class="empty">Nessuna richiesta trovata.</td></tr>`;
+        reportRequestsBody.innerHTML = `<tr><td colspan="8" class="empty">Nessuna richiesta trovata.</td></tr>`;
         return;
       }
 
-      reportRequestsBody.innerHTML = rows.map(row => `
+      reportRequestsBody.innerHTML = rows.map(row => {
+        const requestTypeLabel = row.requestType === "group" ? "Gruppo" : "Personale";
+        const groupLabel = row.requestType === "group"
+          ? `${row.groupName || "Gruppo"} • ${row.memberCount || 0} membri`
+          : "—";
+
+        return `
         <tr>
           <td>${row.clienteNome || "Cliente"}</td>
-          <td>${row.card || "-"}</td>
+          <td>${requestTypeLabel}</td>
+          <td>${groupLabel}</td>
           <td>${row.premioNome || "-"}</td>
           <td>${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
           <td>${statusBadge(row.status)}</td>
           <td>${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
           <td>${formatDate(row.createdAt)}</td>
-        </tr>
-      `).join("");
+        </tr>`;
+      }).join("");
     }
 
     function destroyChart(instance){
@@ -1392,12 +1485,7 @@
       const dayPoints = {};
       const dayRevenue = {};
       const operatorPoints = {};
-      const rewardStatus = {
-        in_attesa: 0,
-        approvata: 0,
-        consegnata: 0,
-        rifiutata: 0
-      };
+      const rewardStatus = { in_attesa:0, approvata:0, consegnata:0, rifiutata:0 };
 
       filteredMovements.forEach(row => {
         const d = row.date ? row.date.slice(0,10) : "senza data";
@@ -1425,11 +1513,7 @@
         type: "line",
         data: {
           labels: pointLabels,
-          datasets: [{
-            label: "Punti",
-            data: pointLabels.map(k => dayPoints[k]),
-            tension: 0.35
-          }]
+          datasets: [{ label: "Punti", data: pointLabels.map(k => dayPoints[k]), tension: 0.35 }]
         },
         options: { responsive:true, maintainAspectRatio:false }
       });
@@ -1438,10 +1522,7 @@
         type: "bar",
         data: {
           labels: revenueLabels,
-          datasets: [{
-            label: "Parafarmaco",
-            data: revenueLabels.map(k => dayRevenue[k])
-          }]
+          datasets: [{ label: "Parafarmaco", data: revenueLabels.map(k => dayRevenue[k]) }]
         },
         options: { responsive:true, maintainAspectRatio:false }
       });
@@ -1450,10 +1531,7 @@
         type: "bar",
         data: {
           labels: operatorLabels,
-          datasets: [{
-            label: "Punti assegnati",
-            data: operatorLabels.map(k => operatorPoints[k])
-          }]
+          datasets: [{ label: "Punti assegnati", data: operatorLabels.map(k => operatorPoints[k]) }]
         },
         options: { responsive:true, maintainAspectRatio:false }
       });
@@ -1483,7 +1561,6 @@
       for (const userDoc of usersSnap.docs) {
         const userData = userDoc.data();
         const uid = userDoc.id;
-
         clients.push({ uid, ...userData });
 
         const movSnap = await getDocs(collection(firestore, "users", uid, "fidelity_movements"));
@@ -1506,20 +1583,14 @@
       allClients = clients;
       allMovements = movements;
 
-      const topClients = [...allClients]
-        .sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0))
-        .slice(0,5);
-
+      const topClients = [...allClients].sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0)).slice(0,5);
       renderVipSidebar(topClients);
       renderClientList(allClients);
     }
 
     async function loadRequests(){
       const reqSnap = await getDocs(collection(firestore, "reward_requests"));
-      allRequests = reqSnap.docs.map(docSnap => ({
-        id: docSnap.id,
-        ...docSnap.data()
-      }));
+      allRequests = reqSnap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
     }
 
     async function refreshAllData(){
@@ -1544,6 +1615,9 @@
     forceBadgeBtn.addEventListener("click", () => {
       openModal(badgeModal);
       badgeCodeInput.focus();
+    });
+    exitOperatorsBtn.addEventListener("click", () => {
+      window.location.href = "index.html";
     });
     confirmBadgeBtn.addEventListener("click", confirmOperatorBadge);
     badgeCodeInput.addEventListener("keydown", (e) => {
