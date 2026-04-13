@@ -406,7 +406,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-  <style>body{opacity:0} body.loaded{opacity:1;transition:.25s ease}</style>
 </head>
 
 <body>
@@ -514,7 +513,7 @@
       appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
     };
 
-    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
     const storage = firebase.storage();
@@ -735,6 +734,5 @@
     window.editOffer = editOffer;
     window.reloadOffers = reloadOffers;
   </script>
-<script>window.addEventListener("load",()=>document.body.classList.add("loaded"));</script>
 </body>
 </html>

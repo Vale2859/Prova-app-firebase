@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Attività | Farmacia Montesano</title>
+  <script src="auth.js"></script>
   <script src="punti.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -260,17 +261,6 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 
-
-  <script type="module">
-    import { auth, onAuthStateChanged } from "./firebase.js";
-    sessionStorage.setItem("farmaciaSkipLegacyAuth", "true");
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html?redirect=attivita.html";
-      }
-    });
-  </script>
-
 </head>
 <body>
   <main class="page">
@@ -406,10 +396,13 @@
 <script src="mobile-only.js"></script>
 <script src="app-fixes.js"></script>
 
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
-    }
-  </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
 </body>
 </html>
