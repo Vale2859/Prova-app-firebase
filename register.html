@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
   <style>
     :root{
       --bg:#f4f7f5;
@@ -16,14 +15,15 @@
       --text-soft:#6c7c76;
       --green:#0d7a5f;
       --green-2:#1b8b6d;
+      --green-3:#e7f5ef;
       --line:#e4ece8;
       --shadow:0 16px 34px rgba(16,50,42,0.08);
       --danger:#c94646;
+      --radius:24px;
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-
     body{
       font-family:"Inter",sans-serif;
       background:
@@ -32,28 +32,14 @@
       min-height:100vh;
     }
 
+    a{text-decoration:none;color:inherit}
+    button,input{font-family:inherit}
+
     .page{
       width:min(100%, 430px);
       margin:0 auto;
       min-height:100vh;
       padding:14px 14px 28px;
-    }
-
-    .brand-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      padding:18px;
-      margin-bottom:16px;
-      display:flex;
-      justify-content:center;
-    }
-
-    .brand-logo{
-      width:100%;
-      max-width:220px;
-      display:block;
     }
 
     .topbar{
@@ -64,8 +50,8 @@
     }
 
     .back-btn{
-      width:50px;
-      height:50px;
+      width:44px;
+      height:44px;
       border:none;
       border-radius:14px;
       background:rgba(255,255,255,0.88);
@@ -73,7 +59,7 @@
       font-size:22px;
       color:var(--text);
       cursor:pointer;
-      flex:0 0 50px;
+      flex:0 0 44px;
     }
 
     .title-wrap{
@@ -97,45 +83,128 @@
       line-height:1.35;
     }
 
-    .panel{
+    .hero-card{
+      background:linear-gradient(135deg,#0f6f57 0%, #1b8769 55%, #58a895 100%);
+      color:#fff;
+      border-radius:28px;
+      box-shadow:0 22px 40px rgba(13,122,95,0.18);
+      padding:18px;
+      margin-bottom:16px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-10px;
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-title{
+      margin:0 0 8px;
+      font-size:1.45rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-text{
+      margin:0;
+      font-size:.98rem;
+      line-height:1.45;
+      color:rgba(255,255,255,0.94);
+      font-weight:500;
+      position:relative;
+      z-index:2;
+    }
+
+    .form-card{
       background:#fff;
       border:1px solid var(--line);
-      border-radius:28px;
+      border-radius:26px;
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:18px 16px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
     }
 
     .field{
-      margin-bottom:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:12px;
     }
 
-    .field label{
-      display:block;
-      margin-bottom:8px;
-      font-size:1rem;
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .label{
+      font-size:.95rem;
       font-weight:800;
-      color:#23463d;
+      color:var(--text);
     }
 
-    .field input{
+    .input{
       width:100%;
-      min-height:58px;
-      border:1px solid #dbe7e2;
-      border-radius:18px;
-      padding:0 18px;
+      min-height:52px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 14px;
+      background:#fff;
+      color:var(--text);
       font-size:1rem;
       font-weight:600;
-      color:var(--text);
       outline:none;
-      background:#fff;
+      transition:border-color .2s ease, box-shadow .2s ease;
     }
 
-    .field input::placeholder{
-      color:#a0aba6;
+    .input:focus{
+      border-color:#77b8a8;
+      box-shadow:0 0 0 4px rgba(13,122,95,0.08);
+    }
+
+    .check-wrap{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-top:6px;
+      margin-bottom:12px;
+    }
+
+    .check-wrap input{
+      margin-top:3px;
+      width:18px;
+      height:18px;
+      accent-color:var(--green);
+      flex:0 0 18px;
+    }
+
+    .check-text{
+      font-size:.94rem;
+      line-height:1.45;
+      color:var(--text-soft);
       font-weight:600;
     }
 
-    .action-btn{
+    .check-text a{
+      color:var(--green);
+      font-weight:800;
+    }
+
+    .submit-btn{
       width:100%;
       min-height:58px;
       border:none;
@@ -144,197 +213,345 @@
       color:#fff;
       font-size:1.05rem;
       font-weight:900;
-      cursor:pointer;
       box-shadow:0 18px 34px rgba(26,139,108,0.18);
+      cursor:pointer;
+      margin-top:8px;
     }
 
-    .bottom-link{
+    .login-link{
       margin-top:14px;
       text-align:center;
-      font-size:.95rem;
+      font-size:.96rem;
       color:var(--text-soft);
+      font-weight:600;
+      line-height:1.4;
+    }
+
+    .login-link a{
+      color:var(--green);
+      font-weight:800;
+    }
+
+    .error-box,
+    .success-box{
+      display:none;
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:14px;
+      font-size:.95rem;
+      line-height:1.45;
       font-weight:700;
     }
 
-    .bottom-link a{
-      color:var(--green);
-      font-weight:900;
-    }
-
-    .status{
-      margin-top:12px;
-      border-radius:16px;
-      padding:12px 14px;
-      font-size:.95rem;
-      font-weight:800;
-      display:none;
-    }
-
-    .status.ok{
-      display:block;
-      background:#ebf8f1;
-      color:#1f7459;
-    }
-
-    .status.error{
-      display:block;
-      background:#fff1f1;
+    .error-box{
+      background:#fff3f3;
+      border:1px solid #f1caca;
       color:var(--danger);
+    }
+
+    .success-box{
+      background:#eefaf4;
+      border:1px solid #cde9da;
+      color:var(--green);
+    }
+
+    .small-note{
+      margin:16px 4px 0;
+      color:var(--text-soft);
+      font-size:.86rem;
+      line-height:1.45;
+      font-weight:600;
+      text-align:center;
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .page-title{font-size:1.65rem}
+      .hero-title{font-size:1.3rem}
+      .form-grid{grid-template-columns:1fr}
+      .field.full{grid-column:auto}
     }
   </style>
 
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
 </head>
 <body>
   <main class="page">
-    <header class="brand-card">
-      <img src="logo.png" alt="Logo Farmacia Montesano" class="brand-logo" />
-    </header>
-
     <div class="topbar">
       <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
       <div class="title-wrap">
         <h1 class="page-title">Registrati</h1>
-        <p class="page-subtitle">Crea il tuo profilo cliente Farmacia Montesano</p>
+        <p class="page-subtitle">Crea il tuo account per accedere a Fidelity, Premi e Fortuna.</p>
       </div>
     </div>
 
-    <section class="panel">
-      <div class="field">
-        <label for="nome">Nome</label>
-        <input id="nome" type="text" placeholder="Nome" />
-      </div>
-
-      <div class="field">
-        <label for="cognome">Cognome</label>
-        <input id="cognome" type="text" placeholder="Cognome" />
-      </div>
-
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" type="email" placeholder="nome@email.it" />
-      </div>
-
-      <div class="field">
-        <label for="telefono">Telefono</label>
-        <input id="telefono" type="text" placeholder="Telefono" />
-      </div>
-
-      <div class="field">
-        <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Password" />
-      </div>
-
-      <button class="action-btn" id="registerBtn">Registrati</button>
-
-      <div id="statusBox" class="status"></div>
-
-      <div class="bottom-link">
-        Hai già un account? <a href="login.html">Accedi</a>
-      </div>
+    <section class="hero-card">
+      <h2 class="hero-title">Entra nel programma clienti</h2>
+      <p class="hero-text">
+        Registrati per avere la tua card personale, accumulare punti e accedere ai vantaggi della Farmacia Montesano.
+      </p>
     </section>
+
+    <section class="form-card">
+      <div class="error-box" id="errorBox"></div>
+      <div class="success-box" id="successBox"></div>
+
+      <form id="registerForm">
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="name">Nome</label>
+            <input class="input" id="name" name="name" type="text" placeholder="Inserisci il nome" required />
+          </div>
+
+          <div class="field">
+            <label class="label" for="surname">Cognome</label>
+            <input class="input" id="surname" name="surname" type="text" placeholder="Inserisci il cognome" required />
+          </div>
+
+          <div class="field full">
+            <label class="label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="Inserisci l'email" required />
+          </div>
+
+          <div class="field full">
+            <label class="label" for="phone">Telefono</label>
+            <input class="input" id="phone" name="phone" type="tel" placeholder="Inserisci il numero di telefono" required />
+          </div>
+
+          <div class="field full">
+            <label class="label" for="password">Password</label>
+            <input class="input" id="password" name="password" type="password" placeholder="Crea una password" required />
+          </div>
+
+          <div class="field full">
+            <label class="label" for="confirmPassword">Conferma password</label>
+            <input class="input" id="confirmPassword" name="confirmPassword" type="password" placeholder="Ripeti la password" required />
+          </div>
+        </div>
+
+        <label class="check-wrap">
+          <input type="checkbox" id="privacyAccepted" required />
+          <span class="check-text">
+            Ho letto e accetto l’<a href="privacy.html" target="_blank">Informativa Privacy</a>.
+          </span>
+        </label>
+
+        <label class="check-wrap">
+          <input type="checkbox" id="marketingAccepted" />
+          <span class="check-text">
+            Accetto di ricevere comunicazioni promozionali e iniziative della farmacia.
+          </span>
+        </label>
+
+        <button class="submit-btn" type="submit">Crea account</button>
+      </form>
+
+      <p class="login-link">
+        Hai già un account? <a href="login.html">Accedi</a>
+      </p>
+    </section>
+
+    <p class="small-note">
+      Per ora i dati vengono salvati in locale sul dispositivo. Quando collegheremo Firebase, questa registrazione diventerà reale.
+    </p>
   </main>
 
-  <script type="module">
-    import {
-      auth,
-      firestore,
-      createUserWithEmailAndPassword,
-      updateProfile,
-      doc,
-      setDoc
-    } from "./firebase.js";
+  <script>
+    const isLogged = localStorage.getItem("farmaciaLoggedIn");
+    const user = localStorage.getItem("farmaciaCurrentUser");
 
-    const nomeEl = document.getElementById("nome");
-    const cognomeEl = document.getElementById("cognome");
-    const emailEl = document.getElementById("email");
-    const telefonoEl = document.getElementById("telefono");
-    const passwordEl = document.getElementById("password");
-    const registerBtn = document.getElementById("registerBtn");
-    const statusBox = document.getElementById("statusBox");
-
-    function getRedirectTarget() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("redirect") || "index.html";
+    if (isLogged === "true" && user) {
+      window.location.href = "index.html";
     }
 
-    function showStatus(message, type = "ok") {
-      statusBox.textContent = message;
-      statusBox.className = `status ${type}`;
+    function showError(message) {
+      const errorBox = document.getElementById("errorBox");
+      const successBox = document.getElementById("successBox");
+      successBox.style.display = "none";
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
     }
 
-    function makeClientCode(uid) {
-      return "FM" + uid.slice(0, 8).toUpperCase();
+    function showSuccess(message) {
+      const errorBox = document.getElementById("errorBox");
+      const successBox = document.getElementById("successBox");
+      errorBox.style.display = "none";
+      successBox.textContent = message;
+      successBox.style.display = "block";
     }
 
-    registerBtn.addEventListener("click", async () => {
-      const nome = nomeEl.value.trim();
-      const cognome = cognomeEl.value.trim();
-      const email = emailEl.value.trim();
-      const telefono = telefonoEl.value.trim();
-      const password = passwordEl.value;
+    function generateClientId() {
+      const random = Math.floor(10000000 + Math.random() * 90000000);
+      return `FM${random}`;
+    }
 
-      if (!nome || !cognome || !email || !password) {
-        showStatus("Compila almeno nome, cognome, email e password.", "error");
+    function getInitialLevel(points) {
+      if (points >= 3000) return "Diamond";
+      if (points >= 1000) return "Gold";
+      return "Bronze";
+    }
+
+    function getInitialMissing(points) {
+      if (points < 1000) return 1000 - points;
+      if (points < 3000) return 3000 - points;
+      return 0;
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const surname = document.getElementById("surname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const privacyAccepted = document.getElementById("privacyAccepted").checked;
+      const marketingAccepted = document.getElementById("marketingAccepted").checked;
+
+      if (!name || !surname || !email || !phone || !password || !confirmPassword) {
+        showError("Compila tutti i campi obbligatori.");
         return;
       }
 
-      registerBtn.disabled = true;
-      showStatus("Registrazione in corso...", "ok");
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        const user = cred.user;
-        const fullName = `${nome} ${cognome}`.trim();
-        const clientCode = makeClientCode(user.uid);
-
-        await updateProfile(user, { displayName: fullName });
-
-        await setDoc(doc(firestore, "users", user.uid), {
-          nome,
-          cognome,
-          email,
-          telefono,
-          clientId: clientCode,
-          clientCode,
-          fidelityCard: clientCode,
-          punti: 0,
-          groupId: null,
-          groupRole: null,
-          premiRiscattati: 0,
-          puntiAnnuali: 0,
-          passaggiAnnuali: 0,
-          spesaAnnuaNumero: 0,
-          spesaAnnua: "0,00 €",
-          createdAt: new Date().toISOString()
-        });
-
-        window.location.replace(getRedirectTarget());
-      } catch (error) {
-        console.error(error);
-        let message = "Registrazione non riuscita. Controlla i dati inseriti.";
-        if (error?.code === "auth/email-already-in-use") {
-          message = "Questa email è già registrata.";
-        } else if (error?.code === "auth/invalid-email") {
-          message = "Email non valida.";
-        } else if (error?.code === "auth/weak-password") {
-          message = "Password troppo debole. Usa almeno 6 caratteri.";
-        } else if (error?.code === "auth/network-request-failed") {
-          message = "Connessione assente o instabile.";
-        } else if (error?.code === "auth/unauthorized-domain") {
-          message = "Questo dominio non è autorizzato in Firebase Authentication.";
-        } else if (error?.code === "auth/operation-not-allowed") {
-          message = "Metodo email/password non attivo su Firebase Authentication.";
-        }
-        showStatus(message, "error");
-      } finally {
-        registerBtn.disabled = false;
+      if (password.length < 6) {
+        showError("La password deve avere almeno 6 caratteri.");
+        return;
       }
+
+      if (password !== confirmPassword) {
+        showError("Le password non coincidono.");
+        return;
+      }
+
+      if (!privacyAccepted) {
+        showError("Devi accettare l’informativa privacy per registrarti.");
+        return;
+      }
+
+      const clientId = generateClientId();
+      const now = new Date().toISOString();
+      const initialPoints = 0;
+      const initialLevel = getInitialLevel(initialPoints);
+      const initialMissing = getInitialMissing(initialPoints);
+
+      const profileData = {
+        name,
+        surname,
+        email,
+        phone,
+        clientId,
+        clientCode: clientId,
+        level: initialLevel,
+        points: initialPoints,
+        createdAt: now
+      };
+
+      const currentUser = {
+        email,
+        clientId,
+        loggedIn: true
+      };
+
+      const privacyData = {
+        privacyAccepted: true,
+        marketingAccepted,
+        acceptedAt: now,
+        privacyVersion: "v1"
+      };
+
+      const pointsData = {
+        points: initialPoints,
+        level: initialLevel,
+        nextReward: "Primo premio disponibile",
+        missing: initialMissing,
+        activities: [],
+        operations: [],
+        received: []
+      };
+
+      const rewardsData = {
+        points: initialPoints,
+        redeemed: [],
+        rewards: [
+          {
+            id: 1,
+            category: "voucher",
+            title: "Voucher Beauty Spa",
+            pointsRequired: 3300,
+            image: "images/premio-voucher.jpg",
+            fallback: "images/beauty.jpg"
+          },
+          {
+            id: 2,
+            category: "beauty",
+            title: "Omaggio prodotti dermocosmesi",
+            pointsRequired: 4500,
+            image: "images/premio-dermocosmesi.jpg",
+            fallback: "images/premi.jpg"
+          },
+          {
+            id: 3,
+            category: "beauty",
+            title: "Set doccia e profumo",
+            pointsRequired: 5000,
+            image: "images/premio-buono.jpg",
+            fallback: "images/premi.jpg"
+          },
+          {
+            id: 4,
+            category: "benessere",
+            title: "Tisana benessere bio",
+            pointsRequired: 6000,
+            image: "images/premio-tisana.jpg",
+            fallback: "images/premi.jpg"
+          }
+        ]
+      };
+
+      const fortunaData = {
+        lastPlayDate: null,
+        lastResult: null
+      };
+
+      localStorage.setItem("farmaciaProfileData", JSON.stringify(profileData));
+      localStorage.setItem("farmaciaCurrentUser", JSON.stringify(currentUser));
+      localStorage.setItem("farmaciaLoggedIn", "true");
+      localStorage.setItem("farmaciaPrivacyData", JSON.stringify(privacyData));
+      localStorage.setItem("farmaciaPuntiData", JSON.stringify(pointsData));
+      localStorage.setItem("farmaciaRewardsData", JSON.stringify(rewardsData));
+      localStorage.setItem("farmaciaFortunaData", JSON.stringify(fortunaData));
+      localStorage.setItem("farmaciaPasswordDemo", password);
+
+      showSuccess("Registrazione completata con successo. Verrai reindirizzato tra pochi secondi.");
+
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1600);
     });
   </script>
 
-  <script src="mobile-only.js"></script>
-  <script src="app-fixes.js"></script>
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
 </body>
 </html>

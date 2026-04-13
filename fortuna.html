@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Fortuna | Farmacia Montesano</title>
+  <script src="auth.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -451,14 +452,15 @@
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f8f55">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Montesano">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
 </head>
 <body>
   <main class="page">
@@ -543,15 +545,12 @@
     </div>
   </div>
 
-  <script type="module">
-    import {
-      auth,
-      firestore,
-      onAuthStateChanged,
-      doc,
-      getDoc,
-      setDoc
-    } from "./firebase.js";
+  <script src="punti.js"></script>
+  <script>
+    const defaultFortunaData = {
+      lastPlayDate: null,
+      lastResult: null
+    };
 
     const fortunaConfig = {
       winChance: 0.32,
@@ -561,17 +560,33 @@
         "Tisana benessere",
         "Prodotto doccia",
         "Campioncino profumo",
-        "Sconto 5%",
-        "Sconto 10%",
+        "Bonus +20 punti",
+        "Bonus +50 punti",
         "Servizio omaggio farmacia"
       ]
     };
 
-    let currentUser = null;
     let wheelRotation = 0;
     let isSpinning = false;
     let countdownInterval = null;
-    let playedToday = false;
+
+    function loadFortunaData() {
+      try {
+        const raw = localStorage.getItem("farmaciaFortunaData");
+        if (!raw) return defaultFortunaData;
+        const parsed = JSON.parse(raw);
+        return {
+          lastPlayDate: parsed.lastPlayDate || null,
+          lastResult: parsed.lastResult || null
+        };
+      } catch (e) {
+        return defaultFortunaData;
+      }
+    }
+
+    function saveFortunaData(data) {
+      localStorage.setItem("farmaciaFortunaData", JSON.stringify(data));
+    }
 
     function getTodayKey() {
       const now = new Date();
@@ -594,18 +609,17 @@
       return `${hours}:${minutes}:${seconds}`;
     }
 
-    async function hasPlayedTodayOnFirebase(uid) {
-      const todayKey = getTodayKey();
-      const spinRef = doc(firestore, "users", uid, "fortune_spins", todayKey);
-      const snap = await getDoc(spinRef);
-      return snap.exists();
+    function hasPlayedToday() {
+      const data = loadFortunaData();
+      return data.lastPlayDate === getTodayKey();
     }
 
     function updatePlayState() {
+      const played = hasPlayedToday();
       const playBtn = document.getElementById("playBtn");
       const playBtnText = document.getElementById("playBtnText");
 
-      if (playedToday) {
+      if (played) {
         playBtn.disabled = true;
         playBtnText.textContent = "Torna domani";
       } else {
@@ -618,7 +632,7 @@
       const countdownEl = document.getElementById("countdownValue");
       if (!countdownEl) return;
 
-      if (!playedToday) {
+      if (!hasPlayedToday()) {
         countdownEl.textContent = "Disponibile ora";
         return;
       }
@@ -627,7 +641,6 @@
       countdownEl.textContent = formatCountdown(diff);
 
       if (diff <= 0) {
-        playedToday = false;
         updatePlayState();
         countdownEl.textContent = "Disponibile ora";
       }
@@ -669,30 +682,58 @@
       return 360 - segmentCenter;
     }
 
-    async function saveFortuneSpin(result) {
-      if (!currentUser) return;
 
-      const todayKey = getTodayKey();
-      const spinRef = doc(firestore, "users", currentUser.uid, "fortune_spins", todayKey);
-
-      await setDoc(spinRef, {
-        date: todayKey,
-        won: result.won,
-        prize: result.prize || "",
-        title: result.title || "",
-        text: result.text || "",
-        createdAt: new Date().toISOString()
-      });
+    function syncPointsTotals(nextPoints) {
+      try {
+        const pointsRaw = localStorage.getItem("farmaciaPuntiData");
+        const pointsData = pointsRaw ? JSON.parse(pointsRaw) : {};
+        pointsData.points = Number(nextPoints || 0);
+        pointsData.level = typeof calcolaLivello === "function" ? calcolaLivello(pointsData.points) : (pointsData.level || "Bronze");
+        pointsData.missing = pointsData.points >= 3000 ? 0 : (pointsData.points >= 1000 ? Math.max(0, 3000 - pointsData.points) : Math.max(0, 1000 - pointsData.points));
+        localStorage.setItem("farmaciaPuntiData", JSON.stringify(pointsData));
+      } catch(e){}
     }
 
-    window.playFortune = async function() {
-      if (isSpinning || playedToday) return;
-
-      if (!currentUser) {
-        alert("Devi accedere prima di usare Fortuna.");
-        window.location.href = "profilo.html";
+    function awardFortunaPrize(result) {
+      if (!result || !result.won) return;
+      const match = String(result.prize || "").match(/(\d+)\s*punti/i);
+      if (match && typeof aggiungiAcquisto === "function") {
+        const bonus = Number(match[1] || 0);
+        if (bonus > 0) {
+          let profile = {};
+          try { profile = JSON.parse(localStorage.getItem("farmaciaProfileData") || "{}"); } catch(e){}
+          let pointsData = {};
+          try { pointsData = JSON.parse(localStorage.getItem("farmaciaPuntiData") || "{}"); } catch(e){}
+          const currentPoints = Number(profile.points ?? pointsData.points ?? 0);
+          const nextPoints = currentPoints + bonus;
+          profile.points = nextPoints;
+          if (typeof calcolaLivello === "function") profile.level = calcolaLivello(nextPoints);
+          pointsData.points = nextPoints;
+          pointsData.level = profile.level || pointsData.level || "Bronze";
+          pointsData.missing = nextPoints >= 3000 ? 0 : (nextPoints >= 1000 ? Math.max(0, 3000 - nextPoints) : Math.max(0, 1000 - nextPoints));
+          pointsData.activities = Array.isArray(pointsData.activities) ? pointsData.activities : [];
+          pointsData.operations = Array.isArray(pointsData.operations) ? pointsData.operations : [];
+          pointsData.activities.unshift({ label: "Bonus Fortuna", points: bonus, date: new Date().toLocaleDateString("it-IT") });
+          pointsData.operations.unshift({ name: "Bonus Fortuna", meta: `${new Date().toLocaleDateString("it-IT")} • ${result.prize}`, points: bonus, icon: "🍀" });
+          localStorage.setItem("farmaciaProfileData", JSON.stringify(profile));
+          localStorage.setItem("farmaciaPuntiData", JSON.stringify(pointsData));
+        }
         return;
       }
+
+      try {
+        let pointsData = JSON.parse(localStorage.getItem("farmaciaPuntiData") || "{}");
+        pointsData.activities = Array.isArray(pointsData.activities) ? pointsData.activities : [];
+        pointsData.operations = Array.isArray(pointsData.operations) ? pointsData.operations : [];
+        pointsData.activities.unshift({ label: "Premio Fortuna", points: 0, date: new Date().toLocaleDateString("it-IT") });
+        pointsData.operations.unshift({ name: "Premio Fortuna", meta: `${new Date().toLocaleDateString("it-IT")} • ${result.prize || 'Premio sorpresa'}`, points: 0, icon: "🎁" });
+        localStorage.setItem("farmaciaPuntiData", JSON.stringify(pointsData));
+      } catch(e){}
+    }
+
+    function playFortune() {
+      if (isSpinning) return;
+      if (hasPlayedToday()) return;
 
       const wheel = document.getElementById("fortuneWheel");
       const playBtn = document.getElementById("playBtn");
@@ -708,17 +749,20 @@
       wheel.style.transform = `rotate(${finalRotation}deg)`;
       wheelRotation = finalRotation % 360;
 
-      playedToday = true;
+      saveFortunaData({
+        lastPlayDate: getTodayKey(),
+        lastResult: result
+      });
+      awardFortunaPrize(result);
+
       updatePlayState();
       updateCountdown();
-
-      await saveFortuneSpin(result);
 
       setTimeout(() => {
         showResultModal(result);
         isSpinning = false;
       }, 6400);
-    };
+    }
 
     function showResultModal(result) {
       const modal = document.getElementById("resultModal");
@@ -744,41 +788,29 @@
       document.body.style.overflow = "hidden";
     }
 
-    window.closeResultModal = function() {
+    function closeResultModal() {
       document.getElementById("resultModal").classList.remove("open");
       document.body.style.overflow = "";
-    };
+    }
 
     document.getElementById("resultModal").addEventListener("click", function(e){
       if (e.target === this) closeResultModal();
     });
 
-    onAuthStateChanged(auth, async (user) => {
-      currentUser = user || null;
-
-      if (!currentUser) {
-        playedToday = false;
-        updatePlayState();
-        startCountdown();
-        return;
-      }
-
-      playedToday = await hasPlayedTodayOnFirebase(currentUser.uid);
-      updatePlayState();
-      startCountdown();
-    });
+    updatePlayState();
+    startCountdown();
   </script>
 
-  <script src="mobile-only.js"></script>
-  <script src="app-fixes.js"></script>
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
 
-  <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js");
-    });
-  }
-  </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
 
 </body>
 </html>
