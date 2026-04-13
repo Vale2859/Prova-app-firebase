@@ -837,6 +837,56 @@
       .top-actions button{width:100%;}
     }
 
+
+    @media (max-width: 700px){
+      .premium-intro{padding:18px 16px}
+      .premium-intro h1{font-size:30px}
+      .premium-intro p{font-size:14px}
+      .sidebar-card{padding:16px}
+      .table-wrap{border:none;background:transparent;overflow:visible}
+      .table-wrap table,
+      .table-wrap thead,
+      .table-wrap tbody,
+      .table-wrap tr,
+      .table-wrap th,
+      .table-wrap td{display:block;width:100%;min-width:0!important}
+      .table-wrap thead{display:none}
+      .table-wrap tbody{display:grid;gap:12px}
+      .table-wrap tr{
+        background:#fff;
+        border:1px solid var(--line);
+        border-radius:18px;
+        box-shadow:var(--shadow);
+        padding:10px 12px;
+        overflow:hidden;
+      }
+      .table-wrap td{
+        border-bottom:1px solid #eef3f0;
+        padding:10px 0 10px 116px;
+        position:relative;
+        min-height:38px;
+        font-size:14px;
+      }
+      .table-wrap td:last-child{border-bottom:none}
+      .table-wrap td::before{
+        content:attr(data-label);
+        position:absolute;
+        left:0;
+        top:10px;
+        width:104px;
+        color:#6b7e78;
+        font-size:11px;
+        line-height:1.2;
+        font-weight:900;
+        text-transform:uppercase;
+        letter-spacing:.04em;
+      }
+      .table-wrap td[colspan]{padding:18px 12px!important}
+      .table-wrap td[colspan]::before{display:none}
+      .action-group{gap:8px}
+      .action-btn{min-height:40px}
+    }
+
   </style>
 </head>
 <body>
@@ -1979,5 +2029,51 @@
     }
     openModal(badgeModal);
   </script>
+
+
+<script>
+(function(){
+  function applyResponsiveTableLabels(){
+    if (window.innerWidth > 700) return;
+    document.querySelectorAll('.table-wrap table').forEach((table)=>{
+      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+      table.querySelectorAll('tbody tr').forEach((row)=>{
+        Array.from(row.children).forEach((cell, index)=>{
+          if (!cell.hasAttribute('colspan')) {
+            cell.setAttribute('data-label', headers[index] || 'Dato');
+          }
+        });
+      });
+    });
+  }
+  const run = ()=>requestAnimationFrame(applyResponsiveTableLabels);
+  window.addEventListener('load', run);
+  window.addEventListener('resize', run);
+  const observer = new MutationObserver(run);
+  document.querySelectorAll('.table-wrap tbody').forEach(tbody => observer.observe(tbody, {childList:true, subtree:true}));
+})();
+</script>
+
+<script>
+(function(){
+  function sendHeight(){
+    try {
+      const body = document.body;
+      const html = document.documentElement;
+      const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type:'montesano:iframeHeight', height }, '*');
+      }
+    } catch (e) {}
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  const observer = new MutationObserver(() => sendHeight());
+  observer.observe(document.documentElement, { childList:true, subtree:true, attributes:true, characterData:true });
+  setTimeout(sendHeight, 300);
+  setTimeout(sendHeight, 1000);
+})();
+</script>
+
 </body>
 </html>

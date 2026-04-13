@@ -4,10 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dashboard Admin | Farmacia Montesano</title>
-
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="mobile.css" />
-
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f8f55" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -16,444 +12,499 @@
   <meta name="apple-mobile-web-app-title" content="Montesano Admin" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-
   <style>
     :root{
-      --admin-bg: linear-gradient(180deg, #f5f7f6 0%, #eef4f1 100%);
-      --admin-card: rgba(255,255,255,0.86);
-      --admin-card-strong: rgba(255,255,255,0.96);
-      --admin-border: rgba(20, 55, 48, 0.08);
-      --admin-text: #16372f;
-      --admin-muted: #6f817b;
-      --admin-green-1: #2f7f5f;
-      --admin-green-2: #86c58b;
-      --admin-shadow: 0 18px 44px rgba(16, 49, 39, 0.08);
-      --admin-radius-xl: 30px;
-      --admin-radius-lg: 24px;
-      --admin-radius-md: 20px;
+      --bg:#f3f8f5;
+      --bg-soft:#edf5f1;
+      --card:rgba(255,255,255,.92);
+      --card-strong:#ffffff;
+      --line:#dfeae4;
+      --text:#14352e;
+      --muted:#6d8078;
+      --green:#158060;
+      --green-2:#76c891;
+      --green-soft:#e8f6f0;
+      --shadow:0 24px 54px rgba(18,54,45,.08);
+      --radius-xl:32px;
+      --radius-lg:26px;
+      --radius-md:20px;
+      --radius-sm:16px;
     }
-
-    *{
-      box-sizing: border-box;
-    }
-
-    html, body{
-      margin: 0;
-      padding: 0;
-    }
-
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-      background: var(--admin-bg);
-      color: var(--admin-text);
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(22,128,97,.10), transparent 28%),
+        linear-gradient(180deg, #f8fbf9 0%, #eef5f1 100%);
     }
-
-    .admin-shell{
-      width: 100%;
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 18px 16px 100px;
+    button,input,select,textarea{font:inherit}
+    .shell{
+      max-width:1560px;
+      margin:0 auto;
+      min-height:100vh;
+      padding:22px;
     }
-
-    .admin-top{
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 18px;
+    .app{
+      display:grid;
+      grid-template-columns:300px minmax(0,1fr);
+      gap:22px;
+      align-items:start;
     }
-
-    .admin-brand-card,
-    .admin-status-card,
-    .admin-hero,
-    .admin-card{
-      border: 1px solid var(--admin-border);
-      box-shadow: var(--admin-shadow);
+    .sidebar,.panel,.hero,.metric,.shortcut,.workbench,.frame-shell,.mobile-nav{
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
     }
-
-    .admin-brand-card{
-      background: var(--admin-card-strong);
-      border-radius: 34px;
-      padding: 22px 20px;
+    .sidebar{
+      position:sticky;
+      top:22px;
+      border-radius:30px;
+      padding:20px;
+      overflow:hidden;
     }
-
-    .admin-logo{
-      width: 100%;
-      max-width: 270px;
-      display: block;
+    .brand{
+      padding:16px;
+      border-radius:24px;
+      background:linear-gradient(180deg,#fff 0%,#f7fbf8 100%);
+      border:1px solid #e6efe9;
+      margin-bottom:16px;
     }
-
-    .admin-status-card{
-      background: rgba(255,255,255,0.86);
-      backdrop-filter: blur(14px);
-      border-radius: 24px;
-      padding: 15px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .brand img{width:100%;max-width:210px;display:block}
+    .brand small{display:block;margin-top:10px;color:var(--muted);font-weight:700;line-height:1.4}
+    .nav-title{font-size:13px;font-weight:900;letter-spacing:.08em;color:#7a8d85;text-transform:uppercase;margin:18px 0 10px}
+    .nav-list{display:flex;flex-direction:column;gap:10px}
+    .nav-btn{
+      width:100%;display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border:none;border-radius:18px;
+      background:transparent;color:#28443d;font-weight:850;cursor:pointer;transition:.18s ease; text-align:left;
     }
+    .nav-btn .dot{width:10px;height:10px;border-radius:50%;background:#bfd6ca;flex:0 0 auto}
+    .nav-btn .sub{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+    .nav-btn:hover{background:#f3f8f5}
+    .nav-btn.active{background:linear-gradient(135deg,var(--green) 0%, #57a98a 100%);color:#fff;box-shadow:0 18px 30px rgba(21,128,96,.20)}
+    .nav-btn.active .dot{background:#fff}
+    .nav-btn.active .sub{color:rgba(255,255,255,.82)}
+    .sidebar-foot{margin-top:18px;padding:16px;border-radius:18px;background:#f7fbf8;border:1px solid #e4eee8}
+    .sidebar-foot strong{display:block;font-size:14px;margin-bottom:4px}
+    .sidebar-foot span{font-size:13px;color:var(--muted);line-height:1.45}
 
-    .admin-status-dot{
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #db8e86;
-      box-shadow: 0 0 0 7px rgba(219,142,134,0.15);
-      flex-shrink: 0;
+    .content{display:flex;flex-direction:column;gap:18px;min-width:0}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .mobile-brand{display:none}
+    .userbox{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .pill,.ghost-btn{
+      min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #d9e8e1;background:#fff;font-weight:800;color:#22463d;
+      display:inline-flex;align-items:center;gap:8px;
     }
+    .pill{background:var(--green-soft);color:var(--green)}
+    .ghost-btn{text-decoration:none}
 
-    .admin-status-text{
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+    .hero{
+      border-radius:30px;padding:24px;display:grid;grid-template-columns:1.3fr .9fr;gap:20px;align-items:stretch;
+      background:linear-gradient(135deg, rgba(20,128,96,.14) 0%, rgba(255,255,255,.96) 45%, rgba(128,197,145,.14) 100%);
     }
+    .hero h1{margin:0 0 10px;font-size:52px;line-height:.94;letter-spacing:-.05em}
+    .hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.55;max-width:760px;font-weight:600}
+    .hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .hero-tag{min-height:40px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid #dce9e2;font-size:13px;font-weight:850;display:inline-flex;align-items:center}
+    .hero-side{display:flex;flex-direction:column;gap:12px}
+    .hero-card{padding:18px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid #e3ede7}
+    .hero-card strong{display:block;font-size:15px;margin-bottom:6px}
+    .hero-card span{display:block;color:var(--muted);line-height:1.45;font-size:14px;font-weight:600}
 
-    .admin-status-text strong{
-      font-size: 16px;
-      color: var(--admin-text);
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .metric{border-radius:24px;padding:20px;position:relative;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#f8fbf9 100%)}
+    .metric::after{content:"";position:absolute;right:-16px;bottom:-24px;width:98px;height:98px;border-radius:50%;background:radial-gradient(circle, rgba(21,128,96,.12) 0%, rgba(21,128,96,0) 72%)}
+    .metric-label{font-size:14px;color:#647871;font-weight:800;margin-bottom:10px}
+    .metric-value{font-size:38px;line-height:1;font-weight:900;letter-spacing:-.05em}
+    .metric-note{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
+
+    .layout{display:grid;grid-template-columns:1fr 370px;gap:18px;align-items:start}
+    .workbench{border-radius:30px;padding:18px}
+    .workbench-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
+    .workbench-head h2{margin:0;font-size:30px;line-height:1;letter-spacing:-.04em}
+    .workbench-head p{margin:8px 0 0;color:var(--muted);font-weight:600;line-height:1.45}
+    .section-pills{display:flex;gap:10px;flex-wrap:wrap}
+    .section-pill{min-height:42px;padding:0 14px;border:none;border-radius:999px;background:#eef5f1;color:#24433b;font-size:13px;font-weight:850;cursor:pointer}
+    .section-pill.active{background:linear-gradient(135deg,var(--green) 0%, #57a98a 100%);color:#fff}
+
+    .frame-shell{border-radius:24px;padding:12px;background:#fff}
+    .frame-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 6px 14px;border-bottom:1px solid #ebf1ee;margin-bottom:12px}
+    .frame-title{font-size:16px;font-weight:900}
+    .frame-sub{font-size:13px;color:var(--muted);font-weight:700}
+    .open-link{min-height:38px;padding:0 14px;border-radius:999px;background:#eef5f1;color:#20443a;text-decoration:none;display:inline-flex;align-items:center;font-size:13px;font-weight:850;border:1px solid #dce9e2}
+    iframe{display:block;width:100%;min-height:900px;border:none;border-radius:18px;background:#fff}
+
+    .side-stack{display:flex;flex-direction:column;gap:18px}
+    .panel{border-radius:28px;padding:18px}
+    .panel h3{margin:0 0 12px;font-size:20px;letter-spacing:-.03em}
+    .shortcuts{display:grid;grid-template-columns:1fr;gap:12px}
+    .shortcut{border-radius:22px;overflow:hidden;text-decoration:none;color:inherit;display:block}
+    .shortcut img{width:100%;height:148px;object-fit:cover;display:block}
+    .shortcut-body{padding:14px}
+    .shortcut-body strong{display:block;font-size:22px;line-height:1;letter-spacing:-.04em;margin-bottom:8px}
+    .shortcut-body span{display:block;color:var(--muted);font-size:14px;line-height:1.45;font-weight:600}
+    .health-list{display:flex;flex-direction:column;gap:10px}
+    .health-row{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:18px;background:#f8fbf9;border:1px solid #e5eeea}
+    .health-row strong{font-size:14px}
+    .health-row span{font-size:13px;color:var(--muted);font-weight:700;text-align:right}
+
+    .mobile-nav{display:none;border-radius:22px;padding:12px;overflow:auto;gap:10px;scrollbar-width:none}
+    .mobile-nav::-webkit-scrollbar{display:none}
+    .mobile-nav .nav-btn{min-width:230px;background:#fff;border:1px solid #e0ebe5}
+
+    @media (max-width: 1260px){
+      .metrics{grid-template-columns:repeat(2,1fr)}
+      .layout{grid-template-columns:1fr}
+      .side-stack{display:grid;grid-template-columns:1fr 1fr;align-items:start}
     }
-
-    .admin-status-text span{
-      font-size: 14px;
-      color: var(--admin-muted);
+    @media (max-width: 980px){
+      .shell{padding:14px}
+      .app{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .mobile-nav{display:flex}
+      .mobile-brand{display:flex;align-items:center;gap:12px}
+      .mobile-brand img{height:48px;width:auto;display:block}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .userbox{width:100%}
+      .hero{grid-template-columns:1fr;border-radius:26px;padding:20px}
+      .hero h1{font-size:38px}
+      .workbench,.panel{border-radius:24px}
+      iframe{min-height:860px}
     }
-
-    .admin-hero{
-      background: rgba(255,255,255,0.74);
-      backdrop-filter: blur(16px);
-      border-radius: var(--admin-radius-xl);
-      padding: 22px 18px;
-      margin-bottom: 20px;
-    }
-
-    .admin-hero h1{
-      margin: 0 0 10px;
-      font-size: 40px;
-      line-height: 0.98;
-      letter-spacing: -0.04em;
-      color: #10352e;
-    }
-
-    .admin-hero p{
-      margin: 0;
-      font-size: 17px;
-      line-height: 1.45;
-      color: var(--admin-muted);
-      max-width: 650px;
-    }
-
-    .admin-grid{
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .admin-card{
-      display: block;
-      width: 100%;
-      padding: 0;
-      text-align: left;
-      font: inherit;
-      text-decoration: none;
-      color: inherit;
-      background: rgba(255,255,255,0.78);
-      backdrop-filter: blur(18px);
-      border-radius: 28px;
-      overflow: hidden;
-      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-    }
-
-    .admin-card:hover{
-      transform: translateY(-4px);
-      box-shadow: 0 22px 48px rgba(17,49,40,0.11);
-      border-color: rgba(47,127,95,0.18);
-    }
-
-    .admin-card-image-wrap{
-      position: relative;
-      padding: 12px 12px 0;
-    }
-
-    .admin-card-image{
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 22px;
-      display: block;
-      background: #e8efeb;
-    }
-
-    .admin-card-badge{
-      position: absolute;
-      top: 22px;
-      right: 22px;
-      min-width: 38px;
-      height: 38px;
-      padding: 0 12px;
-      border-radius: 999px;
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .03em;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-    }
-
-    .badge-offerte{ background:#f58aa0; }
-    .badge-servizi{ background:#76c4d1; }
-    .badge-beauty{ background:#b199f0; }
-    .badge-turni{ background:#87bf7d; }
-
-    .admin-card-body{
-      padding: 14px 14px 16px;
-    }
-
-    .admin-card h2{
-      margin: 0 0 6px;
-      font-size: 26px;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      color: #133930;
-    }
-
-    .admin-card p{
-      margin: 0 0 14px;
-      font-size: 15px;
-      line-height: 1.45;
-      color: var(--admin-muted);
-      min-height: 64px;
-    }
-
-    .admin-card-action{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--admin-green-1) 0%, var(--admin-green-2) 100%);
-      color: #fff;
-      font-weight: 800;
-      font-size: 15px;
-      box-shadow: 0 12px 24px rgba(73, 165, 120, 0.22);
-    }
-
     @media (max-width: 640px){
-      .admin-shell{
-        padding: 16px 12px 90px;
-      }
-
-      .admin-brand-card{
-        padding: 18px 16px;
-        border-radius: 28px;
-      }
-
-      .admin-logo{
-        max-width: 235px;
-      }
-
-      .admin-status-card{
-        border-radius: 22px;
-        padding: 14px 15px;
-      }
-
-      .admin-hero{
-        padding: 18px 16px;
-        border-radius: 24px;
-      }
-
-      .admin-hero h1{
-        font-size: 30px;
-      }
-
-      .admin-hero p{
-        font-size: 15px;
-      }
-
-      .admin-grid{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .admin-card{
-        border-radius: 22px;
-      }
-
-      .admin-card-image-wrap{
-        padding: 10px 10px 0;
-      }
-
-      .admin-card-image{
-        height: 125px;
-        border-radius: 18px;
-      }
-
-      .admin-card-badge{
-        top: 18px;
-        right: 18px;
-        min-width: 34px;
-        height: 34px;
-        font-size: 10px;
-        padding: 0 10px;
-      }
-
-      .admin-card-body{
-        padding: 12px 12px 14px;
-      }
-
-      .admin-card h2{
-        font-size: 20px;
-      }
-
-      .admin-card p{
-        font-size: 14px;
-        min-height: 78px;
-      }
-
-      .admin-card-action{
-        width: 100%;
-        min-height: 42px;
-        font-size: 14px;
-      }
+      .hero h1{font-size:32px}
+      .hero p{font-size:15px}
+      .metrics{grid-template-columns:1fr}
+      .metric{padding:18px}
+      .metric-value{font-size:34px}
+      .workbench-head{flex-direction:column}
+      .section-pills{width:100%}
+      .section-pill{flex:1 1 calc(50% - 10px);justify-content:center}
+      .side-stack{grid-template-columns:1fr}
+      .shortcut img{height:124px}
+      .shortcut-body strong{font-size:20px}
+      .frame-toolbar{align-items:flex-start;flex-direction:column}
+      iframe{min-height:760px}
     }
   </style>
 </head>
-
 <body>
-  <div class="admin-shell">
+  <div class="shell">
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="logo.png" alt="Farmacia Montesano" />
+          <small>Pannello amministrativo unico, ordinato e pronto per lavorare davvero su desktop, tablet e smartphone.</small>
+        </div>
 
-    <header class="admin-top">
-      <div class="admin-brand-card">
-        <img src="logo.png" alt="Logo Farmacia Montesano" class="admin-logo" />
-      </div>
+        <div class="nav-title">Sezioni principali</div>
+        <div class="nav-list" id="desktopNav"></div>
 
-      <div class="admin-status-card">
-        <div class="admin-status-dot"></div>
-        <div class="admin-status-text">
-          <strong>Dashboard Admin unificata</strong>
-          <span>Gestisci offerte, servizi, giornate beauty, fortuna e premi in un unico pannello.</span>
+        <div class="nav-title">Gestione rapida</div>
+        <div class="nav-list">
+          <button class="nav-btn" type="button" data-section="operatori">
+            <span class="dot"></span>
+            <span>Operatori<span class="sub">Accumulo, premi e report</span></span>
+          </button>
+          <button class="nav-btn" type="button" data-section="fidelity">
+            <span class="dot"></span>
+            <span>Fidelity<span class="sub">Utenti, gruppi e storico</span></span>
+          </button>
+          <button class="nav-btn" type="button" data-section="report">
+            <span class="dot"></span>
+            <span>Report<span class="sub">Controllo andamento e movimenti</span></span>
+          </button>
         </div>
-      </div>
-    </header>
 
-    <section class="admin-hero">
-      <h1>Controllo completo</h1>
-      <p>Le card sotto usano le stesse immagini della home pubblica. Da qui apri la sezione desiderata e lavori direttamente nel pannello amministrativo unificato.</p>
-    </section>
+        <div class="sidebar-foot">
+          <strong>Firebase collegato</strong>
+          <span>La dashboard legge i contatori dal tuo progetto <b>farmaciamontesano</b> e apre le sezioni già collegate ai dati.</span>
+        </div>
+      </aside>
 
-    <section class="admin-grid">
-      <button class="admin-card" type="button" data-section="offerte">
-        <div class="admin-card-image-wrap">
-          <img src="images/promo.jpg" alt="Offerte" class="admin-card-image" />
-          <span class="admin-card-badge badge-offerte">PROMO</span>
+      <main class="content">
+        <div class="topbar">
+          <div class="mobile-brand">
+            <img src="logo.png" alt="Farmacia Montesano" />
+          </div>
+          <div class="userbox">
+            <div class="pill">● Online · Dashboard admin</div>
+            <div class="pill" id="projectPill">Firebase: farmaciamontesano</div>
+            <a class="ghost-btn" href="index.html">Vai alla home</a>
+          </div>
         </div>
-        <div class="admin-card-body">
-          <h2>Offerte</h2>
-          <p>Gestisci promozioni, immagini, prezzi, validità e visibilità.</p>
-          <span class="admin-card-action">Apri sezione</span>
-        </div>
-      </button>
 
-      <button class="admin-card" type="button" data-section="servizi">
-        <div class="admin-card-image-wrap">
-          <img src="images/servizi.jpg" alt="Servizi" class="admin-card-image" />
-          <span class="admin-card-badge badge-servizi">SERVIZI</span>
-        </div>
-        <div class="admin-card-body">
-          <h2>Servizi</h2>
-          <p>Modifica nome, descrizione, immagine e visibilità dei servizi.</p>
-          <span class="admin-card-action">Apri sezione</span>
-        </div>
-      </button>
+        <div class="mobile-nav" id="mobileNav"></div>
 
-      <button class="admin-card" type="button" data-section="beauty">
-        <div class="admin-card-image-wrap">
-          <img src="images/beauty.jpg" alt="Giornate Beauty" class="admin-card-image" />
-          <span class="admin-card-badge badge-beauty">BEAUTY</span>
-        </div>
-        <div class="admin-card-body">
-          <h2>Giornate Beauty</h2>
-          <p>Gestisci eventi, date, immagini, descrizioni e pubblicazione.</p>
-          <span class="admin-card-action">Apri sezione</span>
-        </div>
-      </button>
+        <section class="hero">
+          <div>
+            <h1>Dashboard admin<br>fatta bene</h1>
+            <p>Adesso la struttura è pensata come un vero pannello di lavoro: navigazione chiara, sezione attiva sempre visibile, contenuto centrale ordinato e collegamento diretto alle pagine gestionali che salvano su Firebase.</p>
+            <div class="hero-tags">
+              <span class="hero-tag">Offerte</span>
+              <span class="hero-tag">Servizi</span>
+              <span class="hero-tag">Giornate beauty</span>
+              <span class="hero-tag">Fortuna</span>
+              <span class="hero-tag">Premi</span>
+            </div>
+          </div>
+          <div class="hero-side">
+            <div class="hero-card">
+              <strong>Flusso corretto</strong>
+              <span>Apri una sezione, lavori nel pannello centrale e il contenuto si aggiorna senza caos visivo.</span>
+            </div>
+            <div class="hero-card">
+              <strong>Responsive vero</strong>
+              <span>Sidebar su desktop, scorrimento a chip su mobile, area di lavoro ampia e iframe con altezza automatica.</span>
+            </div>
+            <div class="hero-card">
+              <strong>Base pronta a crescere</strong>
+              <span>Puoi aggiungere altre sezioni o metriche senza rompere la struttura.</span>
+            </div>
+          </div>
+        </section>
 
-      <button class="admin-card" type="button" data-section="fortuna">
-        <div class="admin-card-image-wrap">
-          <img src="images/fortuna.jpg" alt="Fortuna" class="admin-card-image" />
-          <span class="admin-card-badge badge-fortuna">FORTUNA</span>
-        </div>
-        <div class="admin-card-body">
-          <h2>Fortuna</h2>
-          <p>Controlla premi fortuna, configurazioni e attivazioni rapide.</p>
-          <span class="admin-card-action">Apri sezione</span>
-        </div>
-      </button>
+        <section class="metrics">
+          <div class="metric"><div class="metric-label">Offerte attive / totali</div><div class="metric-value" id="metricOffers">--</div><div class="metric-note">Collection Firestore: offers</div></div>
+          <div class="metric"><div class="metric-label">Servizi visibili / totali</div><div class="metric-value" id="metricServices">--</div><div class="metric-note">Collection Firestore: servizi</div></div>
+          <div class="metric"><div class="metric-label">Beauty attivi / totali</div><div class="metric-value" id="metricBeauty">--</div><div class="metric-note">Collection Firestore: beauty</div></div>
+          <div class="metric"><div class="metric-label">Premi + fortuna</div><div class="metric-value" id="metricRewards">--</div><div class="metric-note">rewards_catalog + fortune_rewards</div></div>
+        </section>
 
-      <button class="admin-card" type="button" data-section="premi">
-        <div class="admin-card-image-wrap">
-          <img src="images/premi.jpg" alt="Premi" class="admin-card-image" />
-          <span class="admin-card-badge badge-premi">PREMI</span>
-        </div>
-        <div class="admin-card-body">
-          <h2>Premi</h2>
-          <p>Gestisci catalogo premi, punti richiesti e stato delle richieste.</p>
-          <span class="admin-card-action">Apri sezione</span>
-        </div>
-      </button>
-    </section>
+        <section class="layout">
+          <section class="workbench">
+            <div class="workbench-head">
+              <div>
+                <h2 id="activeTitle">Offerte</h2>
+                <p id="activeDesc">Gestisci promozioni, prezzi, immagini, visibilità e ordine di pubblicazione.</p>
+              </div>
+              <div class="section-pills" id="sectionPills"></div>
+            </div>
 
-    <section class="admin-embed-card">
-      <div class="admin-embed-head">
-        <h2>Pannello amministrativo</h2>
-        <p>Tutto ciò che era in <strong>admin.html</strong> è ora accessibile da qui. La vecchia pagina viene reindirizzata automaticamente a questa dashboard.</p>
-        <div class="admin-toolbar">
-          <button class="admin-chip" type="button" data-section="dashboard">Dashboard</button>
-          <button class="admin-chip" type="button" data-section="clienti">Clienti</button>
-          <button class="admin-chip" type="button" data-section="operatori">Operatori</button>
-          <button class="admin-chip" type="button" data-section="fidelity">Fidelity</button>
-          <button class="admin-chip" type="button" data-section="premi">Premi</button>
-          <button class="admin-chip" type="button" data-section="fortuna">Fortuna</button>
-          <button class="admin-chip" type="button" data-section="offerte">Offerte</button>
-          <button class="admin-chip" type="button" data-section="servizi">Servizi</button>
-          <button class="admin-chip" type="button" data-section="beauty">Beauty</button>
-          <button class="admin-chip" type="button" data-section="contenuti">Contenuti</button>
-          <button class="admin-chip" type="button" data-section="report">Report</button>
-          <button class="admin-chip" type="button" data-section="impostazioni">Impostazioni</button>
-        </div>
-      </div>
-      <div class="admin-iframe-wrap">
-        <iframe id="adminPanelFrame" class="admin-iframe" src="admin.html?embed=1&section=dashboard" title="Pannello amministrativo Farmacia Montesano"></iframe>
-      </div>
-    </section>
+            <div class="frame-shell">
+              <div class="frame-toolbar">
+                <div>
+                  <div class="frame-title" id="frameTitle">Sezione operativa</div>
+                  <div class="frame-sub" id="frameSub">Contenuto collegato a Firebase</div>
+                </div>
+                <a class="open-link" id="openStandalone" href="offerte-admin.html" target="_blank" rel="noopener">Apri pagina completa</a>
+              </div>
+              <iframe id="contentFrame" title="Area operativa amministrativa" src="offerte-admin.html"></iframe>
+            </div>
+          </section>
 
+          <aside class="side-stack">
+            <section class="panel">
+              <h3>Accessi rapidi</h3>
+              <div class="shortcuts">
+                <a class="shortcut" href="offerte-admin.html" data-section-link="offerte">
+                  <img src="images/promo.jpg" alt="Offerte" />
+                  <div class="shortcut-body"><strong>Offerte</strong><span>Promozioni, validità, immagini e listino.</span></div>
+                </a>
+                <a class="shortcut" href="servizi-admin.html" data-section-link="servizi">
+                  <img src="images/servizi.jpg" alt="Servizi" />
+                  <div class="shortcut-body"><strong>Servizi</strong><span>Servizi farmacia, descrizioni, ordine e servizio del momento.</span></div>
+                </a>
+                <a class="shortcut" href="beauty-admin.html" data-section-link="beauty">
+                  <img src="images/beauty.jpg" alt="Beauty" />
+                  <div class="shortcut-body"><strong>Beauty</strong><span>Eventi, giornate, date, immagini e pubblicazione.</span></div>
+                </a>
+                <a class="shortcut" href="fortuna-admin.html" data-section-link="fortuna">
+                  <img src="images/fortuna.jpg" alt="Fortuna" />
+                  <div class="shortcut-body"><strong>Fortuna</strong><span>Premi fortuna, configurazioni e attivazioni rapide.</span></div>
+                </a>
+                <a class="shortcut" href="premi-admin.html" data-section-link="premi">
+                  <img src="images/premi.jpg" alt="Premi" />
+                  <div class="shortcut-body"><strong>Premi</strong><span>Catalogo premi, punti richiesti e stato richieste.</span></div>
+                </a>
+              </div>
+            </section>
+
+            <section class="panel">
+              <h3>Stato sistema</h3>
+              <div class="health-list">
+                <div class="health-row"><strong>Utenti fidelity</strong><span id="healthUsers">Caricamento…</span></div>
+                <div class="health-row"><strong>Richieste premio</strong><span id="healthRequests">Caricamento…</span></div>
+                <div class="health-row"><strong>Ultima sezione aperta</strong><span id="healthSection">Offerte</span></div>
+                <div class="health-row"><strong>Modalità pannello</strong><span>Unificata e responsive</span></div>
+              </div>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
   </div>
 
-  <script>
-    const frame = document.getElementById('adminPanelFrame');
-    const sectionButtons = Array.from(document.querySelectorAll('[data-section]'));
+  <script type="module">
+    import { firestore, collection, getDocs } from './firebase.js';
 
-    function openAdminSection(section, shouldScroll = true){
-      sectionButtons.forEach(btn => btn.classList.toggle('is-active', btn.dataset.section === section && btn.classList.contains('admin-chip')));
-      frame.src = 'admin.html?embed=1&section=' + encodeURIComponent(section);
-      if (shouldScroll) {
-        document.querySelector('.admin-embed-card').scrollIntoView({ behavior:'smooth', block:'start' });
+    const sections = {
+      offerte: {
+        title: 'Offerte',
+        desc: 'Gestisci promozioni, prezzi, immagini, visibilità e ordine di pubblicazione.',
+        src: 'offerte-admin.html',
+        sub: 'Gestione promozioni collegata a Firestore',
+        badge: 'Promo'
+      },
+      servizi: {
+        title: 'Servizi',
+        desc: 'Organizza i servizi della farmacia, il servizio del momento e la visibilità in app.',
+        src: 'servizi-admin.html',
+        sub: 'Gestione servizi collegata a Firestore',
+        badge: 'Servizi'
+      },
+      beauty: {
+        title: 'Giornate Beauty',
+        desc: 'Crea, modifica e pubblica gli eventi beauty con date, immagini e priorità.',
+        src: 'beauty-admin.html',
+        sub: 'Gestione eventi beauty collegata a Firestore',
+        badge: 'Beauty'
+      },
+      fortuna: {
+        title: 'Fortuna',
+        desc: 'Controlla premi fortuna, probabilità, configurazioni e disponibilità.',
+        src: 'fortuna-admin.html',
+        sub: 'Gestione fortuna collegata a Firestore',
+        badge: 'Fortuna'
+      },
+      premi: {
+        title: 'Premi',
+        desc: 'Gestisci il catalogo premi, i punti richiesti e lo stato del catalogo.',
+        src: 'premi-admin.html',
+        sub: 'Gestione catalogo premi collegata a Firestore',
+        badge: 'Premi'
+      },
+      operatori: {
+        title: 'Operatori',
+        desc: 'Dashboard operatore premium per accumulo, voucher e report, adattata a mobile e desktop.',
+        src: 'operatori.html',
+        sub: 'Area operatori con statistiche e movimenti in Firestore',
+        badge: 'Operatori'
+      },
+      fidelity: {
+        title: 'Fidelity',
+        desc: 'Consulta utenti, gruppi e logica punti del programma fedeltà.',
+        src: 'fidelity.html',
+        sub: 'Area fidelity collegata a Firestore',
+        badge: 'Fidelity'
+      },
+      report: {
+        title: 'Report',
+        desc: 'Controlla andamento, dati e report pubblici collegati al programma.',
+        src: 'report.html',
+        sub: 'Pagina report collegata ai dati del progetto',
+        badge: 'Report'
+      }
+    };
+
+    const primary = ['offerte','servizi','beauty','fortuna','premi'];
+    const frame = document.getElementById('contentFrame');
+    const desktopNav = document.getElementById('desktopNav');
+    const mobileNav = document.getElementById('mobileNav');
+    const sectionPills = document.getElementById('sectionPills');
+    const activeTitle = document.getElementById('activeTitle');
+    const activeDesc = document.getElementById('activeDesc');
+    const frameTitle = document.getElementById('frameTitle');
+    const frameSub = document.getElementById('frameSub');
+    const openStandalone = document.getElementById('openStandalone');
+    const healthSection = document.getElementById('healthSection');
+
+    function navMarkup(key) {
+      const item = sections[key];
+      return `
+        <button class="nav-btn" type="button" data-section="${key}">
+          <span class="dot"></span>
+          <span>${item.title}<span class="sub">${item.badge}</span></span>
+        </button>`;
+    }
+
+    desktopNav.innerHTML = primary.map(navMarkup).join('');
+    mobileNav.innerHTML = Object.keys(sections).map(navMarkup).join('');
+    sectionPills.innerHTML = primary.map(key => `<button class="section-pill" type="button" data-section="${key}">${sections[key].title}</button>`).join('');
+
+    function setActive(section, push = true){
+      const item = sections[section] || sections.offerte;
+      activeTitle.textContent = item.title;
+      activeDesc.textContent = item.desc;
+      frameTitle.textContent = item.title;
+      frameSub.textContent = item.sub;
+      openStandalone.href = item.src;
+      frame.src = item.src;
+      healthSection.textContent = item.title;
+      document.querySelectorAll('[data-section]').forEach(el => el.classList.toggle('active', el.dataset.section === section));
+      if (push) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('section', section);
+        history.replaceState({}, '', url.toString());
+      }
+      localStorage.setItem('montesanoAdminSection', section);
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-section]');
+      if (btn) {
+        e.preventDefault();
+        setActive(btn.dataset.section);
+      }
+      const card = e.target.closest('[data-section-link]');
+      if (card) {
+        e.preventDefault();
+        setActive(card.dataset.sectionLink);
+        document.querySelector('.workbench').scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+
+    window.addEventListener('message', (event) => {
+      const data = event.data || {};
+      if (data.type === 'montesano:iframeHeight' && typeof data.height === 'number') {
+        frame.style.height = Math.max(720, data.height + 20) + 'px';
+      }
+    });
+
+    async function loadStats(){
+      const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+      try {
+        const [offersSnap, serviziSnap, beautySnap, rewardsSnap, fortuneSnap, usersSnap, requestsSnap] = await Promise.all([
+          getDocs(collection(firestore, 'offers')),
+          getDocs(collection(firestore, 'servizi')),
+          getDocs(collection(firestore, 'beauty')),
+          getDocs(collection(firestore, 'rewards_catalog')),
+          getDocs(collection(firestore, 'fortune_rewards')),
+          getDocs(collection(firestore, 'users')),
+          getDocs(collection(firestore, 'reward_requests'))
+        ]);
+
+        const countActive = (snap, field='attiva') => snap.docs.filter(doc => doc.data()?.[field] === true).length;
+        const serviziActive = serviziSnap.docs.filter(doc => doc.data()?.attivo === true).length;
+        const beautyActive = beautySnap.docs.filter(doc => doc.data()?.attivo === true).length;
+        const rewardsTotal = rewardsSnap.size + fortuneSnap.size;
+
+        setText('metricOffers', `${countActive(offersSnap)} / ${offersSnap.size}`);
+        setText('metricServices', `${serviziActive} / ${serviziSnap.size}`);
+        setText('metricBeauty', `${beautyActive} / ${beautySnap.size}`);
+        setText('metricRewards', `${rewardsTotal}`);
+        setText('healthUsers', `${usersSnap.size} profili`);
+        setText('healthRequests', `${requestsSnap.size} richieste`);
+      } catch (err) {
+        console.error(err);
+        setText('metricOffers', 'Errore');
+        setText('metricServices', 'Errore');
+        setText('metricBeauty', 'Errore');
+        setText('metricRewards', 'Errore');
+        setText('healthUsers', 'Errore lettura');
+        setText('healthRequests', 'Errore lettura');
       }
     }
 
-    sectionButtons.forEach(btn => {
-      btn.addEventListener('click', () => openAdminSection(btn.dataset.section, true));
-    });
-
-    const initialSection = new URLSearchParams(window.location.search).get('section') || 'dashboard';
-    openAdminSection(initialSection, false);
+    const initialSection = new URLSearchParams(location.search).get('section') || localStorage.getItem('montesanoAdminSection') || 'offerte';
+    setActive(initialSection, false);
+    loadStats();
 
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js');
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
     }
   </script>
 </body>
