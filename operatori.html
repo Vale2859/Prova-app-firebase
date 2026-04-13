@@ -2,7 +2,11 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f8f55" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Operatori | Farmacia Montesano</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,6 +30,7 @@
       --radius:24px;
     }
     *{box-sizing:border-box}
+    html,body{min-height:100%}
     body{
       margin:0;
       font-family:"Inter",sans-serif;
@@ -33,11 +38,16 @@
         radial-gradient(circle at top left, rgba(13,122,95,0.08), transparent 30%),
         linear-gradient(180deg,#f8fbf9 0%, #eef5f1 100%);
       color:var(--text);
+      --safe-top:max(14px, env(safe-area-inset-top));
+      --safe-right:max(12px, env(safe-area-inset-right));
+      --safe-bottom:max(16px, env(safe-area-inset-bottom));
+      --safe-left:max(12px, env(safe-area-inset-left));
+      padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
     }
     .page{
-      max-width:1440px;
-      margin:18px auto;
-      background:rgba(255,255,255,0.9);
+      max-width:1480px;
+      margin:0 auto;
+      background:rgba(255,255,255,0.92);
       border:1px solid rgba(211,226,218,0.8);
       border-radius:32px;
       box-shadow:0 24px 54px rgba(15,43,35,0.08);
@@ -45,7 +55,7 @@
       backdrop-filter:blur(14px);
     }
     .topbar{
-      position:sticky;top:var(--safe-top);z-index:45;
+      position:sticky;top:0;z-index:45;
       background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
       display:flex;
       align-items:center;
@@ -128,7 +138,7 @@
     .sidebar-card{
       padding:18px;
       position:sticky;
-      top:20px;
+      top:92px;
     }
     .sidebar-title,.panel-title{
       margin:0 0 14px;
@@ -425,6 +435,9 @@
       margin-bottom:20px;
     }
     .panel{padding:18px}
+    .report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
+    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
+    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
     .chart-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -444,8 +457,8 @@
     }
     .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
     .chart-note{font-size:12px;color:var(--muted);font-weight:700}
-    .chart-canvas-wrap{position:relative;flex:1;min-height:260px;height:260px;max-height:260px}
-    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;display:block;}
+    .chart-canvas-wrap{position:relative;flex:1;min-height:280px;height:280px;max-height:280px;overflow:hidden;border-radius:18px}
+    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;display:block;max-width:100%;}
     .chart-title{
       margin:0 0 12px;
       font-size:16px;
@@ -609,7 +622,7 @@
         box-shadow:none;
       }
       .topbar{
-      position:sticky;top:var(--safe-top);z-index:45;
+      position:sticky;top:0;z-index:45;
       background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
         flex-direction:column;
         align-items:stretch;
@@ -702,7 +715,7 @@
         min-height:300px;
         padding:14px;
       }
-      .chart-canvas-wrap{min-height:220px;height:220px;max-height:220px}
+      .chart-canvas-wrap{min-height:240px;height:240px;max-height:240px}
       .modal-card{
         width:min(100%, 94vw);
         border-radius:20px;
@@ -750,7 +763,10 @@
 
     @media (max-width: 1280px){
       .stats.report-stats{grid-template-columns:repeat(3,1fr)}
-      .grid,.chart-grid{grid-template-columns:1fr}
+      .grid,.report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
+    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
+    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
+    .chart-grid{grid-template-columns:1fr}
     }
     @media (max-width: 1180px){
       .layout{grid-template-columns:1fr}
@@ -766,7 +782,7 @@
       .page{margin:0;border-radius:0;border-left:none;border-right:none;min-height:100vh;}
       .content{padding:16px;}
       .topbar{
-      position:sticky;top:var(--safe-top);z-index:45;
+      position:sticky;top:0;z-index:45;
       background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
       .brand{width:100%;display:flex;justify-content:center;}
       .brand img{height:48px;}
@@ -786,9 +802,12 @@
       .row{flex-direction:column;align-items:stretch;}
       .archive-btn{width:100%;min-width:0;}
       .toolbar,.toolbar.report-toolbar{grid-template-columns:1fr;}
-      .chart-grid{grid-template-columns:1fr;}
-      .chart-box{min-height:300px;}
-      .chart-canvas-wrap{min-height:230px;height:230px;max-height:230px;}
+      .report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
+    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
+    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
+    .chart-grid{grid-template-columns:1fr;}
+      .chart-box{min-height:320px;}
+      .chart-canvas-wrap{min-height:240px;height:240px;max-height:240px;}
       .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
       table{min-width:880px;}
       .modal-card{width:min(100%, 95vw);max-height:85vh;overflow:auto;}
@@ -837,9 +856,14 @@
       }
       .page{margin:0; border-radius:0;}
       .topbar{
-      position:sticky;top:var(--safe-top);z-index:45;
+      position:sticky;top:0;z-index:45;
       background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:18px 16px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);}
       .content{padding:16px;}
+      body{padding:0;}
+      .page{border-radius:0; border-left:none; border-right:none; min-height:100dvh;}
+      .topbar{padding:calc(var(--safe-top) + 10px) 16px 14px;}
+      .content{padding:16px;}
+      .layout{gap:16px;}
       .main-card,.sidebar-card,.panel,.chart-box,.stat-card,.accumulo-panel{border-radius:20px;}
       .accumulo-panel{padding:18px;}
       .field label{font-size:15px;}
@@ -1054,7 +1078,7 @@
               <button class="filter-btn" id="applyFiltersBtn">Filtra</button>
             </div>
 
-            <div class="toolbar report-toolbar" style="grid-template-columns: 180px 180px 1fr 180px; margin-top:-4px;">
+            <div class="toolbar report-toolbar" style="grid-template-columns: 170px 170px minmax(0,1fr) 180px 180px; margin-top:-4px;">
               <select id="reportPeriod">
                 <option value="all">Periodo grafici: tutto</option>
                 <option value="7">Ultimi 7 giorni</option>
@@ -1067,6 +1091,9 @@
               </select>
               <select id="chartOperatorFilter">
                 <option value="all">Tutti gli operatori</option>
+              </select>
+              <select id="reportMovementType">
+                <option value="all">Tutti i movimenti</option>
               </select>
               <select id="reportRequestStatus">
                 <option value="all">Tutte le richieste</option>
@@ -1083,6 +1110,11 @@
               <div class="stat-card"><div class="stat-label">Premi richiesti</div><div class="stat-value" id="totRequests">0</div></div>
               <div class="stat-card"><div class="stat-label">Premi approvati</div><div class="stat-value" id="totApproved">0</div></div>
               <div class="stat-card"><div class="stat-label">Premi consegnati</div><div class="stat-value" id="totDelivered">0</div></div>
+            </div>
+
+            <div class="report-meta">
+              <p>I grafici ora hanno contenitori stabili, resize controllato e filtri dedicati per periodo, operatore, tipo movimento e stato richieste.</p>
+              <span class="badge-lite">Report premium responsive</span>
             </div>
 
             <div class="chart-grid">
@@ -1285,6 +1317,7 @@
     const reportPeriod = document.getElementById("reportPeriod");
     const chartGroupBy = document.getElementById("chartGroupBy");
     const chartOperatorFilter = document.getElementById("chartOperatorFilter");
+    const reportMovementType = document.getElementById("reportMovementType");
     const reportRequestStatus = document.getElementById("reportRequestStatus");
     const totRevenue = document.getElementById("totRevenue");
     const totPoints = document.getElementById("totPoints");
@@ -1774,6 +1807,14 @@
       chartOperatorFilter.value = names.includes(current) ? current : 'all';
     }
 
+
+    function populateMovementTypeFilter(){
+      const current = reportMovementType.value || "all";
+      const types = [...new Set(allMovements.map(row => String(row.type || "").trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, "it"));
+      reportMovementType.innerHTML = `<option value="all">Tutti i movimenti</option>` + types.map(type => `<option value="${type.replace(/"/g,'&quot;')}">${type}</option>`).join('');
+      reportMovementType.value = types.includes(current) ? current : 'all';
+    }
+
     function getChartDateKey(dateValue, mode){
       const d = new Date(dateValue);
       if (Number.isNaN(d.getTime())) return 'Senza data';
@@ -1791,18 +1832,31 @@
       return d >= limit;
     }
 
+    function formatChartLabel(key, mode){
+      if (!key || key === 'Senza data') return key;
+      if (mode === 'month') {
+        const [year, month] = String(key).split('-');
+        return `${month}/${year}`;
+      }
+      const d = new Date(key);
+      return Number.isNaN(d.getTime()) ? key : d.toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit' });
+    }
+
     function chartBaseOptions(){
+      const compact = window.innerWidth < 700;
       return {
         responsive:true,
         maintainAspectRatio:false,
         animation:false,
         normalized:true,
-        resizeDelay:120,
+        parsing:false,
+        resizeDelay:160,
         interaction:{mode:'index', intersect:false},
-        plugins:{legend:{display:true, labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}},
+        plugins:{legend:{display:true, position: compact ? 'bottom' : 'top', labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}},
         layout:{padding:{top:6,right:6,bottom:2,left:2}},
+        elements:{line:{capBezierPoints:true}, point:{hitRadius:10}},
         scales:{
-          x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: window.innerWidth < 700 ? 4 : 8, font:{size:11, weight:'700'}}},
+          x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: compact ? 4 : 8, font:{size:11, weight:'700'}}},
           y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}
         }
       };
@@ -1810,6 +1864,7 @@
 
     function renderReport(){
       const operatorFilterValue = chartOperatorFilter.value;
+      const movementTypeValue = reportMovementType.value;
       const requestStatusValue = reportRequestStatus.value;
       const chartDays = reportPeriod.value;
 
@@ -1817,6 +1872,7 @@
         if (!inDateRange(row.date)) return false;
         if (!inRecentWindow(row.date, chartDays)) return false;
         if (operatorFilterValue !== "all" && (row.operatorName || "-") !== operatorFilterValue) return false;
+        if (movementTypeValue !== "all" && (row.type || "") !== movementTypeValue) return false;
         const q = normalizeText(searchText.value);
         if (!q) return true;
         return `${row.clientName} ${row.card} ${row.operatorName || ""}`.toLowerCase().includes(q);
@@ -1951,9 +2007,11 @@
         rewardStatus[row.status || 'voucher_emesso'] = (rewardStatus[row.status || 'voucher_emesso'] || 0) + 1;
       });
 
-      const pointLabels = Object.keys(dayPoints).sort();
-      const revenueLabels = Object.keys(dayRevenue).sort();
+      const pointKeys = Object.keys(dayPoints).sort();
+      const revenueKeys = Object.keys(dayRevenue).sort();
       const operatorLabels = Object.keys(operatorPoints).sort((a,b) => (operatorPoints[b]||0) - (operatorPoints[a]||0));
+      const pointLabels = pointKeys.length ? pointKeys.map(key => formatChartLabel(key, groupMode)) : ['Nessun dato'];
+      const revenueLabels = revenueKeys.length ? revenueKeys.map(key => formatChartLabel(key, groupMode)) : ['Nessun dato'];
       const rewardLabels = ['Voucher emessi', 'Consegnate', 'Rifiutate'];
 
       destroyChart(pointsByDayChart);
@@ -1969,13 +2027,13 @@
 
       pointsByDayChart = new Chart(document.getElementById('pointsByDayChart'), {
         type: 'line',
-        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointLabels.map(k => dayPoints[k]), tension: 0.34, fill: true, backgroundColor: softGreen, borderColor: commonGreen, borderWidth: 3, pointRadius: 2.5, pointHoverRadius: 4 }] },
+        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointKeys.length ? pointKeys.map(k => dayPoints[k]) : [0], tension: 0.34, fill: true, backgroundColor: softGreen, borderColor: commonGreen, borderWidth: 3, pointRadius: 2.5, pointHoverRadius: 4, spanGaps:true }] },
         options: chartBaseOptions()
       });
 
       revenueByDayChart = new Chart(document.getElementById('revenueByDayChart'), {
         type: 'bar',
-        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueLabels.map(k => dayRevenue[k]), backgroundColor: 'rgba(91,147,200,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
+        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueKeys.length ? revenueKeys.map(k => dayRevenue[k]) : [0], backgroundColor: 'rgba(91,147,200,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
         options: { ...chartBaseOptions(), scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: window.innerWidth < 700 ? 4 : 8, font:{size:11, weight:'700'}}}, y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{callback:(v)=> Number(v).toLocaleString('it-IT'), font:{size:11, weight:'700'}}}} }
       });
 
@@ -2003,7 +2061,7 @@
     }
 
     let resizeTimer = null;
-    window.addEventListener('resize', () => {
+    function scheduleReportResize(){
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (document.getElementById('reportView')?.classList.contains('active')) {
@@ -2011,8 +2069,10 @@
         } else {
           resizeAllCharts();
         }
-      }, 160);
-    });
+      }, 180);
+    }
+    window.addEventListener('resize', scheduleReportResize, { passive:true });
+    window.addEventListener('orientationchange', scheduleReportResize, { passive:true });
 
     async function loadClientsAndMovements(){
       const usersSnap = await getDocs(collection(firestore, "users"));
@@ -2062,6 +2122,7 @@
         await loadAccumuloStats();
         renderRequestsTable();
         populateOperatorFilter();
+        populateMovementTypeFilter();
         renderReport();
       } catch (error) {
         console.error("Errore refresh operatori:", error);
@@ -2137,8 +2198,8 @@
     reportPeriod.addEventListener("change", renderReport);
     chartGroupBy.addEventListener("change", renderReport);
     chartOperatorFilter.addEventListener("change", renderReport);
+    reportMovementType.addEventListener("change", renderReport);
     reportRequestStatus.addEventListener("change", renderReport);
-    window.addEventListener("resize", renderReport);
 
     try {
       await refreshAllData();

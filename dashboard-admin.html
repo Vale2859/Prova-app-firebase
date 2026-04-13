@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Dashboard Admin | Farmacia Montesano</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f8f55" />
@@ -14,265 +14,252 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <style>
     :root{
-      --bg:#eff6f2;
-      --bg2:#f7fbf9;
+      --bg:#eef6f2;
+      --bg2:#f8fcfa;
       --card:rgba(255,255,255,.92);
-      --line:#dce8e2;
-      --text:#16352e;
-      --muted:#70827b;
-      --green:#11805f;
-      --green2:#64bc93;
-      --greenSoft:#eaf7f1;
-      --shadow:0 24px 60px rgba(16,54,43,.08);
-      --radius-xl:32px;
-      --radius-lg:26px;
-      --radius-md:22px;
-      --radius-sm:18px;
+      --line:#d8e6df;
+      --text:#16362f;
+      --muted:#6a7d76;
+      --green:#0f8f55;
+      --green2:#4fb182;
+      --greenSoft:#eaf6ef;
+      --shadow:0 24px 60px rgba(18,58,46,.10);
+      --safe-top:max(16px, env(safe-area-inset-top));
+      --safe-right:max(14px, env(safe-area-inset-right));
+      --safe-bottom:max(18px, env(safe-area-inset-bottom));
+      --safe-left:max(14px, env(safe-area-inset-left));
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;min-height:100%}
     body{
       font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
       color:var(--text);
-      min-height:100dvh;
       background:
-        radial-gradient(circle at 0 0, rgba(17,128,95,.12), transparent 28%),
-        radial-gradient(circle at 100% 0, rgba(100,188,147,.10), transparent 24%),
-        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-      --safe-top:max(18px, env(safe-area-inset-top));
-      --safe-right:max(14px, env(safe-area-inset-right));
-      --safe-bottom:max(18px, env(safe-area-inset-bottom));
-      --safe-left:max(14px, env(safe-area-inset-left));
+        radial-gradient(circle at top left, rgba(15,143,85,.10), transparent 26%),
+        radial-gradient(circle at right top, rgba(79,177,130,.12), transparent 24%),
+        linear-gradient(180deg,var(--bg2) 0%, var(--bg) 100%);
     }
-    body.standalone{background:linear-gradient(180deg,#edf6f1 0%, #eff6f2 100%)}
-    button,input,select,textarea{font:inherit}
-    .shell{max-width:1500px;margin:0 auto;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)}
-    .header{
-      position:sticky;top:var(--safe-top);z-index:30;
-      display:flex;align-items:center;justify-content:space-between;gap:18px;
-      margin-bottom:18px;padding:16px 18px;border:1px solid var(--line);background:rgba(255,255,255,.88);
-      border-radius:26px;box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
-    }
-    .brand{display:flex;align-items:center;gap:16px;min-width:0}
-    .brand img{width:64px;height:64px;object-fit:contain;border-radius:20px;background:#fff;padding:8px;border:1px solid #e6efea}
-    .brand h1{margin:0;font-size:26px;line-height:.95;letter-spacing:-.04em}
-    .brand p{margin:6px 0 0;color:var(--muted);font-weight:600}
+    a,button,input,select,textarea{font:inherit}
+    .app-shell{max-width:1560px;margin:0 auto;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)}
+    .topbar{position:sticky;top:var(--safe-top);z-index:40;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.88);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand img{width:58px;height:58px;object-fit:contain;border-radius:18px;background:#fff;border:1px solid #e4efe9;padding:7px}
+    .brand-copy{min-width:0}
+    .brand-copy h1{margin:0;font-size:24px;line-height:.92;letter-spacing:-.05em}
+    .brand-copy p{margin:5px 0 0;color:var(--muted);font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .pill,.ghost{
-      min-height:46px;padding:0 16px;border-radius:999px;border:1px solid #d8e7e0;
-      display:inline-flex;align-items:center;gap:8px;font-weight:850;text-decoration:none
-    }
+    .pill,.ghost,.cta,.btn{min-height:46px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:850;cursor:pointer}
+    .pill,.ghost{border:1px solid #d7e5de}
     .pill{background:var(--greenSoft);color:var(--green)}
-    .ghost{background:#fff;color:#20433a}
-    .app{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
-    .sidebar,.hero,.metric,.section-card,.workspace,.quick-card,.health,.mobile-tabs{
-      background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px)
-    }
-    .sidebar{position:sticky;top:22px;border-radius:30px;padding:18px}
-    .sidebar h3{margin:0 0 14px;font-size:13px;color:#7b8c86;text-transform:uppercase;letter-spacing:.08em}
+    .ghost{background:#fff;color:#20453d}
+    .cta,.btn-primary{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff;border:none;box-shadow:0 16px 28px rgba(15,143,85,.22)}
+    .btn-secondary{background:#eff6f2;color:#22433c;border:1px solid #dce8e2}
+    .layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
+    .sidebar,.mobile-nav,.hero,.metric,.workspace,.section-card,.side-card,.notification-bar{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+    .sidebar{position:sticky;top:calc(var(--safe-top) + 86px);border-radius:28px;padding:18px}
+    .sidebar h2,.side-card h3{margin:0 0 12px;font-size:13px;letter-spacing:.10em;text-transform:uppercase;color:#7c8e88}
     .nav{display:flex;flex-direction:column;gap:10px}
-    .nav-btn{
-      width:100%;border:none;background:#fff;border:1px solid #e1ece6;color:#26423c;
-      border-radius:18px;min-height:62px;padding:0 14px;display:flex;align-items:center;gap:12px;
-      cursor:pointer;text-align:left;font-weight:850;transition:.18s ease
-    }
-    .nav-btn .dot{width:11px;height:11px;border-radius:50%;background:#bed6ca;flex:0 0 auto}
-    .nav-btn .small{display:block;font-size:12px;color:var(--muted);margin-top:4px;font-weight:700}
-    .nav-btn.active{background:linear-gradient(135deg,var(--green) 0%, #52ab88 100%);color:#fff;box-shadow:0 18px 30px rgba(17,128,95,.2)}
+    .nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:none;border-radius:18px;background:#fff;border:1px solid #e2ece7;color:#27433d;text-align:left;cursor:pointer;font-weight:850;transition:.18s ease}
+    .nav-btn .dot{width:11px;height:11px;border-radius:50%;background:#b7d3c5;flex:0 0 auto}
+    .nav-btn .meta{display:flex;flex-direction:column;gap:4px}
+    .nav-btn .meta small{color:var(--muted);font-size:12px;font-weight:700}
+    .nav-btn.active{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff;box-shadow:0 18px 28px rgba(15,143,85,.24)}
     .nav-btn.active .dot{background:#fff}
-    .nav-btn.active .small{color:rgba(255,255,255,.82)}
-    .sidebar-note{margin-top:14px;padding:16px;border-radius:18px;background:#f7fbf9;border:1px solid #e4efe9}
-    .sidebar-note strong{display:block;margin-bottom:4px}
-    .sidebar-note span{color:var(--muted);font-size:14px;line-height:1.45;font-weight:600}
+    .nav-btn.active small{color:rgba(255,255,255,.82)}
+    .sidebar-note{margin-top:14px;padding:16px;border-radius:18px;background:#f8fcfa;border:1px solid #e4eee8;color:var(--muted);font-size:14px;line-height:1.5;font-weight:600}
     .main{display:flex;flex-direction:column;gap:18px;min-width:0}
-    .mobile-tabs{display:none;gap:10px;padding:12px;border-radius:22px;overflow:auto;scrollbar-width:none}
-    .mobile-tabs::-webkit-scrollbar{display:none}
-    .mobile-tabs .nav-btn{min-width:220px}
-    .hero{border-radius:30px;padding:24px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:18px;background:linear-gradient(135deg, rgba(17,128,95,.14) 0%, rgba(255,255,255,.96) 46%, rgba(100,188,147,.18) 100%)}
-    .hero h2{margin:0 0 10px;font-size:clamp(34px,4vw,54px);line-height:.92;letter-spacing:-.06em;max-width:10ch}
-    .hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.55;max-width:760px;font-weight:600}
-    .hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-    .hero-badges span{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #dbe9e2;background:#fff;display:inline-flex;align-items:center;font-size:13px;font-weight:850}
-    .hero-side{display:grid;gap:12px}
-    .hero-side .quick-card{padding:18px;border-radius:22px}
-    .quick-card strong{display:block;font-size:16px;margin-bottom:6px}
-    .quick-card span{display:block;color:var(--muted);font-size:14px;line-height:1.45;font-weight:600}
+    .mobile-nav{display:none;gap:10px;padding:12px;border-radius:24px;overflow:auto;scrollbar-width:none}
+    .mobile-nav::-webkit-scrollbar{display:none}
+    .mobile-nav .nav-btn{min-width:210px}
+    .hero{border-radius:30px;padding:24px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;background:linear-gradient(135deg, rgba(15,143,85,.14) 0%, rgba(255,255,255,.96) 56%, rgba(79,177,130,.16) 100%)}
+    .eyebrow{display:inline-flex;align-items:center;gap:9px;min-height:40px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid #dce9e2;font-size:13px;font-weight:900;color:var(--green);margin-bottom:14px}
+    .eyebrow:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
+    .hero h2{margin:0 0 10px;font-size:clamp(34px,5vw,58px);line-height:.92;letter-spacing:-.07em;max-width:12ch}
+    .hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.55;font-weight:600;max-width:780px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .hero-grid{display:grid;gap:12px}
+    .quick{padding:18px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid #dce8e2}
+    .quick strong{display:block;font-size:16px;margin-bottom:4px}
+    .quick span{display:block;color:var(--muted);line-height:1.45;font-size:14px;font-weight:600}
+    .notification-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;border-radius:24px}
+    .notification-copy strong{display:block;font-size:17px;margin-bottom:4px}
+    .notification-copy span{color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
+    .notification-status{font-size:13px;font-weight:800;color:var(--muted)}
     .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-    .metric{position:relative;overflow:hidden;border-radius:24px;padding:20px;background:linear-gradient(180deg,#fff 0%,#f8fbf9 100%)}
-    .metric:after{content:"";position:absolute;right:-22px;bottom:-28px;width:112px;height:112px;border-radius:50%;background:radial-gradient(circle, rgba(17,128,95,.12), transparent 68%)}
-    .metric-label{font-size:14px;color:#617671;font-weight:800;margin-bottom:10px}
-    .metric-value{font-size:42px;line-height:1;font-weight:900;letter-spacing:-.06em}
-    .metric-note{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
-    .content-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:18px;align-items:start}
-    .sections-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:18px}
-    .section-card{border-radius:28px;overflow:hidden;display:flex;flex-direction:column}
-    .section-cover{position:relative;height:172px;overflow:hidden}
-    .section-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}
+    .metric{position:relative;overflow:hidden;border-radius:24px;padding:20px;background:linear-gradient(180deg,#fff 0%,#f9fcfa 100%)}
+    .metric:after{content:"";position:absolute;right:-28px;bottom:-30px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle, rgba(15,143,85,.12), transparent 68%)}
+    .metric .label{font-size:14px;color:#647872;font-weight:800;margin-bottom:10px}
+    .metric .value{font-size:42px;line-height:1;font-weight:900;letter-spacing:-.06em}
+    .metric .note{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
+    .workspace-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;align-items:start}
+    .sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .section-card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column}
+    .section-cover{position:relative;height:168px;overflow:hidden}
+    .section-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .28s ease}
     .section-card:hover .section-cover img{transform:scale(1.04)}
-    .tag{position:absolute;left:16px;top:16px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.92);display:inline-flex;align-items:center;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(221,233,227,.9)}
-    .section-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px}
-    .section-body h3{margin:0;font-size:30px;line-height:.95;letter-spacing:-.05em}
+    .tag{position:absolute;left:14px;top:14px;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.92);display:inline-flex;align-items:center;border:1px solid rgba(221,233,227,.9);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    .section-body{padding:18px;display:flex;flex-direction:column;gap:10px}
+    .section-body h3{margin:0;font-size:28px;line-height:.94;letter-spacing:-.05em}
     .section-body p{margin:0;color:var(--muted);font-size:15px;line-height:1.5;font-weight:600}
-    .section-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-    .btn{
-      min-height:44px;padding:0 15px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;
-      display:inline-flex;align-items:center;justify-content:center;font-weight:850
-    }
-    .btn-primary{background:linear-gradient(135deg,var(--green) 0%, #58af8d 100%);color:#fff;box-shadow:0 18px 28px rgba(17,128,95,.18)}
-    .btn-secondary{background:#eef5f1;color:#214239;border:1px solid #dce8e2}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
     .workspace{border-radius:30px;padding:18px}
-    .workspace-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px}
-    .workspace-head h3{margin:0;font-size:34px;line-height:.95;letter-spacing:-.05em}
-    .workspace-head p{margin:8px 0 0;color:var(--muted);font-weight:600;line-height:1.5;max-width:820px}
-    .workspace-tools{display:flex;gap:10px;flex-wrap:wrap}
+    .workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+    .workspace-head h3{margin:0;font-size:34px;line-height:.94;letter-spacing:-.06em}
+    .workspace-head p{margin:8px 0 0;color:var(--muted);font-size:15px;line-height:1.5;font-weight:600;max-width:840px}
     .subtabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .subtab{border:none;background:#eef5f1;border-radius:999px;min-height:40px;padding:0 14px;font-size:13px;font-weight:850;cursor:pointer;color:#24423b}
-    .subtab.active{background:linear-gradient(135deg,var(--green) 0%, #52ab88 100%);color:#fff}
-    .section-summary{padding:18px;border:1px solid #e5efe9;border-radius:22px;background:linear-gradient(180deg,#fff 0%,#f8fbf9 100%);margin-bottom:14px}
-    .section-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-    .mini-stat{padding:16px;border-radius:18px;background:#fff;border:1px solid #e3ede8}
-    .mini-stat .k{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:8px}
-    .mini-stat .v{font-size:28px;font-weight:900;letter-spacing:-.04em}
-    .frame-wrap{display:none;border:1px solid #e5efea;border-radius:24px;background:#fff;padding:12px}
+    .subtab{min-height:40px;padding:0 14px;border:none;border-radius:999px;background:#eef5f1;color:#25443d;font-size:13px;font-weight:850;cursor:pointer}
+    .subtab.active{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff}
+    .summary{padding:18px;border:1px solid #e4efe8;border-radius:22px;background:linear-gradient(180deg,#fff 0%,#f9fcfa 100%);margin-bottom:14px}
+    .summary p{margin:0;color:var(--muted);font-size:15px;line-height:1.55;font-weight:600}
+    .summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+    .mini{padding:16px;border-radius:18px;background:#fff;border:1px solid #e3ede7}
+    .mini .k{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+    .mini .v{font-size:28px;font-weight:900;letter-spacing:-.04em}
+    .frame-wrap{display:none;border:1px solid #e3ede7;border-radius:24px;background:#fff;padding:12px}
     .frame-wrap.open{display:block}
-    .frame-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 4px 14px;border-bottom:1px solid #edf3ef;margin-bottom:12px}
-    .frame-top strong{font-size:16px}
-    .frame-top span{display:block;color:var(--muted);font-size:13px;font-weight:700;margin-top:4px}
-    iframe{display:block;width:100%;min-height:860px;border:none;border-radius:18px;background:#fff}
-    .right-stack{display:grid;gap:18px}
-    .health,.quick-card{border-radius:28px;padding:18px}
-    .health h3,.quick-panel h3{margin:0 0 12px;font-size:21px;letter-spacing:-.03em}
-    .health-list{display:grid;gap:10px}
-    .health-row{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:18px;background:#f8fbf9;border:1px solid #e5efea}
-    .health-row strong{font-size:14px}.health-row span{font-size:13px;color:var(--muted);font-weight:800;text-align:right}
-    .quick-links{display:grid;gap:10px}
-    .quick-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-radius:18px;background:#fff;border:1px solid #e1ece6;text-decoration:none;color:#1f4138;font-weight:850}
-    @media (max-width:1260px){
-      .metrics{grid-template-columns:repeat(2,1fr)}
-      .content-grid{grid-template-columns:1fr}
+    .frame-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 4px 14px;border-bottom:1px solid #edf3ef;margin-bottom:12px}
+    .frame-head strong{font-size:16px}
+    .frame-head span{display:block;color:var(--muted);font-size:13px;font-weight:700;margin-top:4px}
+    iframe{display:block;width:100%;min-height:920px;border:none;border-radius:18px;background:#fff}
+    .side-stack{display:grid;gap:18px}
+    .side-card{border-radius:24px;padding:18px}
+    .side-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;font-weight:600}
+    .health-list,.quick-links{display:grid;gap:10px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:16px;background:#fbfdfc;border:1px solid #e3ede7}
+    .row strong{font-size:14px}
+    .row span{color:var(--muted);font-size:13px;font-weight:800;text-align:right}
+    .quick-link{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-radius:16px;text-decoration:none;background:#fbfdfc;border:1px solid #e3ede7;color:#21443c;font-weight:850}
+    .quick-link span{color:var(--green)}
+    .tiny{font-size:12px;color:var(--muted);font-weight:700;margin-top:10px;line-height:1.45}
+    @media (max-width: 1200px){
+      .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .workspace-grid{grid-template-columns:1fr}
       .hero{grid-template-columns:1fr}
+      .side-stack{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media (max-width:980px){
-      .shell{padding:14px}
-      .app{grid-template-columns:1fr}
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
       .sidebar{display:none}
-      .mobile-tabs{display:flex}
-      .header{flex-direction:column;align-items:stretch}
+      .mobile-nav{display:flex}
+      .topbar{grid-template-columns:1fr}
       .top-actions{justify-content:flex-start}
-      .hero{padding:22px;border-radius:26px}
-      .hero h2{font-size:40px}
-      .sections-board{grid-template-columns:1fr 1fr}
+      .sections{grid-template-columns:1fr 1fr}
+      .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media (max-width:720px){
-      .brand img{width:56px;height:56px}
-      .brand h1{font-size:22px}
-      .hero h2{font-size:34px}
+    @media (max-width: 720px){
+      .topbar{padding:14px}
+      .brand img{width:50px;height:50px}
+      .brand-copy h1{font-size:20px}
+      .brand-copy p{font-size:13px}
+      .hero,.workspace,.side-card,.notification-bar,.metric{border-radius:22px}
+      .hero{padding:18px}
+      .hero h2{font-size:38px;max-width:11ch}
       .hero p{font-size:15px}
-      .metrics{grid-template-columns:1fr}
-      .sections-board{grid-template-columns:1fr}
-      .section-cover{height:180px}
+      .notification-bar{flex-direction:column;align-items:flex-start}
+      .metrics,.sections,.summary-grid,.side-stack{grid-template-columns:1fr}
+      .section-cover{height:190px}
       .workspace-head{flex-direction:column}
-      .section-summary-grid{grid-template-columns:1fr}
-      iframe{min-height:760px}
+      .workspace-head h3{font-size:28px}
+      .mobile-nav .nav-btn{min-width:190px}
+      iframe{min-height:780px}
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="header">
+  <div class="app-shell">
+    <header class="topbar">
       <div class="brand">
-        <img src="logo.png" alt="Farmacia Montesano">
-        <div>
+        <img src="logo.png" alt="Farmacia Montesano" />
+        <div class="brand-copy">
           <h1>Dashboard Admin</h1>
-          <p>Pannello premium unico per gestire contenuti, campagne, fortuna, premi e aree operative su telefono e pc.</p>
+          <p>Pannello premium unificato · Home Screen ready · Firebase collegato</p>
         </div>
       </div>
       <div class="top-actions">
-        <div class="pill" id="projectPill">● Firebase: farmaciamontesano</div>
-        <div class="pill" id="statusPill">Online</div>
+        <span class="pill">Online · farmaciamontesano</span>
+        <button class="ghost" type="button" id="enableNotifications">Notifiche</button>
         <a class="ghost" href="index.html">Vai alla home</a>
       </div>
     </header>
 
-    <div class="app">
+    <div class="layout">
       <aside class="sidebar">
-        <h3>Sezioni</h3>
+        <h2>Navigazione</h2>
         <div class="nav" id="desktopNav"></div>
-        <div class="sidebar-note">
-          <strong>Struttura pulita</strong>
-          <span>Una dashboard sola, card coerenti, area di lavoro vera e collegamento diretto alle pagine che salvano su Firebase.</span>
-        </div>
+        <div class="sidebar-note">Questa dashboard è pensata per iPhone, Android, tablet e pc. Le sezioni restano leggibili e puoi aprire l'editor completo senza rompere il layout.</div>
       </aside>
 
       <main class="main">
-        <div class="mobile-tabs" id="mobileNav"></div>
+        <div class="mobile-nav" id="mobileNav"></div>
 
         <section class="hero">
           <div>
-            <h2>Controllo totale,<br>senza caos</h2>
-            <p>Qui sopra scegli la sezione, sotto vedi i numeri principali e poi entri nell’area di lavoro. Su mobile le card restano leggibili e ordinate, su desktop hai uno spazio ampio e professionale.</p>
-            <div class="hero-badges">
-              <span>Offerte</span><span>Servizi</span><span>Beauty</span><span>Fortuna</span><span>Premi</span><span>Operatori</span>
+            <div class="eyebrow">Area amministrativa premium</div>
+            <h2 id="activeTitle">Offerte</h2>
+            <p id="activeDesc">Gestisci promozioni, servizi, giornate beauty, fortuna e premi con una struttura molto più ordinata su telefono e desktop.</p>
+            <div class="hero-actions">
+              <button class="cta" type="button" id="openWorkspaceBtn">Apri editor nel pannello</button>
+              <a class="ghost" id="openStandalone" href="offerte-admin.html" target="_blank" rel="noopener">Apri pagina completa</a>
             </div>
           </div>
-          <div class="hero-side">
-            <div class="quick-card"><strong>Stile premium</strong><span>Gerarchia chiara, respiri visivi migliori, card curate e flusso di lavoro più elegante.</span></div>
-            <div class="quick-card"><strong>Responsive vero</strong><span>Telefono, tablet e pc con layout dedicato, senza pezzi schiacciati o pannelli buttati sotto.</span></div>
-            <div class="quick-card"><strong>Firebase già letto</strong><span>I contatori principali usano il progetto farmaciamontesano e si aggiornano dalla tua base dati.</span></div>
+          <div class="hero-grid">
+            <div class="quick"><strong>Una sola dashboard</strong><span>Niente pannelli buttati uno sotto l'altro. Selezioni una sezione e lavori in modo pulito.</span></div>
+            <div class="quick"><strong>Responsive vero</strong><span>Chip su mobile, sidebar su desktop, safe area rispettate e editor dentro area di lavoro dedicata.</span></div>
+            <div class="quick"><strong>Base per notifiche</strong><span>Da qui puoi attivare il permesso notifiche della web app. La parte automatica via backend Firebase resta il prossimo step.</span></div>
           </div>
+        </section>
+
+        <section class="notification-bar">
+          <div class="notification-copy">
+            <strong>Notifiche web app</strong>
+            <span>Giornate beauty pubblicate, giornata in corso, farmacia di turno o di appoggio: la base lato app è pronta, ma per l'invio automatico serve ancora la funzione backend collegata a Firebase.</span>
+          </div>
+          <div class="notification-status" id="notificationStatus">Permesso non verificato</div>
         </section>
 
         <section class="metrics">
-          <div class="metric"><div class="metric-label">Offerte attive / totali</div><div class="metric-value" id="metricOffers">--</div><div class="metric-note">Collection offers</div></div>
-          <div class="metric"><div class="metric-label">Servizi visibili / totali</div><div class="metric-value" id="metricServices">--</div><div class="metric-note">Collection servizi</div></div>
-          <div class="metric"><div class="metric-label">Beauty attivi / totali</div><div class="metric-value" id="metricBeauty">--</div><div class="metric-note">Collection beauty</div></div>
-          <div class="metric"><div class="metric-label">Premi + fortuna</div><div class="metric-value" id="metricRewards">--</div><div class="metric-note">rewards_catalog + fortune_rewards</div></div>
+          <article class="metric"><div class="label">Offerte attive / totali</div><div class="value" id="metricOffers">--</div><div class="note">Collection offers</div></article>
+          <article class="metric"><div class="label">Servizi visibili / totali</div><div class="value" id="metricServices">--</div><div class="note">Collection servizi</div></article>
+          <article class="metric"><div class="label">Beauty attivi / totali</div><div class="value" id="metricBeauty">--</div><div class="note">Collection beauty</div></article>
+          <article class="metric"><div class="label">Premi + fortuna</div><div class="value" id="metricRewards">--</div><div class="note">rewards_catalog + fortune_rewards</div></article>
         </section>
 
-        <section class="content-grid">
+        <section class="workspace-grid">
           <div>
-            <section class="sections-board" id="sectionsBoard"></section>
-
+            <section class="sections" id="sectionsBoard"></section>
             <section class="workspace">
               <div class="workspace-head">
                 <div>
-                  <h3 id="activeTitle">Offerte</h3>
-                  <p id="activeDesc">Gestisci promozioni, prezzi, immagini, visibilità e ordine di pubblicazione.</p>
+                  <h3 id="workspaceTitle">Offerte</h3>
+                  <p id="workspaceDesc">Gestione ordinata della sezione attiva con riepilogo veloce e accesso immediato all'editor.</p>
                 </div>
-                <div class="workspace-tools">
-                  <a class="btn btn-secondary" id="openStandalone" href="offerte-admin.html" target="_blank" rel="noopener">Apri pagina completa</a>
-                  <button class="btn btn-primary" type="button" id="openWorkspaceBtn">Apri nell'area di lavoro</button>
-                </div>
+                <button class="btn btn-secondary" type="button" id="closeWorkspaceBtn">Chiudi editor</button>
               </div>
-
               <div class="subtabs" id="subtabs"></div>
-
-              <div class="section-summary">
-                <div id="summaryText">Promozioni, immagini, validità e ordinamento della vetrina promo.</div>
-                <div class="section-summary-grid" id="summaryStats"></div>
+              <div class="summary">
+                <p id="summaryText">Promozioni, immagini, validità e ordine di pubblicazione della vetrina promo.</p>
+                <div class="summary-grid" id="summaryStats"></div>
               </div>
-
               <div class="frame-wrap" id="frameWrap">
-                <div class="frame-top">
+                <div class="frame-head">
                   <div><strong id="frameTitle">Offerte</strong><span id="frameSub">Editor operativo collegato a Firebase</span></div>
-                  <button class="btn btn-secondary" type="button" id="closeWorkspaceBtn">Chiudi editor</button>
+                  <a class="btn btn-secondary" id="frameLink" href="offerte-admin.html" target="_blank" rel="noopener">Apri in pagina separata</a>
                 </div>
                 <iframe id="contentFrame" title="Area di lavoro amministrativa" loading="lazy"></iframe>
               </div>
             </section>
           </div>
-
-          <aside class="right-stack">
-            <section class="health">
+          <aside class="side-stack">
+            <section class="side-card">
               <h3>Stato sistema</h3>
               <div class="health-list">
-                <div class="health-row"><strong>Utenti fidelity</strong><span id="healthUsers">Caricamento…</span></div>
-                <div class="health-row"><strong>Richieste premio</strong><span id="healthRequests">Caricamento…</span></div>
-                <div class="health-row"><strong>Sezione attiva</strong><span id="healthSection">Offerte</span></div>
-                <div class="health-row"><strong>Modalità</strong><span>Dashboard unificata</span></div>
+                <div class="row"><strong>Utenti fidelity</strong><span id="healthUsers">Caricamento…</span></div>
+                <div class="row"><strong>Richieste premio</strong><span id="healthRequests">Caricamento…</span></div>
+                <div class="row"><strong>Sezione attiva</strong><span id="healthSection">Offerte</span></div>
+                <div class="row"><strong>Permesso notifiche</strong><span id="healthNotifications">Da verificare</span></div>
               </div>
             </section>
-            <section class="quick-card quick-panel">
+            <section class="side-card">
               <h3>Accessi rapidi</h3>
               <div class="quick-links">
                 <a class="quick-link" href="operatori.html">Operatori <span>→</span></a>
@@ -280,6 +267,7 @@
                 <a class="quick-link" href="report.html">Report <span>→</span></a>
                 <a class="quick-link" href="admin.html">Redirect admin <span>→</span></a>
               </div>
+              <div class="tiny">Il redirect da admin.html resta attivo. La dashboard usa le stesse pagine gestionali già collegate al tuo Firebase.</div>
             </section>
           </aside>
         </section>
@@ -289,56 +277,55 @@
 
   <script type="module">
     import { firestore, collection, getDocs } from './firebase.js';
+    import { registerMontesanoNotifications } from './notifications.js';
 
     const sections = {
-      offerte: { title:'Offerte', short:'Promo', src:'offerte-admin.html', image:'images/promo.jpg', desc:'Promozioni, immagini, validità e ordine di pubblicazione della vetrina promo.', summary:'Gestisci le promozioni pubbliche, metti in evidenza quelle attive e controlla prezzi, descrizioni e visibilità senza sporcare la dashboard.', stats:[['Attive','metricOffers'],['Collezione','offers'],['Uso','Home + promo']] },
-      servizi: { title:'Servizi', short:'Servizi', src:'servizi-admin.html', image:'images/servizi.jpg', desc:'Servizi farmacia, descrizioni, ordine, copertina e visibilità.', summary:'Organizza servizi, priorità, immagini e contenuti della sezione servizi in modo più ordinato e leggibile.', stats:[['Visibili','metricServices'],['Collezione','servizi'],['Uso','Home + servizi']] },
-      beauty: { title:'Giornate Beauty', short:'Beauty', src:'beauty-admin.html', image:'images/beauty.jpg', desc:'Eventi beauty, date, pubblicazione e grafiche collegate.', summary:'Controlla le giornate beauty con date, immagini, testo promozionale e stato di pubblicazione.', stats:[['Attivi','metricBeauty'],['Collezione','beauty'],['Uso','Home + beauty']] },
+      offerte: { title:'Offerte', short:'Promo', src:'offerte-admin.html', image:'images/promo.jpg', desc:'Promozioni, immagini, prezzi, validità e ordine di pubblicazione.', summary:'Gestisci le promozioni pubbliche, metti in evidenza quelle attive e controlla visibilità e contenuti senza sporcare la dashboard.', stats:[['Attive','metricOffers'],['Collezione','offers'],['Uso','Home + promo']] },
+      servizi: { title:'Servizi', short:'Servizi', src:'servizi-admin.html', image:'images/servizi.jpg', desc:'Servizi farmacia, descrizioni, immagini, ordine e visibilità.', summary:'Organizza i servizi con copertine, priorità e testo in una vista molto più leggibile su telefono e desktop.', stats:[['Visibili','metricServices'],['Collezione','servizi'],['Uso','Home + servizi']] },
+      beauty: { title:'Giornate Beauty', short:'Beauty', src:'beauty-admin.html', image:'images/beauty.jpg', desc:'Eventi beauty con date, pubblicazione e grafiche collegate.', summary:'Controlla le giornate beauty con date, immagini, testo promozionale e stato di pubblicazione.', stats:[['Attivi','metricBeauty'],['Collezione','beauty'],['Uso','Home + beauty']] },
       fortuna: { title:'Fortuna', short:'Fortuna', src:'fortuna-admin.html', image:'images/fortuna.jpg', desc:'Ruota clienti, premi fortuna, probabilità e disponibilità.', summary:'Da qui controlli tutta la parte fortuna: premi, regole, probabilità e disponibilità della ruota clienti.', stats:[['Catalogo','fortune_rewards'],['Uso','Ruota clienti'],['Tipo','Premi dinamici']] },
       premi: { title:'Premi', short:'Premi', src:'premi-admin.html', image:'images/premi.jpg', desc:'Catalogo premi, punti richiesti e stato del catalogo.', summary:'Gestisci il catalogo premi, i punti necessari, le immagini e la coerenza con richieste e consegne.', stats:[['Totale','metricRewards'],['Collezione','rewards_catalog'],['Uso','Catalogo premi']] },
-      operatori: { title:'Operatori', short:'Operatori', src:'operatori.html', image:'images/fidelity.jpg', desc:'Accumulo, richieste premi e report operatore in stile premium.', summary:'Pagina operatore ottimizzata per telefono e pc, con grafici corretti, filtri e aree di lavoro più pulite.', stats:[['Vista','mobile + desktop'],['Focus','Accumulo / premi / report'],['Uso','Banco farmacia']] },
-      fidelity: { title:'Fidelity', short:'Fidelity', src:'fidelity.html', image:'images/fidelity.jpg', desc:'Utenti, gruppi, card e storico fedeltà.', summary:'Area dedicata a programma fedeltà, gruppi, card e profili clienti con dati persistenti su Firebase.', stats:[['Collezione','users'],['Area','Fidelity'],['Uso','Clienti + gruppi']] },
-      report: { title:'Report', short:'Report', src:'report.html', image:'images/premi.jpg', desc:'Report e panoramiche pubbliche dei dati.', summary:'Controlla andamento generale, movimenti e numeri sintetici in una vista ordinata.', stats:[['Area','Report'],['Uso','Sintesi'],['Stile','Pulito']] }
+      operatori: { title:'Operatori', short:'Operatori', src:'operatori.html', image:'images/fidelity.jpg', desc:'Accumulo, richieste premi e report con grafici premium.', summary:'Pagina operatore ottimizzata per telefono e pc, con grafici corretti, filtri e area di lavoro molto più pulita.', stats:[['Vista','mobile + desktop'],['Focus','Accumulo / premi / report'],['Uso','Banco farmacia']] },
+      fidelity: { title:'Fidelity', short:'Fidelity', src:'fidelity.html', image:'images/fidelity.jpg', desc:'Utenti, gruppi, card e storico fedeltà.', summary:'Area dedicata al programma fedeltà con dati persistenti su Firebase.', stats:[['Collezione','users'],['Area','Fidelity'],['Uso','Clienti + gruppi']] },
+      report: { title:'Report', short:'Report', src:'report.html', image:'images/premi.jpg', desc:'Report e panoramiche sintetiche dei dati.', summary:'Controlla andamento generale e numeri sintetici in una vista ordinata.', stats:[['Area','Report'],['Uso','Sintesi'],['Stile','Pulito']] }
     };
 
-    const boardKeys = ['offerte','servizi','beauty','fortuna','premi','operatori'];
     const navKeys = ['offerte','servizi','beauty','fortuna','premi','operatori','fidelity','report'];
+    const boardKeys = ['offerte','servizi','beauty','fortuna','premi','operatori'];
     const desktopNav = document.getElementById('desktopNav');
     const mobileNav = document.getElementById('mobileNav');
     const sectionsBoard = document.getElementById('sectionsBoard');
-    const subtabs = document.getElementById('subtabs');
     const frameWrap = document.getElementById('frameWrap');
     const frame = document.getElementById('contentFrame');
     const openWorkspaceBtn = document.getElementById('openWorkspaceBtn');
     const closeWorkspaceBtn = document.getElementById('closeWorkspaceBtn');
     const openStandalone = document.getElementById('openStandalone');
+    const frameLink = document.getElementById('frameLink');
+    const subtabs = document.getElementById('subtabs');
     const activeTitle = document.getElementById('activeTitle');
     const activeDesc = document.getElementById('activeDesc');
+    const workspaceTitle = document.getElementById('workspaceTitle');
+    const workspaceDesc = document.getElementById('workspaceDesc');
     const frameTitle = document.getElementById('frameTitle');
     const frameSub = document.getElementById('frameSub');
     const summaryText = document.getElementById('summaryText');
     const summaryStats = document.getElementById('summaryStats');
+    const enableNotifications = document.getElementById('enableNotifications');
+    const notificationStatus = document.getElementById('notificationStatus');
+    const healthNotifications = document.getElementById('healthNotifications');
     const healthSection = document.getElementById('healthSection');
 
     const navMarkup = (key) => {
       const s = sections[key];
-      return `<button class="nav-btn" data-section="${key}" type="button"><span class="dot"></span><span>${s.title}<span class="small">${s.short}</span></span></button>`;
+      return `<button class="nav-btn" type="button" data-section="${key}"><span class="dot"></span><span class="meta">${s.title}<small>${s.short}</small></span></button>`;
     };
 
     desktopNav.innerHTML = navKeys.map(navMarkup).join('');
     mobileNav.innerHTML = navKeys.map(navMarkup).join('');
     subtabs.innerHTML = boardKeys.map(key => `<button class="subtab" data-section="${key}" type="button">${sections[key].title}</button>`).join('');
-    sectionsBoard.innerHTML = boardKeys.map(key => {
+    sectionsBoard.innerHTML = boardKeys.map((key) => {
       const s = sections[key];
-      return `<article class="section-card">
-        <div class="section-cover"><img src="${s.image}" alt="${s.title}"><span class="tag">${s.short}</span></div>
-        <div class="section-body"><h3>${s.title}</h3><p>${s.desc}</p>
-          <div class="section-actions">
-            <button class="btn btn-primary" type="button" data-open-workspace="${key}">Apri qui</button>
-            <a class="btn btn-secondary" href="${s.src}" target="_blank" rel="noopener">Pagina completa</a>
-          </div>
-        </div>
-      </article>`;
+      return `<article class="section-card"><div class="section-cover"><img src="${s.image}" alt="${s.title}" /><span class="tag">${s.short}</span></div><div class="section-body"><h3>${s.title}</h3><p>${s.desc}</p><div class="actions"><button class="btn btn-primary" type="button" data-open-workspace="${key}">Apri qui</button><a class="btn btn-secondary" href="${s.src}" target="_blank" rel="noopener">Pagina completa</a></div></div></article>`;
     }).join('');
 
     function fillSummary(section){
@@ -346,7 +333,7 @@
       summaryText.textContent = s.summary;
       summaryStats.innerHTML = s.stats.map(([label, value]) => {
         const actual = String(value).startsWith('metric') ? (document.getElementById(value)?.textContent || '--') : value;
-        return `<div class="mini-stat"><div class="k">${label}</div><div class="v">${actual}</div></div>`;
+        return `<div class="mini"><div class="k">${label}</div><div class="v">${actual}</div></div>`;
       }).join('');
     }
 
@@ -354,19 +341,22 @@
       const s = sections[section] || sections.offerte;
       activeTitle.textContent = s.title;
       activeDesc.textContent = s.desc;
+      workspaceTitle.textContent = s.title;
+      workspaceDesc.textContent = `${s.summary} ${section === 'operatori' ? 'Grafici e filtri sono stati riorganizzati per una lettura migliore.' : ''}`;
       frameTitle.textContent = s.title;
       frameSub.textContent = `Editor operativo · ${s.short}`;
       openStandalone.href = s.src;
+      frameLink.href = s.src;
       healthSection.textContent = s.title;
-      document.querySelectorAll('[data-section]').forEach(el => el.classList.toggle('active', el.dataset.section === section));
-      document.querySelectorAll('.subtab').forEach(el => el.classList.toggle('active', el.dataset.section === section));
+      document.querySelectorAll('[data-section]').forEach((el) => el.classList.toggle('active', el.dataset.section === section));
+      document.querySelectorAll('.subtab').forEach((el) => el.classList.toggle('active', el.dataset.section === section));
       fillSummary(section);
+      localStorage.setItem('montesanoAdminSection', section);
       if (push) {
         const url = new URL(location.href);
         url.searchParams.set('section', section);
         history.replaceState({}, '', url);
       }
-      localStorage.setItem('montesanoAdminSection', section);
     }
 
     function openWorkspace(section){
@@ -374,20 +364,18 @@
       setActive(section);
       frame.src = s.src;
       frameWrap.classList.add('open');
-      if (window.innerWidth < 900) {
-        frameWrap.scrollIntoView({behavior:'smooth', block:'start'});
-      }
+      if (window.innerWidth < 980) frameWrap.scrollIntoView({behavior:'smooth', block:'start'});
     }
 
-    document.addEventListener('click', (e) => {
-      const nav = e.target.closest('[data-section]');
+    document.addEventListener('click', (event) => {
+      const nav = event.target.closest('[data-section]');
       if (nav) {
-        e.preventDefault();
+        event.preventDefault();
         setActive(nav.dataset.section);
       }
-      const openBtn = e.target.closest('[data-open-workspace]');
+      const openBtn = event.target.closest('[data-open-workspace]');
       if (openBtn) {
-        e.preventDefault();
+        event.preventDefault();
         openWorkspace(openBtn.dataset.openWorkspace);
       }
     });
@@ -398,12 +386,32 @@
     window.addEventListener('message', (event) => {
       const data = event.data || {};
       if (data.type === 'montesano:iframeHeight' && typeof data.height === 'number') {
-        frame.style.height = Math.max(760, data.height + 24) + 'px';
+        frame.style.height = Math.max(780, data.height + 28) + 'px';
+      }
+    });
+
+    function updatePermissionUi(){
+      const permission = (typeof Notification !== 'undefined' && Notification.permission) ? Notification.permission : 'unsupported';
+      const map = { granted: 'Attive', denied: 'Bloccate', default: 'Non concesse', unsupported: 'Non supportate' };
+      const label = map[permission] || permission;
+      notificationStatus.textContent = `Permesso notifiche: ${label}`;
+      healthNotifications.textContent = label;
+    }
+
+    enableNotifications.addEventListener('click', async () => {
+      try {
+        const result = await registerMontesanoNotifications();
+        updatePermissionUi();
+        if (!result.ok) alert(result.reason || 'Notifiche non attivate.');
+      } catch (error) {
+        console.error(error);
+        updatePermissionUi();
+        alert('Non sono riuscito ad attivare le notifiche su questo dispositivo.');
       }
     });
 
     async function loadStats(){
-      const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
       try {
         const [offersSnap, serviziSnap, beautySnap, rewardsSnap, fortuneSnap, usersSnap, requestsSnap] = await Promise.all([
           getDocs(collection(firestore, 'offers')),
@@ -414,29 +422,27 @@
           getDocs(collection(firestore, 'users')),
           getDocs(collection(firestore, 'reward_requests')),
         ]);
-        const activeOffers = offersSnap.docs.filter(d => d.data()?.attiva === true).length;
-        const activeServices = serviziSnap.docs.filter(d => d.data()?.attivo === true).length;
-        const activeBeauty = beautySnap.docs.filter(d => d.data()?.attivo === true).length;
+        const activeOffers = offersSnap.docs.filter((d) => d.data()?.attiva === true).length;
+        const activeServices = serviziSnap.docs.filter((d) => d.data()?.attivo === true).length;
+        const activeBeauty = beautySnap.docs.filter((d) => d.data()?.attivo === true).length;
         setText('metricOffers', `${activeOffers} / ${offersSnap.size}`);
         setText('metricServices', `${activeServices} / ${serviziSnap.size}`);
         setText('metricBeauty', `${activeBeauty} / ${beautySnap.size}`);
         setText('metricRewards', `${rewardsSnap.size + fortuneSnap.size}`);
         setText('healthUsers', `${usersSnap.size} profili`);
         setText('healthRequests', `${requestsSnap.size} richieste`);
-      } catch (err) {
-        console.error(err);
-        ['metricOffers','metricServices','metricBeauty','metricRewards'].forEach(id => setText(id, 'Errore'));
-        setText('healthUsers','Errore lettura');
-        setText('healthRequests','Errore lettura');
+      } catch (error) {
+        console.error(error);
+        ['metricOffers','metricServices','metricBeauty','metricRewards'].forEach((id) => setText(id, 'Errore'));
+        setText('healthUsers', 'Errore lettura');
+        setText('healthRequests', 'Errore lettura');
       }
       fillSummary(localStorage.getItem('montesanoAdminSection') || 'offerte');
     }
 
-    const initialSection = new URLSearchParams(location.search).get('section') || localStorage.getItem('montesanoAdminSection') || 'offerte';
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-      document.body.classList.add('standalone');
-    }
-    setActive(initialSection, false);
+    const initial = new URLSearchParams(location.search).get('section') || localStorage.getItem('montesanoAdminSection') || 'offerte';
+    setActive(initial, false);
+    updatePermissionUi();
     loadStats();
 
     if ('serviceWorker' in navigator) {
