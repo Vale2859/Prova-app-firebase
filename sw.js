@@ -80,3 +80,32 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
+self.addEventListener('push', (event) => {
+  let payload = {};
+  try { payload = event.data ? event.data.json() : {}; } catch (e) { payload = { title: 'Farmacia Montesano', body: event.data ? event.data.text() : '' }; }
+  const title = payload.title || 'Farmacia Montesano';
+  const options = {
+    body: payload.body || 'Hai un nuovo aggiornamento.',
+    icon: payload.icon || './icon-192.png',
+    badge: payload.badge || './icon-192.png',
+    data: { url: payload.url || './index.html' },
+    tag: payload.tag || 'montesano-notification',
+    renotify: Boolean(payload.renotify)
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = event.notification?.data?.url || './index.html';
+  event.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+    for (const client of windowClients) {
+      if ('focus' in client && client.url.includes(self.location.origin)) {
+        client.navigate(url);
+        return client.focus();
+      }
+    }
+    if (clients.openWindow) return clients.openWindow(url);
+  }));
+});

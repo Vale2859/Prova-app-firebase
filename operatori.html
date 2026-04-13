@@ -45,6 +45,8 @@
       backdrop-filter:blur(14px);
     }
     .topbar{
+      position:sticky;top:var(--safe-top);z-index:45;
+      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -179,6 +181,7 @@
       margin-bottom:22px;
     }
     .premium-intro{
+      align-items:flex-start;
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
@@ -424,8 +427,8 @@
     .panel{padding:18px}
     .chart-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
       margin-top:20px;
     }
     .chart-box{
@@ -434,14 +437,15 @@
       border-radius:22px;
       padding:16px;
       box-shadow:var(--shadow);
-      min-height:360px;
+      min-height:340px;
       display:flex;
       flex-direction:column;
+      overflow:hidden;
     }
     .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
     .chart-note{font-size:12px;color:var(--muted);font-weight:700}
-    .chart-canvas-wrap{position:relative;flex:1;min-height:280px;height:280px}
-    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;}
+    .chart-canvas-wrap{position:relative;flex:1;min-height:260px;height:260px;max-height:260px}
+    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;display:block;}
     .chart-title{
       margin:0 0 12px;
       font-size:16px;
@@ -605,6 +609,8 @@
         box-shadow:none;
       }
       .topbar{
+      position:sticky;top:var(--safe-top);z-index:45;
+      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
         flex-direction:column;
         align-items:stretch;
         gap:14px;
@@ -693,9 +699,10 @@
         min-width:860px;
       }
       .chart-box{
-        min-height:280px;
+        min-height:300px;
         padding:14px;
       }
+      .chart-canvas-wrap{min-height:220px;height:220px;max-height:220px}
       .modal-card{
         width:min(100%, 94vw);
         border-radius:20px;
@@ -758,7 +765,9 @@
     @media (max-width: 900px){
       .page{margin:0;border-radius:0;border-left:none;border-right:none;min-height:100vh;}
       .content{padding:16px;}
-      .topbar{padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+      .topbar{
+      position:sticky;top:var(--safe-top);z-index:45;
+      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
       .brand{width:100%;display:flex;justify-content:center;}
       .brand img{height:48px;}
       .menu{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -779,6 +788,7 @@
       .toolbar,.toolbar.report-toolbar{grid-template-columns:1fr;}
       .chart-grid{grid-template-columns:1fr;}
       .chart-box{min-height:300px;}
+      .chart-canvas-wrap{min-height:230px;height:230px;max-height:230px;}
       .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
       table{min-width:880px;}
       .modal-card{width:min(100%, 95vw);max-height:85vh;overflow:auto;}
@@ -811,7 +821,8 @@
       .modal-head{padding:14px 16px;}
       .modal-body{padding:14px 16px 16px;}
       .modal-actions{flex-direction:column;}
-      .premium-intro{flex-direction:column; padding:18px; border-radius:22px;}
+      .premium-intro{
+      align-items:flex-start;flex-direction:column; padding:18px; border-radius:22px;}
       .premium-intro h1{font-size:28px;}
       .premium-badge{width:100%; justify-content:center;}
       .menu{width:100%; overflow:auto; padding:6px; gap:8px;}
@@ -825,7 +836,9 @@
         grid-template-columns:1fr;
       }
       .page{margin:0; border-radius:0;}
-      .topbar{padding:18px 16px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);}
+      .topbar{
+      position:sticky;top:var(--safe-top);z-index:45;
+      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:18px 16px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);}
       .content{padding:16px;}
       .main-card,.sidebar-card,.panel,.chart-box,.stat-card,.accumulo-panel{border-radius:20px;}
       .accumulo-panel{padding:18px;}
@@ -845,7 +858,8 @@
 
 
     @media (max-width: 700px){
-      .premium-intro{padding:18px 16px}
+      .premium-intro{
+      align-items:flex-start;padding:18px 16px}
       .premium-intro h1{font-size:30px}
       .premium-intro p{font-size:14px}
       .sidebar-card{padding:16px}
@@ -896,6 +910,12 @@
   </style>
 </head>
 <body>
+  <script>
+    if (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone)) {
+      document.documentElement.classList.add("standalone");
+      document.body.classList.add("standalone");
+    }
+  </script>
   <div class="page">
     <div class="topbar">
       <div class="brand">
@@ -1776,9 +1796,15 @@
         responsive:true,
         maintainAspectRatio:false,
         animation:false,
+        normalized:true,
+        resizeDelay:120,
         interaction:{mode:'index', intersect:false},
-        plugins:{legend:{display:true, labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}},
-        scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}}}
+        plugins:{legend:{display:true, labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}},
+        layout:{padding:{top:6,right:6,bottom:2,left:2}},
+        scales:{
+          x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: window.innerWidth < 700 ? 4 : 8, font:{size:11, weight:'700'}}},
+          y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}
+        }
       };
     }
 
@@ -1935,30 +1961,58 @@
       destroyChart(operatorPointsChart);
       destroyChart(rewardStatusChart);
 
+      const commonGreen = '#158a67';
+      const softGreen = 'rgba(21,138,103,0.16)';
+      const accentBlue = '#5b93c8';
+      const accentGold = '#d8a438';
+      const accentRed = '#d36a6a';
+
       pointsByDayChart = new Chart(document.getElementById('pointsByDayChart'), {
         type: 'line',
-        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointLabels.map(k => dayPoints[k]), tension: 0.32, fill: false, borderWidth: 3, pointRadius: 3 }] },
+        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointLabels.map(k => dayPoints[k]), tension: 0.34, fill: true, backgroundColor: softGreen, borderColor: commonGreen, borderWidth: 3, pointRadius: 2.5, pointHoverRadius: 4 }] },
         options: chartBaseOptions()
       });
 
       revenueByDayChart = new Chart(document.getElementById('revenueByDayChart'), {
         type: 'bar',
-        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueLabels.map(k => dayRevenue[k]), borderRadius: 10, maxBarThickness: 42 }] },
-        options: { ...chartBaseOptions(), plugins:{legend:{display:true, labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}}, scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}, ticks:{callback:(v)=> Number(v).toLocaleString('it-IT')}}} }
+        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueLabels.map(k => dayRevenue[k]), backgroundColor: 'rgba(91,147,200,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
+        options: { ...chartBaseOptions(), scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: window.innerWidth < 700 ? 4 : 8, font:{size:11, weight:'700'}}}, y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{callback:(v)=> Number(v).toLocaleString('it-IT'), font:{size:11, weight:'700'}}}} }
       });
 
       operatorPointsChart = new Chart(document.getElementById('operatorPointsChart'), {
         type: 'bar',
-        data: { labels: operatorLabels, datasets: [{ label: 'Punti assegnati', data: operatorLabels.map(k => operatorPoints[k]), borderRadius: 10, maxBarThickness: 42 }] },
-        options: { ...chartBaseOptions(), indexAxis: window.innerWidth < 700 ? 'y' : 'x', scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}}} }
+        data: { labels: operatorLabels, datasets: [{ label: 'Punti assegnati', data: operatorLabels.map(k => operatorPoints[k]), backgroundColor: 'rgba(21,138,103,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
+        options: { ...chartBaseOptions(), indexAxis: window.innerWidth < 700 ? 'y' : 'x', scales: window.innerWidth < 700 ? {x:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}, y:{grid:{display:false}, ticks:{font:{size:11, weight:'700'}}}} : {x:{grid:{display:false}, ticks:{font:{size:11, weight:'700'}}}, y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}} }
       });
 
       rewardStatusChart = new Chart(document.getElementById('rewardStatusChart'), {
         type: 'doughnut',
-        data: { labels: rewardLabels, datasets: [{ data: [rewardStatus.voucher_emesso || 0, rewardStatus.consegnata || 0, rewardStatus.rifiutata || 0], borderWidth: 0, hoverOffset: 6 }] },
-        options: { responsive:true, maintainAspectRatio:false, animation:false, cutout:'66%', plugins:{legend:{position:'bottom', labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}} }
+        data: { labels: rewardLabels, datasets: [{ data: [rewardStatus.voucher_emesso || 0, rewardStatus.consegnata || 0, rewardStatus.rifiutata || 0], backgroundColor:[accentBlue, accentGold, accentRed], borderWidth: 0, hoverOffset: 6 }] },
+        options: { responsive:true, maintainAspectRatio:false, animation:false, cutout:'68%', plugins:{legend:{position:'bottom', labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}} }
       });
     }
+
+
+    function resizeAllCharts(){
+      [pointsByDayChart, revenueByDayChart, operatorPointsChart, rewardStatusChart].forEach((chart) => {
+        if (chart) {
+          chart.resize();
+          chart.update('none');
+        }
+      });
+    }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (document.getElementById('reportView')?.classList.contains('active')) {
+          renderReport();
+        } else {
+          resizeAllCharts();
+        }
+      }, 160);
+    });
 
     async function loadClientsAndMovements(){
       const usersSnap = await getDocs(collection(firestore, "users"));
