@@ -431,11 +431,17 @@
     .chart-box{
       background:#fff;
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:22px;
       padding:16px;
       box-shadow:var(--shadow);
       min-height:360px;
+      display:flex;
+      flex-direction:column;
     }
+    .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+    .chart-note{font-size:12px;color:var(--muted);font-weight:700}
+    .chart-canvas-wrap{position:relative;flex:1;min-height:280px;height:280px}
+    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;}
     .chart-title{
       margin:0 0 12px;
       font-size:16px;
@@ -1028,6 +1034,28 @@
               <button class="filter-btn" id="applyFiltersBtn">Filtra</button>
             </div>
 
+            <div class="toolbar report-toolbar" style="grid-template-columns: 180px 180px 1fr 180px; margin-top:-4px;">
+              <select id="reportPeriod">
+                <option value="all">Periodo grafici: tutto</option>
+                <option value="7">Ultimi 7 giorni</option>
+                <option value="30" selected>Ultimi 30 giorni</option>
+                <option value="90">Ultimi 90 giorni</option>
+              </select>
+              <select id="chartGroupBy">
+                <option value="day" selected>Grafici per giorno</option>
+                <option value="month">Grafici per mese</option>
+              </select>
+              <select id="chartOperatorFilter">
+                <option value="all">Tutti gli operatori</option>
+              </select>
+              <select id="reportRequestStatus">
+                <option value="all">Tutte le richieste</option>
+                <option value="voucher_emesso">Voucher emessi</option>
+                <option value="consegnata">Consegnate</option>
+                <option value="rifiutata">Rifiutate</option>
+              </select>
+            </div>
+
             <div class="stats report-stats">
               <div class="stat-card"><div class="stat-label">Parafarmaco</div><div class="stat-value" id="totRevenue">0,00 €</div></div>
               <div class="stat-card"><div class="stat-label">Punti assegnati</div><div class="stat-value" id="totPoints">0</div></div>
@@ -1039,20 +1067,20 @@
 
             <div class="chart-grid">
               <div class="chart-box">
-                <h3 class="chart-title">Punti per giorno</h3>
-                <canvas id="pointsByDayChart"></canvas>
+                <div class="chart-head"><div><h3 class="chart-title">Punti nel tempo</h3><div class="chart-note">Andamento punti assegnati filtrato per periodo e operatore</div></div></div>
+                <div class="chart-canvas-wrap"><canvas id="pointsByDayChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <h3 class="chart-title">Parafarmaco per giorno</h3>
-                <canvas id="revenueByDayChart"></canvas>
+                <div class="chart-head"><div><h3 class="chart-title">Parafarmaco nel tempo</h3><div class="chart-note">Valore parafarmaco generato nel periodo selezionato</div></div></div>
+                <div class="chart-canvas-wrap"><canvas id="revenueByDayChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <h3 class="chart-title">Accumuli per operatore</h3>
-                <canvas id="operatorPointsChart"></canvas>
+                <div class="chart-head"><div><h3 class="chart-title">Accumuli per operatore</h3><div class="chart-note">Confronto punti assegnati dagli operatori</div></div></div>
+                <div class="chart-canvas-wrap"><canvas id="operatorPointsChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <h3 class="chart-title">Richieste premi per stato</h3>
-                <canvas id="rewardStatusChart"></canvas>
+                <div class="chart-head"><div><h3 class="chart-title">Richieste premi per stato</h3><div class="chart-note">Distribuzione richieste filtrata</div></div></div>
+                <div class="chart-canvas-wrap"><canvas id="rewardStatusChart"></canvas></div>
               </div>
             </div>
 
@@ -1234,6 +1262,10 @@
     const toDate = document.getElementById("toDate");
     const searchText = document.getElementById("searchText");
     const applyFiltersBtn = document.getElementById("applyFiltersBtn");
+    const reportPeriod = document.getElementById("reportPeriod");
+    const chartGroupBy = document.getElementById("chartGroupBy");
+    const chartOperatorFilter = document.getElementById("chartOperatorFilter");
+    const reportRequestStatus = document.getElementById("reportRequestStatus");
     const totRevenue = document.getElementById("totRevenue");
     const totPoints = document.getElementById("totPoints");
     const totClients = document.getElementById("totClients");
@@ -1587,15 +1619,15 @@
         const groupLabel = item.requestType === "group" ? `${item.groupName || "Gruppo"} • ${item.memberCount || 0} membri` : "—";
         return `
           <tr>
-            <td><div class="client-name">${item.clienteNome || "Cliente"}</div><div class="client-sub">${item.card || "-"}</div></td>
-            <td>${requestTypeLabel}</td>
-            <td>${groupLabel}</td>
-            <td>${item.premioNome || "-"}</td>
-            <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
-            <td>${formatDate(item.createdAt)}</td>
-            <td><span class="badge badge-gray">${item.voucherCode || "-"}</span></td>
-            <td>${statusBadge(item.status)}</td>
-            <td>${buildRequestActions(item)}</td>
+            <td data-label="Cliente"><div class="client-name">${item.clienteNome || "Cliente"}</div><div class="client-sub">${item.card || "-"}</div></td>
+            <td data-label="Tipo">${requestTypeLabel}</td>
+            <td data-label="Gruppo">${groupLabel}</td>
+            <td data-label="Premio">${item.premioNome || "-"}</td>
+            <td data-label="Punti spesi">${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+            <td data-label="Data richiesta">${formatDate(item.createdAt)}</td>
+            <td data-label="Voucher"><span class="badge badge-gray">${item.voucherCode || "-"}</span></td>
+            <td data-label="Stato">${statusBadge(item.status)}</td>
+            <td data-label="Azioni">${buildRequestActions(item)}</td>
           </tr>`;
       }).join("");
 
@@ -1714,19 +1746,63 @@
       voucherCodeInput.value = "";
     }
 
+
+    function populateOperatorFilter(){
+      const current = chartOperatorFilter.value || "all";
+      const names = [...new Set(allMovements.map(row => String(row.operatorName || "").trim()).filter(Boolean).filter(v => v !== "-"))].sort((a,b) => a.localeCompare(b, "it"));
+      chartOperatorFilter.innerHTML = `<option value="all">Tutti gli operatori</option>` + names.map(name => `<option value="${name.replace(/"/g,'&quot;')}">${name}</option>`).join('');
+      chartOperatorFilter.value = names.includes(current) ? current : 'all';
+    }
+
+    function getChartDateKey(dateValue, mode){
+      const d = new Date(dateValue);
+      if (Number.isNaN(d.getTime())) return 'Senza data';
+      if (mode === 'month') return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      return d.toISOString().slice(0,10);
+    }
+
+    function inRecentWindow(dateValue, days){
+      if (!days || days === 'all') return true;
+      const d = new Date(dateValue);
+      if (Number.isNaN(d.getTime())) return false;
+      const now = new Date();
+      const limit = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      limit.setDate(limit.getDate() - Number(days) + 1);
+      return d >= limit;
+    }
+
+    function chartBaseOptions(){
+      return {
+        responsive:true,
+        maintainAspectRatio:false,
+        animation:false,
+        interaction:{mode:'index', intersect:false},
+        plugins:{legend:{display:true, labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}},
+        scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}}}
+      };
+    }
+
     function renderReport(){
+      const operatorFilterValue = chartOperatorFilter.value;
+      const requestStatusValue = reportRequestStatus.value;
+      const chartDays = reportPeriod.value;
+
       const filteredMovements = allMovements.filter(row => {
         if (!inDateRange(row.date)) return false;
+        if (!inRecentWindow(row.date, chartDays)) return false;
+        if (operatorFilterValue !== "all" && (row.operatorName || "-") !== operatorFilterValue) return false;
         const q = normalizeText(searchText.value);
         if (!q) return true;
-        return `${row.clientName} ${row.card}`.toLowerCase().includes(q);
+        return `${row.clientName} ${row.card} ${row.operatorName || ""}`.toLowerCase().includes(q);
       });
 
       const filteredRequests = allRequests.filter(row => {
         if (!inDateRange(row.createdAt)) return false;
+        if (!inRecentWindow(row.createdAt, chartDays)) return false;
+        if (requestStatusValue !== "all" && row.status !== requestStatusValue) return false;
         const q = normalizeText(searchText.value);
         if (!q) return true;
-        return `${row.clienteNome} ${row.card}`.toLowerCase().includes(q);
+        return `${row.clienteNome} ${row.card} ${row.groupName || ""}`.toLowerCase().includes(q);
       });
 
       const filteredUsers = allClients.filter(user => {
@@ -1789,13 +1865,13 @@
 
       movementsBody.innerHTML = rows.map(row => `
         <tr>
-          <td>${row.clientName}</td>
-          <td>${row.card}</td>
-          <td><span class="badge badge-green">${row.points}</span></td>
-          <td>${formatEuro(row.amount)}</td>
-          <td>${row.operatorName || "-"}</td>
-          <td><span class="badge badge-gray">${row.type}</span></td>
-          <td>${formatDate(row.date)}</td>
+          <td data-label="Cliente">${row.clientName}</td>
+          <td data-label="Card">${row.card}</td>
+          <td data-label="Punti"><span class="badge badge-green">${row.points}</span></td>
+          <td data-label="Importo">${formatEuro(row.amount)}</td>
+          <td data-label="Operatore">${row.operatorName || "-"}</td>
+          <td data-label="Tipo"><span class="badge badge-gray">${row.type}</span></td>
+          <td data-label="Data">${formatDate(row.date)}</td>
         </tr>
       `).join("");
     }
@@ -1814,14 +1890,14 @@
 
         return `
         <tr>
-          <td>${row.clienteNome || "Cliente"}</td>
-          <td>${requestTypeLabel}</td>
-          <td>${groupLabel}</td>
-          <td>${row.premioNome || "-"}</td>
-          <td>${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
-          <td>${statusBadge(row.status)}</td>
-          <td>${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
-          <td>${formatDate(row.createdAt)}</td>
+          <td data-label="Cliente">${row.clienteNome || "Cliente"}</td>
+          <td data-label="Tipo">${requestTypeLabel}</td>
+          <td data-label="Gruppo">${groupLabel}</td>
+          <td data-label="Premio">${row.premioNome || "-"}</td>
+          <td data-label="Punti spesi">${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+          <td data-label="Stato">${statusBadge(row.status)}</td>
+          <td data-label="Operatore">${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
+          <td data-label="Data richiesta">${formatDate(row.createdAt)}</td>
         </tr>`;
       }).join("");
     }
@@ -1835,70 +1911,52 @@
       const dayRevenue = {};
       const operatorPoints = {};
       const rewardStatus = { voucher_emesso:0, consegnata:0, rifiutata:0 };
+      const groupMode = chartGroupBy.value || 'day';
 
       filteredMovements.forEach(row => {
-        const d = row.date ? row.date.slice(0,10) : "senza data";
-        dayPoints[d] = (dayPoints[d] || 0) + Number(row.points || 0);
-        dayRevenue[d] = (dayRevenue[d] || 0) + Number(row.amount || 0);
-        const op = row.operatorName || "Senza operatore";
+        const key = getChartDateKey(row.date, groupMode);
+        dayPoints[key] = (dayPoints[key] || 0) + Number(row.points || 0);
+        dayRevenue[key] = (dayRevenue[key] || 0) + Number(row.amount || 0);
+        const op = row.operatorName || 'Senza operatore';
         operatorPoints[op] = (operatorPoints[op] || 0) + Number(row.points || 0);
       });
 
       filteredRequests.forEach(row => {
-        rewardStatus[row.status || "voucher_emesso"] = (rewardStatus[row.status || "voucher_emesso"] || 0) + 1;
+        rewardStatus[row.status || 'voucher_emesso'] = (rewardStatus[row.status || 'voucher_emesso'] || 0) + 1;
       });
 
       const pointLabels = Object.keys(dayPoints).sort();
       const revenueLabels = Object.keys(dayRevenue).sort();
-      const operatorLabels = Object.keys(operatorPoints);
-      const rewardLabels = ["In attesa", "Approvate", "Consegnate", "Rifiutate"];
+      const operatorLabels = Object.keys(operatorPoints).sort((a,b) => (operatorPoints[b]||0) - (operatorPoints[a]||0));
+      const rewardLabels = ['Voucher emessi', 'Consegnate', 'Rifiutate'];
 
       destroyChart(pointsByDayChart);
       destroyChart(revenueByDayChart);
       destroyChart(operatorPointsChart);
       destroyChart(rewardStatusChart);
 
-      pointsByDayChart = new Chart(document.getElementById("pointsByDayChart"), {
-        type: "line",
-        data: {
-          labels: pointLabels,
-          datasets: [{ label: "Punti", data: pointLabels.map(k => dayPoints[k]), tension: 0.35 }]
-        },
-        options: { responsive:true, maintainAspectRatio:false }
+      pointsByDayChart = new Chart(document.getElementById('pointsByDayChart'), {
+        type: 'line',
+        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointLabels.map(k => dayPoints[k]), tension: 0.32, fill: false, borderWidth: 3, pointRadius: 3 }] },
+        options: chartBaseOptions()
       });
 
-      revenueByDayChart = new Chart(document.getElementById("revenueByDayChart"), {
-        type: "bar",
-        data: {
-          labels: revenueLabels,
-          datasets: [{ label: "Parafarmaco", data: revenueLabels.map(k => dayRevenue[k]) }]
-        },
-        options: { responsive:true, maintainAspectRatio:false }
+      revenueByDayChart = new Chart(document.getElementById('revenueByDayChart'), {
+        type: 'bar',
+        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueLabels.map(k => dayRevenue[k]), borderRadius: 10, maxBarThickness: 42 }] },
+        options: { ...chartBaseOptions(), plugins:{legend:{display:true, labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}}, scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}, ticks:{callback:(v)=> Number(v).toLocaleString('it-IT')}}} }
       });
 
-      operatorPointsChart = new Chart(document.getElementById("operatorPointsChart"), {
-        type: "bar",
-        data: {
-          labels: operatorLabels,
-          datasets: [{ label: "Punti assegnati", data: operatorLabels.map(k => operatorPoints[k]) }]
-        },
-        options: { responsive:true, maintainAspectRatio:false }
+      operatorPointsChart = new Chart(document.getElementById('operatorPointsChart'), {
+        type: 'bar',
+        data: { labels: operatorLabels, datasets: [{ label: 'Punti assegnati', data: operatorLabels.map(k => operatorPoints[k]), borderRadius: 10, maxBarThickness: 42 }] },
+        options: { ...chartBaseOptions(), indexAxis: window.innerWidth < 700 ? 'y' : 'x', scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid:{color:'rgba(22,53,46,.08)'}}} }
       });
 
-      rewardStatusChart = new Chart(document.getElementById("rewardStatusChart"), {
-        type: "doughnut",
-        data: {
-          labels: rewardLabels,
-          datasets: [{
-            data: [
-              rewardStatus.voucher_emesso || 0,
-              0,
-              rewardStatus.consegnata || 0,
-              rewardStatus.rifiutata || 0
-            ]
-          }]
-        },
-        options: { responsive:true, maintainAspectRatio:false }
+      rewardStatusChart = new Chart(document.getElementById('rewardStatusChart'), {
+        type: 'doughnut',
+        data: { labels: rewardLabels, datasets: [{ data: [rewardStatus.voucher_emesso || 0, rewardStatus.consegnata || 0, rewardStatus.rifiutata || 0], borderWidth: 0, hoverOffset: 6 }] },
+        options: { responsive:true, maintainAspectRatio:false, animation:false, cutout:'66%', plugins:{legend:{position:'bottom', labels:{boxWidth:12, usePointStyle:true, pointStyle:'circle', font:{weight:'700'}}}} }
       });
     }
 
@@ -1949,6 +2007,7 @@
         await loadRequests();
         await loadAccumuloStats();
         renderRequestsTable();
+        populateOperatorFilter();
         renderReport();
       } catch (error) {
         console.error("Errore refresh operatori:", error);
@@ -2021,6 +2080,11 @@
 
     applyFiltersBtn.addEventListener("click", renderReport);
     searchText.addEventListener("input", renderReport);
+    reportPeriod.addEventListener("change", renderReport);
+    chartGroupBy.addEventListener("change", renderReport);
+    chartOperatorFilter.addEventListener("change", renderReport);
+    reportRequestStatus.addEventListener("change", renderReport);
+    window.addEventListener("resize", renderReport);
 
     try {
       await refreshAllData();
