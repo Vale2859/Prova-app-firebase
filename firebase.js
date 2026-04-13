@@ -6,8 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile,
-  signInAnonymously
+  updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore,
@@ -15,8 +14,7 @@ import {
   setDoc,
   getDoc,
   updateDoc,
-  collection,
-  getDocs
+  collection
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -49,11 +47,9 @@ export {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  signInAnonymously,
   doc,
   setDoc,
   getDoc,
   updateDoc,
-  collection,
-  getDocs
+  collection
 };

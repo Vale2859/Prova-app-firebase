@@ -338,88 +338,6 @@
       display:none;
     }
 
-
-    .group-inline-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(8,20,16,0.66);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:9999;
-    }
-
-    .modal-overlay.open{
-      display:flex;
-    }
-
-    .modal-card{
-      width:min(100%, 430px);
-      background:#fff;
-      border-radius:28px;
-      padding:22px 20px;
-      box-shadow:0 24px 48px rgba(0,0,0,0.18);
-      border:1px solid var(--border);
-    }
-
-    .modal-title{
-      margin:0 0 10px;
-      font-size:1.5rem;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-0.04em;
-    }
-
-    .modal-text{
-      margin:0;
-      color:var(--muted);
-      font-size:1rem;
-      line-height:1.55;
-      font-weight:600;
-    }
-
-    .modal-actions{
-      margin-top:16px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .modal-btn{
-      flex:1;
-      min-height:48px;
-      border:none;
-      border-radius:14px;
-      font-size:.98rem;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    .modal-btn.secondary{
-      background:#eef3f1;
-      color:var(--text);
-    }
-
-    .modal-btn.primary{
-      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
-      color:#fff;
-    }
-
-    .modal-btn.danger{
-      background:linear-gradient(135deg,#c94646 0%, #de6b6b 100%);
-      color:#fff;
-    }
-
     @media (max-width: 640px){
       .title-block h1{
         font-size:34px;
@@ -480,11 +398,6 @@
 
         <h2 class="hero-name" id="heroUserName">Cliente</h2>
         <p class="hero-card-number" id="heroCardNumber">Tessera: non assegnata</p>
-        <p class="hero-card-number hidden" id="heroGroupInfo">Gruppo attivo • 0 tessere associate</p>
-        <div id="groupActions" class="group-inline-actions hidden">
-          <button class="btn btn-primary" id="openGroupBtn" type="button">Vedi gruppo</button>
-          <button class="btn" id="leaveGroupBtn" type="button" style="background:#eef3f1;color:#17352f;">Esci dal gruppo</button>
-        </div>
 
         <div class="points-box">
           <div class="points-label">Punti attuali</div>
@@ -510,59 +423,10 @@
       </section>
 
       <section class="panel">
-        <h3 class="panel-title">Raccolta condivisa</h3>
-        <div id="groupNotActive">
-          <div class="list">
-            <input id="inviteClientCode" type="text" placeholder="Inserisci ID cliente da invitare" style="width:100%;min-height:50px;padding:0 14px;border:1px solid var(--border);border-radius:16px;font-size:15px;font-weight:700;">
-            <button class="btn btn-primary" id="createGroupBtn" type="button">Crea gruppo e invita</button>
-          </div>
-        </div>
-        <div id="groupActive" class="hidden">
-          <div class="list">
-            <div class="mini-card">
-              <div class="mini-card-label">Gruppo attivo</div>
-              <div class="mini-card-value" id="groupInfoText">—</div>
-            </div>
-            <input id="inviteMoreClientCode" type="text" placeholder="Invita un altro ID cliente" style="width:100%;min-height:50px;padding:0 14px;border:1px solid var(--border);border-radius:16px;font-size:15px;font-weight:700;">
-            <button class="btn btn-primary" id="inviteMoreBtn" type="button">Invita un altro utente</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel" id="inviteRequestsPanel">
-        <h3 class="panel-title">Inviti raccolta condivisa</h3>
-        <div class="list" id="inviteRequestsList"></div>
-      </section>
-
-      <section class="panel">
         <h3 class="panel-title">Storico punti</h3>
         <div class="list" id="movementsList"></div>
       </section>
     </section>
-  </div>
-
-  <div class="modal-overlay" id="groupModal">
-    <div class="modal-card">
-      <h3 class="modal-title">Membri del gruppo</h3>
-      <p class="modal-text" id="groupModalText">Caricamento...</p>
-      <div class="modal-actions">
-        <button class="modal-btn secondary" id="closeGroupModalBtn" type="button">Chiudi</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="leaveGroupModal">
-    <div class="modal-card">
-      <h3 class="modal-title">Uscire dal gruppo?</h3>
-      <p class="modal-text">
-        Uscendo dal gruppo, i punti già presenti nel gruppo resteranno nel gruppo.
-        Da questo momento i tuoi nuovi punti torneranno personali.
-      </p>
-      <div class="modal-actions">
-        <button class="modal-btn secondary" id="cancelLeaveGroupBtn" type="button">Annulla</button>
-        <button class="modal-btn danger" id="confirmLeaveGroupBtn" type="button">Esci</button>
-      </div>
-    </div>
   </div>
 
   <script type="module">
@@ -571,45 +435,26 @@
       firestore,
       onAuthStateChanged,
       doc,
-      getDoc,
-      updateDoc,
-      collection,
-      getDocs,
-      setDoc
+      getDoc
     } from "./firebase.js";
 
     import {
-      addDoc,
+      collection,
+      getDocs,
       query,
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const guestBox = document.getElementById("guestBox");
     const fidelityContent = document.getElementById("fidelityContent");
+
     const heroUserName = document.getElementById("heroUserName");
     const heroCardNumber = document.getElementById("heroCardNumber");
-    const heroGroupInfo = document.getElementById("heroGroupInfo");
     const heroPoints = document.getElementById("heroPoints");
+
     const summaryCard = document.getElementById("summaryCard");
     const summaryMovements = document.getElementById("summaryMovements");
     const movementsList = document.getElementById("movementsList");
-    const createGroupBtn = document.getElementById("createGroupBtn");
-    const inviteClientCode = document.getElementById("inviteClientCode");
-    const inviteMoreClientCode = document.getElementById("inviteMoreClientCode");
-    const inviteMoreBtn = document.getElementById("inviteMoreBtn");
-    const groupNotActive = document.getElementById("groupNotActive");
-    const groupActive = document.getElementById("groupActive");
-    const groupInfoText = document.getElementById("groupInfoText");
-    const inviteRequestsList = document.getElementById("inviteRequestsList");
-    const groupActions = document.getElementById("groupActions");
-    const openGroupBtn = document.getElementById("openGroupBtn");
-    const leaveGroupBtn = document.getElementById("leaveGroupBtn");
-    const groupModal = document.getElementById("groupModal");
-    const groupModalText = document.getElementById("groupModalText");
-    const closeGroupModalBtn = document.getElementById("closeGroupModalBtn");
-    const leaveGroupModal = document.getElementById("leaveGroupModal");
-    const cancelLeaveGroupBtn = document.getElementById("cancelLeaveGroupBtn");
-    const confirmLeaveGroupBtn = document.getElementById("confirmLeaveGroupBtn");
 
     async function loadUserProfile(uid) {
       const userRef = doc(firestore, "users", uid);
@@ -617,257 +462,66 @@
       return snap.exists() ? snap.data() : null;
     }
 
-    async function loadUserGroup(groupId) {
-      if (!groupId) return null;
-      const groupRef = doc(firestore, "groups", groupId);
-      const snap = await getDoc(groupRef);
-      return snap.exists() ? { id: snap.id, ...snap.data() } : null;
-    }
-
     async function loadMovements(uid) {
       const colRef = collection(firestore, "users", uid, "fidelity_movements");
-      let rows = [];
-      try {
-        const q = query(colRef, orderBy("timestampIso", "desc"));
-        const snap = await getDocs(q);
-        snap.forEach((docSnap) => rows.push({ id: docSnap.id, ...docSnap.data() }));
-      } catch (e) {
-        const snap = await getDocs(colRef);
-        snap.forEach((docSnap) => rows.push({ id: docSnap.id, ...docSnap.data() }));
-        rows.sort((a,b)=> String(b.timestampIso||b.data||"").localeCompare(String(a.timestampIso||a.data||"")));
-      }
+      const q = query(colRef, orderBy("data", "desc"));
+      const snap = await getDocs(q);
+
+      const rows = [];
+      snap.forEach((docSnap) => {
+        rows.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
       return rows;
     }
 
-    async function findUserByClientCode(clientCode) {
-      const normalized = String(clientCode || "").trim().toUpperCase();
-      if (!normalized) return null;
-      const usersSnap = await getDocs(collection(firestore, "users"));
-      let found = null;
-      usersSnap.forEach((docSnap) => {
-        const data = docSnap.data();
-        const code = String(data.clientCode || data.fidelityCard || "").trim().toUpperCase();
-        if (!found && code === normalized) found = { uid: docSnap.id, ...data };
-      });
-      return found;
-    }
-
-    function generateGroupId() { return `GROUP_${Date.now()}`; }
-
-    async function ensureUserGroup(currentUserDoc, currentUserData) {
-      if (currentUserData.groupId) {
-        const existingGroup = await loadUserGroup(currentUserData.groupId);
-        if (existingGroup) return existingGroup;
-      }
-      const groupId = generateGroupId();
-      const fullName = `${currentUserData.nome || ""} ${currentUserData.cognome || ""}`.trim() || "Cliente";
-      const clientCode = currentUserData.clientCode || currentUserData.fidelityCard || "-";
-      const userPoints = Number(currentUserData.punti || 0);
-      const groupData = {
-        name: `Gruppo ${currentUserData.nome || "Cliente"}`,
-        ownerUid: currentUserDoc.uid,
-        totalPoints: userPoints,
-        memberCount: 1,
-        members: [{ uid: currentUserDoc.uid, nome: fullName, clientCode }],
-        createdAt: new Date().toISOString()
-      };
-      await setDoc(doc(firestore, "groups", groupId), groupData);
-      await updateDoc(doc(firestore, "users", currentUserDoc.uid), { groupId, groupRole: "owner", punti: 0 });
-      return { id: groupId, ...groupData };
-    }
-
-    async function createGroupInvite(currentUserDoc, currentUserData, invitedUser) {
-      const group = await ensureUserGroup(currentUserDoc, currentUserData);
-      if (!invitedUser || !invitedUser.uid) throw new Error("Utente invitato non valido.");
-      if (invitedUser.uid === currentUserDoc.uid) throw new Error("Non puoi invitare te stesso.");
-      if (invitedUser.groupId) throw new Error("Questo utente è già in un gruppo.");
-      const invitesSnap = await getDocs(collection(firestore, "group_invites"));
-      let duplicate = false;
-      invitesSnap.forEach(docSnap => {
-        const d = docSnap.data();
-        if (d.toUid === invitedUser.uid && d.groupId === group.id && d.status === "pending") duplicate = true;
-      });
-      if (duplicate) throw new Error("Esiste già un invito in attesa per questo utente.");
-      const fromName = `${currentUserData.nome || ""} ${currentUserData.cognome || ""}`.trim() || "Cliente";
-      const toName = `${invitedUser.nome || ""} ${invitedUser.cognome || ""}`.trim() || "Cliente";
-      await addDoc(collection(firestore, "group_invites"), {
-        fromUid: currentUserDoc.uid,
-        fromName,
-        fromClientCode: currentUserData.clientCode || currentUserData.fidelityCard || "-",
-        toUid: invitedUser.uid,
-        toName,
-        toClientCode: invitedUser.clientCode || invitedUser.fidelityCard || "-",
-        groupId: group.id,
-        groupName: group.name,
-        status: "pending",
-        createdAt: new Date().toISOString()
-      });
-      return group;
-    }
-
-    async function loadReceivedInvites(uid) {
-      const invitesSnap = await getDocs(collection(firestore, "group_invites"));
-      const invites = [];
-      invitesSnap.forEach((docSnap) => {
-        const data = docSnap.data();
-        if (data.toUid === uid && data.status === "pending") invites.push({ id: docSnap.id, ...data });
-      });
-      return invites.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    }
-
-    async function acceptGroupInvite(inviteId, currentUserDoc, currentUserData) {
-      const inviteRef = doc(firestore, "group_invites", inviteId);
-      const inviteSnap = await getDoc(inviteRef);
-      if (!inviteSnap.exists()) throw new Error("Invito non trovato.");
-      const invite = inviteSnap.data();
-      if (invite.toUid !== currentUserDoc.uid) throw new Error("Invito non valido.");
-      if (invite.status !== "pending") throw new Error("Invito non più disponibile.");
-      const groupRef = doc(firestore, "groups", invite.groupId);
-      const groupSnap = await getDoc(groupRef);
-      if (!groupSnap.exists()) throw new Error("Gruppo non trovato.");
-      const groupData = groupSnap.data();
-      const memberName = `${currentUserData.nome || ""} ${currentUserData.cognome || ""}`.trim() || "Cliente";
-      const memberCode = currentUserData.clientCode || currentUserData.fidelityCard || "-";
-      const alreadyMember = Array.isArray(groupData.members) && groupData.members.some(m => m.uid === currentUserDoc.uid);
-      if (alreadyMember) throw new Error("Sei già nel gruppo.");
-      const currentPersonalPoints = Number(currentUserData.punti || 0);
-      const nextMembers = [...(groupData.members || []), { uid: currentUserDoc.uid, nome: memberName, clientCode: memberCode }];
-      await updateDoc(groupRef, {
-        members: nextMembers,
-        memberCount: nextMembers.length,
-        totalPoints: Number(groupData.totalPoints || 0) + currentPersonalPoints
-      });
-      await updateDoc(doc(firestore, "users", currentUserDoc.uid), { groupId: invite.groupId, groupRole: "member", punti: 0 });
-      await updateDoc(inviteRef, { status: "accepted", acceptedAt: new Date().toISOString() });
-    }
-
-    async function rejectGroupInvite(inviteId) {
-      await updateDoc(doc(firestore, "group_invites", inviteId), { status: "rejected", rejectedAt: new Date().toISOString() });
-    }
-
-    function refreshGroupPanel(profileData, groupData) {
-      if (profileData?.groupId && groupData) {
-        groupNotActive.classList.add("hidden");
-        groupActive.classList.remove("hidden");
-        groupInfoText.textContent = `${groupData.name || "Gruppo attivo"} • ${Number(groupData.memberCount || groupData.members?.length || 0)} tessere associate`;
-      } else {
-        groupNotActive.classList.remove("hidden");
-        groupActive.classList.add("hidden");
-      }
-    }
-
-    function renderProfile(user, profile, groupData = null) {
+    function renderProfile(user, profile) {
       const fullName = [profile?.nome, profile?.cognome].filter(Boolean).join(" ").trim() || user.displayName || "Cliente";
-      const cardNumber = profile?.clientCode?.trim() || profile?.fidelityCard?.trim() || "non assegnata";
-      const isInGroup = !!groupData;
-      const points = isInGroup ? Number(groupData.totalPoints || 0) : Number(profile?.punti || 0);
+      const cardNumber = profile?.fidelityCard?.trim() || "non assegnata";
+      const points = typeof profile?.punti === "number" ? profile.punti : 0;
+
       heroUserName.textContent = fullName;
       heroCardNumber.textContent = `Tessera: ${cardNumber}`;
       heroPoints.textContent = points;
+
       summaryCard.textContent = cardNumber;
-      if (isInGroup) {
-        const memberCount = Number(groupData.memberCount || (Array.isArray(groupData.members) ? groupData.members.length : 0) || 0);
-        heroGroupInfo.textContent = `Gruppo attivo • ${memberCount} tessere associate`;
-        heroGroupInfo.classList.remove("hidden");
-        groupActions.classList.remove("hidden");
-      } else {
-        heroGroupInfo.textContent = "";
-        heroGroupInfo.classList.add("hidden");
-        groupActions.classList.add("hidden");
-      }
-    }
-
-    function openGroupDetails(groupData) {
-      if (!groupData) return;
-      const members = Array.isArray(groupData.members) ? groupData.members : [];
-      const membersHtml = members.map(member => `• ${member.nome || "Cliente"} — ${member.clientCode || "-"}`).join("<br>");
-      groupModalText.innerHTML = `<strong>${groupData.name || "Gruppo punti"}</strong><br><br>${membersHtml || "Nessun membro"}<br><br><strong>Totale punti gruppo:</strong> ${Number(groupData.totalPoints || 0)}`;
-      groupModal.classList.add("open");
-      document.body.style.overflow = "hidden";
-    }
-
-    async function leaveCurrentGroup(user, profile, groupData) {
-      if (!groupData || !profile?.groupId) return;
-      const groupRef = doc(firestore, "groups", profile.groupId);
-      const userRef = doc(firestore, "users", user.uid);
-      const currentMembers = Array.isArray(groupData.members) ? groupData.members : [];
-      const nextMembers = currentMembers.filter(member => member.uid !== user.uid);
-      if (nextMembers.length === 0) {
-        await updateDoc(userRef, { groupId: null, groupRole: null });
-        return;
-      }
-      const isOwner = groupData.ownerUid === user.uid;
-      const nextOwnerUid = isOwner ? nextMembers[0]?.uid || null : groupData.ownerUid;
-      await updateDoc(groupRef, {
-        members: nextMembers,
-        memberCount: nextMembers.length,
-        ownerUid: nextOwnerUid
-      });
-      await updateDoc(userRef, { groupId: null, groupRole: null });
     }
 
     function renderMovements(movements) {
       summaryMovements.textContent = movements.length;
+
       if (!movements.length) {
-        movementsList.innerHTML = `<div class="empty">Nessun movimento punti registrato al momento.</div>`;
+        movementsList.innerHTML = `
+          <div class="empty">
+            Nessun movimento punti registrato al momento.
+          </div>
+        `;
         return;
       }
+
       movementsList.innerHTML = movements.map((m) => {
         const punti = Number(m.punti || 0);
         const isPositive = punti >= 0;
+
         return `
           <article class="movement">
             <div class="movement-left">
               <h4 class="movement-title">${m.descrizione || "Movimento punti"}</h4>
-              <p class="movement-meta">${m.tipo || "movimento"}${m.data ? ` • ${m.data}` : ""}</p>
+              <p class="movement-meta">
+                ${m.tipo || "movimento"}${m.data ? ` • ${m.data}` : ""}
+              </p>
             </div>
-            <div class="movement-points ${isPositive ? "plus" : "minus"}">${isPositive ? "+" : ""}${punti}</div>
-          </article>`;
+
+            <div class="movement-points ${isPositive ? "plus" : "minus"}">
+              ${isPositive ? "+" : ""}${punti}
+            </div>
+          </article>
+        `;
       }).join("");
     }
-
-    function renderReceivedInvites(invites) {
-      if (!invites.length) {
-        inviteRequestsList.innerHTML = `<div class="empty">Nessun invito ricevuto.</div>`;
-        return;
-      }
-      inviteRequestsList.innerHTML = invites.map(invite => `
-        <article class="movement">
-          <div class="movement-left">
-            <h4 class="movement-title">${invite.fromName} ti ha invitato</h4>
-            <p class="movement-meta">${invite.groupName} • ${invite.fromClientCode}</p>
-          </div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <button class="btn btn-primary accept-invite-btn" data-id="${invite.id}" type="button">Accetta</button>
-            <button class="btn reject-invite-btn" data-id="${invite.id}" type="button" style="background:#eef3f1;color:#17352f;">Rifiuta</button>
-          </div>
-        </article>`).join("");
-    }
-
-
-    closeGroupModalBtn?.addEventListener("click", () => {
-      groupModal.classList.remove("open");
-      document.body.style.overflow = "";
-    });
-
-    cancelLeaveGroupBtn?.addEventListener("click", () => {
-      leaveGroupModal.classList.remove("open");
-      document.body.style.overflow = "";
-    });
-
-    groupModal?.addEventListener("click", function(e){
-      if (e.target === this) {
-        groupModal.classList.remove("open");
-        document.body.style.overflow = "";
-      }
-    });
-
-    leaveGroupModal?.addEventListener("click", function(e){
-      if (e.target === this) {
-        leaveGroupModal.classList.remove("open");
-        document.body.style.overflow = "";
-      }
-    });
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -875,86 +529,15 @@
         fidelityContent.classList.add("hidden");
         return;
       }
+
       guestBox.classList.add("hidden");
       fidelityContent.classList.remove("hidden");
 
-      let profile = await loadUserProfile(user.uid);
-      let movements = await loadMovements(user.uid);
-      let groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
+      const profile = await loadUserProfile(user.uid);
+      const movements = await loadMovements(user.uid);
 
-      const refreshView = async () => {
-        profile = await loadUserProfile(user.uid);
-        movements = await loadMovements(user.uid);
-        groupData = profile?.groupId ? await loadUserGroup(profile.groupId) : null;
-        renderProfile(user, profile, groupData);
-        renderMovements(movements);
-        refreshGroupPanel(profile, groupData);
-        renderReceivedInvites(await loadReceivedInvites(user.uid));
-      };
-
-      await refreshView();
-
-      createGroupBtn.onclick = async () => {
-        try {
-          const code = inviteClientCode.value.trim();
-          if (!code) return alert("Inserisci un ID cliente.");
-          const invitedUser = await findUserByClientCode(code);
-          if (!invitedUser) return alert("Nessun utente trovato con questo ID cliente.");
-          await createGroupInvite(user, profile, invitedUser);
-          alert("Invito inviato correttamente.");
-          inviteClientCode.value = "";
-          await refreshView();
-        } catch (error) {
-          alert(error.message || "Errore durante l'invio dell'invito.");
-        }
-      };
-
-      inviteMoreBtn.onclick = async () => {
-        try {
-          const code = inviteMoreClientCode.value.trim();
-          if (!code) return alert("Inserisci un ID cliente.");
-          const invitedUser = await findUserByClientCode(code);
-          if (!invitedUser) return alert("Nessun utente trovato con questo ID cliente.");
-          await createGroupInvite(user, profile, invitedUser);
-          alert("Invito inviato correttamente.");
-          inviteMoreClientCode.value = "";
-        } catch (error) {
-          alert(error.message || "Errore durante l'invio dell'invito.");
-        }
-      };
-
-      inviteRequestsList.onclick = async (e) => {
-        const acceptBtn = e.target.closest('.accept-invite-btn');
-        const rejectBtn = e.target.closest('.reject-invite-btn');
-        try {
-          if (acceptBtn) await acceptGroupInvite(acceptBtn.dataset.id, user, profile);
-          else if (rejectBtn) await rejectGroupInvite(rejectBtn.dataset.id);
-          else return;
-          await refreshView();
-        } catch (error) {
-          alert(error.message || "Operazione non riuscita.");
-        }
-      };
-
-      openGroupBtn.onclick = () => {
-        openGroupDetails(groupData);
-      };
-
-      leaveGroupBtn.onclick = () => {
-        leaveGroupModal.classList.add("open");
-        document.body.style.overflow = "hidden";
-      };
-
-      confirmLeaveGroupBtn.onclick = async () => {
-        try {
-          await leaveCurrentGroup(user, profile, groupData);
-          leaveGroupModal.classList.remove("open");
-          document.body.style.overflow = "";
-          await refreshView();
-        } catch (error) {
-          alert(error.message || "Errore durante l'uscita dal gruppo.");
-        }
-      };
+      renderProfile(user, profile);
+      renderMovements(movements);
     });
   </script>
 </body>
