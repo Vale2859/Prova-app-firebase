@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Admin | Farmacia Montesano</title>
+  <script>
+    (function(){
+      var params = new URLSearchParams(window.location.search);
+      var isEmbed = params.get('embed') === '1';
+      if (!isEmbed) {
+        var section = params.get('section') || 'dashboard';
+        window.location.replace('dashboard-admin.html?section=' + encodeURIComponent(section));
+      } else {
+        document.documentElement.classList.add('admin-embedded');
+      }
+    })();
+  </script>
   <style>
     :root{
       --bg:#f3f4f1;
@@ -27,6 +39,20 @@
       font-family:Inter, Arial, sans-serif;
       background:var(--bg);
       color:var(--text);
+    }
+
+    html.admin-embedded body{
+      background:transparent;
+    }
+
+    html.admin-embedded .app{
+      min-height:auto;
+    }
+
+    html.admin-embedded .sidebar{
+      position:sticky;
+      top:0;
+      min-height:100vh;
     }
 
     button,input,select,textarea{font-family:inherit}
@@ -755,6 +781,8 @@
     document.querySelectorAll(".nav button").forEach(btn => {
       btn.addEventListener("click", () => setActiveSection(btn.dataset.section));
     });
+
+    const initialSection = new URLSearchParams(window.location.search).get("section") || "dashboard";
 
     function renderDashboard() {
       const clienti = getClienti();

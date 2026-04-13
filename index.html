@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Farmacia Montesano</title>
   <meta name="description" content="Farmacia Montesano: servizi, prevenzione, promozioni e assistenza." />
+  <script>
+    (function () {
+      var isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) {
+        document.documentElement.classList.add('mobile-preload');
+      }
+    })();
+  </script>
+  <style>
+    html.mobile-preload body{opacity:0;}
+    html.mobile-preload body.mobile-ready{opacity:1;transition:opacity .18s ease;}
+  </style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +32,7 @@
 <meta name="theme-color" content="#0f8f55">
 </head>
 
-<body class="season-primavera">
+<body class="season-primavera mobile-ready">
   <div class="home-page-bg"></div>
 
   <header class="home-site-header">

@@ -18,57 +18,70 @@
       --muted:#6c7c76;
       --green:#0d7a5f;
       --green2:#1b8b6d;
+      --green-soft:#e8f6f0;
       --blue:#2f6f94;
       --gold:#b87900;
       --red:#c94646;
-      --shadow:0 16px 34px rgba(16,50,42,0.08);
-      --radius:22px;
+      --shadow:0 18px 40px rgba(16,50,42,0.08);
+      --radius:24px;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:"Inter",sans-serif;
-      background:linear-gradient(180deg,#f7faf8 0%, #eff4f1 100%);
+      background:
+        radial-gradient(circle at top left, rgba(13,122,95,0.08), transparent 30%),
+        linear-gradient(180deg,#f8fbf9 0%, #eef5f1 100%);
       color:var(--text);
     }
     .page{
       max-width:1440px;
-      margin:24px auto;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:0 20px 40px rgba(0,0,0,0.07);
+      margin:18px auto;
+      background:rgba(255,255,255,0.9);
+      border:1px solid rgba(211,226,218,0.8);
+      border-radius:32px;
+      box-shadow:0 24px 54px rgba(15,43,35,0.08);
       overflow:hidden;
+      backdrop-filter:blur(14px);
     }
     .topbar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:22px 28px;
+      gap:18px;
+      padding:24px 28px;
       border-bottom:1px solid var(--line);
-      background:#fff;
+      background:linear-gradient(180deg,rgba(255,255,255,0.95) 0%, rgba(248,252,250,0.92) 100%);
     }
     .brand img{height:54px;width:auto;display:block}
     .menu{
       display:flex;
-      gap:34px;
+      gap:10px;
       align-items:center;
-      font-size:18px;
-      font-weight:700;
+      padding:8px;
+      background:rgba(238,248,244,0.9);
+      border:1px solid #dcebe5;
+      border-radius:999px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);
     }
     .menu button{
-      background:none;
+      background:transparent;
       border:none;
-      color:#334944;
-      padding:0 0 10px;
-      border-bottom:4px solid transparent;
+      color:#49615b;
+      min-height:48px;
+      padding:0 18px;
+      border-radius:999px;
       font:inherit;
-      font-weight:700;
+      font-size:15px;
+      font-weight:800;
       cursor:pointer;
+      transition:all .18s ease;
+      white-space:nowrap;
     }
     .menu button.active{
-      color:var(--green);
-      border-bottom-color:var(--green);
+      color:#fff;
+      background:linear-gradient(135deg,var(--green) 0%, #4fa38c 100%);
+      box-shadow:0 12px 24px rgba(13,122,95,0.2);
     }
     .top-actions{
       display:flex;
@@ -79,21 +92,23 @@
       border:none;
       background:#fff;
       border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px 16px;
-      font-weight:700;
+      border-radius:16px;
+      padding:12px 16px;
+      font-weight:800;
       cursor:pointer;
+      box-shadow:0 10px 20px rgba(15,43,35,0.04);
     }
     .operator-pill{
-      min-height:44px;
+      min-height:46px;
       display:flex;
       align-items:center;
-      padding:0 14px;
+      padding:0 16px;
       border-radius:999px;
-      background:#eef8f4;
+      background:var(--green-soft);
       color:var(--green);
-      font-weight:800;
+      font-weight:900;
       border:1px solid #d7ebe2;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);
     }
     .content{padding:26px}
     .layout{
@@ -163,8 +178,62 @@
       gap:18px;
       margin-bottom:22px;
     }
+    .premium-intro{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      padding:22px 24px;
+      margin-bottom:20px;
+      background:linear-gradient(135deg, rgba(13,122,95,0.12) 0%, rgba(255,255,255,0.96) 58%, rgba(47,111,148,0.08) 100%);
+      border:1px solid #dceae4;
+      border-radius:26px;
+      box-shadow:var(--shadow);
+    }
+    .premium-intro h1{
+      margin:0 0 8px;
+      font-size:34px;
+      line-height:0.95;
+      letter-spacing:-0.05em;
+    }
+    .premium-intro p{
+      margin:0;
+      max-width:700px;
+      color:var(--muted);
+      font-weight:600;
+      line-height:1.45;
+    }
+    .premium-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+      padding:0 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #dfe9e4;
+      font-weight:800;
+      color:var(--green);
+      white-space:nowrap;
+      box-shadow:0 10px 18px rgba(15,43,35,0.05);
+    }
+    .stat-card{
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,#ffffff 0%, #f9fcfa 100%);
+    }
+    .stat-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -14px -24px auto;
+      width:96px;
+      height:96px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(13,122,95,0.12) 0%, rgba(13,122,95,0) 70%);
+      pointer-events:none;
+    }
     .stats.report-stats{grid-template-columns:repeat(6,1fr)}
-    .stat-card{padding:20px 22px}
     .stat-label{
       font-size:15px;
       color:#586b66;
@@ -177,7 +246,7 @@
       font-weight:900;
       letter-spacing:-0.05em;
     }
-    .main-card{padding:28px 30px;min-height:500px}
+    .main-card{padding:28px 30px;min-height:500px;background:rgba(255,255,255,0.94)}
     .view{display:none}
     .view.active{display:block}
     .accumulo-panel{
@@ -736,8 +805,35 @@
       .modal-head{padding:14px 16px;}
       .modal-body{padding:14px 16px 16px;}
       .modal-actions{flex-direction:column;}
+      .premium-intro{flex-direction:column; padding:18px; border-radius:22px;}
+      .premium-intro h1{font-size:28px;}
+      .premium-badge{width:100%; justify-content:center;}
+      .menu{width:100%; overflow:auto; padding:6px; gap:8px;}
+      .menu button{min-width:max-content; padding:0 14px; min-height:44px; font-size:14px;}
+      .stats,
+      .stats.report-stats,
+      .grid,
+      .chart-grid,
+      .toolbar,
+      .toolbar.report-toolbar{
+        grid-template-columns:1fr;
+      }
+      .page{margin:0; border-radius:0;}
+      .topbar{padding:18px 16px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);}
+      .content{padding:16px;}
+      .main-card,.sidebar-card,.panel,.chart-box,.stat-card,.accumulo-panel{border-radius:20px;}
+      .accumulo-panel{padding:18px;}
+      .field label{font-size:15px;}
+      .send-btn{min-height:58px; font-size:20px;}
+      .toolbar{gap:10px;}
+      .table-wrap{border-radius:16px; overflow-x:auto;}
+      table{min-width:760px;}
+      .modal-card{width:min(100%, 94vw); border-radius:20px;}
+      .modal-head{padding:14px 16px;}
+      .modal-body{padding:14px 16px 16px;}
+      .modal-actions{flex-direction:column;}
       .operator-pill{justify-content:center; width:100%;}
-      .top-actions{flex-direction:column; align-items:stretch;}
+      .top-actions{flex-direction:column; align-items:stretch; width:100%;}
       .top-actions button{width:100%;}
     }
 
@@ -771,6 +867,14 @@
         </aside>
 
         <main>
+          <div class="premium-intro">
+            <div>
+              <h1>Dashboard operatore</h1>
+              <p>Interfaccia premium per accumulo punti, gestione premi e controllo report. Pensata per essere più chiara, veloce e comoda anche da smartphone.</p>
+            </div>
+            <div class="premium-badge">✨ Esperienza mobile ottimizzata</div>
+          </div>
+
           <section class="view active" id="accumuloView">
             <div class="stats">
               <div class="stat-card">

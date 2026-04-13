@@ -150,6 +150,10 @@
 
     .admin-card{
       display: block;
+      width: 100%;
+      padding: 0;
+      text-align: left;
+      font: inherit;
       text-decoration: none;
       color: inherit;
       background: rgba(255,255,255,0.78);
@@ -328,34 +332,33 @@
       <div class="admin-status-card">
         <div class="admin-status-dot"></div>
         <div class="admin-status-text">
-          <strong>Dashboard Admin</strong>
-          <span>Gestisci offerte, servizi, beauty e turni in un unico posto.</span>
+          <strong>Dashboard Admin unificata</strong>
+          <span>Gestisci offerte, servizi, giornate beauty, fortuna e premi in un unico pannello.</span>
         </div>
       </div>
     </header>
 
     <section class="admin-hero">
-      <h1>Controllo contenuti</h1>
-      <p>Apri la sezione che vuoi aggiornare. Ogni area avrà la sua pagina dedicata di modifica, collegata a Firebase.</p>
+      <h1>Controllo completo</h1>
+      <p>Le card sotto usano le stesse immagini della home pubblica. Da qui apri la sezione desiderata e lavori direttamente nel pannello amministrativo unificato.</p>
     </section>
 
     <section class="admin-grid">
-
-      <a href="offerte-admin.html" class="admin-card">
+      <button class="admin-card" type="button" data-section="offerte">
         <div class="admin-card-image-wrap">
-          <img src="promo-card.jpg" alt="Offerte" class="admin-card-image" />
+          <img src="images/promo.jpg" alt="Offerte" class="admin-card-image" />
           <span class="admin-card-badge badge-offerte">PROMO</span>
         </div>
         <div class="admin-card-body">
           <h2>Offerte</h2>
-          <p>Gestisci promozioni, immagini, prezzi, visibilità e validità.</p>
+          <p>Gestisci promozioni, immagini, prezzi, validità e visibilità.</p>
           <span class="admin-card-action">Apri sezione</span>
         </div>
-      </a>
+      </button>
 
-      <a href="servizi-admin.html" class="admin-card">
+      <button class="admin-card" type="button" data-section="servizi">
         <div class="admin-card-image-wrap">
-          <img src="servizi-card.jpg" alt="Servizi" class="admin-card-image" />
+          <img src="images/servizi.jpg" alt="Servizi" class="admin-card-image" />
           <span class="admin-card-badge badge-servizi">SERVIZI</span>
         </div>
         <div class="admin-card-body">
@@ -363,11 +366,11 @@
           <p>Modifica nome, descrizione, immagine e visibilità dei servizi.</p>
           <span class="admin-card-action">Apri sezione</span>
         </div>
-      </a>
+      </button>
 
-      <a href="beauty-admin.html" class="admin-card">
+      <button class="admin-card" type="button" data-section="beauty">
         <div class="admin-card-image-wrap">
-          <img src="beauty-card.jpg" alt="Giornate Beauty" class="admin-card-image" />
+          <img src="images/beauty.jpg" alt="Giornate Beauty" class="admin-card-image" />
           <span class="admin-card-badge badge-beauty">BEAUTY</span>
         </div>
         <div class="admin-card-body">
@@ -375,28 +378,81 @@
           <p>Gestisci eventi, date, immagini, descrizioni e pubblicazione.</p>
           <span class="admin-card-action">Apri sezione</span>
         </div>
-      </a>
+      </button>
 
-      <a href="turni-admin.html" class="admin-card">
+      <button class="admin-card" type="button" data-section="fortuna">
         <div class="admin-card-image-wrap">
-          <img src="turni-card.jpg" alt="Farmacie di turno" class="admin-card-image" />
-          <span class="admin-card-badge badge-turni">TURNI</span>
+          <img src="images/fortuna.jpg" alt="Fortuna" class="admin-card-image" />
+          <span class="admin-card-badge badge-fortuna">FORTUNA</span>
         </div>
         <div class="admin-card-body">
-          <h2>Farmacie di turno</h2>
-          <p>Controlla calendario, cambi rapidi, scambi e inserimenti manuali.</p>
+          <h2>Fortuna</h2>
+          <p>Controlla premi fortuna, configurazioni e attivazioni rapide.</p>
           <span class="admin-card-action">Apri sezione</span>
         </div>
-      </a>
+      </button>
 
+      <button class="admin-card" type="button" data-section="premi">
+        <div class="admin-card-image-wrap">
+          <img src="images/premi.jpg" alt="Premi" class="admin-card-image" />
+          <span class="admin-card-badge badge-premi">PREMI</span>
+        </div>
+        <div class="admin-card-body">
+          <h2>Premi</h2>
+          <p>Gestisci catalogo premi, punti richiesti e stato delle richieste.</p>
+          <span class="admin-card-action">Apri sezione</span>
+        </div>
+      </button>
+    </section>
+
+    <section class="admin-embed-card">
+      <div class="admin-embed-head">
+        <h2>Pannello amministrativo</h2>
+        <p>Tutto ciò che era in <strong>admin.html</strong> è ora accessibile da qui. La vecchia pagina viene reindirizzata automaticamente a questa dashboard.</p>
+        <div class="admin-toolbar">
+          <button class="admin-chip" type="button" data-section="dashboard">Dashboard</button>
+          <button class="admin-chip" type="button" data-section="clienti">Clienti</button>
+          <button class="admin-chip" type="button" data-section="operatori">Operatori</button>
+          <button class="admin-chip" type="button" data-section="fidelity">Fidelity</button>
+          <button class="admin-chip" type="button" data-section="premi">Premi</button>
+          <button class="admin-chip" type="button" data-section="fortuna">Fortuna</button>
+          <button class="admin-chip" type="button" data-section="offerte">Offerte</button>
+          <button class="admin-chip" type="button" data-section="servizi">Servizi</button>
+          <button class="admin-chip" type="button" data-section="beauty">Beauty</button>
+          <button class="admin-chip" type="button" data-section="contenuti">Contenuti</button>
+          <button class="admin-chip" type="button" data-section="report">Report</button>
+          <button class="admin-chip" type="button" data-section="impostazioni">Impostazioni</button>
+        </div>
+      </div>
+      <div class="admin-iframe-wrap">
+        <iframe id="adminPanelFrame" class="admin-iframe" src="admin.html?embed=1&section=dashboard" title="Pannello amministrativo Farmacia Montesano"></iframe>
+      </div>
     </section>
 
   </div>
 
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("sw.js");
+    const frame = document.getElementById('adminPanelFrame');
+    const sectionButtons = Array.from(document.querySelectorAll('[data-section]'));
+
+    function openAdminSection(section, shouldScroll = true){
+      sectionButtons.forEach(btn => btn.classList.toggle('is-active', btn.dataset.section === section && btn.classList.contains('admin-chip')));
+      frame.src = 'admin.html?embed=1&section=' + encodeURIComponent(section);
+      if (shouldScroll) {
+        document.querySelector('.admin-embed-card').scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    }
+
+    sectionButtons.forEach(btn => {
+      btn.addEventListener('click', () => openAdminSection(btn.dataset.section, true));
+    });
+
+    const initialSection = new URLSearchParams(window.location.search).get('section') || 'dashboard';
+    openAdminSection(initialSection, false);
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js');
       });
     }
   </script>

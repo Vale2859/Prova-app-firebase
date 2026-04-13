@@ -5,3 +5,7 @@
   document.querySelectorAll('.home-desktop-nav,.home-nav-actions').forEach(function(el){el.remove();});
   document.querySelectorAll('[data-desktop-only], .desktop-only').forEach(function(el){el.remove();});
 })();
+(function(){
+  document.documentElement.classList.remove('mobile-preload');
+  document.body && document.body.classList.add('mobile-ready');
+})();
