@@ -18,6 +18,7 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f8f55">
+  <style>body{opacity:0} body.loaded{opacity:1;transition:.25s ease}</style>
 </head>
 
 <body class="season-primavera">
@@ -472,10 +473,6 @@
 <script src="app-fixes.js"></script>
 
 <script>
-if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js');}
-</script>
-
-<script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("sw.js");
@@ -483,5 +480,6 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+<script>window.addEventListener("load",()=>document.body.classList.add("loaded"));</script>
 </body>
 </html>
