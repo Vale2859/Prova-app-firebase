@@ -3,59 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Admin Unificata | Farmacia Montesano</title>
-
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#1f8f6a" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Montesano Admin" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
+  <title>Admin | Farmacia Montesano</title>
   <style>
     :root{
-      --bg:#f5f8f6;
-      --bg-2:#eef5f1;
+      --bg:#f3f4f1;
+      --sidebar:#1f5b52;
+      --sidebar-2:#2d6c62;
       --card:#ffffff;
-      --line:#dbe8e1;
-      --text:#17372f;
-      --muted:#6d8079;
-      --green:#1f8f6a;
-      --green-2:#64bc95;
-      --green-soft:#e7f7ef;
-      --blue:#edf7ff;
-      --violet:#f1ecff;
-      --pink:#fff0f4;
-      --gold:#fff7e7;
-      --danger:#c85d5d;
-      --danger-soft:#fff2f2;
-      --shadow:0 18px 48px rgba(18,54,43,.08);
-      --radius:26px;
-      --radius-sm:18px;
+      --text:#24322d;
+      --muted:#6f7b74;
+      --line:#d9ddd7;
+      --green:#5f6f66;
+      --green-2:#738379;
+      --gold:#ccb37b;
+      --danger:#c55353;
+      --shadow:0 18px 34px rgba(28,38,33,0.10);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
-      font-family:"Inter",system-ui,sans-serif;
+      font-family:Inter, Arial, sans-serif;
+      background:var(--bg);
       color:var(--text);
-      background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
-      opacity:0;
-      transition:opacity .28s ease;
     }
-    body.loaded{opacity:1}
-    button,input,select,textarea{font:inherit}
-    a{text-decoration:none;color:inherit}
 
-    .shell{
-      max-width:1480px;
-      margin:0 auto;
-      padding:18px;
+    button,input,select,textarea{font-family:inherit}
+
+    .app{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      background:linear-gradient(180deg,var(--sidebar) 0%, var(--sidebar-2) 100%);
+      color:#fff;
+      padding:24px 18px;
+    }
+
+    .brand{
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      margin:0 0 8px;
+    }
+
+    .brand-sub{
+      margin:0 0 24px;
+      font-size:14px;
+      color:rgba(255,255,255,0.82);
+      line-height:1.45;
+      font-weight:600;
+    }
+
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .nav button{
+      width:100%;
+      text-align:left;
+      min-height:52px;
+      border:none;
+      border-radius:16px;
+      background:transparent;
+      color:#fff;
+      padding:0 16px;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .nav button.active{
+      background:rgba(255,255,255,0.16);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .main{
+      padding:24px;
     }
 
     .topbar{
@@ -63,1383 +92,1507 @@
       align-items:center;
       justify-content:space-between;
       gap:16px;
-      padding:18px 20px;
-      background:rgba(255,255,255,.82);
-      border:1px solid rgba(219,232,225,.92);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
-      position:sticky;
-      top:10px;
-      z-index:40;
+      margin-bottom:20px;
     }
 
-    .brand-wrap{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      min-width:0;
-    }
-    .brand-logo{
-      width:58px;height:58px;border-radius:18px;object-fit:cover;
-      background:#fff;border:1px solid var(--line);padding:8px;
-    }
-    .brand-copy h1{
+    .page-title{
       margin:0;
-      font-size:1.65rem;
-      line-height:1;
+      font-size:2rem;
       font-weight:900;
-      letter-spacing:-.05em;
+      letter-spacing:-0.04em;
     }
-    .brand-copy p{
-      margin:8px 0 0;
+
+    .page-sub{
+      margin:6px 0 0;
       color:var(--muted);
-      font-size:.95rem;
+      font-size:15px;
       font-weight:600;
     }
 
     .top-actions{
-      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .chip, .btn{
+    .btn{
       min-height:46px;
       border:none;
-      border-radius:999px;
+      border-radius:14px;
       padding:0 16px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
+      font-size:14px;
       font-weight:900;
       cursor:pointer;
     }
-    .chip{
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--text);
-    }
-    .chip-green{background:var(--green-soft); color:var(--green); border:1px solid #c8ead9}
+
     .btn-primary{
-      background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%);
+      background:linear-gradient(135deg,#5c6a62 0%, #748278 100%);
       color:#fff;
-      box-shadow:0 14px 28px rgba(31,143,106,.18);
     }
-    .btn-soft{
+
+    .btn-ghost{
       background:#fff;
-      border:1px solid var(--line);
       color:var(--text);
-    }
-    .btn-danger{
-      background:linear-gradient(135deg,#c85d5d 0%, #df8a8a 100%);
-      color:#fff;
-    }
-
-    .grid-main{
-      display:grid;
-      grid-template-columns:280px 1fr;
-      gap:20px;
-      margin-top:18px;
-      align-items:start;
-    }
-
-    .sidebar,
-    .panel{
-      background:rgba(255,255,255,.9);
-      border:1px solid rgba(219,232,225,.9);
-      border-radius:28px;
       box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
     }
 
-    .sidebar{
-      padding:18px;
-      position:sticky;
-      top:104px;
-    }
-
-    .nav-title{
-      margin:0 0 12px;
-      font-size:1rem;
-      font-weight:900;
-      letter-spacing:-.03em;
-    }
-
-    .nav{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .nav button{
-      width:100%;
-      min-height:52px;
-      border:none;
-      border-radius:18px;
-      background:#f7fbf9;
-      color:var(--text);
-      text-align:left;
-      padding:0 16px;
-      font-size:.98rem;
-      font-weight:800;
-      cursor:pointer;
-      border:1px solid #e3eee9;
-    }
-    .nav button.active{
-      background:linear-gradient(135deg,var(--green) 0%, var(--green-2) 100%);
+    .btn-danger{
+      background:linear-gradient(135deg,#c55353 0%, #d86c6c 100%);
       color:#fff;
-      border-color:transparent;
-      box-shadow:0 12px 24px rgba(31,143,106,.16);
     }
 
-    .panel{
-      padding:20px;
-      min-height:72vh;
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5, 1fr);
+      gap:16px;
+      margin-bottom:20px;
     }
 
-    .hero{
-      padding:4px 0 18px;
-      display:flex;
-      justify-content:space-between;
-      gap:18px;
-      align-items:flex-start;
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
     }
-    .hero-copy h2{
-      margin:0;
-      font-size:2.2rem;
-      font-weight:900;
-      line-height:1;
-      letter-spacing:-.06em;
-    }
-    .hero-copy p{
-      margin:10px 0 0;
+
+    .stat-label{
+      margin:0 0 8px;
       color:var(--muted);
-      font-weight:600;
-      line-height:1.55;
-      max-width:760px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .stat-value{
+      margin:0;
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-0.04em;
     }
 
     .section{
       display:none;
     }
+
     .section.active{
       display:block;
     }
 
-    .stats{
+    .grid{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-      margin-bottom:20px;
-    }
-    .stat{
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:linear-gradient(180deg,#fff 0%, #f8fbf9 100%);
-      padding:16px;
-    }
-    .stat-label{
-      color:var(--muted);
-      font-size:.9rem;
-      font-weight:700;
-      margin-bottom:8px;
-    }
-    .stat-value{
-      font-size:2rem;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.05em;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-    }
-
-    .quick-card{
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:16px;
-      background:#fff;
-      box-shadow:0 10px 24px rgba(18,54,43,.04);
-    }
-    .quick-card h3{
-      margin:0 0 8px;
-      font-size:1.05rem;
-      font-weight:900;
-      letter-spacing:-.03em;
-    }
-    .quick-card p{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.5;
-      font-weight:600;
-    }
-
-    .content-grid{
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
+      grid-template-columns:1fr 1fr;
       gap:18px;
-      margin-top:14px;
     }
 
-    .card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:18px;
-      box-shadow:0 10px 24px rgba(18,54,43,.04);
+    .grid-3{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:18px;
     }
 
-    .card h3{
-      margin:0 0 8px;
-      font-size:1.18rem;
+    .section-title{
+      margin:0 0 14px;
+      font-size:1.35rem;
       font-weight:900;
-      letter-spacing:-.04em;
-    }
-    .card p.lead{
-      margin:0 0 16px;
-      color:var(--muted);
-      font-weight:600;
-      line-height:1.55;
+      letter-spacing:-0.03em;
     }
 
     .field{
       margin-bottom:12px;
     }
+
     .field label{
       display:block;
-      margin-bottom:8px;
-      font-size:.9rem;
+      margin-bottom:7px;
+      font-size:13px;
       font-weight:800;
+      color:var(--text);
     }
+
     .field input,
     .field select,
     .field textarea{
       width:100%;
-      min-height:50px;
-      border:1px solid #d6e7de;
-      background:#fff;
-      border-radius:16px;
+      min-height:48px;
+      border:1px solid var(--line);
+      border-radius:14px;
       padding:0 14px;
+      font-size:14px;
+      background:#fbfbf8;
       color:var(--text);
       outline:none;
     }
+
     .field textarea{
-      min-height:108px;
-      resize:vertical;
+      min-height:110px;
       padding:14px;
+      resize:vertical;
     }
+
     .field input:focus,
     .field select:focus,
     .field textarea:focus{
-      border-color:#8bccb1;
-      box-shadow:0 0 0 4px rgba(31,143,106,.08);
+      border-color:#b8c8bf;
+      box-shadow:0 0 0 4px rgba(108,132,119,0.10);
     }
 
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-
-    .toggle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      margin:8px 0 14px;
-    }
-    .toggle input{
-      width:20px;height:20px;accent-color:var(--green);
-    }
-
-    .actions{
+    .toolbar{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-top:8px;
+      margin-bottom:14px;
     }
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      max-height:620px;
-      overflow:auto;
-      padding-right:2px;
+    table{
+      width:100%;
+      border-collapse:collapse;
     }
 
-    .item{
+    th, td{
+      text-align:left;
+      padding:12px 10px;
+      border-bottom:1px solid #edf1ed;
+      font-size:14px;
+      vertical-align:top;
+    }
+
+    th{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .list-card{
+      background:#fff;
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:14px;
-      display:grid;
-      grid-template-columns:82px 1fr auto;
-      gap:14px;
-      align-items:center;
-      background:linear-gradient(180deg,#fff 0%, #fbfdfc 100%);
-    }
-    .thumb{
-      width:82px;
-      height:82px;
       border-radius:18px;
-      border:1px solid var(--line);
-      background:#f3f7f5;
-      object-fit:cover;
-      display:block;
+      padding:14px;
+      margin-bottom:10px;
     }
-    .meta h4{
+
+    .list-title{
       margin:0 0 6px;
-      font-size:1rem;
+      font-size:15px;
       font-weight:900;
-      letter-spacing:-.03em;
     }
-    .meta p{
+
+    .list-meta{
       margin:0;
       color:var(--muted);
-      font-size:.9rem;
+      font-size:13px;
       line-height:1.45;
       font-weight:600;
     }
-    .badges{
+
+    .row-actions{
       display:flex;
-      flex-wrap:wrap;
       gap:8px;
+      flex-wrap:wrap;
       margin-top:10px;
     }
-    .badge{
-      min-height:30px;
-      padding:0 10px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      font-size:.8rem;
+
+    .mini-btn{
+      min-height:34px;
+      padding:0 12px;
+      border:none;
+      border-radius:10px;
+      font-size:12px;
       font-weight:900;
-      border:1px solid transparent;
-    }
-    .badge.green{background:var(--green-soft); color:var(--green); border-color:#caeadb}
-    .badge.blue{background:var(--blue); color:#4a8bb2; border-color:#cee7f6}
-    .badge.violet{background:var(--violet); color:#7b63b6; border-color:#ddd3fb}
-    .badge.pink{background:var(--pink); color:#b65d7f; border-color:#f7d4de}
-    .badge.gold{background:var(--gold); color:#9d7a1f; border-color:#f3dfaa}
-    .badge.red{background:var(--danger-soft); color:var(--danger); border-color:#f4d1d1}
-    .item-actions{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      min-width:112px;
+      cursor:pointer;
     }
 
-    .empty{
-      border:1px dashed #d7e8e0;
-      border-radius:22px;
-      background:#fbfdfc;
-      color:var(--muted);
-      text-align:center;
-      padding:28px 16px;
-      font-weight:700;
+    .mini-edit{
+      background:#eef3f1;
+      color:var(--text);
+    }
+
+    .mini-delete{
+      background:#fff1f1;
+      color:var(--danger);
+    }
+
+    .mini-toggle{
+      background:#f5f3ea;
+      color:#8a6d2f;
     }
 
     .notice{
-      display:none;
-      margin-top:12px;
-      border-radius:18px;
+      margin-top:14px;
       padding:14px 16px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.45;
+      background:#eef7f1;
+      color:#356350;
+      border:1px solid #cfe3d8;
+    }
+
+    .empty{
+      padding:18px;
+      border-radius:18px;
+      border:1px dashed #d8e4de;
+      background:linear-gradient(180deg,#ffffff 0%, #f6fbf8 100%);
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      text-align:center;
+    }
+
+    .switch-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      min-height:54px;
+      padding:0 14px;
+      background:#fbfbf8;
+      border:1px solid var(--line);
+      border-radius:14px;
+      margin-bottom:10px;
+    }
+
+    .switch-row span{
+      font-size:14px;
       font-weight:800;
     }
-    .notice.show{display:block}
-    .notice.ok{background:#eef8f3; color:var(--green); border:1px solid #caeadb}
-    .notice.error{background:var(--danger-soft); color:var(--danger); border:1px solid #f4d1d1}
 
-    .install-card{
-      background:linear-gradient(135deg,#1f8f6a 0%, #63bc95 100%);
-      color:#fff;
-      border:none;
-      padding:18px;
-    }
-    .install-card p{color:rgba(255,255,255,.88); margin:10px 0 0}
-
-    @media (max-width:1200px){
-      .cards{grid-template-columns:1fr 1fr}
-      .content-grid{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr 1fr}
+    .switch-row input{
+      width:20px;
+      height:20px;
     }
 
-    @media (max-width:900px){
-      .grid-main{grid-template-columns:1fr}
-      .sidebar{position:static}
-      .topbar{flex-direction:column; align-items:flex-start}
-      .hero{flex-direction:column}
-      .cards{grid-template-columns:1fr}
+    @media (max-width: 1250px){
+      .stats{grid-template-columns:repeat(2, 1fr)}
+      .grid,.grid-3{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 900px){
+      .app{grid-template-columns:1fr}
+      .sidebar{padding-bottom:10px}
+      .nav{display:grid;grid-template-columns:1fr 1fr}
+      .main{padding:16px}
       .stats{grid-template-columns:1fr}
-      .row{grid-template-columns:1fr}
-      .item{grid-template-columns:1fr}
-      .item-actions{min-width:0}
-      .shell{padding:14px}
-      .top-actions{width:100%}
-      .chip,.btn{width:100%}
     }
   </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div class="brand-wrap">
-        <img src="logo.png" alt="Logo Farmacia Montesano" class="brand-logo">
-        <div class="brand-copy">
-          <h1>Admin Unificata</h1>
-          <p>Un solo pannello premium per gestire offerte, servizi, beauty, premi, fortuna e impostazioni dell’app.</p>
+  <div class="app">
+    <aside class="sidebar">
+      <h1 class="brand">Admin Panel</h1>
+      <p class="brand-sub">Farmacia Montesano · controllo completo locale</p>
+
+      <nav class="nav">
+        <button class="active" data-section="dashboard">Dashboard</button>
+        <button data-section="clienti">Clienti</button>
+        <button data-section="operatori">Operatori</button>
+        <button data-section="fidelity">Fidelity</button>
+        <button data-section="premi">Premi</button>
+        <button data-section="fortuna">Fortuna</button>
+        <button data-section="offerte">Offerte</button>
+        <button data-section="servizi">Servizi</button>
+        <button data-section="beauty">Giornate Beauty</button>
+        <button data-section="contenuti">Contenuti</button>
+        <button data-section="report">Report</button>
+        <button data-section="impostazioni">Impostazioni</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h2 class="page-title">Pannello Amministratore</h2>
+          <p class="page-sub">Gestisci clienti, operatori, premi, offerte, servizi e contenuti.</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn btn-ghost" onclick="seedDemoData()">Carica dati demo</button>
+          <button class="btn btn-danger" onclick="resetLocalAdminData()">Reset localStorage</button>
         </div>
       </div>
 
-      <div class="top-actions">
-        <button class="chip chip-green" id="installBtn" type="button" style="display:none;">Installa app</button>
-        <button class="chip" id="reloadBtn" type="button">Ricarica dati</button>
-        <a class="chip" href="index.html">Apri app</a>
-      </div>
-    </header>
+      <section class="section active" id="section-dashboard">
+        <div class="stats">
+          <div class="card"><p class="stat-label">Clienti totali</p><p class="stat-value" id="dashClienti">0</p></div>
+          <div class="card"><p class="stat-label">Operatori</p><p class="stat-value" id="dashOperatori">0</p></div>
+          <div class="card"><p class="stat-label">Punti totali</p><p class="stat-value" id="dashPunti">0</p></div>
+          <div class="card"><p class="stat-label">Premi</p><p class="stat-value" id="dashPremi">0</p></div>
+          <div class="card"><p class="stat-label">Operazioni</p><p class="stat-value" id="dashOperazioni">0</p></div>
+        </div>
 
-    <div class="grid-main">
-      <aside class="sidebar">
-        <h3 class="nav-title">Sezioni</h3>
-        <nav class="nav">
-          <button class="nav-btn active" data-section="dashboardSection">Dashboard</button>
-          <button class="nav-btn" data-section="offersSection">Offerte</button>
-          <button class="nav-btn" data-section="servicesSection">Servizi</button>
-          <button class="nav-btn" data-section="beautySection">Beauty</button>
-          <button class="nav-btn" data-section="rewardsSection">Premi</button>
-          <button class="nav-btn" data-section="fortuneSection">Fortuna</button>
-          <button class="nav-btn" data-section="settingsSection">Impostazioni app</button>
-          <button class="nav-btn" data-section="reportSection">Report</button>
-        </nav>
-      </aside>
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Top clienti</h3>
+            <div id="dashboardTopClienti"></div>
+          </div>
+          <div class="card">
+            <h3 class="section-title">Top operatori</h3>
+            <div id="dashboardTopOperatori"></div>
+          </div>
+        </div>
+      </section>
 
-      <main class="panel">
-        <section class="section active" id="dashboardSection">
-          <div class="hero">
-            <div class="hero-copy">
-              <h2>Dashboard veloce</h2>
-              <p>Qui hai tutto in un solo posto. Inserisci nuovi contenuti, aggiorna immagini, controlla quante card sono attive e tieni l’app sempre ordinata e veloce.</p>
-            </div>
+      <section class="section" id="section-clienti">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi / modifica cliente</h3>
+            <div class="field"><label>Nome</label><input id="clienteNome"></div>
+            <div class="field"><label>Cognome</label><input id="clienteCognome"></div>
+            <div class="field"><label>Email</label><input id="clienteEmail"></div>
+            <div class="field"><label>Telefono</label><input id="clienteTelefono"></div>
+            <div class="field"><label>Codice cliente</label><input id="clienteCodice"></div>
+            <div class="field"><label>Punti</label><input id="clientePunti" type="number"></div>
+            <button class="btn btn-primary" onclick="saveCliente()">Salva cliente</button>
+            <div class="notice">Puoi creare o aggiornare clienti della banca dati locale.</div>
           </div>
 
-          <div class="stats">
-            <div class="stat"><div class="stat-label">Offerte attive</div><div class="stat-value" id="statOffers">0</div></div>
-            <div class="stat"><div class="stat-label">Servizi visibili</div><div class="stat-value" id="statServices">0</div></div>
-            <div class="stat"><div class="stat-label">Beauty attive</div><div class="stat-value" id="statBeauty">0</div></div>
-            <div class="stat"><div class="stat-label">Premi visibili</div><div class="stat-value" id="statRewards">0</div></div>
+          <div class="card">
+            <h3 class="section-title">Elenco clienti</h3>
+            <div class="toolbar">
+              <input id="searchClienti" placeholder="Cerca cliente..." oninput="renderClienti()">
+            </div>
+            <div id="listaClienti"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-operatori">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi operatore</h3>
+            <div class="field"><label>Nome</label><input id="operatoreNome"></div>
+            <div class="field"><label>Cognome</label><input id="operatoreCognome"></div>
+            <div class="field"><label>Badge</label><input id="operatoreBadge"></div>
+            <button class="btn btn-primary" onclick="saveOperatore()">Salva operatore</button>
           </div>
 
-          <div class="cards">
-            <div class="quick-card">
-              <h3>Offerte</h3>
-              <p>Aggiungi promo, prezzo, descrizione e immagine. Le card usano Firebase e si aggiornano nell’app.</p>
-              <button class="btn btn-primary jump-btn" data-target="offersSection">Gestisci offerte</button>
-            </div>
-            <div class="quick-card">
-              <h3>Servizi</h3>
-              <p>Gestisci i servizi mostrati nell’app con immagine, ordine, visibilità e descrizione.</p>
-              <button class="btn btn-primary jump-btn" data-target="servicesSection">Gestisci servizi</button>
-            </div>
-            <div class="quick-card">
-              <h3>Beauty</h3>
-              <p>Crea giornate beauty, data, brand, prenotabilità e immagine in una sola schermata.</p>
-              <button class="btn btn-primary jump-btn" data-target="beautySection">Gestisci beauty</button>
-            </div>
-            <div class="quick-card">
-              <h3>Premi</h3>
-              <p>Premi catalogo con punti richiesti, promo, disponibilità e visibilità per il cliente.</p>
-              <button class="btn btn-primary jump-btn" data-target="rewardsSection">Gestisci premi</button>
-            </div>
-            <div class="quick-card">
-              <h3>Fortuna</h3>
-              <p>Configura la ruota, i premi disponibili, le quantità e la probabilità.</p>
-              <button class="btn btn-primary jump-btn" data-target="fortuneSection">Gestisci fortuna</button>
-            </div>
-            <div class="quick-card install-card">
-              <h3>Installazione rapida</h3>
-              <p>Questa pagina è pronta per essere aggiunta alla schermata Home del telefono e usata come un’app.</p>
-            </div>
+          <div class="card">
+            <h3 class="section-title">Elenco operatori</h3>
+            <div id="listaOperatori"></div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="section" id="offersSection"></section>
-        <section class="section" id="servicesSection"></section>
-        <section class="section" id="beautySection"></section>
-        <section class="section" id="rewardsSection"></section>
-        <section class="section" id="fortuneSection"></section>
-        <section class="section" id="settingsSection"></section>
-        <section class="section" id="reportSection"></section>
-      </main>
-    </div>
+      <section class="section" id="section-fidelity">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Regole fidelity</h3>
+            <div class="field"><label>Ogni quanti € = 1 punto</label><input id="ruleEuroPerPunto" type="number" step="0.01"></div>
+            <div class="field"><label>Soglia Bronze → Gold</label><input id="ruleGold" type="number"></div>
+            <div class="field"><label>Soglia Gold → Diamond</label><input id="ruleDiamond" type="number"></div>
+            <button class="btn btn-primary" onclick="saveFidelityRules()">Salva regole</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Comandi rapidi cliente</h3>
+            <div class="field"><label>Codice cliente</label><input id="quickClienteCodice"></div>
+            <div class="field"><label>Punti da aggiungere/togliere</label><input id="quickClientePunti" type="number"></div>
+            <button class="btn btn-primary" onclick="adjustClientePoints()">Applica punti</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-premi">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi premio</h3>
+            <div class="field"><label>Titolo premio</label><input id="premioTitolo"></div>
+            <div class="field"><label>Categoria</label><input id="premioCategoria"></div>
+            <div class="field"><label>Punti richiesti</label><input id="premioPunti" type="number"></div>
+            <div class="field"><label>Immagine</label><input id="premioImmagine"></div>
+            <button class="btn btn-primary" onclick="savePremio()">Salva premio</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Catalogo premi</h3>
+            <div id="listaPremi"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-fortuna">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Controllo Fortuna</h3>
+            <div class="switch-row"><span>Fortuna attiva</span><input id="fortunaAttiva" type="checkbox"></div>
+            <div class="field"><label>Probabilità vincita (0-1)</label><input id="fortunaWinChance" type="number" step="0.01"></div>
+            <div class="field"><label>Tentativi al giorno</label><input id="fortunaTentativi" type="number"></div>
+            <button class="btn btn-primary" onclick="saveFortunaSettings()">Salva fortuna</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Premi fortuna</h3>
+            <div class="field"><label>Nuovo premio fortuna</label><input id="fortunaPrizeInput"></div>
+            <button class="btn btn-primary" onclick="addFortunaPrize()">Aggiungi premio</button>
+            <div id="listaFortunaPremi" style="margin-top:14px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-offerte">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi offerta</h3>
+            <div class="field"><label>Titolo</label><input id="offertaTitolo"></div>
+            <div class="field"><label>Prezzo</label><input id="offertaPrezzo"></div>
+            <div class="field"><label>Immagine</label><input id="offertaImmagine"></div>
+            <div class="field"><label>Descrizione</label><textarea id="offertaDescrizione"></textarea></div>
+            <button class="btn btn-primary" onclick="saveOfferta()">Salva offerta</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Elenco offerte</h3>
+            <div id="listaOfferte"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-servizi">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi servizio</h3>
+            <div class="field"><label>Nome servizio</label><input id="servizioNome"></div>
+            <div class="field"><label>Categoria</label><input id="servizioCategoria"></div>
+            <div class="field"><label>Immagine</label><input id="servizioImmagine"></div>
+            <div class="field"><label>Descrizione</label><textarea id="servizioDescrizione"></textarea></div>
+            <button class="btn btn-primary" onclick="saveServizio()">Salva servizio</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Elenco servizi</h3>
+            <div id="listaServizi"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-beauty">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Aggiungi giornata beauty</h3>
+            <div class="field"><label>Titolo</label><input id="beautyTitolo"></div>
+            <div class="field"><label>Data</label><input id="beautyData" type="date"></div>
+            <div class="field"><label>Immagine</label><input id="beautyImmagine"></div>
+            <div class="field"><label>Descrizione</label><textarea id="beautyDescrizione"></textarea></div>
+            <button class="btn btn-primary" onclick="saveBeautyDay()">Salva giornata</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Elenco giornate beauty</h3>
+            <div id="listaBeauty"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-contenuti">
+        <div class="grid">
+          <div class="card">
+            <h3 class="section-title">Contenuti rapidi sito</h3>
+            <div class="field"><label>Titolo homepage</label><input id="contentHomeTitle"></div>
+            <div class="field"><label>Sottotitolo homepage</label><textarea id="contentHomeSubtitle"></textarea></div>
+            <div class="field"><label>Banner principale immagine</label><input id="contentHeroImage"></div>
+            <button class="btn btn-primary" onclick="saveContents()">Salva contenuti</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Controlli visibilità</h3>
+            <div class="switch-row"><span>Mostra Offerte</span><input id="flagOfferte" type="checkbox"></div>
+            <div class="switch-row"><span>Mostra Servizi</span><input id="flagServizi" type="checkbox"></div>
+            <div class="switch-row"><span>Mostra Giornate Beauty</span><input id="flagBeauty" type="checkbox"></div>
+            <div class="switch-row"><span>Mostra Fortuna</span><input id="flagFortuna" type="checkbox"></div>
+            <button class="btn btn-primary" onclick="saveVisibilityFlags()">Salva flag</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="section-report">
+        <div class="card">
+          <h3 class="section-title">Log operazioni operatori</h3>
+          <div id="reportTableWrap"></div>
+        </div>
+      </section>
+
+      <section class="section" id="section-impostazioni">
+        <div class="grid-3">
+          <div class="card">
+            <h3 class="section-title">Brand</h3>
+            <div class="field"><label>Nome farmacia</label><input id="settingsNomeFarmacia"></div>
+            <button class="btn btn-primary" onclick="saveSettingsBrand()">Salva</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Sistema</h3>
+            <div class="switch-row"><span>Registrazione clienti attiva</span><input id="settingsRegisterOn" type="checkbox"></div>
+            <div class="switch-row"><span>Login clienti attivo</span><input id="settingsLoginOn" type="checkbox"></div>
+            <button class="btn btn-primary" onclick="saveSystemSettings()">Salva</button>
+          </div>
+
+          <div class="card">
+            <h3 class="section-title">Azioni rapide</h3>
+            <button class="btn btn-ghost" style="width:100%;margin-bottom:10px;" onclick="exportLocalData()">Esporta dati JSON</button>
+            <button class="btn btn-danger" style="width:100%;" onclick="resetLocalAdminData()">Reset completo</button>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <template id="crudTemplate">
-    <div class="content-grid">
-      <div class="card">
-        <h3 class="form-title">Nuovo elemento</h3>
-        <p class="lead form-lead">Compila i campi e salva direttamente su Firebase.</p>
-        <div class="field">
-          <label>Titolo / nome</label>
-          <input type="text" class="field-title" placeholder="Inserisci titolo">
-        </div>
-        <div class="row row-optional">
-          <div class="field field-category-wrap">
-            <label>Categoria</label>
-            <select class="field-category"></select>
-          </div>
-          <div class="field field-date-wrap" style="display:none;">
-            <label>Data</label>
-            <input type="date" class="field-date">
-          </div>
-        </div>
-        <div class="row">
-          <div class="field field-price-wrap" style="display:none;">
-            <label>Prezzo / valore</label>
-            <input type="text" class="field-price" placeholder="Es. 9,90€">
-          </div>
-          <div class="field field-points-wrap" style="display:none;">
-            <label>Punti richiesti</label>
-            <input type="number" class="field-points" min="0" placeholder="5000">
-          </div>
-        </div>
-        <div class="row row-extra">
-          <div class="field field-promo-wrap" style="display:none;">
-            <label>Punti promo</label>
-            <input type="number" class="field-promo" min="0" placeholder="4200">
-          </div>
-          <div class="field field-stock-wrap" style="display:none;">
-            <label>Disponibilità</label>
-            <input type="number" class="field-stock" min="0" placeholder="20">
-          </div>
-        </div>
-        <div class="row row-fortuna" style="display:none;">
-          <div class="field">
-            <label>Tipo premio</label>
-            <select class="field-fortuna-type">
-              <option>Voucher</option>
-              <option>Omaggio</option>
-              <option>Punti bonus</option>
-              <option>Sconto</option>
-              <option>Servizio</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Probabilità</label>
-            <select class="field-fortuna-prob">
-              <option>Bassa</option>
-              <option selected>Media</option>
-              <option>Alta</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label>Descrizione</label>
-          <textarea class="field-description" placeholder="Descrizione breve e chiara..."></textarea>
-        </div>
-        <div class="field">
-          <label>Immagine</label>
-          <input type="file" class="field-image-file" accept="image/*">
-        </div>
-        <div class="field">
-          <label>Oppure URL immagine</label>
-          <input type="text" class="field-image-url" placeholder="https://... oppure images/...">
-        </div>
-        <label class="toggle"><input type="checkbox" class="field-visible" checked> Visibile</label>
-        <label class="toggle extra-available" style="display:none;"><input type="checkbox" class="field-available" checked> Disponibile</label>
-        <label class="toggle extra-active" style="display:none;"><input type="checkbox" class="field-active" checked> Attivo</label>
-        <div class="actions">
-          <button class="btn btn-primary save-btn" type="button">Salva</button>
-          <button class="btn btn-soft reset-btn" type="button">Nuovo</button>
-        </div>
-        <div class="notice"></div>
-      </div>
+  <script>
+    let editingClienteId = null;
+    let editingOperatoreId = null;
+    let editingPremioId = null;
+    let editingOffertaId = null;
+    let editingServizioId = null;
+    let editingBeautyId = null;
 
-      <div class="card">
-        <h3 class="list-title">Elementi presenti</h3>
-        <p class="lead list-lead">Quello che vedi qui è già collegato alle card dell’app.</p>
-        <div class="list"></div>
-      </div>
-    </div>
-  </template>
-
-  <template id="settingsTemplate">
-    <div class="content-grid">
-      <div class="card">
-        <h3>Impostazioni principali dell’app</h3>
-        <p class="lead">Gestisci testi e immagini che possono essere usati nelle sezioni principali dell’app. Le immagini vengono salvate su Firebase Storage.</p>
-
-        <div class="field">
-          <label>Titolo home</label>
-          <input type="text" id="settingsHomeTitle" placeholder="Es. Benvenuto in Farmacia Montesano">
-        </div>
-        <div class="field">
-          <label>Sottotitolo home</label>
-          <textarea id="settingsHomeSubtitle" placeholder="Testo introduttivo"></textarea>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine hero home</label>
-            <input type="file" id="settingsHeroFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine hero</label>
-            <input type="text" id="settingsHeroUrl" placeholder="https://...">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine card promo</label>
-            <input type="file" id="settingsPromoFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine card promo</label>
-            <input type="text" id="settingsPromoUrl">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine card servizi</label>
-            <input type="file" id="settingsServicesFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine card servizi</label>
-            <input type="text" id="settingsServicesUrl">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine card beauty</label>
-            <input type="file" id="settingsBeautyFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine card beauty</label>
-            <input type="text" id="settingsBeautyUrl">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine card premi</label>
-            <input type="file" id="settingsRewardsFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine card premi</label>
-            <input type="text" id="settingsRewardsUrl">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="field">
-            <label>Immagine card fortuna</label>
-            <input type="file" id="settingsFortunaFile" accept="image/*">
-          </div>
-          <div class="field">
-            <label>URL immagine card fortuna</label>
-            <input type="text" id="settingsFortunaUrl">
-          </div>
-        </div>
-
-        <label class="toggle"><input type="checkbox" id="settingsShowOffers" checked> Mostra sezione offerte</label>
-        <label class="toggle"><input type="checkbox" id="settingsShowServices" checked> Mostra sezione servizi</label>
-        <label class="toggle"><input type="checkbox" id="settingsShowBeauty" checked> Mostra sezione beauty</label>
-        <label class="toggle"><input type="checkbox" id="settingsShowRewards" checked> Mostra sezione premi</label>
-        <label class="toggle"><input type="checkbox" id="settingsShowFortuna" checked> Mostra sezione fortuna</label>
-
-        <div class="actions">
-          <button class="btn btn-primary" id="saveSettingsBtn" type="button">Salva impostazioni</button>
-        </div>
-        <div class="notice" id="settingsNotice"></div>
-      </div>
-
-      <div class="card">
-        <h3>Anteprima rapida</h3>
-        <p class="lead">Qui vedi al volo le immagini principali attualmente impostate.</p>
-        <div class="list" id="settingsPreviewList"></div>
-      </div>
-    </div>
-  </template>
-
-  <template id="reportTemplate">
-    <div class="stats">
-      <div class="stat"><div class="stat-label">Offerte totali</div><div class="stat-value" id="reportOffers">0</div></div>
-      <div class="stat"><div class="stat-label">Servizi totali</div><div class="stat-value" id="reportServices">0</div></div>
-      <div class="stat"><div class="stat-label">Beauty totali</div><div class="stat-value" id="reportBeauty">0</div></div>
-      <div class="stat"><div class="stat-label">Premi totali</div><div class="stat-value" id="reportRewards">0</div></div>
-    </div>
-
-    <div class="cards">
-      <div class="quick-card">
-        <h3>Stato cataloghi</h3>
-        <p id="reportSummary">Caricamento report...</p>
-      </div>
-      <div class="quick-card">
-        <h3>PWA</h3>
-        <p>La pagina è già predisposta per installazione da telefono. Da iPhone usa “Aggiungi a Home”, da Android usa “Installa app”.</p>
-      </div>
-      <div class="quick-card">
-        <h3>Firebase</h3>
-        <p>Tutte le sezioni di questa admin salvano su Firestore e le immagini su Firebase Storage.</p>
-      </div>
-    </div>
-  </template>
-
-  <script type="module">
-    import {
-      app,
-      firestore
-    } from "./firebase.js";
-
-    import {
-      collection,
-      addDoc,
-      getDocs,
-      doc,
-      getDoc,
-      setDoc,
-      updateDoc,
-      deleteDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    import {
-      getStorage,
-      ref,
-      uploadBytes,
-      getDownloadURL
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-    const storage = getStorage(app);
-    const SETTINGS_DOC_ID = "main";
-
-    const navButtons = document.querySelectorAll(".nav-btn");
-    const sections = document.querySelectorAll(".section");
-    const installBtn = document.getElementById("installBtn");
-    const reloadBtn = document.getElementById("reloadBtn");
-
-    let deferredPrompt = null;
-    let appState = {
-      offers: [],
-      servizi: [],
-      beauty: [],
-      rewards: [],
-      fortune: [],
-      settings: {}
-    };
-
-    const SECTION_CONFIG = {
-      offersSection: {
-        title: "Gestione offerte",
-        lead: "Aggiungi promo, prezzo, immagine e descrizione. Questa sezione alimenta le offerte mostrate nella app.",
-        collectionName: "offers",
-        imageFolder: "offers",
-        listTitle: "Offerte presenti",
-        listLead: "Le card salvate qui sono quelle usate dall’area promo della app.",
-        categoryOptions: []
-      },
-      servicesSection: {
-        title: "Gestione servizi",
-        lead: "Aggiungi servizi con categoria, immagine e descrizione. Questa sezione alimenta le card servizi della app.",
-        collectionName: "servizi",
-        imageFolder: "servizi",
-        listTitle: "Servizi presenti",
-        listLead: "I servizi visibili qui vengono letti dall’area servizi della app.",
-        categoryOptions: ["Esami", "Consulenza", "Benessere", "Autoanalisi"]
-      },
-      beautySection: {
-        title: "Gestione beauty",
-        lead: "Crea giornate beauty con data, brand, immagine e prenotabilità.",
-        collectionName: "beauty",
-        imageFolder: "beauty",
-        listTitle: "Eventi beauty",
-        listLead: "Gli eventi salvati qui vengono letti dalla sezione giornate beauty.",
-        categoryOptions: ["Beauty", "Skincare", "Make-up", "Capelli", "Dermocosmesi"],
-        hasDate: true
-      },
-      rewardsSection: {
-        title: "Gestione premi",
-        lead: "Gestisci il catalogo premi con punti richiesti, promo punti, disponibilità e immagine.",
-        collectionName: "rewards_catalog",
-        imageFolder: "rewards",
-        listTitle: "Premi catalogo",
-        listLead: "Questi premi vengono letti dal cliente nella sezione premi.",
-        categoryOptions: ["Voucher", "Benessere", "Dermocosmesi", "Omaggio", "Sconto", "Servizio"],
-        hasPoints: true,
-        hasPromo: true,
-        hasStock: true,
-        hasAvailable: true
-      },
-      fortuneSection: {
-        title: "Gestione fortuna",
-        lead: "Configura la ruota fortuna con premi, quantità, tipo e probabilità.",
-        collectionName: "fortune_rewards",
-        imageFolder: "fortune",
-        listTitle: "Premi ruota",
-        listLead: "I premi salvati qui alimentano la sezione fortuna dell’app.",
-        categoryOptions: [],
-        hasFortune: true,
-        hasStock: true,
-        hasActive: true
-      }
-    };
-
-    function showSection(id) {
-      navButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.section === id));
-      sections.forEach(sec => sec.classList.toggle("active", sec.id === id));
+    function uid(prefix="id") {
+      return prefix + "_" + Date.now() + "_" + Math.floor(Math.random()*10000);
     }
 
-    navButtons.forEach(btn => {
-      btn.addEventListener("click", () => showSection(btn.dataset.section));
-    });
+    function loadLS(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        return JSON.parse(raw);
+      } catch(e) {
+        return fallback;
+      }
+    }
 
-    document.querySelectorAll(".jump-btn").forEach(btn => {
-      btn.addEventListener("click", () => showSection(btn.dataset.target));
-    });
+    function saveLS(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
 
-    window.addEventListener("load", () => {
-      document.body.classList.add("loaded");
-    });
+    function getClienti() { return loadLS("farmaciaClienti", []); }
+    function saveClienti(v) { saveLS("farmaciaClienti", v); }
 
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
+    function getOperatori() { return loadLS("farmaciaOperatori", []); }
+    function saveOperatori(v) { saveLS("farmaciaOperatori", v); }
+
+    function getPremi() {
+      const rewards = loadLS("farmaciaRewardsData", { rewards: [], redeemed: [], points: 0 });
+      rewards.rewards = Array.isArray(rewards.rewards) ? rewards.rewards : [];
+      return rewards;
+    }
+    function savePremiData(v) { saveLS("farmaciaRewardsData", v); }
+
+    function getFortunaSettings() {
+      return loadLS("farmaciaFortunaSettings", {
+        active: true,
+        winChance: 0.32,
+        attemptsPerDay: 1,
+        prizes: []
       });
     }
+    function saveFortunaSettingsData(v) { saveLS("farmaciaFortunaSettings", v); }
 
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      deferredPrompt = event;
-      installBtn.style.display = "inline-flex";
+    function getOfferte() { return loadLS("farmaciaOfferte", []); }
+    function saveOfferte(v) { saveLS("farmaciaOfferte", v); }
+
+    function getServizi() { return loadLS("farmaciaServizi", []); }
+    function saveServizi(v) { saveLS("farmaciaServizi", v); }
+
+    function getBeautyDays() { return loadLS("farmaciaBeautyDays", []); }
+    function saveBeautyDays(v) { saveLS("farmaciaBeautyDays", v); }
+
+    function getContentSettings() {
+      return loadLS("farmaciaContentSettings", {
+        homeTitle: "",
+        homeSubtitle: "",
+        heroImage: "",
+        showOfferte: true,
+        showServizi: true,
+        showBeauty: true,
+        showFortuna: true
+      });
+    }
+    function saveContentSettings(v) { saveLS("farmaciaContentSettings", v); }
+
+    function getFidelityRules() {
+      return loadLS("farmaciaFidelityRules", {
+        euroPerPunto: 0.5,
+        goldThreshold: 1000,
+        diamondThreshold: 3000
+      });
+    }
+    function saveFidelityRulesData(v) { saveLS("farmaciaFidelityRules", v); }
+
+    function getGeneralSettings() {
+      return loadLS("farmaciaGeneralSettings", {
+        nomeFarmacia: "Farmacia Montesano",
+        registerEnabled: true,
+        loginEnabled: true
+      });
+    }
+    function saveGeneralSettings(v) { saveLS("farmaciaGeneralSettings", v); }
+
+    function getOperatorLog() { return loadLS("farmaciaOperatorLog", []); }
+
+    function formatNumber(num) {
+      return new Intl.NumberFormat("it-IT").format(Number(num || 0));
+    }
+
+    function setActiveSection(name) {
+      document.querySelectorAll(".nav button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.section === name);
+      });
+
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById("section-" + name).classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn => {
+      btn.addEventListener("click", () => setActiveSection(btn.dataset.section));
     });
 
-    installBtn.addEventListener("click", async () => {
-      if (!deferredPrompt) {
-        alert("Su iPhone usa Condividi → Aggiungi alla schermata Home.");
+    function renderDashboard() {
+      const clienti = getClienti();
+      const operatori = getOperatori();
+      const premi = getPremi();
+      const logs = getOperatorLog();
+
+      const totalPuntiClienti = clienti.reduce((sum, c) => sum + Number(c.points || 0), 0);
+
+      document.getElementById("dashClienti").textContent = formatNumber(clienti.length);
+      document.getElementById("dashOperatori").textContent = formatNumber(operatori.length);
+      document.getElementById("dashPunti").textContent = formatNumber(totalPuntiClienti);
+      document.getElementById("dashPremi").textContent = formatNumber((premi.rewards || []).length);
+      document.getElementById("dashOperazioni").textContent = formatNumber(logs.length);
+
+      const topClientiWrap = document.getElementById("dashboardTopClienti");
+      const topClienti = [...clienti].sort((a,b)=>Number(b.points||0)-Number(a.points||0)).slice(0,5);
+
+      topClientiWrap.innerHTML = topClienti.length
+        ? topClienti.map(c => `
+            <div class="list-card">
+              <p class="list-title">${c.name || ""} ${c.surname || ""}</p>
+              <p class="list-meta">${c.clientId || c.clientCode || "-"} · ${formatNumber(c.points || 0)} punti</p>
+            </div>
+          `).join("")
+        : `<div class="empty">Nessun cliente disponibile</div>`;
+
+      const groupedOps = {};
+      logs.forEach(l => {
+        const k = l.badge || l.operatore || "Operatore";
+        if (!groupedOps[k]) groupedOps[k] = { name: l.operatore || "Operatore", badge: l.badge || "-", total: 0 };
+        groupedOps[k].total += Number(l.totalePunti || 0);
+      });
+
+      const topOps = Object.values(groupedOps).sort((a,b)=>b.total-a.total).slice(0,5);
+      document.getElementById("dashboardTopOperatori").innerHTML = topOps.length
+        ? topOps.map(o => `
+            <div class="list-card">
+              <p class="list-title">${o.name}</p>
+              <p class="list-meta">Badge: ${o.badge} · ${formatNumber(o.total)} punti erogati</p>
+            </div>
+          `).join("")
+        : `<div class="empty">Nessun operatore disponibile</div>`;
+    }
+
+    function saveCliente() {
+      const clienti = getClienti();
+
+      const cliente = {
+        id: editingClienteId || uid("client"),
+        name: document.getElementById("clienteNome").value.trim(),
+        surname: document.getElementById("clienteCognome").value.trim(),
+        email: document.getElementById("clienteEmail").value.trim(),
+        phone: document.getElementById("clienteTelefono").value.trim(),
+        clientId: document.getElementById("clienteCodice").value.trim(),
+        clientCode: document.getElementById("clienteCodice").value.trim(),
+        points: Number(document.getElementById("clientePunti").value || 0),
+        level: calculateLevelFromPoints(Number(document.getElementById("clientePunti").value || 0)),
+        activities: [],
+        operations: []
+      };
+
+      if (!cliente.name || !cliente.surname || !cliente.clientId) {
+        alert("Compila almeno nome, cognome e codice cliente.");
         return;
       }
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      installBtn.style.display = "none";
-    });
 
-    function setNotice(el, message, type = "ok") {
-      el.className = `notice show ${type}`;
-      el.textContent = message;
+      const idx = clienti.findIndex(c => c.id === cliente.id);
+      if (idx >= 0) clienti[idx] = { ...clienti[idx], ...cliente };
+      else clienti.unshift(cliente);
+
+      saveClienti(clienti);
+      clearClienteForm();
+      renderClienti();
+      renderDashboard();
     }
 
-    async function uploadImage(file, folder) {
-      if (!file) return "";
-      const safeName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-      const fileRef = ref(storage, `${folder}/${safeName}`);
-      await uploadBytes(fileRef, file);
-      return getDownloadURL(fileRef);
-    }
-
-    function createCrudSection(sectionId) {
-      const cfg = SECTION_CONFIG[sectionId];
-      const mount = document.getElementById(sectionId);
-      const tpl = document.getElementById("crudTemplate").content.cloneNode(true);
-
-      tpl.querySelector(".form-title").textContent = cfg.title;
-      tpl.querySelector(".form-lead").textContent = cfg.lead;
-      tpl.querySelector(".list-title").textContent = cfg.listTitle;
-      tpl.querySelector(".list-lead").textContent = cfg.listLead;
-
-      const titleEl = tpl.querySelector(".field-title");
-      const categoryWrap = tpl.querySelector(".field-category-wrap");
-      const categoryEl = tpl.querySelector(".field-category");
-      const dateWrap = tpl.querySelector(".field-date-wrap");
-      const dateEl = tpl.querySelector(".field-date");
-      const priceWrap = tpl.querySelector(".field-price-wrap");
-      const priceEl = tpl.querySelector(".field-price");
-      const pointsWrap = tpl.querySelector(".field-points-wrap");
-      const pointsEl = tpl.querySelector(".field-points");
-      const promoWrap = tpl.querySelector(".field-promo-wrap");
-      const promoEl = tpl.querySelector(".field-promo");
-      const stockWrap = tpl.querySelector(".field-stock-wrap");
-      const stockEl = tpl.querySelector(".field-stock");
-      const fortuneRow = tpl.querySelector(".row-fortuna");
-      const fortunaTypeEl = tpl.querySelector(".field-fortuna-type");
-      const fortunaProbEl = tpl.querySelector(".field-fortuna-prob");
-      const descriptionEl = tpl.querySelector(".field-description");
-      const imageFileEl = tpl.querySelector(".field-image-file");
-      const imageUrlEl = tpl.querySelector(".field-image-url");
-      const visibleEl = tpl.querySelector(".field-visible");
-      const availableWrap = tpl.querySelector(".extra-available");
-      const availableEl = tpl.querySelector(".field-available");
-      const activeWrap = tpl.querySelector(".extra-active");
-      const activeEl = tpl.querySelector(".field-active");
-      const saveBtn = tpl.querySelector(".save-btn");
-      const resetBtn = tpl.querySelector(".reset-btn");
-      const listEl = tpl.querySelector(".list");
-      const noticeEl = tpl.querySelector(".notice");
-
-      if (!cfg.categoryOptions.length) {
-        categoryWrap.style.display = "none";
-      } else {
-        categoryEl.innerHTML = cfg.categoryOptions.map(item => `<option>${item}</option>`).join("");
-      }
-
-      if (cfg.collectionName === "offers") {
-        priceWrap.style.display = "block";
-      }
-      if (cfg.hasDate) {
-        dateWrap.style.display = "block";
-      }
-      if (cfg.hasPoints) {
-        pointsWrap.style.display = "block";
-      }
-      if (cfg.hasPromo) {
-        promoWrap.style.display = "block";
-      }
-      if (cfg.hasStock) {
-        stockWrap.style.display = "block";
-      }
-      if (cfg.hasAvailable) {
-        availableWrap.style.display = "flex";
-      }
-      if (cfg.hasActive) {
-        activeWrap.style.display = "flex";
-      }
-      if (cfg.hasFortune) {
-        fortuneRow.style.display = "grid";
-      }
-
-      let editingId = null;
-
-      function resetForm() {
-        editingId = null;
-        titleEl.value = "";
-        if (cfg.categoryOptions.length) categoryEl.selectedIndex = 0;
-        dateEl.value = "";
-        priceEl.value = "";
-        pointsEl.value = "";
-        promoEl.value = "";
-        stockEl.value = "";
-        fortunaTypeEl.value = "Voucher";
-        fortunaProbEl.value = "Media";
-        descriptionEl.value = "";
-        imageFileEl.value = "";
-        imageUrlEl.value = "";
-        visibleEl.checked = true;
-        availableEl.checked = true;
-        activeEl.checked = true;
-        saveBtn.textContent = "Salva";
-      }
-
-      function mapItem(raw) {
-        const data = raw.data || raw;
-        if (cfg.collectionName === "offers") {
-          return {
-            title: data.title || data.nome || "",
-            description: data.description || data.descrizione || "",
-            image: data.image || data.img || "",
-            visible: data.active !== false
-          };
-        }
-
-        if (cfg.collectionName === "servizi") {
-          return {
-            title: data.title || data.nome || "",
-            description: data.description || data.descrizione || "",
-            image: data.image || data.img || "",
-            category: data.category || data.categoria || "",
-            visible: data.active !== false && data.visible !== false
-          };
-        }
-
-        if (cfg.collectionName === "beauty") {
-          return {
-            title: data.title || data.titolo || data.nome || "",
-            description: data.description || data.descrizione || "",
-            image: data.image || data.img || "",
-            category: data.brand || data.categoria || "",
-            date: data.date || data.dataEvento || "",
-            visible: data.active !== false && data.visible !== false
-          };
-        }
-
-        if (cfg.collectionName === "rewards_catalog") {
-          return {
-            title: data.nome || data.title || "",
-            description: data.descrizione || data.description || "",
-            image: data.image || data.img || "",
-            category: data.categoria || "",
-            points: Number(data.puntiRichiesti || data.pointsRequired || 0),
-            promo: Number(data.puntiPromo || 0),
-            stock: Number(data.disponibilita || data.stock || 0),
-            visible: data.visible !== false,
-            available: data.available !== false
-          };
-        }
-
-        return {
-          title: data.nome || data.title || "",
-          description: data.descrizione || data.description || "",
-          image: data.image || data.img || "",
-          type: data.tipo || "",
-          probability: data.probabilita || "Media",
-          stock: Number(data.disponibilita || data.stock || 0),
-          visible: data.visible !== false,
-          active: data.active !== false
-        };
-      }
-
-      function renderList(items) {
-        if (!items.length) {
-          listEl.innerHTML = `<div class="empty">Nessun elemento presente.</div>`;
-          return;
-        }
-
-        listEl.innerHTML = items.map(item => {
-          const d = mapItem(item);
-          const badges = [];
-
-          if (d.category) badges.push(`<span class="badge blue">${d.category}</span>`);
-          if (d.date) badges.push(`<span class="badge violet">${d.date}</span>`);
-          if (typeof d.points === "number" && d.points) badges.push(`<span class="badge gold">${d.points} pt</span>`);
-          if (typeof d.promo === "number" && d.promo) badges.push(`<span class="badge pink">Promo ${d.promo} pt</span>`);
-          if (typeof d.stock === "number") badges.push(`<span class="badge ${d.stock > 0 ? "gold" : "red"}">Disponibili: ${d.stock}</span>`);
-          if (d.type) badges.push(`<span class="badge blue">${d.type}</span>`);
-          if (d.probability) badges.push(`<span class="badge violet">${d.probability}</span>`);
-          badges.push(`<span class="badge ${d.visible ? "green" : "red"}">${d.visible ? "Visibile" : "Nascosto"}</span>`);
-          if (typeof d.available === "boolean") badges.push(`<span class="badge ${d.available ? "green" : "red"}">${d.available ? "Disponibile" : "Non disponibile"}</span>`);
-          if (typeof d.active === "boolean") badges.push(`<span class="badge ${d.active ? "green" : "red"}">${d.active ? "Attivo" : "Disattivo"}</span>`);
-
-          return `
-            <div class="item">
-              <img class="thumb" src="${d.image || 'images/logo.png'}" alt="${d.title || 'Elemento'}">
-              <div class="meta">
-                <h4>${d.title || "Elemento"}</h4>
-                <p>${d.description || "Nessuna descrizione."}</p>
-                <div class="badges">${badges.join("")}</div>
-              </div>
-              <div class="item-actions">
-                <button class="btn btn-soft edit-btn" data-id="${item.id}">Modifica</button>
-                <button class="btn btn-danger delete-btn" data-id="${item.id}">Elimina</button>
-              </div>
-            </div>
-          `;
-        }).join("");
-
-        listEl.querySelectorAll(".edit-btn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const found = items.find(x => x.id === btn.dataset.id);
-            if (!found) return;
-            const d = mapItem(found);
-            editingId = found.id;
-
-            titleEl.value = d.title || "";
-            if (cfg.categoryOptions.length) {
-              const idx = [...categoryEl.options].findIndex(opt => opt.value === d.category);
-              categoryEl.selectedIndex = idx >= 0 ? idx : 0;
-            }
-            dateEl.value = d.date || "";
-            priceEl.value = d.price || "";
-            pointsEl.value = d.points || "";
-            promoEl.value = d.promo || "";
-            stockEl.value = (d.stock ?? "") === 0 ? "0" : (d.stock || "");
-            if (d.type) fortunaTypeEl.value = d.type;
-            if (d.probability) fortunaProbEl.value = d.probability;
-            descriptionEl.value = d.description || "";
-            imageUrlEl.value = d.image || "";
-            visibleEl.checked = d.visible !== false;
-            if (typeof d.available === "boolean") availableEl.checked = d.available;
-            if (typeof d.active === "boolean") activeEl.checked = d.active;
-            saveBtn.textContent = "Salva modifiche";
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-        });
-
-        listEl.querySelectorAll(".delete-btn").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            if (!confirm("Eliminare questo elemento?")) return;
-            await deleteDoc(doc(firestore, cfg.collectionName, btn.dataset.id));
-            await refreshData();
-            setNotice(noticeEl, "Elemento eliminato.", "ok");
-          });
-        });
-      }
-
-      async function saveItem() {
-        const uploaded = await uploadImage(imageFileEl.files[0], cfg.imageFolder);
-        const finalImage = uploaded || imageUrlEl.value.trim();
-
-        let payload = {};
-
-        if (cfg.collectionName === "offers") {
-          payload = {
-            title: titleEl.value.trim(),
-            price: priceEl.value.trim(),
-            description: descriptionEl.value.trim(),
-            image: finalImage,
-            active: visibleEl.checked,
-            updatedAt: serverTimestamp()
-          };
-        } else if (cfg.collectionName === "servizi") {
-          payload = {
-            title: titleEl.value.trim(),
-            category: categoryEl.value,
-            description: descriptionEl.value.trim(),
-            image: finalImage,
-            active: visibleEl.checked,
-            visible: visibleEl.checked,
-            updatedAt: serverTimestamp()
-          };
-        } else if (cfg.collectionName === "beauty") {
-          payload = {
-            titolo: titleEl.value.trim(),
-            brand: categoryEl.value,
-            dataEvento: dateEl.value,
-            descrizione: descriptionEl.value.trim(),
-            image: finalImage,
-            active: visibleEl.checked,
-            visible: visibleEl.checked,
-            updatedAt: serverTimestamp()
-          };
-        } else if (cfg.collectionName === "rewards_catalog") {
-          payload = {
-            nome: titleEl.value.trim(),
-            categoria: categoryEl.value,
-            puntiRichiesti: Number(pointsEl.value || 0),
-            puntiPromo: Number(promoEl.value || 0),
-            disponibilita: Number(stockEl.value || 0),
-            descrizione: descriptionEl.value.trim(),
-            image: finalImage,
-            visible: visibleEl.checked,
-            available: availableEl.checked,
-            updatedAt: serverTimestamp()
-          };
-        } else {
-          payload = {
-            nome: titleEl.value.trim(),
-            tipo: fortunaTypeEl.value,
-            probabilita: fortunaProbEl.value,
-            disponibilita: Number(stockEl.value || 0),
-            descrizione: descriptionEl.value.trim(),
-            image: finalImage,
-            visible: visibleEl.checked,
-            active: activeEl.checked,
-            updatedAt: serverTimestamp()
-          };
-        }
-
-        if (!payload.title && !payload.nome && !payload.titolo) {
-          setNotice(noticeEl, "Inserisci almeno un titolo.", "error");
-          return;
-        }
-
-        if (editingId) {
-          await setDoc(doc(firestore, cfg.collectionName, editingId), payload, { merge: true });
-        } else {
-          await addDoc(collection(firestore, cfg.collectionName), payload);
-        }
-
-        resetForm();
-        await refreshData();
-        setNotice(noticeEl, "Salvataggio completato.", "ok");
-      }
-
-      saveBtn.addEventListener("click", async () => {
-        try {
-          await saveItem();
-        } catch (error) {
-          console.error(error);
-          setNotice(noticeEl, "Salvataggio non riuscito.", "error");
-        }
+    function renderClienti() {
+      const query = document.getElementById("searchClienti").value.trim().toLowerCase();
+      const clienti = getClienti().filter(c => {
+        const txt = `${c.name} ${c.surname} ${c.clientId} ${c.email}`.toLowerCase();
+        return txt.includes(query);
       });
 
-      resetBtn.addEventListener("click", resetForm);
+      const wrap = document.getElementById("listaClienti");
+      if (!clienti.length) {
+        wrap.innerHTML = `<div class="empty">Nessun cliente disponibile</div>`;
+        return;
+      }
 
-      mount.appendChild(tpl);
-
-      return {
-        render(items) {
-          renderList(items);
-        }
-      };
-    }
-
-    const offersUI = createCrudSection("offersSection");
-    const servicesUI = createCrudSection("servicesSection");
-    const beautyUI = createCrudSection("beautySection");
-    const rewardsUI = createCrudSection("rewardsSection");
-    const fortuneUI = createCrudSection("fortuneSection");
-
-    function renderSettings() {
-      const mount = document.getElementById("settingsSection");
-      mount.innerHTML = "";
-      mount.appendChild(document.getElementById("settingsTemplate").content.cloneNode(true));
-
-      const fields = {
-        homeTitle: document.getElementById("settingsHomeTitle"),
-        homeSubtitle: document.getElementById("settingsHomeSubtitle"),
-        heroFile: document.getElementById("settingsHeroFile"),
-        heroUrl: document.getElementById("settingsHeroUrl"),
-        promoFile: document.getElementById("settingsPromoFile"),
-        promoUrl: document.getElementById("settingsPromoUrl"),
-        servicesFile: document.getElementById("settingsServicesFile"),
-        servicesUrl: document.getElementById("settingsServicesUrl"),
-        beautyFile: document.getElementById("settingsBeautyFile"),
-        beautyUrl: document.getElementById("settingsBeautyUrl"),
-        rewardsFile: document.getElementById("settingsRewardsFile"),
-        rewardsUrl: document.getElementById("settingsRewardsUrl"),
-        fortunaFile: document.getElementById("settingsFortunaFile"),
-        fortunaUrl: document.getElementById("settingsFortunaUrl"),
-        showOffers: document.getElementById("settingsShowOffers"),
-        showServices: document.getElementById("settingsShowServices"),
-        showBeauty: document.getElementById("settingsShowBeauty"),
-        showRewards: document.getElementById("settingsShowRewards"),
-        showFortuna: document.getElementById("settingsShowFortuna"),
-        notice: document.getElementById("settingsNotice"),
-        preview: document.getElementById("settingsPreviewList")
-      };
-
-      const data = appState.settings || {};
-      fields.homeTitle.value = data.homeTitle || "";
-      fields.homeSubtitle.value = data.homeSubtitle || "";
-      fields.heroUrl.value = data.heroImage || "";
-      fields.promoUrl.value = data.promoCardImage || "";
-      fields.servicesUrl.value = data.servicesCardImage || "";
-      fields.beautyUrl.value = data.beautyCardImage || "";
-      fields.rewardsUrl.value = data.rewardsCardImage || "";
-      fields.fortunaUrl.value = data.fortunaCardImage || "";
-      fields.showOffers.checked = data.showOfferte !== false;
-      fields.showServices.checked = data.showServizi !== false;
-      fields.showBeauty.checked = data.showBeauty !== false;
-      fields.showRewards.checked = data.showRewards !== false;
-      fields.showFortuna.checked = data.showFortuna !== false;
-
-      function previewItems() {
-        const images = [
-          { label: "Hero", url: fields.heroUrl.value },
-          { label: "Promo", url: fields.promoUrl.value },
-          { label: "Servizi", url: fields.servicesUrl.value },
-          { label: "Beauty", url: fields.beautyUrl.value },
-          { label: "Premi", url: fields.rewardsUrl.value },
-          { label: "Fortuna", url: fields.fortunaUrl.value }
-        ];
-        fields.preview.innerHTML = images.map(item => `
-          <div class="item">
-            <img class="thumb" src="${item.url || 'images/logo.png'}" alt="${item.label}">
-            <div class="meta">
-              <h4>${item.label}</h4>
-              <p>${item.url || "Nessuna immagine impostata."}</p>
-            </div>
-            <div class="item-actions"></div>
+      wrap.innerHTML = clienti.map(c => `
+        <div class="list-card">
+          <p class="list-title">${c.name} ${c.surname}</p>
+          <p class="list-meta">${c.clientId || "-"} · ${c.email || "nessuna email"} · ${formatNumber(c.points || 0)} punti · ${c.level || "-"}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editCliente('${c.id}')">Modifica</button>
+            <button class="mini-btn mini-delete" onclick="deleteCliente('${c.id}')">Elimina</button>
           </div>
-        `).join("");
+        </div>
+      `).join("");
+    }
+
+    function editCliente(id) {
+      const cliente = getClienti().find(c => c.id === id);
+      if (!cliente) return;
+      editingClienteId = id;
+      document.getElementById("clienteNome").value = cliente.name || "";
+      document.getElementById("clienteCognome").value = cliente.surname || "";
+      document.getElementById("clienteEmail").value = cliente.email || "";
+      document.getElementById("clienteTelefono").value = cliente.phone || "";
+      document.getElementById("clienteCodice").value = cliente.clientId || cliente.clientCode || "";
+      document.getElementById("clientePunti").value = Number(cliente.points || 0);
+    }
+
+    function deleteCliente(id) {
+      if (!confirm("Eliminare questo cliente?")) return;
+      saveClienti(getClienti().filter(c => c.id !== id));
+      renderClienti();
+      renderDashboard();
+    }
+
+    function clearClienteForm() {
+      editingClienteId = null;
+      ["clienteNome","clienteCognome","clienteEmail","clienteTelefono","clienteCodice","clientePunti"].forEach(id => {
+        document.getElementById(id).value = "";
+      });
+    }
+
+    function saveOperatore() {
+      const operatori = getOperatori();
+      const op = {
+        id: editingOperatoreId || uid("op"),
+        nome: document.getElementById("operatoreNome").value.trim(),
+        cognome: document.getElementById("operatoreCognome").value.trim(),
+        badge: document.getElementById("operatoreBadge").value.trim().toUpperCase()
+      };
+
+      if (!op.nome || !op.cognome || !op.badge) {
+        alert("Compila nome, cognome e badge.");
+        return;
       }
 
-      previewItems();
+      const idx = operatori.findIndex(o => o.id === op.id);
+      if (idx >= 0) operatori[idx] = { ...operatori[idx], ...op };
+      else operatori.unshift(op);
 
-      document.getElementById("saveSettingsBtn").addEventListener("click", async () => {
-        try {
-          const heroImage = await uploadImage(fields.heroFile.files[0], "settings");
-          const promoImage = await uploadImage(fields.promoFile.files[0], "settings");
-          const servicesImage = await uploadImage(fields.servicesFile.files[0], "settings");
-          const beautyImage = await uploadImage(fields.beautyFile.files[0], "settings");
-          const rewardsImage = await uploadImage(fields.rewardsFile.files[0], "settings");
-          const fortunaImage = await uploadImage(fields.fortunaFile.files[0], "settings");
+      saveOperatori(operatori);
+      editingOperatoreId = null;
+      ["operatoreNome","operatoreCognome","operatoreBadge"].forEach(id => document.getElementById(id).value = "");
+      renderOperatori();
+      renderDashboard();
+    }
 
-          const payload = {
-            homeTitle: fields.homeTitle.value.trim(),
-            homeSubtitle: fields.homeSubtitle.value.trim(),
-            heroImage: heroImage || fields.heroUrl.value.trim(),
-            promoCardImage: promoImage || fields.promoUrl.value.trim(),
-            servicesCardImage: servicesImage || fields.servicesUrl.value.trim(),
-            beautyCardImage: beautyImage || fields.beautyUrl.value.trim(),
-            rewardsCardImage: rewardsImage || fields.rewardsUrl.value.trim(),
-            fortunaCardImage: fortunaImage || fields.fortunaUrl.value.trim(),
-            showOfferte: fields.showOffers.checked,
-            showServizi: fields.showServices.checked,
-            showBeauty: fields.showBeauty.checked,
-            showRewards: fields.showRewards.checked,
-            showFortuna: fields.showFortuna.checked,
-            updatedAt: serverTimestamp()
-          };
+    function renderOperatori() {
+      const operatori = getOperatori();
+      const wrap = document.getElementById("listaOperatori");
+      if (!operatori.length) {
+        wrap.innerHTML = `<div class="empty">Nessun operatore disponibile</div>`;
+        return;
+      }
 
-          await setDoc(doc(firestore, "app_settings", SETTINGS_DOC_ID), payload, { merge: true });
-          await refreshData();
-          setNotice(fields.notice, "Impostazioni salvate su Firebase.", "ok");
-        } catch (error) {
-          console.error(error);
-          setNotice(fields.notice, "Salvataggio impostazioni non riuscito.", "error");
-        }
+      wrap.innerHTML = operatori.map(o => `
+        <div class="list-card">
+          <p class="list-title">${o.nome} ${o.cognome}</p>
+          <p class="list-meta">Badge: ${o.badge}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editOperatore('${o.id}')">Modifica</button>
+            <button class="mini-btn mini-delete" onclick="deleteOperatore('${o.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editOperatore(id) {
+      const o = getOperatori().find(x => x.id === id);
+      if (!o) return;
+      editingOperatoreId = id;
+      document.getElementById("operatoreNome").value = o.nome || "";
+      document.getElementById("operatoreCognome").value = o.cognome || "";
+      document.getElementById("operatoreBadge").value = o.badge || "";
+    }
+
+    function deleteOperatore(id) {
+      if (!confirm("Eliminare questo operatore?")) return;
+      saveOperatori(getOperatori().filter(o => o.id !== id));
+      renderOperatori();
+      renderDashboard();
+    }
+
+    function calculateLevelFromPoints(points) {
+      const rules = getFidelityRules();
+      if (points >= Number(rules.diamondThreshold || 3000)) return "Diamond";
+      if (points >= Number(rules.goldThreshold || 1000)) return "Gold";
+      return "Bronze";
+    }
+
+    function saveFidelityRules() {
+      saveFidelityRulesData({
+        euroPerPunto: Number(document.getElementById("ruleEuroPerPunto").value || 0.5),
+        goldThreshold: Number(document.getElementById("ruleGold").value || 1000),
+        diamondThreshold: Number(document.getElementById("ruleDiamond").value || 3000)
       });
+      alert("Regole fidelity salvate.");
+    }
+
+    function loadFidelityRulesIntoForm() {
+      const r = getFidelityRules();
+      document.getElementById("ruleEuroPerPunto").value = r.euroPerPunto;
+      document.getElementById("ruleGold").value = r.goldThreshold;
+      document.getElementById("ruleDiamond").value = r.diamondThreshold;
+    }
+
+    function adjustClientePoints() {
+      const codice = document.getElementById("quickClienteCodice").value.trim();
+      const delta = Number(document.getElementById("quickClientePunti").value || 0);
+
+      const clienti = getClienti();
+      const idx = clienti.findIndex(c => (c.clientId || c.clientCode) === codice);
+      if (idx === -1) {
+        alert("Cliente non trovato.");
+        return;
+      }
+
+      clienti[idx].points = Number(clienti[idx].points || 0) + delta;
+      if (clienti[idx].points < 0) clienti[idx].points = 0;
+      clienti[idx].level = calculateLevelFromPoints(clienti[idx].points);
+
+      saveClienti(clienti);
+      renderClienti();
+      renderDashboard();
+      alert("Punti aggiornati.");
+    }
+
+    function savePremio() {
+      const data = getPremi();
+      const premio = {
+        id: editingPremioId || uid("reward"),
+        title: document.getElementById("premioTitolo").value.trim(),
+        category: document.getElementById("premioCategoria").value.trim(),
+        pointsRequired: Number(document.getElementById("premioPunti").value || 0),
+        image: document.getElementById("premioImmagine").value.trim(),
+        active: true
+      };
+
+      if (!premio.title) {
+        alert("Inserisci il titolo del premio.");
+        return;
+      }
+
+      const idx = data.rewards.findIndex(r => r.id === premio.id);
+      if (idx >= 0) data.rewards[idx] = { ...data.rewards[idx], ...premio };
+      else data.rewards.unshift(premio);
+
+      savePremiData(data);
+      editingPremioId = null;
+      ["premioTitolo","premioCategoria","premioPunti","premioImmagine"].forEach(id => document.getElementById(id).value = "");
+      renderPremi();
+      renderDashboard();
+    }
+
+    function renderPremi() {
+      const data = getPremi();
+      const wrap = document.getElementById("listaPremi");
+      if (!data.rewards.length) {
+        wrap.innerHTML = `<div class="empty">Nessun premio disponibile</div>`;
+        return;
+      }
+
+      wrap.innerHTML = data.rewards.map(r => `
+        <div class="list-card">
+          <p class="list-title">${r.title}</p>
+          <p class="list-meta">${r.category || "-"} · ${formatNumber(r.pointsRequired || 0)} punti · ${r.active ? "attivo" : "disattivo"}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editPremio('${r.id}')">Modifica</button>
+            <button class="mini-btn mini-toggle" onclick="togglePremio('${r.id}')">${r.active ? "Disattiva" : "Attiva"}</button>
+            <button class="mini-btn mini-delete" onclick="deletePremio('${r.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editPremio(id) {
+      const p = getPremi().rewards.find(x => x.id === id);
+      if (!p) return;
+      editingPremioId = id;
+      document.getElementById("premioTitolo").value = p.title || "";
+      document.getElementById("premioCategoria").value = p.category || "";
+      document.getElementById("premioPunti").value = Number(p.pointsRequired || 0);
+      document.getElementById("premioImmagine").value = p.image || "";
+    }
+
+    function togglePremio(id) {
+      const data = getPremi();
+      const idx = data.rewards.findIndex(r => r.id === id);
+      if (idx === -1) return;
+      data.rewards[idx].active = !data.rewards[idx].active;
+      savePremiData(data);
+      renderPremi();
+    }
+
+    function deletePremio(id) {
+      const data = getPremi();
+      data.rewards = data.rewards.filter(r => r.id !== id);
+      savePremiData(data);
+      renderPremi();
+      renderDashboard();
+    }
+
+    function saveFortunaSettings() {
+      saveFortunaSettingsData({
+        active: document.getElementById("fortunaAttiva").checked,
+        winChance: Number(document.getElementById("fortunaWinChance").value || 0.32),
+        attemptsPerDay: Number(document.getElementById("fortunaTentativi").value || 1),
+        prizes: getFortunaSettings().prizes || []
+      });
+      alert("Impostazioni fortuna salvate.");
+      renderFortuna();
+    }
+
+    function addFortunaPrize() {
+      const value = document.getElementById("fortunaPrizeInput").value.trim();
+      if (!value) return;
+      const data = getFortunaSettings();
+      data.prizes = Array.isArray(data.prizes) ? data.prizes : [];
+      data.prizes.unshift({ id: uid("fortune"), title: value, active: true });
+      saveFortunaSettingsData(data);
+      document.getElementById("fortunaPrizeInput").value = "";
+      renderFortuna();
+    }
+
+    function renderFortuna() {
+      const data = getFortunaSettings();
+      document.getElementById("fortunaAttiva").checked = !!data.active;
+      document.getElementById("fortunaWinChance").value = data.winChance;
+      document.getElementById("fortunaTentativi").value = data.attemptsPerDay;
+
+      const wrap = document.getElementById("listaFortunaPremi");
+      if (!data.prizes || !data.prizes.length) {
+        wrap.innerHTML = `<div class="empty">Nessun premio fortuna</div>`;
+        return;
+      }
+
+      wrap.innerHTML = data.prizes.map(p => `
+        <div class="list-card">
+          <p class="list-title">${p.title}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-toggle" onclick="toggleFortunaPrize('${p.id}')">${p.active ? "Disattiva" : "Attiva"}</button>
+            <button class="mini-btn mini-delete" onclick="deleteFortunaPrize('${p.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function toggleFortunaPrize(id) {
+      const data = getFortunaSettings();
+      const idx = data.prizes.findIndex(p => p.id === id);
+      if (idx === -1) return;
+      data.prizes[idx].active = !data.prizes[idx].active;
+      saveFortunaSettingsData(data);
+      renderFortuna();
+    }
+
+    function deleteFortunaPrize(id) {
+      const data = getFortunaSettings();
+      data.prizes = data.prizes.filter(p => p.id !== id);
+      saveFortunaSettingsData(data);
+      renderFortuna();
+    }
+
+    function saveOfferta() {
+      const list = getOfferte();
+      const item = {
+        id: editingOffertaId || uid("offer"),
+        title: document.getElementById("offertaTitolo").value.trim(),
+        price: document.getElementById("offertaPrezzo").value.trim(),
+        image: document.getElementById("offertaImmagine").value.trim(),
+        description: document.getElementById("offertaDescrizione").value.trim(),
+        active: true
+      };
+
+      if (!item.title) {
+        alert("Inserisci il titolo dell'offerta.");
+        return;
+      }
+
+      const idx = list.findIndex(x => x.id === item.id);
+      if (idx >= 0) list[idx] = { ...list[idx], ...item };
+      else list.unshift(item);
+
+      saveOfferte(list);
+      editingOffertaId = null;
+      ["offertaTitolo","offertaPrezzo","offertaImmagine","offertaDescrizione"].forEach(id => document.getElementById(id).value = "");
+      renderOfferte();
+    }
+
+    function renderOfferte() {
+      const list = getOfferte();
+      const wrap = document.getElementById("listaOfferte");
+      if (!list.length) {
+        wrap.innerHTML = `<div class="empty">Nessuna offerta disponibile</div>`;
+        return;
+      }
+
+      wrap.innerHTML = list.map(o => `
+        <div class="list-card">
+          <p class="list-title">${o.title}</p>
+          <p class="list-meta">${o.price || "-"} · ${o.active ? "attiva" : "disattiva"}<br>${o.description || ""}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editOfferta('${o.id}')">Modifica</button>
+            <button class="mini-btn mini-toggle" onclick="toggleOfferta('${o.id}')">${o.active ? "Disattiva" : "Attiva"}</button>
+            <button class="mini-btn mini-delete" onclick="deleteOfferta('${o.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editOfferta(id) {
+      const o = getOfferte().find(x => x.id === id);
+      if (!o) return;
+      editingOffertaId = id;
+      document.getElementById("offertaTitolo").value = o.title || "";
+      document.getElementById("offertaPrezzo").value = o.price || "";
+      document.getElementById("offertaImmagine").value = o.image || "";
+      document.getElementById("offertaDescrizione").value = o.description || "";
+    }
+
+    function toggleOfferta(id) {
+      const list = getOfferte();
+      const idx = list.findIndex(o => o.id === id);
+      if (idx === -1) return;
+      list[idx].active = !list[idx].active;
+      saveOfferte(list);
+      renderOfferte();
+    }
+
+    function deleteOfferta(id) {
+      saveOfferte(getOfferte().filter(o => o.id !== id));
+      renderOfferte();
+    }
+
+    function saveServizio() {
+      const list = getServizi();
+      const item = {
+        id: editingServizioId || uid("service"),
+        title: document.getElementById("servizioNome").value.trim(),
+        category: document.getElementById("servizioCategoria").value.trim(),
+        image: document.getElementById("servizioImmagine").value.trim(),
+        description: document.getElementById("servizioDescrizione").value.trim(),
+        active: true
+      };
+
+      if (!item.title) {
+        alert("Inserisci il nome del servizio.");
+        return;
+      }
+
+      const idx = list.findIndex(x => x.id === item.id);
+      if (idx >= 0) list[idx] = { ...list[idx], ...item };
+      else list.unshift(item);
+
+      saveServizi(list);
+      editingServizioId = null;
+      ["servizioNome","servizioCategoria","servizioImmagine","servizioDescrizione"].forEach(id => document.getElementById(id).value = "");
+      renderServizi();
+    }
+
+    function renderServizi() {
+      const list = getServizi();
+      const wrap = document.getElementById("listaServizi");
+      if (!list.length) {
+        wrap.innerHTML = `<div class="empty">Nessun servizio disponibile</div>`;
+        return;
+      }
+
+      wrap.innerHTML = list.map(s => `
+        <div class="list-card">
+          <p class="list-title">${s.title}</p>
+          <p class="list-meta">${s.category || "-"} · ${s.active ? "attivo" : "disattivo"}<br>${s.description || ""}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editServizio('${s.id}')">Modifica</button>
+            <button class="mini-btn mini-toggle" onclick="toggleServizio('${s.id}')">${s.active ? "Disattiva" : "Attiva"}</button>
+            <button class="mini-btn mini-delete" onclick="deleteServizio('${s.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editServizio(id) {
+      const s = getServizi().find(x => x.id === id);
+      if (!s) return;
+      editingServizioId = id;
+      document.getElementById("servizioNome").value = s.title || "";
+      document.getElementById("servizioCategoria").value = s.category || "";
+      document.getElementById("servizioImmagine").value = s.image || "";
+      document.getElementById("servizioDescrizione").value = s.description || "";
+    }
+
+    function toggleServizio(id) {
+      const list = getServizi();
+      const idx = list.findIndex(s => s.id === id);
+      if (idx === -1) return;
+      list[idx].active = !list[idx].active;
+      saveServizi(list);
+      renderServizi();
+    }
+
+    function deleteServizio(id) {
+      saveServizi(getServizi().filter(s => s.id !== id));
+      renderServizi();
+    }
+
+    function saveBeautyDay() {
+      const list = getBeautyDays();
+      const item = {
+        id: editingBeautyId || uid("beauty"),
+        title: document.getElementById("beautyTitolo").value.trim(),
+        date: document.getElementById("beautyData").value,
+        image: document.getElementById("beautyImmagine").value.trim(),
+        description: document.getElementById("beautyDescrizione").value.trim(),
+        active: true
+      };
+
+      if (!item.title) {
+        alert("Inserisci il titolo della giornata beauty.");
+        return;
+      }
+
+      const idx = list.findIndex(x => x.id === item.id);
+      if (idx >= 0) list[idx] = { ...list[idx], ...item };
+      else list.unshift(item);
+
+      saveBeautyDays(list);
+      editingBeautyId = null;
+      ["beautyTitolo","beautyData","beautyImmagine","beautyDescrizione"].forEach(id => document.getElementById(id).value = "");
+      renderBeautyDays();
+    }
+
+    function renderBeautyDays() {
+      const list = getBeautyDays();
+      const wrap = document.getElementById("listaBeauty");
+      if (!list.length) {
+        wrap.innerHTML = `<div class="empty">Nessuna giornata beauty disponibile</div>`;
+        return;
+      }
+
+      wrap.innerHTML = list.map(b => `
+        <div class="list-card">
+          <p class="list-title">${b.title}</p>
+          <p class="list-meta">${b.date || "-"} · ${b.active ? "attiva" : "disattiva"}<br>${b.description || ""}</p>
+          <div class="row-actions">
+            <button class="mini-btn mini-edit" onclick="editBeautyDay('${b.id}')">Modifica</button>
+            <button class="mini-btn mini-toggle" onclick="toggleBeautyDay('${b.id}')">${b.active ? "Disattiva" : "Attiva"}</button>
+            <button class="mini-btn mini-delete" onclick="deleteBeautyDay('${b.id}')">Elimina</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function editBeautyDay(id) {
+      const b = getBeautyDays().find(x => x.id === id);
+      if (!b) return;
+      editingBeautyId = id;
+      document.getElementById("beautyTitolo").value = b.title || "";
+      document.getElementById("beautyData").value = b.date || "";
+      document.getElementById("beautyImmagine").value = b.image || "";
+      document.getElementById("beautyDescrizione").value = b.description || "";
+    }
+
+    function toggleBeautyDay(id) {
+      const list = getBeautyDays();
+      const idx = list.findIndex(b => b.id === id);
+      if (idx === -1) return;
+      list[idx].active = !list[idx].active;
+      saveBeautyDays(list);
+      renderBeautyDays();
+    }
+
+    function deleteBeautyDay(id) {
+      saveBeautyDays(getBeautyDays().filter(b => b.id !== id));
+      renderBeautyDays();
+    }
+
+    function saveContents() {
+      const c = getContentSettings();
+      c.homeTitle = document.getElementById("contentHomeTitle").value.trim();
+      c.homeSubtitle = document.getElementById("contentHomeSubtitle").value.trim();
+      c.heroImage = document.getElementById("contentHeroImage").value.trim();
+      saveContentSettings(c);
+      alert("Contenuti salvati.");
+    }
+
+    function saveVisibilityFlags() {
+      const c = getContentSettings();
+      c.showOfferte = document.getElementById("flagOfferte").checked;
+      c.showServizi = document.getElementById("flagServizi").checked;
+      c.showBeauty = document.getElementById("flagBeauty").checked;
+      c.showFortuna = document.getElementById("flagFortuna").checked;
+      saveContentSettings(c);
+      alert("Flag salvati.");
+    }
+
+    function loadContentsIntoForm() {
+      const c = getContentSettings();
+      document.getElementById("contentHomeTitle").value = c.homeTitle || "";
+      document.getElementById("contentHomeSubtitle").value = c.homeSubtitle || "";
+      document.getElementById("contentHeroImage").value = c.heroImage || "";
+      document.getElementById("flagOfferte").checked = !!c.showOfferte;
+      document.getElementById("flagServizi").checked = !!c.showServizi;
+      document.getElementById("flagBeauty").checked = !!c.showBeauty;
+      document.getElementById("flagFortuna").checked = !!c.showFortuna;
     }
 
     function renderReport() {
-      const mount = document.getElementById("reportSection");
-      mount.innerHTML = "";
-      mount.appendChild(document.getElementById("reportTemplate").content.cloneNode(true));
+      const logs = getOperatorLog();
+      const wrap = document.getElementById("reportTableWrap");
 
-      document.getElementById("reportOffers").textContent = appState.offers.length;
-      document.getElementById("reportServices").textContent = appState.servizi.length;
-      document.getElementById("reportBeauty").textContent = appState.beauty.length;
-      document.getElementById("reportRewards").textContent = appState.rewards.length;
+      if (!logs.length) {
+        wrap.innerHTML = `<div class="empty">Nessun log disponibile</div>`;
+        return;
+      }
 
-      const summary = document.getElementById("reportSummary");
-      summary.textContent =
-        `Hai ${appState.offers.length} offerte, ${appState.servizi.length} servizi, ${appState.beauty.length} eventi beauty, ${appState.rewards.length} premi e ${appState.fortune.length} premi fortuna salvati su Firebase.`;
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Operatore</th>
+              <th>Badge</th>
+              <th>Cliente</th>
+              <th>Nome cliente</th>
+              <th>Importo</th>
+              <th>Punti acquisto</th>
+              <th>Punti extra</th>
+              <th>Totale punti</th>
+              <th>Descrizione extra</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${logs.map(item => `
+              <tr>
+                <td>${item.data || "-"}</td>
+                <td>${item.operatore || "-"}</td>
+                <td>${item.badge || "-"}</td>
+                <td>${item.cliente || "-"}</td>
+                <td>${item.clienteNome || "-"}</td>
+                <td>${item.importo || "-"}</td>
+                <td>${formatNumber(item.puntiAcquisto || 0)}</td>
+                <td>${formatNumber(item.puntiExtra || 0)}</td>
+                <td>${formatNumber(item.totalePunti || 0)}</td>
+                <td>${item.descrizioneExtra || "-"}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
     }
 
-    async function fetchCollection(name) {
-      const snap = await getDocs(collection(firestore, name));
-      return snap.docs.map(docSnap => ({ id: docSnap.id, data: docSnap.data() }));
+    function saveSettingsBrand() {
+      const s = getGeneralSettings();
+      s.nomeFarmacia = document.getElementById("settingsNomeFarmacia").value.trim();
+      saveGeneralSettings(s);
+      alert("Brand salvato.");
     }
 
-    async function fetchSettings() {
-      const snap = await getDoc(doc(firestore, "app_settings", SETTINGS_DOC_ID));
-      return snap.exists() ? snap.data() : {};
+    function saveSystemSettings() {
+      const s = getGeneralSettings();
+      s.registerEnabled = document.getElementById("settingsRegisterOn").checked;
+      s.loginEnabled = document.getElementById("settingsLoginOn").checked;
+      saveGeneralSettings(s);
+      alert("Impostazioni sistema salvate.");
     }
 
-    function refreshDashboardStats() {
-      document.getElementById("statOffers").textContent = appState.offers.filter(x => (x.data?.active ?? x.data?.visible ?? true) !== false).length;
-      document.getElementById("statServices").textContent = appState.servizi.filter(x => (x.data?.active ?? x.data?.visible ?? true) !== false).length;
-      document.getElementById("statBeauty").textContent = appState.beauty.filter(x => (x.data?.active ?? x.data?.visible ?? true) !== false).length;
-      document.getElementById("statRewards").textContent = appState.rewards.filter(x => (x.data?.visible ?? true) !== false).length;
+    function loadSystemSettingsIntoForm() {
+      const s = getGeneralSettings();
+      document.getElementById("settingsNomeFarmacia").value = s.nomeFarmacia || "";
+      document.getElementById("settingsRegisterOn").checked = !!s.registerEnabled;
+      document.getElementById("settingsLoginOn").checked = !!s.loginEnabled;
     }
 
-    async function refreshData() {
-      const [offers, servizi, beauty, rewards, fortune, settings] = await Promise.all([
-        fetchCollection("offers"),
-        fetchCollection("servizi"),
-        fetchCollection("beauty"),
-        fetchCollection("rewards_catalog"),
-        fetchCollection("fortune_rewards"),
-        fetchSettings()
+    function exportLocalData() {
+      const data = {
+        clienti: getClienti(),
+        operatori: getOperatori(),
+        rewards: getPremi(),
+        fortuna: getFortunaSettings(),
+        offerte: getOfferte(),
+        servizi: getServizi(),
+        beautyDays: getBeautyDays(),
+        contenuti: getContentSettings(),
+        fidelityRules: getFidelityRules(),
+        generalSettings: getGeneralSettings(),
+        operatorLog: getOperatorLog()
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "farmacia-montesano-admin-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function resetLocalAdminData() {
+      if (!confirm("Vuoi davvero cancellare tutti i dati locali del pannello admin?")) return;
+
+      [
+        "farmaciaClienti",
+        "farmaciaOperatori",
+        "farmaciaRewardsData",
+        "farmaciaFortunaSettings",
+        "farmaciaOfferte",
+        "farmaciaServizi",
+        "farmaciaBeautyDays",
+        "farmaciaContentSettings",
+        "farmaciaFidelityRules",
+        "farmaciaGeneralSettings",
+        "farmaciaOperatorLog"
+      ].forEach(k => localStorage.removeItem(k));
+
+      location.reload();
+    }
+
+    function seedDemoData() {
+      if (!confirm("Caricare dati demo di prova?")) return;
+
+      saveClienti([
+        { id: uid("client"), name: "Mario", surname: "Rossi", email: "mario@email.com", phone: "3331111111", clientId: "FM1001", clientCode: "FM1001", points: 2300, level: "Gold", activities: [], operations: [] },
+        { id: uid("client"), name: "Anna", surname: "Bianchi", email: "anna@email.com", phone: "3332222222", clientId: "FM1002", clientCode: "FM1002", points: 1450, level: "Gold", activities: [], operations: [] },
+        { id: uid("client"), name: "Luca", surname: "Verdi", email: "luca@email.com", phone: "3333333333", clientId: "FM1003", clientCode: "FM1003", points: 320, level: "Bronze", activities: [], operations: [] }
       ]);
 
-      appState = { offers, servizi, beauty, rewards, fortune, settings };
+      saveOperatori([
+        { id: uid("op"), nome: "Valerio", cognome: "Montesano", badge: "00107" },
+        { id: uid("op"), nome: "Anna", cognome: "Staff", badge: "00201" }
+      ]);
 
-      refreshDashboardStats();
-      offersUI.render(appState.offers);
-      servicesUI.render(appState.servizi);
-      beautyUI.render(appState.beauty);
-      rewardsUI.render(appState.rewards);
-      fortuneUI.render(appState.fortune);
-      renderSettings();
-      renderReport();
+      savePremiData({
+        points: 0,
+        redeemed: [],
+        rewards: [
+          { id: uid("reward"), title: "Voucher Beauty", category: "voucher", pointsRequired: 3000, image: "", active: true },
+          { id: uid("reward"), title: "Set Cosmetici", category: "beauty", pointsRequired: 4500, image: "", active: true }
+        ]
+      });
+
+      saveFortunaSettingsData({
+        active: true,
+        winChance: 0.32,
+        attemptsPerDay: 1,
+        prizes: [
+          { id: uid("fortune"), title: "Mini crema omaggio", active: true },
+          { id: uid("fortune"), title: "Bonus +20 punti", active: true }
+        ]
+      });
+
+      saveOfferte([
+        { id: uid("offer"), title: "Promo Vitamina C", price: "9,90€", image: "", description: "Promo del mese", active: true }
+      ]);
+
+      saveServizi([
+        { id: uid("service"), title: "Holter Pressorio", category: "Esami", image: "", description: "Servizio rapido in farmacia", active: true }
+      ]);
+
+      saveBeautyDays([
+        { id: uid("beauty"), title: "Beauty Day Viso", date: "2026-04-10", image: "", description: "Evento dedicato alla pelle", active: true }
+      ]);
+
+      saveContentSettings({
+        homeTitle: "Benvenuto in Farmacia Montesano",
+        homeSubtitle: "Scopri servizi, offerte e vantaggi fidelity",
+        heroImage: "",
+        showOfferte: true,
+        showServizi: true,
+        showBeauty: true,
+        showFortuna: true
+      });
+
+      saveFidelityRulesData({
+        euroPerPunto: 0.5,
+        goldThreshold: 1000,
+        diamondThreshold: 3000
+      });
+
+      saveGeneralSettings({
+        nomeFarmacia: "Farmacia Montesano",
+        registerEnabled: true,
+        loginEnabled: true
+      });
+
+      saveLS("farmaciaOperatorLog", [
+        {
+          id: uid("log"),
+          operatore: "Valerio Montesano",
+          badge: "00107",
+          cliente: "FM1001",
+          clienteNome: "Mario Rossi",
+          importo: 25,
+          puntiAcquisto: 50,
+          puntiExtra: 10,
+          totalePunti: 60,
+          descrizioneExtra: "Bonus maggio",
+          data: new Date().toLocaleString("it-IT")
+        }
+      ]);
+
+      initAdmin();
+      alert("Dati demo caricati.");
     }
 
-    reloadBtn.addEventListener("click", async () => {
-      await refreshData();
-      alert("Dati aggiornati.");
-    });
+    function initAdmin() {
+      renderDashboard();
+      renderClienti();
+      renderOperatori();
+      loadFidelityRulesIntoForm();
+      renderPremi();
+      renderFortuna();
+      renderOfferte();
+      renderServizi();
+      renderBeautyDays();
+      loadContentsIntoForm();
+      renderReport();
+      loadSystemSettingsIntoForm();
+    }
 
-    // Use same admin page if someone opens dashboard-admin
-    window.addEventListener("DOMContentLoaded", async () => {
-      await refreshData();
-    });
+    initAdmin();
   </script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
 </body>
 </html>
