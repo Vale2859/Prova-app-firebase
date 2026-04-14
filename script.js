@@ -30,8 +30,9 @@ async function attivaNotifiche() {
       });
 
       console.log("TOKEN:", token);
-
-    } else {
+      alert("TOKEN: " + token);
+      
+            } else {
       console.log("Notifiche rifiutate");
     }
 
