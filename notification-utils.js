@@ -20,44 +20,24 @@ function makeSubscriptionId(endpoint) {
 
 export async function askNotificationPermission() {
   if (!("Notification" in window)) {
-    alert("Notifiche non supportate");
     throw new Error("Notifiche non supportate");
   }
 
   if (!("serviceWorker" in navigator)) {
-    alert("Service Worker non supportato");
     throw new Error("Service Worker non supportato");
   }
 
   const user = auth.currentUser;
   if (!user) {
-    alert("Utente non autenticato");
     throw new Error("Utente non autenticato");
   }
 
   const permission = await Notification.requestPermission();
-  alert("Permesso: " + permission);
-
   if (permission !== "granted") {
     throw new Error("Permesso notifiche non concesso");
   }
 
   const registration = await navigator.serviceWorker.ready;
-  alert("Service worker pronto");
-
-  await setDoc(
-    doc(firestore, "users", user.uid),
-    {
-      pushDebug: {
-        permission: permission,
-        serviceWorkerReady: true,
-        updatedAt: serverTimestamp()
-      }
-    },
-    { merge: true }
-  );
-
-  alert("pushDebug salvato");
 
   let subscription = await registration.pushManager.getSubscription();
 
@@ -66,11 +46,6 @@ export async function askNotificationPermission() {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
     });
-  }
-
-  if (!subscription) {
-    alert("Subscription non creata");
-    throw new Error("Subscription non creata");
   }
 
   const subJson = subscription.toJSON();
@@ -86,8 +61,6 @@ export async function askNotificationPermission() {
     },
     { merge: true }
   );
-
-  alert("push_subscriptions salvato ✅");
 
   await setDoc(
     doc(firestore, "users", user.uid),
