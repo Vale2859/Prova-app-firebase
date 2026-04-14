@@ -162,15 +162,23 @@ exports.notifyTurniEAppoggi = functions.pubsub
     const dd = String(today.getDate()).padStart(2, "0");
     const todayKey = `${yyyy}-${mm}-${dd}`;
 
-    const snap = await db
-      .collection("turni")
-      .where("data", "==", todayKey)
-      .where("farmacia", "==", "montesano")
-      .get();
+    const response = await fetch(`${app.baseUrl}/turno.html`);
+    const html = await response.text();
 
-    for (const doc of snap.docs) {
-      const data = doc.data() || {};
-      const stato = (data.stato || "").toLowerCase();
+    const match = html.match(
+      /<script id="turni-data" type="application\/json">([\s\S]*?)<\/script>/
+    );
+
+    if (!match) return null;
+
+    const turni = JSON.parse(match[1]);
+
+    for (const item of turni) {
+      const data = item.data || "";
+      const stato = (item.stato || "").toLowerCase();
+      const farmacia = (item.farmacia || "").toLowerCase();
+
+      if (data !== todayKey || farmacia !== "montesano") continue;
 
       if (stato === "turno") {
         const users = await getEligibleUsersByFlag("turno");
