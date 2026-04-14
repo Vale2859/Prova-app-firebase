@@ -3,75 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Calendario Prenotazioni | Farmacia Montesano</title>
+  <title>Prenota | Farmacia Montesano</title>
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="mobile.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Montesano" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
 
   <style>
     :root{
-      --bg1:#f5f8f6;
-      --bg2:#edf3ef;
-      --card:#ffffffee;
-      --border:rgba(19,55,45,0.08);
-      --text:#103a32;
-      --muted:#73857f;
-      --green1:#2d7b5f;
-      --green2:#89c987;
-      --greenSoft:#e7f3ec;
-      --purple1:#8b68c8;
-      --purple2:#c6b1ea;
-      --purpleSoft:#eee6fa;
-      --danger:#df6671;
-      --dangerSoft:#fdecee;
-      --warning:#ac7a1b;
-      --warningSoft:#fff5dc;
-      --shadow:0 18px 44px rgba(16,49,39,0.08);
+      --bg:#f4f7f5;
+      --bg-soft:#eef3f0;
+      --card:#ffffff;
+      --text:#16372f;
+      --muted:#70837c;
+      --border:rgba(18,55,45,0.08);
+      --shadow:0 14px 34px rgba(16,49,39,0.08);
+
+      --green-1:#1b6c56;
+      --green-2:#84c691;
+      --green-soft:#e4f2e9;
+
+      --beauty-1:#8c67c3;
+      --beauty-2:#c9b6eb;
+      --beauty-soft:#efe7fb;
+
+      --blue-soft:#e5f1f5;
+      --blue-text:#2c7281;
+
+      --danger:#d86c7f;
+
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:16px;
     }
 
     *{ box-sizing:border-box; }
     html,body{ margin:0; padding:0; }
     body{
-      min-height:100vh;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#f8faf9 0%, #eef3f1 100%);
       color:var(--text);
-      background:
-        radial-gradient(circle at top left, #f8fbf8 0%, #f0f5f2 45%, #eaf1ed 100%);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
     }
 
     .page{
       width:100%;
       max-width:760px;
       margin:0 auto;
-      padding:10px 10px 22px;
+      padding:12px 12px 90px;
     }
 
     .topbar{
       display:flex;
       align-items:center;
       gap:10px;
-      margin-bottom:8px;
+      margin-bottom:12px;
     }
 
     .back-btn{
       width:48px;
       height:48px;
+      min-width:48px;
       border-radius:16px;
-      background:#fff;
       border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
       display:flex;
       align-items:center;
       justify-content:center;
       text-decoration:none;
-      color:var(--text);
       font-size:24px;
       box-shadow:var(--shadow);
       flex-shrink:0;
     }
 
-    .logo-wrap{
+    .brand-card{
       flex:1;
-      background:#fff;
+      background:rgba(255,255,255,0.95);
       border:1px solid var(--border);
       border-radius:22px;
       padding:10px 12px 8px;
@@ -79,363 +92,384 @@
       text-align:center;
     }
 
-    .logo-wrap img{
+    .brand-logo{
       width:100%;
-      max-width:138px;
+      max-width:120px;
       display:block;
       margin:0 auto 2px;
     }
 
-    .logo-sub{
+    .brand-sub{
+      margin:0;
       font-size:12px;
-      font-weight:800;
-      color:var(--green1);
-      letter-spacing:.02em;
       line-height:1.1;
+      font-weight:800;
+      color:var(--green-1);
+      letter-spacing:.02em;
     }
 
     .section{ display:none; }
     .section.active{ display:block; }
 
+    .compact-intro{
+      margin:2px 0 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      line-height:1.3;
+    }
+
     .home-grid{
       display:grid;
       grid-template-columns:1fr;
-      gap:8px;
+      gap:10px;
     }
 
     .choice-card,
-    .list-card,
-    .slots-card,
-    .summary-card,
-    .picker-card{
+    .item-card,
+    .booking-card,
+    .success-card{
       background:#fff;
       border:1px solid var(--border);
-      border-radius:22px;
+      border-radius:24px;
       overflow:hidden;
       box-shadow:var(--shadow);
     }
 
-    .choice-card{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .choice-image{
+    .choice-image,
+    .item-image{
       width:100%;
-      height:92px;
+      height:108px;
       object-fit:cover;
       display:block;
       background:#e8efeb;
     }
 
-    .choice-body{
-      padding:10px 12px 12px;
+    .choice-body,
+    .item-body{
+      padding:12px;
     }
 
-    .pill{
+    .choice-pill,
+    .chip{
       display:inline-flex;
       align-items:center;
-      min-height:24px;
-      padding:0 10px;
+      min-height:28px;
+      padding:0 11px;
       border-radius:999px;
       font-size:12px;
       font-weight:800;
-      margin-bottom:6px;
     }
 
-    .pill.service{
-      background:var(--greenSoft);
-      color:var(--green1);
+    .choice-pill.service,
+    .chip.service{
+      background:var(--green-soft);
+      color:#276951;
     }
 
-    .pill.beauty{
-      background:var(--purpleSoft);
-      color:var(--purple1);
+    .choice-pill.beauty,
+    .chip.beauty{
+      background:var(--beauty-soft);
+      color:#7f56b1;
     }
 
-    .choice-title{
-      margin:0 0 4px;
-      font-size:20px;
+    .chip.date{
+      background:var(--blue-soft);
+      color:var(--blue-text);
+    }
+
+    .choice-title,
+    .item-title{
+      margin:8px 0 6px;
+      font-size:24px;
       line-height:1;
       letter-spacing:-0.04em;
+      color:#10352e;
     }
 
-    .choice-text{
-      margin:0 0 8px;
+    .choice-text,
+    .item-text{
+      margin:0 0 10px;
       color:var(--muted);
       font-size:14px;
-      line-height:1.3;
+      line-height:1.38;
     }
 
     .choice-btn,
-    .main-btn,
+    .primary-btn,
     .secondary-btn,
-    .danger-btn{
-      min-height:42px;
+    .ghost-btn{
+      min-height:44px;
       border:none;
       border-radius:14px;
       padding:0 14px;
       font-size:15px;
       font-weight:800;
       cursor:pointer;
-      width:100%;
     }
 
     .choice-btn,
-    .main-btn{
+    .primary-btn{
       color:#fff;
     }
 
     .choice-btn.service,
-    .main-btn.service{
-      background:linear-gradient(135deg,var(--green1) 0%, var(--green2) 100%);
+    .primary-btn.service{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
     }
 
     .choice-btn.beauty,
-    .main-btn.beauty{
-      background:linear-gradient(135deg,var(--purple1) 0%, var(--purple2) 100%);
+    .primary-btn.beauty{
+      background:linear-gradient(135deg,var(--beauty-1),var(--beauty-2));
     }
 
     .secondary-btn{
-      background:#eff4f1;
+      background:#eff4f2;
+      color:#173a33;
+    }
+
+    .ghost-btn{
+      background:#fff;
       color:var(--text);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
     }
 
-    .danger-btn{
-      background:var(--dangerSoft);
-      color:var(--danger);
+    .section-head{
+      margin:4px 0 12px;
     }
 
-    .section-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin:6px 0 8px;
-    }
-
-    .section-title{
-      margin:0;
-      font-size:24px;
-      line-height:1;
-      letter-spacing:-0.04em;
-    }
-
-    .back-small{
-      min-height:38px;
-      padding:0 12px;
-      border:none;
-      border-radius:12px;
-      background:#eef3f0;
-      color:var(--text);
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .list-wrap{
-      display:grid;
-      gap:8px;
-    }
-
-    .list-card img{
-      width:100%;
-      height:120px;
-      object-fit:cover;
-      display:block;
-      background:#edf2ef;
-    }
-
-    .list-body{
-      padding:12px;
-    }
-
-    .list-title{
+    .section-head h2{
       margin:0 0 6px;
-      font-size:20px;
-      line-height:1.04;
-      letter-spacing:-0.04em;
+      font-size:30px;
+      line-height:.98;
+      letter-spacing:-0.05em;
+      color:#10352e;
     }
 
-    .list-desc{
-      margin:0 0 10px;
+    .section-head p{
+      margin:0;
       color:var(--muted);
       font-size:14px;
-      line-height:1.35;
+      line-height:1.38;
     }
 
-    .meta-row{
+    .toolbar{
       display:flex;
+      gap:8px;
+      margin-bottom:10px;
       flex-wrap:wrap;
+    }
+
+    .search{
+      width:100%;
+      min-height:46px;
+      padding:0 14px;
+      border-radius:15px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:15px;
+      box-shadow:var(--shadow);
+      outline:none;
+      margin-bottom:10px;
+    }
+
+    .list{
+      display:grid;
+      gap:10px;
+    }
+
+    .item-meta{
+      display:flex;
       gap:6px;
+      flex-wrap:wrap;
       margin-bottom:8px;
     }
 
-    .meta-chip{
-      display:inline-flex;
-      align-items:center;
-      min-height:28px;
-      padding:0 10px;
-      border-radius:999px;
-      background:#f1f5f2;
-      font-size:12px;
-      font-weight:800;
-      color:#35534b;
-    }
-
-    .booking-layout{
-      display:grid;
+    .item-actions{
+      display:flex;
       gap:8px;
+      flex-wrap:wrap;
     }
 
-    .picker-card{
-      padding:12px;
+    .item-actions .secondary-btn,
+    .item-actions .primary-btn{
+      flex:1;
     }
 
-    .picker-label{
-      display:block;
-      margin:0 0 7px;
-      font-size:13px;
-      font-weight:800;
-      color:#34554d;
+    .booking-card{
+      padding:14px;
     }
 
-    .picker-input{
-      width:100%;
-      min-height:44px;
-      border-radius:13px;
-      border:1px solid rgba(20,55,48,0.10);
-      background:#fff;
-      padding:0 12px;
-      font:inherit;
-      color:var(--text);
-      outline:none;
+    .booking-card h3{
+      margin:0 0 6px;
+      font-size:26px;
+      line-height:1;
+      letter-spacing:-0.04em;
+      color:#10352e;
     }
 
-    .slots-card{
-      padding:12px;
-    }
-
-    .slots-title{
-      margin:0 0 8px;
-      font-size:18px;
-      line-height:1.1;
-    }
-
-    .slot-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:8px;
-    }
-
-    .slot-btn{
-      min-height:46px;
-      border-radius:13px;
-      border:1px solid rgba(20,55,48,0.09);
-      background:#f6faf7;
-      color:var(--text);
+    .booking-sub{
+      margin:0 0 12px;
       font-size:14px;
-      font-weight:800;
+      color:var(--muted);
+      line-height:1.38;
+    }
+
+    .days-row{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      margin-bottom:12px;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .day-pill{
+      min-width:82px;
+      min-height:68px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      padding:9px 10px;
+      text-align:left;
+      box-shadow:0 8px 20px rgba(16,49,39,0.05);
       cursor:pointer;
-      transition:.15s ease;
     }
 
-    .slot-btn.available{
-      background:#eef8f2;
-      color:var(--green1);
-    }
-
-    .slot-btn.available.active{
-      background:linear-gradient(135deg,var(--green1) 0%, var(--green2) 100%);
+    .day-pill.active{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
       color:#fff;
       border-color:transparent;
     }
 
-    .slot-btn.busy{
-      background:#f2f2f2;
-      color:#8a9792;
+    .day-top{
+      display:block;
+      font-size:12px;
+      font-weight:700;
+      opacity:.86;
+      margin-bottom:4px;
     }
 
-    .slot-btn.wait{
-      background:#fff8e6;
-      color:#a47315;
+    .day-num{
+      display:block;
+      font-size:22px;
+      font-weight:900;
+      line-height:1;
     }
 
-    .summary-card{
-      padding:12px;
-    }
-
-    .summary-title{
-      margin:0 0 8px;
-      font-size:18px;
-    }
-
-    .summary-box{
-      border-radius:14px;
-      background:#f4f8f5;
-      padding:10px;
-      margin-bottom:10px;
-    }
-
-    .summary-box p{
-      margin:0 0 5px;
-      font-size:13px;
-      color:#35534b;
-      line-height:1.35;
-    }
-
-    .summary-box p:last-child{ margin-bottom:0; }
-
-    .actions-grid{
+    .slots-grid{
       display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:8px;
+      margin-bottom:12px;
     }
 
-    .empty-state{
+    .slot-btn{
+      min-height:46px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(16,49,39,0.05);
+    }
+
+    .slot-btn.active{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .summary{
+      background:#f1f6f4;
+      border-radius:18px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+      font-size:14px;
+    }
+
+    .summary-row:last-child{ margin-bottom:0; }
+
+    .summary-label{
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .summary-value{
+      color:var(--text);
+      font-weight:800;
+      text-align:right;
+    }
+
+    .empty{
+      padding:20px 14px;
+      border-radius:20px;
       background:#fff;
       border:1px solid var(--border);
-      border-radius:18px;
       box-shadow:var(--shadow);
-      padding:18px 14px;
-      text-align:center;
       color:var(--muted);
       font-size:14px;
+      text-align:center;
       line-height:1.4;
     }
 
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(10,20,18,0.42);
+      background:rgba(11,24,20,0.45);
       display:none;
       align-items:flex-end;
-      justify-content:center;
       z-index:999;
       padding:10px;
     }
 
-    .modal.show{ display:flex; }
+    .modal.show{
+      display:flex;
+    }
 
-    .modal-card{
+    .modal-sheet{
       width:100%;
       max-width:760px;
+      margin:0 auto;
       background:#fff;
-      border-radius:22px 22px 14px 14px;
-      padding:16px 12px 14px;
-      box-shadow:0 24px 60px rgba(0,0,0,0.18);
-      max-height:88vh;
+      border-radius:24px 24px 18px 18px;
+      padding:16px 14px;
+      box-shadow:0 24px 50px rgba(0,0,0,0.18);
+      max-height:92vh;
       overflow:auto;
     }
 
     .modal-title{
-      margin:0 0 8px;
+      margin:0 0 6px;
       font-size:24px;
       line-height:1;
       letter-spacing:-0.04em;
+      color:#10352e;
+    }
+
+    .modal-text{
+      margin:0 0 12px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.38;
     }
 
     .form-grid{
       display:grid;
-      gap:8px;
+      gap:10px;
     }
 
     .field{
@@ -445,58 +479,85 @@
     }
 
     .field label{
-      font-size:12px;
+      font-size:13px;
       font-weight:800;
-      color:#35534b;
+      color:#35534a;
     }
 
     .field input,
     .field select{
-      width:100%;
-      min-height:44px;
-      border-radius:13px;
-      border:1px solid rgba(20,55,48,0.10);
-      background:#fff;
-      padding:0 12px;
-      font:inherit;
+      min-height:46px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      padding:0 13px;
+      font-size:15px;
       color:var(--text);
+      background:#fff;
       outline:none;
     }
 
     .modal-actions{
-      display:grid;
+      display:flex;
       gap:8px;
+      flex-wrap:wrap;
       margin-top:12px;
     }
 
-    .top-note{
-      margin:0 0 10px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
+    .modal-actions .primary-btn,
+    .modal-actions .secondary-btn{
+      flex:1;
     }
 
-    .status-note{
-      margin-top:8px;
-      border-radius:13px;
-      padding:10px;
-      font-size:13px;
-      line-height:1.35;
+    .success-card{
       display:none;
+      padding:18px 14px;
+      text-align:center;
+      margin-top:12px;
     }
 
-    .status-note.show{ display:block; }
-    .status-note.ok{
-      background:#ebf7ee;
-      color:#1f6c4a;
+    .success-card.show{
+      display:block;
     }
-    .status-note.warn{
-      background:#fff6de;
-      color:#9a6d14;
+
+    .success-icon{
+      width:72px;
+      height:72px;
+      border-radius:50%;
+      margin:0 auto 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:32px;
+      background:#e4f3ea;
     }
-    .status-note.err{
-      background:#fdecee;
-      color:#bf4d59;
+
+    .success-card h3{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:.98;
+      letter-spacing:-0.05em;
+      color:#10352e;
+    }
+
+    .success-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    @media (min-width: 700px){
+      .home-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .list{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .slots-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
     }
   </style>
 
@@ -507,20 +568,23 @@
   <main class="page">
     <div class="topbar">
       <a href="index.html" class="back-btn" aria-label="Torna indietro">←</a>
-      <div class="logo-wrap">
-        <img src="logo.png" alt="Logo Farmacia Montesano" />
-        <div class="logo-sub">Prenota in farmacia</div>
+
+      <div class="brand-card">
+        <img src="logo.png" alt="Logo Farmacia Montesano" class="brand-logo" />
+        <p class="brand-sub">Prenota in farmacia</p>
       </div>
     </div>
 
     <section id="homeSection" class="section active">
+      <p class="compact-intro">Scegli cosa vuoi prenotare in modo semplice e veloce.</p>
+
       <div class="home-grid">
         <article class="choice-card" onclick="openServicesSection()">
           <img class="choice-image" src="images/fidelity.jpg" alt="Servizi farmacia" onerror="this.src='logo.png'" />
           <div class="choice-body">
-            <div class="pill service">Servizi</div>
+            <div class="choice-pill service">Servizi</div>
             <h2 class="choice-title">Servizi</h2>
-            <p class="choice-text">Prenota ECG, holter, analisi, consulenze e gli altri servizi della farmacia.</p>
+            <p class="choice-text">ECG, holter, analisi, consulenze e altri servizi della farmacia.</p>
             <button class="choice-btn service" type="button">Vai ai servizi</button>
           </div>
         </article>
@@ -528,9 +592,9 @@
         <article class="choice-card" onclick="openBeautySection()">
           <img class="choice-image" src="images/profilo.jpg" alt="Giornate beauty" onerror="this.src='logo.png'" />
           <div class="choice-body">
-            <div class="pill beauty">Giornate Beauty</div>
-            <h2 class="choice-title">Giornate Beauty</h2>
-            <p class="choice-text">Prenota il tuo posto per eventi, consulenze e giornate speciali in farmacia.</p>
+            <div class="choice-pill beauty">Giornate Beauty</div>
+            <h2 class="choice-title">Beauty</h2>
+            <p class="choice-text">Eventi, consulenze e giornate speciali prenotabili in farmacia.</p>
             <button class="choice-btn beauty" type="button">Vai alle giornate</button>
           </div>
         </article>
@@ -538,81 +602,101 @@
     </section>
 
     <section id="servicesSection" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Servizi</h2>
-        <button class="back-small" type="button" onclick="goHome()">Indietro</button>
+      <div class="section-head">
+        <h2>Servizi prenotabili</h2>
+        <p>Scegli il servizio e poi seleziona giorno e orario disponibili.</p>
       </div>
-      <div id="servicesList" class="list-wrap"></div>
+
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goHome()">← Indietro</button>
+      </div>
+
+      <input id="serviceSearch" class="search" type="text" placeholder="Cerca un servizio..." oninput="renderServices()" />
+      <div id="servicesList" class="list"></div>
     </section>
 
     <section id="beautySection" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Giornate Beauty</h2>
-        <button class="back-small" type="button" onclick="goHome()">Indietro</button>
+      <div class="section-head">
+        <h2>Giornate Beauty</h2>
+        <p>Scegli la giornata che preferisci e prenota il tuo posto.</p>
       </div>
-      <div id="beautyList" class="list-wrap"></div>
+
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goHome()">← Indietro</button>
+      </div>
+
+      <input id="beautySearch" class="search" type="text" placeholder="Cerca una giornata..." oninput="renderBeauty()" />
+      <div id="beautyList" class="list"></div>
     </section>
 
     <section id="bookingSection" class="section">
-      <div class="section-header">
-        <h2 id="bookingHeading" class="section-title">Prenotazione</h2>
-        <button class="back-small" type="button" onclick="goBackToList()">Indietro</button>
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goBackFromBooking()">← Indietro</button>
       </div>
 
-      <div class="booking-layout">
-        <div class="picker-card">
-          <label class="picker-label" for="bookingDate">Scegli il giorno</label>
-          <input id="bookingDate" class="picker-input" type="date" />
-        </div>
+      <div class="booking-card">
+        <h3 id="bookingTitle">Prenota</h3>
+        <p id="bookingSubtitle" class="booking-sub">Seleziona giorno e orario.</p>
 
-        <div class="slots-card">
-          <h3 class="slots-title">Orari disponibili</h3>
-          <div id="slotGrid" class="slot-grid"></div>
-          <div id="slotStatus" class="status-note"></div>
-        </div>
+        <div id="daysRow" class="days-row"></div>
+        <div id="slotsGrid" class="slots-grid"></div>
 
-        <div class="summary-card">
-          <h3 class="summary-title">Riepilogo</h3>
-          <div class="summary-box">
-            <p><strong>Tipo:</strong> <span id="summaryType">—</span></p>
-            <p><strong>Nome:</strong> <span id="summaryTitle">—</span></p>
-            <p><strong>Data:</strong> <span id="summaryDate">—</span></p>
-            <p><strong>Orario:</strong> <span id="summaryTime">—</span></p>
+        <div id="bookingSummary" class="summary" style="display:none;">
+          <div class="summary-row">
+            <span class="summary-label">Tipo</span>
+            <span id="summaryType" class="summary-value">—</span>
           </div>
-
-          <div class="actions-grid">
-            <button id="confirmBookingBtn" class="main-btn service" type="button" onclick="continueBooking()" disabled>Conferma prenotazione</button>
-            <button id="waitingBtn" class="secondary-btn" type="button" onclick="joinWaitingList()" style="display:none;">Entra in lista d’attesa</button>
+          <div class="summary-row">
+            <span class="summary-label">Titolo</span>
+            <span id="summaryTitle" class="summary-value">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Giorno</span>
+            <span id="summaryDate" class="summary-value">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Ora</span>
+            <span id="summaryTime" class="summary-value">—</span>
           </div>
         </div>
+
+        <div class="item-actions">
+          <button id="confirmBookingBtn" class="primary-btn service" type="button" style="display:none;" onclick="continueBooking()">Conferma prenotazione</button>
+        </div>
+      </div>
+
+      <div id="successCard" class="success-card">
+        <div class="success-icon">✔️</div>
+        <h3>Prenotazione inviata</h3>
+        <p id="successText">La tua richiesta è stata salvata con successo.</p>
       </div>
     </section>
   </main>
 
-  <div id="clientModal" class="modal">
-    <div class="modal-card">
-      <h2 class="modal-title">Dati cliente</h2>
-      <p class="top-note">Se non sei registrato, inserisci i dati per inviare la prenotazione.</p>
+  <div id="guestModal" class="modal">
+    <div class="modal-sheet">
+      <h3 class="modal-title">Completa i dati</h3>
+      <p class="modal-text">Inserisci i dati necessari per inviare la prenotazione.</p>
 
       <div class="form-grid">
         <div class="field">
-          <label for="clientName">Nome</label>
-          <input id="clientName" type="text" />
+          <label for="guestName">Nome</label>
+          <input id="guestName" type="text" placeholder="Nome" />
         </div>
 
         <div class="field">
-          <label for="clientSurname">Cognome</label>
-          <input id="clientSurname" type="text" />
+          <label for="guestSurname">Cognome</label>
+          <input id="guestSurname" type="text" placeholder="Cognome" />
         </div>
 
         <div class="field">
-          <label for="clientBirthDate">Data di nascita</label>
-          <input id="clientBirthDate" type="date" />
+          <label for="guestBirthDate">Data di nascita</label>
+          <input id="guestBirthDate" type="date" />
         </div>
 
         <div class="field">
-          <label for="clientGender">Sesso</label>
-          <select id="clientGender">
+          <label for="guestSex">Sesso</label>
+          <select id="guestSex">
             <option value="">Seleziona</option>
             <option value="M">Maschio</option>
             <option value="F">Femmina</option>
@@ -621,17 +705,15 @@
         </div>
 
         <div class="field">
-          <label for="clientPhone">Numero di telefono</label>
-          <input id="clientPhone" type="tel" />
+          <label for="guestPhone">Numero di telefono</label>
+          <input id="guestPhone" type="tel" placeholder="Numero di telefono" />
         </div>
       </div>
 
       <div class="modal-actions">
-        <button id="submitBookingBtn" class="main-btn service" type="button" onclick="submitBooking()">Invia prenotazione</button>
-        <button class="secondary-btn" type="button" onclick="closeClientModal()">Chiudi</button>
+        <button id="guestSubmitBtn" class="primary-btn service" type="button" onclick="submitGuestBooking()">Invia prenotazione</button>
+        <button class="secondary-btn" type="button" onclick="closeGuestModal()">Annulla</button>
       </div>
-
-      <div id="modalStatus" class="status-note"></div>
     </div>
   </div>
 
@@ -648,546 +730,614 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const state = {
-      services: [],
-      beauty: [],
-      currentType: null,
-      currentItem: null,
-      selectedDate: "",
-      selectedTime: "",
-      selectedBusyTime: "",
-      occupiedSlots: []
+    const sections = {
+      home: document.getElementById("homeSection"),
+      services: document.getElementById("servicesSection"),
+      beauty: document.getElementById("beautySection"),
+      booking: document.getElementById("bookingSection")
     };
 
-    const homeSection = document.getElementById("homeSection");
-    const servicesSection = document.getElementById("servicesSection");
-    const beautySection = document.getElementById("beautySection");
-    const bookingSection = document.getElementById("bookingSection");
-
-    const servicesList = document.getElementById("servicesList");
-    const beautyList = document.getElementById("beautyList");
-    const bookingDate = document.getElementById("bookingDate");
-    const slotGrid = document.getElementById("slotGrid");
-    const bookingHeading = document.getElementById("bookingHeading");
-
-    const summaryType = document.getElementById("summaryType");
-    const summaryTitle = document.getElementById("summaryTitle");
-    const summaryDate = document.getElementById("summaryDate");
-    const summaryTime = document.getElementById("summaryTime");
-
+    const servicesListEl = document.getElementById("servicesList");
+    const beautyListEl = document.getElementById("beautyList");
+    const daysRowEl = document.getElementById("daysRow");
+    const slotsGridEl = document.getElementById("slotsGrid");
+    const bookingTitleEl = document.getElementById("bookingTitle");
+    const bookingSubtitleEl = document.getElementById("bookingSubtitle");
+    const bookingSummaryEl = document.getElementById("bookingSummary");
     const confirmBookingBtn = document.getElementById("confirmBookingBtn");
-    const waitingBtn = document.getElementById("waitingBtn");
-    const slotStatus = document.getElementById("slotStatus");
+    const successCardEl = document.getElementById("successCard");
+    const successTextEl = document.getElementById("successText");
+    const guestModal = document.getElementById("guestModal");
+    const guestSubmitBtn = document.getElementById("guestSubmitBtn");
 
-    const clientModal = document.getElementById("clientModal");
-    const modalStatus = document.getElementById("modalStatus");
+    let allServices = [];
+    let allBeauty = [];
+    let currentBookingItem = null;
+    let currentBookingType = null;
+    let selectedDate = "";
+    let selectedTime = "";
+    let availableSlots = [];
+    let lastListSection = "home";
+    let currentWaitlistMode = false;
+    let requestedBusySlot = "";
 
-    const clientName = document.getElementById("clientName");
-    const clientSurname = document.getElementById("clientSurname");
-    const clientBirthDate = document.getElementById("clientBirthDate");
-    const clientGender = document.getElementById("clientGender");
-    const clientPhone = document.getElementById("clientPhone");
+    const WORK_START_HOUR = 9;
+    const WORK_END_HOUR = 19;
+    const SLOT_STEP_MINUTES = 15;
 
-    function showSection(section){
-      [homeSection, servicesSection, beautySection, bookingSection].forEach(s => s.classList.remove("active"));
-      section.classList.add("active");
+    function showSection(name){
+      Object.values(sections).forEach(section => section.classList.remove("active"));
+      sections[name].classList.add("active");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function goHome(){
-      state.currentType = null;
-      state.currentItem = null;
-      state.selectedDate = "";
-      state.selectedTime = "";
-      state.selectedBusyTime = "";
-      state.occupiedSlots = [];
-      showSection(homeSection);
+      lastListSection = "home";
+      resetBookingView();
+      showSection("home");
     }
 
     function openServicesSection(){
-      showSection(servicesSection);
+      lastListSection = "services";
+      renderServices();
+      showSection("services");
     }
 
     function openBeautySection(){
-      showSection(beautySection);
+      lastListSection = "beauty";
+      renderBeauty();
+      showSection("beauty");
     }
 
-    function goBackToList(){
-      if(state.currentType === "beauty"){
-        showSection(beautySection);
-      } else {
-        showSection(servicesSection);
-      }
+    function goBackFromBooking(){
+      resetBookingView();
+      showSection(lastListSection === "beauty" ? "beauty" : "services");
     }
 
-    function setStatus(el, type, text){
-      el.className = `status-note show ${type}`;
-      el.textContent = text;
+    function formatDisplayDate(dateStr){
+      const d = new Date(dateStr + "T12:00:00");
+      return d.toLocaleDateString("it-IT", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
     }
 
-    function clearStatus(el){
-      el.className = "status-note";
-      el.textContent = "";
-    }
-
-    function formatDateIT(value){
-      if(!value) return "—";
-      const d = new Date(value + "T12:00:00");
-      return d.toLocaleDateString("it-IT", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
-    }
-
-    function todayLocal(){
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth()+1).padStart(2,"0");
-      const d = String(now.getDate()).padStart(2,"0");
-      return `${y}-${m}-${d}`;
-    }
-
-    function getProfileFromStorage(){
-      const keys = ["fm_logged_user", "fm_profile", "userProfile", "clienteProfilo"];
-      for (const key of keys){
-        try{
-          const raw = localStorage.getItem(key);
-          if(!raw) continue;
-          const data = JSON.parse(raw);
-          if(data) return data;
-        }catch(e){}
-      }
-      return null;
-    }
-
-    function prefillClientFields(){
-      const p = getProfileFromStorage();
-      if(!p) return false;
-
-      clientName.value = p.nome || p.name || "";
-      clientSurname.value = p.cognome || p.surname || "";
-      clientBirthDate.value = p.dataNascita || p.birthDate || "";
-      clientGender.value = p.sesso || p.gender || "";
-      clientPhone.value = p.telefono || p.phone || "";
-
-      return !!(clientName.value && clientSurname.value && clientPhone.value);
-    }
-
-    function openClientModal(){
-      clearStatus(modalStatus);
-      prefillClientFields();
-      clientModal.classList.add("show");
-    }
-
-    function closeClientModal(){
-      clientModal.classList.remove("show");
-      resetModalPrimaryAction();
-    }
-
-    function getDurationMinutes(item, type){
-      if(type === "beauty"){
-        return parseInt(item.durataMinuti || item.durata || item.slotMinutes || 30, 10) || 30;
-      }
-      return parseInt(item.durataMinuti || item.durata || 20, 10) || 20;
-    }
-
-    function getWorkingHours(item){
+    function formatDayShort(dateStr){
+      const d = new Date(dateStr + "T12:00:00");
       return {
-        start: item.orarioInizio || "09:00",
-        end: item.orarioFine || "13:00"
+        top: d.toLocaleDateString("it-IT", { weekday: "short" }),
+        num: d.toLocaleDateString("it-IT", { day: "2-digit" })
       };
     }
 
+    function generateNextDays(total = 14){
+      const result = [];
+      const now = new Date();
+
+      for(let i = 0; i < total; i++){
+        const d = new Date(now);
+        d.setDate(now.getDate() + i);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2,"0");
+        const day = String(d.getDate()).padStart(2,"0");
+        result.push(`${y}-${m}-${day}`);
+      }
+
+      return result;
+    }
+
     function timeToMinutes(time){
-      const [h,m] = time.split(":").map(Number);
+      const [h, m] = time.split(":").map(Number);
       return h * 60 + m;
     }
 
-    function minutesToTime(total){
-      const h = String(Math.floor(total/60)).padStart(2,"0");
-      const m = String(total % 60).padStart(2,"0");
+    function minutesToTime(totalMinutes){
+      const h = String(Math.floor(totalMinutes / 60)).padStart(2,"0");
+      const m = String(totalMinutes % 60).padStart(2,"0");
       return `${h}:${m}`;
     }
 
-    function buildSlots(item, type){
-      const duration = getDurationMinutes(item, type);
-      const hours = getWorkingHours(item);
-      const start = timeToMinutes(hours.start);
-      const end = timeToMinutes(hours.end);
-
-      const slots = [];
-      for(let current = start; current + duration <= end; current += duration){
-        slots.push(minutesToTime(current));
-      }
-      return slots;
-    }
-
-    async function getBusySlots(date, sourceType, sourceId){
-      const snap = await db.collection("appointments")
-        .where("date", "==", date)
-        .where("sourceType", "==", sourceType)
+    async function getAppointmentsForItem(dateStr, sourceCollection, sourceId){
+      const snapshot = await db.collection("appointments")
+        .where("date", "==", dateStr)
+        .where("sourceCollection", "==", sourceCollection)
         .where("sourceId", "==", sourceId)
+        .where("status", "in", ["requested", "confirmed"])
         .get();
 
-      const busy = [];
-      snap.forEach(doc => {
-        const d = doc.data() || {};
-        if(d.status === "requested" || d.status === "confirmed"){
-          busy.push(d.startTime);
-        }
-      });
-      return busy;
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     }
 
-    async function openBookingScreen(type, item){
-      state.currentType = type;
-      state.currentItem = item;
-      state.selectedDate = "";
-      state.selectedTime = "";
-      state.selectedBusyTime = "";
-      state.occupiedSlots = [];
+    async function buildServiceSlots(service, dateStr){
+      const duration = Number(service.durationMinuti || service.durataMinuti || service.duration || 30);
+      const appointments = await getAppointmentsForItem(dateStr, "servizi", service.id);
 
-      bookingHeading.textContent = type === "beauty" ? "Prenota giornata beauty" : "Prenota servizio";
-      summaryType.textContent = type === "beauty" ? "Giornata Beauty" : "Servizio";
-      summaryTitle.textContent = item.titolo || item.nome || "Prenotazione";
-      summaryDate.textContent = "—";
-      summaryTime.textContent = "—";
+      const slots = [];
+      const start = WORK_START_HOUR * 60;
+      const end = WORK_END_HOUR * 60;
 
-      confirmBookingBtn.className = type === "beauty" ? "main-btn beauty" : "main-btn service";
-      confirmBookingBtn.disabled = true;
-      waitingBtn.style.display = "none";
-      clearStatus(slotStatus);
+      for(let current = start; current + duration <= end; current += SLOT_STEP_MINUTES){
+        const startTime = minutesToTime(current);
+        const endTime = minutesToTime(current + duration);
 
-      bookingDate.min = todayLocal();
-      bookingDate.value = "";
-      slotGrid.innerHTML = `<div class="empty-state">Scegli prima il giorno per vedere gli orari disponibili.</div>`;
+        const overlaps = appointments.some(app => {
+          const appStart = timeToMinutes(app.startTime || "00:00");
+          const appEnd = timeToMinutes(app.endTime || "00:00");
+          return current < appEnd && (current + duration) > appStart;
+        });
 
-      showSection(bookingSection);
-    }
-
-    async function renderSlots(){
-      if(!state.currentItem || !state.selectedDate){
-        slotGrid.innerHTML = `<div class="empty-state">Scegli prima il giorno per vedere gli orari disponibili.</div>`;
-        return;
-      }
-
-      const slots = buildSlots(state.currentItem, state.currentType);
-      state.occupiedSlots = await getBusySlots(state.selectedDate, state.currentType, state.currentItem.id);
-
-      let html = "";
-
-      if(!slots.length){
-        html = `<div class="empty-state">Nessuno slot disponibile per questo elemento.</div>`;
-      } else {
-        slots.forEach(slot => {
-          const busy = state.occupiedSlots.includes(slot);
-          let cls = "slot-btn ";
-          let text = slot;
-
-          if(busy){
-            cls += state.selectedBusyTime === slot ? "wait active" : "busy";
-            text += state.selectedBusyTime === slot ? " • Lista" : " • Occupato";
-          } else {
-            cls += state.selectedTime === slot ? "available active" : "available";
-          }
-
-          html += `<button type="button" class="${cls}" onclick="selectSlot('${slot}', ${busy})">${text}</button>`;
+        slots.push({
+          startTime,
+          endTime,
+          busy: overlaps
         });
       }
 
-      slotGrid.innerHTML = html;
+      return slots;
     }
 
-    function selectSlot(time, busy){
-      if(busy){
-        state.selectedBusyTime = time;
-        state.selectedTime = "";
-        summaryTime.textContent = `${time} (occupato)`;
-        confirmBookingBtn.disabled = true;
-        waitingBtn.style.display = "block";
-        setStatus(slotStatus, "warn", "Questo orario è già occupato. Puoi entrare in lista d’attesa.");
-      } else {
-        state.selectedTime = time;
-        state.selectedBusyTime = "";
-        summaryTime.textContent = time;
-        confirmBookingBtn.disabled = false;
-        waitingBtn.style.display = "none";
-        clearStatus(slotStatus);
+    async function buildBeautySlots(eventItem, dateStr){
+      const duration = Number(eventItem.durationMinuti || eventItem.durataMinuti || 20);
+      const appointments = await getAppointmentsForItem(dateStr, "beauty", eventItem.id);
+      const slots = [];
+      const presetTimes = ["09:00","09:20","09:40","10:00","10:20","10:40","11:00","11:20","11:40","12:00","16:00","16:20","16:40","17:00","17:20","17:40","18:00"];
+
+      for(const time of presetTimes){
+        const start = timeToMinutes(time);
+        const end = start + duration;
+
+        const overlaps = appointments.some(app => {
+          const appStart = timeToMinutes(app.startTime || "00:00");
+          const appEnd = timeToMinutes(app.endTime || "00:00");
+          return start < appEnd && end > appStart;
+        });
+
+        slots.push({
+          startTime: time,
+          endTime: minutesToTime(end),
+          busy: overlaps
+        });
       }
-      renderSlots();
+
+      return slots;
     }
 
-    bookingDate.addEventListener("change", async function(){
-      state.selectedDate = this.value;
-      state.selectedTime = "";
-      state.selectedBusyTime = "";
-      summaryDate.textContent = formatDateIT(this.value);
-      summaryTime.textContent = "—";
-      confirmBookingBtn.disabled = true;
-      waitingBtn.style.display = "none";
-      clearStatus(slotStatus);
-      await renderSlots();
-    });
+    function renderServices(){
+      const q = document.getElementById("serviceSearch").value.trim().toLowerCase();
+
+      const items = allServices.filter(item => {
+        const text = `${item.nome || ""} ${item.titolo || ""} ${item.descrizione || ""}`.toLowerCase();
+        return item.attivo === true && text.includes(q);
+      });
+
+      if(!items.length){
+        servicesListEl.innerHTML = `<div class="empty">Nessun servizio trovato.</div>`;
+        return;
+      }
+
+      servicesListEl.innerHTML = items.map(item => `
+        <article class="item-card">
+          <img class="item-image" src="${item.immagine || item.imageUrl || "logo.png"}" alt="${escapeHtml(item.nome || item.titolo || "Servizio")}" onerror="this.src='logo.png'" />
+          <div class="item-body">
+            <div class="item-meta">
+              <span class="chip service">Servizio</span>
+              <span class="chip date">${Number(item.durationMinuti || item.durataMinuti || item.duration || 30)} min</span>
+            </div>
+            <h3 class="item-title">${escapeHtml(item.nome || item.titolo || "Servizio")}</h3>
+            <p class="item-text">${escapeHtml(item.descrizione || "Servizio della farmacia.")}</p>
+            <div class="item-actions">
+              <button class="secondary-btn" type="button" onclick="showServiceDetails('${item.id}')">Dettagli</button>
+              <button class="primary-btn service" type="button" onclick="startBooking('service','${item.id}')">Prenota</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderBeauty(){
+      const q = document.getElementById("beautySearch").value.trim().toLowerCase();
+
+      const items = allBeauty.filter(item => {
+        const text = `${item.titolo || ""} ${item.nome || ""} ${item.descrizione || ""}`.toLowerCase();
+        return item.attivo === true && text.includes(q);
+      });
+
+      if(!items.length){
+        beautyListEl.innerHTML = `<div class="empty">Nessuna giornata beauty trovata.</div>`;
+        return;
+      }
+
+      beautyListEl.innerHTML = items.map(item => `
+        <article class="item-card">
+          <img class="item-image" src="${item.immagine || item.imageUrl || "logo.png"}" alt="${escapeHtml(item.titolo || item.nome || "Giornata beauty")}" onerror="this.src='logo.png'" />
+          <div class="item-body">
+            <div class="item-meta">
+              <span class="chip beauty">Beauty</span>
+              ${item.data ? `<span class="chip date">${escapeHtml(item.data)}</span>` : ``}
+            </div>
+            <h3 class="item-title">${escapeHtml(item.titolo || item.nome || "Giornata Beauty")}</h3>
+            <p class="item-text">${escapeHtml(item.descrizione || "Evento speciale in farmacia.")}</p>
+            <div class="item-actions">
+              <button class="secondary-btn" type="button" onclick="showBeautyDetails('${item.id}')">Dettagli</button>
+              <button class="primary-btn beauty" type="button" onclick="startBooking('beauty','${item.id}')">Prenota</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function showServiceDetails(id){
+      const item = allServices.find(x => x.id === id);
+      if(!item) return;
+      alert(`${item.nome || item.titolo || "Servizio"}\n\n${item.descrizione || "Nessuna descrizione disponibile."}`);
+    }
+
+    function showBeautyDetails(id){
+      const item = allBeauty.find(x => x.id === id);
+      if(!item) return;
+      alert(`${item.titolo || item.nome || "Giornata Beauty"}\n\n${item.descrizione || "Nessuna descrizione disponibile."}`);
+    }
+
+    async function startBooking(type, id){
+      currentBookingType = type;
+      currentBookingItem = type === "service"
+        ? allServices.find(x => x.id === id)
+        : allBeauty.find(x => x.id === id);
+
+      if(!currentBookingItem) return;
+
+      selectedDate = "";
+      selectedTime = "";
+      availableSlots = [];
+      requestedBusySlot = "";
+      currentWaitlistMode = false;
+      successCardEl.classList.remove("show");
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+
+      confirmBookingBtn.className = type === "beauty"
+        ? "primary-btn beauty"
+        : "primary-btn service";
+
+      bookingTitleEl.textContent = currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione";
+
+      if(type === "service"){
+        bookingSubtitleEl.textContent = `Seleziona giorno e orario per ${currentBookingItem.nome || currentBookingItem.titolo}.`;
+        renderDays(generateNextDays(14));
+      } else {
+        const beautyDate = currentBookingItem.data || "";
+        if(!beautyDate){
+          alert("Questa giornata non ha una data configurata.");
+          return;
+        }
+        bookingSubtitleEl.textContent = `Prenota il tuo posto per ${currentBookingItem.titolo || currentBookingItem.nome}.`;
+        renderDays([beautyDate]);
+      }
+
+      lastListSection = type === "beauty" ? "beauty" : "services";
+      showSection("booking");
+    }
+
+    function renderDays(days){
+      daysRowEl.innerHTML = days.map((day, index) => {
+        const formatted = formatDayShort(day);
+        return `
+          <button class="day-pill ${index === 0 ? "active" : ""}" type="button" onclick="selectDate('${day}', this)">
+            <span class="day-top">${escapeHtml(formatted.top)}</span>
+            <span class="day-num">${escapeHtml(formatted.num)}</span>
+          </button>
+        `;
+      }).join("");
+
+      if(days.length){
+        selectDate(days[0], daysRowEl.querySelector(".day-pill"));
+      }
+    }
+
+    async function selectDate(dateStr, buttonEl){
+      selectedDate = dateStr;
+      selectedTime = "";
+      requestedBusySlot = "";
+      currentWaitlistMode = false;
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+
+      daysRowEl.querySelectorAll(".day-pill").forEach(btn => btn.classList.remove("active"));
+      if(buttonEl) buttonEl.classList.add("active");
+
+      slotsGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Caricamento orari...</div>`;
+
+      if(currentBookingType === "service"){
+        availableSlots = await buildServiceSlots(currentBookingItem, dateStr);
+      } else {
+        availableSlots = await buildBeautySlots(currentBookingItem, dateStr);
+      }
+
+      if(!availableSlots.length){
+        slotsGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Nessun orario disponibile per questo giorno.</div>`;
+        return;
+      }
+
+      slotsGridEl.innerHTML = availableSlots.map(slot => `
+        <button class="slot-btn ${slot.busy ? "busy-slot" : ""}" type="button" onclick="selectSlot('${slot.startTime}', ${slot.busy}, this)">
+          ${escapeHtml(slot.startTime)}${slot.busy ? " • Occupato" : ""}
+        </button>
+      `).join("");
+    }
+
+    function selectSlot(time, isBusy, buttonEl){
+      slotsGridEl.querySelectorAll(".slot-btn").forEach(btn => btn.classList.remove("active"));
+      if(buttonEl) buttonEl.classList.add("active");
+
+      document.getElementById("summaryType").textContent = currentBookingType === "service" ? "Servizio" : "Giornata Beauty";
+      document.getElementById("summaryTitle").textContent = currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione";
+      document.getElementById("summaryDate").textContent = formatDisplayDate(selectedDate);
+      document.getElementById("summaryTime").textContent = time;
+
+      bookingSummaryEl.style.display = "";
+
+      if(isBusy){
+        selectedTime = "";
+        requestedBusySlot = time;
+        currentWaitlistMode = true;
+        confirmBookingBtn.style.display = "";
+        confirmBookingBtn.textContent = "Entra in lista d’attesa";
+      } else {
+        selectedTime = time;
+        requestedBusySlot = "";
+        currentWaitlistMode = false;
+        confirmBookingBtn.style.display = "";
+        confirmBookingBtn.textContent = "Conferma prenotazione";
+      }
+    }
+
+    function getStoredUserProfile(){
+      const candidateKeys = [
+        "montesanoUserProfile",
+        "userProfile",
+        "clienteProfile",
+        "currentUserProfile"
+      ];
+
+      for(const key of candidateKeys){
+        try{
+          const raw = localStorage.getItem(key);
+          if(!raw) continue;
+          const parsed = JSON.parse(raw);
+          if(parsed && (parsed.nome || parsed.name) && (parsed.telefono || parsed.phone)){
+            return parsed;
+          }
+        }catch(err){}
+      }
+
+      return null;
+    }
 
     function continueBooking(){
-      if(!state.selectedDate || !state.selectedTime || !state.currentItem) return;
-      resetModalPrimaryAction();
-      openClientModal();
+      const profile = getStoredUserProfile();
+
+      if(profile){
+        submitBooking({
+          nome: profile.nome || profile.name || "",
+          cognome: profile.cognome || profile.surname || "",
+          dataNascita: profile.dataNascita || profile.birthDate || "",
+          sesso: profile.sesso || profile.sex || "",
+          telefono: profile.telefono || profile.phone || "",
+          userId: profile.uid || profile.userId || null,
+          isRegistered: true
+        });
+        return;
+      }
+
+      openGuestModal();
     }
 
-    async function slotStillFree(){
-      const snap = await db.collection("appointments")
-        .where("date", "==", state.selectedDate)
-        .where("sourceType", "==", state.currentType)
-        .where("sourceId", "==", state.currentItem.id)
-        .where("startTime", "==", state.selectedTime)
-        .get();
+    function openGuestModal(){
+      guestSubmitBtn.className = currentBookingType === "beauty"
+        ? "primary-btn beauty"
+        : "primary-btn service";
 
-      let busy = false;
-      snap.forEach(doc => {
-        const d = doc.data() || {};
-        if(d.status === "requested" || d.status === "confirmed"){
-          busy = true;
+      guestSubmitBtn.textContent = currentWaitlistMode
+        ? "Entra in lista d’attesa"
+        : "Invia prenotazione";
+
+      guestModal.classList.add("show");
+    }
+
+    function closeGuestModal(){
+      guestModal.classList.remove("show");
+    }
+
+    function submitGuestBooking(){
+      const nome = document.getElementById("guestName").value.trim();
+      const cognome = document.getElementById("guestSurname").value.trim();
+      const dataNascita = document.getElementById("guestBirthDate").value;
+      const sesso = document.getElementById("guestSex").value;
+      const telefono = document.getElementById("guestPhone").value.trim();
+
+      if(!nome || !cognome || !dataNascita || !sesso || !telefono){
+        alert("Compila tutti i campi richiesti.");
+        return;
+      }
+
+      submitBooking({
+        nome,
+        cognome,
+        dataNascita,
+        sesso,
+        telefono,
+        userId: null,
+        isRegistered: false
+      });
+    }
+
+    async function submitBooking(clientData){
+      try{
+        if(!currentWaitlistMode){
+          const chosenSlot = availableSlots.find(slot => slot.startTime === selectedTime && !slot.busy);
+          if(!chosenSlot){
+            alert("Seleziona un orario disponibile.");
+            return;
+          }
+
+          const duration = Number(
+            currentBookingItem.durationMinuti ||
+            currentBookingItem.durataMinuti ||
+            currentBookingItem.duration ||
+            20
+          );
+
+          const payload = {
+            type: currentBookingType === "service" ? "servizio" : "giornata",
+            sourceCollection: currentBookingType === "service" ? "servizi" : "beauty",
+            sourceId: currentBookingItem.id,
+            title: currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione",
+            description: currentBookingItem.descrizione || "",
+            date: selectedDate,
+            startTime: chosenSlot.startTime,
+            endTime: chosenSlot.endTime,
+            durationMinuti: duration,
+            status: "requested",
+            clientName: clientData.nome,
+            clientSurname: clientData.cognome,
+            clientBirthDate: clientData.dataNascita,
+            clientSex: clientData.sesso,
+            clientPhone: clientData.telefono,
+            userId: clientData.userId,
+            isRegisteredUser: clientData.isRegistered,
+            createdByType: "customer",
+            createdByUid: clientData.userId || null,
+            createdByName: clientData.nome,
+            pharmacyViewColor: "yellow",
+            needsRecall: false,
+            notes: "",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+
+          await db.collection("appointments").add(payload);
+
+          successTextEl.textContent =
+            `${payload.title} prenotato per ${formatDisplayDate(payload.date)} alle ${payload.startTime}.`;
+        } else {
+          if(!requestedBusySlot){
+            alert("Seleziona prima uno slot occupato.");
+            return;
+          }
+
+          const waitPayload = {
+            type: currentBookingType === "service" ? "servizio" : "giornata",
+            sourceCollection: currentBookingType === "service" ? "servizi" : "beauty",
+            sourceId: currentBookingItem.id,
+            title: currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione",
+            date: selectedDate,
+            requestedTime: requestedBusySlot,
+            status: "active",
+            notified: false,
+            clientName: clientData.nome,
+            clientSurname: clientData.cognome,
+            clientBirthDate: clientData.dataNascita,
+            clientSex: clientData.sesso,
+            clientPhone: clientData.telefono,
+            userId: clientData.userId,
+            isRegisteredUser: clientData.isRegistered,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+
+          await db.collection("appointment_waitlist").add(waitPayload);
+
+          successTextEl.textContent =
+            `Sei entrato in lista d’attesa per ${currentBookingItem.nome || currentBookingItem.titolo} il ${formatDisplayDate(selectedDate)} alle ${requestedBusySlot}.`;
         }
-      });
 
-      return !busy;
+        closeGuestModal();
+        resetGuestForm();
+
+        successCardEl.classList.add("show");
+        bookingSummaryEl.style.display = "none";
+        confirmBookingBtn.style.display = "none";
+      } catch(err){
+        console.error(err);
+        alert("C'è stato un problema durante il salvataggio.");
+      }
     }
 
-    async function submitBooking(){
-      const nome = clientName.value.trim();
-      const cognome = clientSurname.value.trim();
-      const dataNascita = clientBirthDate.value || "";
-      const sesso = clientGender.value || "";
-      const telefono = clientPhone.value.trim();
-
-      if(!nome || !cognome || !telefono){
-        setStatus(modalStatus, "err", "Inserisci almeno nome, cognome e numero di telefono.");
-        return;
-      }
-
-      if(!state.currentItem || !state.selectedDate || !state.selectedTime){
-        setStatus(modalStatus, "err", "Seleziona prima giorno e orario.");
-        return;
-      }
-
-      const free = await slotStillFree();
-      if(!free){
-        setStatus(modalStatus, "err", "Questo orario è stato appena prenotato. Scegline un altro.");
-        await renderSlots();
-        confirmBookingBtn.disabled = true;
-        setTimeout(() => closeClientModal(), 700);
-        return;
-      }
-
-      const duration = getDurationMinutes(state.currentItem, state.currentType);
-      const endTime = minutesToTime(timeToMinutes(state.selectedTime) + duration);
-
-      await db.collection("appointments").add({
-        sourceType: state.currentType,
-        sourceId: state.currentItem.id,
-        title: state.currentItem.titolo || state.currentItem.nome || "",
-        date: state.selectedDate,
-        startTime: state.selectedTime,
-        endTime: endTime,
-        durationMinutes: duration,
-        status: "requested",
-        clientName: nome,
-        clientSurname: cognome,
-        clientBirthDate: dataNascita,
-        clientGender: sesso,
-        clientPhone: telefono,
-        userId: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdFrom: "mobile-calendar"
-      });
-
-      setStatus(modalStatus, "ok", "Prenotazione inviata correttamente.");
-      setTimeout(async () => {
-        closeClientModal();
-        state.selectedTime = "";
-        summaryTime.textContent = "—";
-        confirmBookingBtn.disabled = true;
-        await renderSlots();
-        setStatus(slotStatus, "ok", "Prenotazione inviata.");
-      }, 800);
+    function resetGuestForm(){
+      document.getElementById("guestName").value = "";
+      document.getElementById("guestSurname").value = "";
+      document.getElementById("guestBirthDate").value = "";
+      document.getElementById("guestSex").value = "";
+      document.getElementById("guestPhone").value = "";
     }
 
-    async function joinWaitingList(){
-      resetModalPrimaryAction();
-      const btn = document.getElementById("submitBookingBtn");
-      btn.textContent = "Entra in lista d’attesa";
-      btn.onclick = submitWaitingList;
-
-      prefillClientFields();
-      openClientModal();
-      setStatus(modalStatus, "warn", "Questo orario è occupato. Se confermi, entrerai in lista d’attesa.");
+    function resetBookingView(){
+      currentBookingItem = null;
+      currentBookingType = null;
+      selectedDate = "";
+      selectedTime = "";
+      availableSlots = [];
+      requestedBusySlot = "";
+      currentWaitlistMode = false;
+      daysRowEl.innerHTML = "";
+      slotsGridEl.innerHTML = "";
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+      successCardEl.classList.remove("show");
     }
 
-    async function submitWaitingList(){
-      const nome = clientName.value.trim();
-      const cognome = clientSurname.value.trim();
-      const dataNascita = clientBirthDate.value || "";
-      const sesso = clientGender.value || "";
-      const telefono = clientPhone.value.trim();
-
-      if(!nome || !cognome || !telefono){
-        setStatus(modalStatus, "err", "Inserisci almeno nome, cognome e numero di telefono.");
-        return;
-      }
-
-      if(!state.currentItem || !state.selectedDate || !state.selectedBusyTime){
-        setStatus(modalStatus, "err", "Seleziona prima uno slot occupato.");
-        return;
-      }
-
-      const dup = await db.collection("waiting_list")
-        .where("sourceType", "==", state.currentType)
-        .where("sourceId", "==", state.currentItem.id)
-        .where("date", "==", state.selectedDate)
-        .where("desiredTime", "==", state.selectedBusyTime)
-        .where("clientPhone", "==", telefono)
-        .where("status", "==", "active")
-        .get();
-
-      if(!dup.empty){
-        setStatus(modalStatus, "warn", "Sei già in lista d’attesa per questo orario.");
-        return;
-      }
-
-      await db.collection("waiting_list").add({
-        sourceType: state.currentType,
-        sourceId: state.currentItem.id,
-        title: state.currentItem.titolo || state.currentItem.nome || "",
-        date: state.selectedDate,
-        desiredTime: state.selectedBusyTime,
-        clientName: nome,
-        clientSurname: cognome,
-        clientBirthDate: dataNascita,
-        clientGender: sesso,
-        clientPhone: telefono,
-        userId: null,
-        status: "active",
-        notifiedAt: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdFrom: "mobile-calendar"
-      });
-
-      setStatus(modalStatus, "ok", "Sei entrato in lista d’attesa.");
-      setTimeout(() => {
-        closeClientModal();
-        setStatus(slotStatus, "warn", "Sei in lista d’attesa per questo orario.");
-      }, 800);
+    function escapeHtml(text){
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    function resetModalPrimaryAction(){
-      const btn = document.getElementById("submitBookingBtn");
-      btn.textContent = "Invia prenotazione";
-      btn.onclick = submitBooking;
+    async function loadServices(){
+      const snapshot = await db.collection("servizi").get();
+      allServices = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      renderServices();
     }
 
-    clientModal.addEventListener("click", function(e){
-      if(e.target === clientModal){
-        closeClientModal();
-      }
-    });
-
-    function renderServiceCards(items){
-      if(!items.length){
-        servicesList.innerHTML = `<div class="empty-state">Non ci sono servizi attivi al momento.</div>`;
-        return;
-      }
-
-      servicesList.innerHTML = items.map(item => `
-        <article class="list-card">
-          <img src="${item.immagine || item.imageUrl || 'logo.png'}" alt="${item.titolo || item.nome || 'Servizio'}" onerror="this.src='logo.png'" />
-          <div class="list-body">
-            <div class="pill service">Servizio</div>
-            <h3 class="list-title">${item.titolo || item.nome || "Servizio"}</h3>
-            <div class="meta-row">
-              <span class="meta-chip">Durata ${getDurationMinutes(item, "service")} min</span>
-              <span class="meta-chip">${item.orarioInizio || "09:00"} - ${item.orarioFine || "13:00"}</span>
-            </div>
-            <p class="list-desc">${item.descrizione || "Prenota questo servizio in farmacia in pochi passaggi."}</p>
-            <button class="main-btn service" type="button" onclick="openBooking('service','${item.id}')">Prenota</button>
-          </div>
-        </article>
-      `).join("");
+    async function loadBeauty(){
+      const snapshot = await db.collection("beauty").get();
+      allBeauty = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      renderBeauty();
     }
 
-    function renderBeautyCards(items){
-      if(!items.length){
-        beautyList.innerHTML = `<div class="empty-state">Non ci sono giornate beauty attive al momento.</div>`;
-        return;
+    async function initPage(){
+      try{
+        await Promise.all([loadServices(), loadBeauty()]);
+      } catch(err){
+        console.error(err);
+        servicesListEl.innerHTML = `<div class="empty">Errore nel caricamento dei servizi.</div>`;
+        beautyListEl.innerHTML = `<div class="empty">Errore nel caricamento delle giornate beauty.</div>`;
       }
-
-      beautyList.innerHTML = items.map(item => `
-        <article class="list-card">
-          <img src="${item.immagine || item.imageUrl || 'logo.png'}" alt="${item.titolo || item.nome || 'Giornata beauty'}" onerror="this.src='logo.png'" />
-          <div class="list-body">
-            <div class="pill beauty">Beauty</div>
-            <h3 class="list-title">${item.titolo || item.nome || "Giornata beauty"}</h3>
-            <div class="meta-row">
-              <span class="meta-chip">${item.data || "Data da definire"}</span>
-              <span class="meta-chip">Slot ${getDurationMinutes(item, "beauty")} min</span>
-            </div>
-            <p class="list-desc">${item.descrizione || "Prenota il tuo posto per questa giornata beauty."}</p>
-            <button class="main-btn beauty" type="button" onclick="openBooking('beauty','${item.id}')">Prenota</button>
-          </div>
-        </article>
-      `).join("");
     }
-
-    window.openBooking = function(type, id){
-      if(type === "beauty"){
-        const item = state.beauty.find(x => x.id === id);
-        openBookingScreen("beauty", item);
-      } else {
-        const item = state.services.find(x => x.id === id);
-        openBookingScreen("service", item);
-      }
-    };
 
     window.openServicesSection = openServicesSection;
     window.openBeautySection = openBeautySection;
     window.goHome = goHome;
-    window.goBackToList = goBackToList;
+    window.goBackFromBooking = goBackFromBooking;
+    window.startBooking = startBooking;
+    window.showServiceDetails = showServiceDetails;
+    window.showBeautyDetails = showBeautyDetails;
+    window.selectDate = selectDate;
     window.selectSlot = selectSlot;
     window.continueBooking = continueBooking;
-    window.joinWaitingList = joinWaitingList;
-    window.submitBooking = submitBooking;
-    window.submitWaitingList = submitWaitingList;
-    window.closeClientModal = closeClientModal;
+    window.submitGuestBooking = submitGuestBooking;
+    window.closeGuestModal = closeGuestModal;
 
-    async function loadServices(){
-      const snap = await db.collection("servizi").get();
-      const items = [];
-      snap.forEach(doc => {
-        const d = doc.data() || {};
-        if(d.attivo === false) return;
-        items.push({ id: doc.id, ...d });
-      });
-      state.services = items;
-      renderServiceCards(items);
-    }
-
-    async function loadBeauty(){
-      const snap = await db.collection("beauty").get();
-      const items = [];
-      snap.forEach(doc => {
-        const d = doc.data() || {};
-        if(d.attivo !== true) return;
-        items.push({ id: doc.id, ...d });
-      });
-
-      items.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
-      state.beauty = items;
-      renderBeautyCards(items);
-    }
-
-    async function init(){
-      await loadServices();
-      await loadBeauty();
-    }
-
-    init();
+    initPage();
   </script>
 </body>
 </html>
