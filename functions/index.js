@@ -166,7 +166,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
     const hour = now.getHours();
 
     // 🔥 BLOCCO: manda SOLO alle 8
-    // if (hour !== 8) return null;
+    // if (!isMontesanoTurno) return null;
 
     const response = await fetch(`${app.baseUrl}/turno.html`);
     const html = await response.text();
