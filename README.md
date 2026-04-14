@@ -9,3 +9,5 @@
 - Il progetto è una ricostruzione statica ispirata al sito pubblico.
 - Funziona senza build, plugin o framework.
 - Puoi personalizzare testi, immagini e collegamenti pagina per pagina.
+
+
