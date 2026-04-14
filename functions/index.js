@@ -274,7 +274,6 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Errore");
   }
 });
-
 exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
   try {
     const users = await getEligibleUsersByFlag("turno");
