@@ -27,18 +27,30 @@ export async function askNotificationPermission() {
     throw new Error("Service Worker non supportato");
   }
 
-  const permission = await Notification.requestPermission();
-
-  if (permission !== "granted") {
-    throw new Error("Permesso notifiche non concesso");
-  }
-
   const user = auth.currentUser;
   if (!user) {
     throw new Error("Utente non autenticato");
   }
 
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") {
+    throw new Error("Permesso notifiche non concesso");
+  }
+
   const registration = await navigator.serviceWorker.ready;
+
+  // Scriviamo subito un test nel documento utente
+  await setDoc(
+    doc(firestore, "users", user.uid),
+    {
+      pushDebug: {
+        permission: permission,
+        serviceWorkerReady: true,
+        updatedAt: serverTimestamp()
+      }
+    },
+    { merge: true }
+  );
 
   let subscription = await registration.pushManager.getSubscription();
 
@@ -47,6 +59,10 @@ export async function askNotificationPermission() {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
     });
+  }
+
+  if (!subscription) {
+    throw new Error("Subscription non creata");
   }
 
   const subJson = subscription.toJSON();
@@ -59,6 +75,20 @@ export async function askNotificationPermission() {
       keys: subJson.keys,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
+    },
+    { merge: true }
+  );
+
+  // Scriviamo conferma finale
+  await setDoc(
+    doc(firestore, "users", user.uid),
+    {
+      pushDebug: {
+        permission: permission,
+        serviceWorkerReady: true,
+        subscriptionSaved: true,
+        updatedAt: serverTimestamp()
+      }
     },
     { merge: true }
   );
