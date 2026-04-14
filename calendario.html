@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Prenota | Farmacia Montesano</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Montesano" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#16372f;
+      --muted:#6d8078;
+      --border:rgba(18,55,45,0.08);
+      --shadow:0 16px 40px rgba(16,49,39,0.08);
+      --green-1:#1c6b56;
+      --green-2:#7dc191;
+      --green-3:#dff1e7;
+      --beauty-1:#8d64b7;
+      --beauty-2:#d7c4ee;
+      --blue-1:#6bb6c7;
+      --blue-2:#a9dde6;
+      --danger:#d76a7f;
+      --radius-xl:30px;
+      --radius-lg:24px;
+      --radius-md:18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ margin:0; padding:0; }
+    body{
+      background:linear-gradient(180deg,#f8faf9 0%, #eef3f1 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+    }
+
+    .page{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
+      padding:18px 14px 120px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .back-btn{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-size:26px;
+      box-shadow:var(--shadow);
+      flex-shrink:0;
+    }
+
+    .hero{
+      background:rgba(255,255,255,0.92);
+      border:1px solid var(--border);
+      border-radius:34px;
+      padding:22px 18px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .hero h1{
+      margin:0 0 8px;
+      font-size:44px;
+      line-height:.95;
+      letter-spacing:-0.05em;
+      color:#10352e;
+    }
+
+    .hero p{
+      margin:0;
+      font-size:18px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+
+    .home-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
+    .choice-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:32px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+    }
+
+    .choice-image{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      display:block;
+      background:#e8efeb;
+    }
+
+    .choice-body{
+      padding:18px;
+    }
+
+    .choice-pill{
+      display:inline-flex;
+      min-height:34px;
+      align-items:center;
+      padding:0 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    .choice-pill.service{
+      background:#e3f2e9;
+      color:#25674f;
+    }
+
+    .choice-pill.beauty{
+      background:#eee6f8;
+      color:#7d50aa;
+    }
+
+    .choice-title{
+      margin:0 0 8px;
+      font-size:34px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    .choice-text{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.45;
+    }
+
+    .choice-btn{
+      min-height:54px;
+      border:none;
+      border-radius:18px;
+      padding:0 18px;
+      font-size:17px;
+      font-weight:800;
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .choice-btn.service{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+    }
+
+    .choice-btn.beauty{
+      background:linear-gradient(135deg,var(--beauty-1),var(--beauty-2));
+    }
+
+    .section{
+      display:none;
+    }
+
+    .section.active{
+      display:block;
+    }
+
+    .section-head{
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      margin:0 0 8px;
+      font-size:38px;
+      line-height:.96;
+      letter-spacing:-0.05em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.45;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .ghost-btn{
+      min-height:48px;
+      padding:0 16px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    .search{
+      width:100%;
+      min-height:54px;
+      padding:0 16px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:16px;
+      box-shadow:var(--shadow);
+      outline:none;
+      margin-bottom:16px;
+    }
+
+    .list{
+      display:grid;
+      gap:16px;
+    }
+
+    .item-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .item-image{
+      width:100%;
+      height:210px;
+      object-fit:cover;
+      display:block;
+      background:#e8efeb;
+    }
+
+    .item-body{
+      padding:18px;
+    }
+
+    .item-meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .chip.service{
+      background:#e3f2e9;
+      color:#25674f;
+    }
+
+    .chip.beauty{
+      background:#eee6f8;
+      color:#7d50aa;
+    }
+
+    .chip.date{
+      background:#e6f2f6;
+      color:#2b7180;
+    }
+
+    .item-title{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    .item-text{
+      margin:0 0 16px;
+      font-size:17px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .item-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .secondary-btn,
+    .primary-btn{
+      min-height:52px;
+      padding:0 18px;
+      border-radius:16px;
+      border:none;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .secondary-btn{
+      background:#eff4f2;
+      color:#173a33;
+    }
+
+    .primary-btn{
+      color:#fff;
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+    }
+
+    .primary-btn.beauty{
+      background:linear-gradient(135deg,var(--beauty-1),var(--beauty-2));
+    }
+
+    .booking-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:16px;
+    }
+
+    .booking-card h3{
+      margin:0 0 10px;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    .booking-sub{
+      margin:0 0 16px;
+      font-size:16px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .days-row{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      margin-bottom:14px;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .day-pill{
+      min-width:92px;
+      min-height:76px;
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      padding:10px 12px;
+      text-align:left;
+      box-shadow:0 8px 22px rgba(16,49,39,0.05);
+      cursor:pointer;
+    }
+
+    .day-pill.active{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .day-top{
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      opacity:.86;
+      margin-bottom:4px;
+    }
+
+    .day-num{
+      display:block;
+      font-size:24px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .slots-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .slot-btn{
+      min-height:52px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 22px rgba(16,49,39,0.05);
+    }
+
+    .slot-btn.active{
+      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .summary{
+      background:#f1f6f4;
+      border-radius:20px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:8px;
+      font-size:15px;
+    }
+
+    .summary-row:last-child{
+      margin-bottom:0;
+    }
+
+    .summary-label{
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .summary-value{
+      color:var(--text);
+      font-weight:800;
+      text-align:right;
+    }
+
+    .empty{
+      padding:24px 18px;
+      border-radius:24px;
+      background:#fff;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      color:var(--muted);
+      font-size:17px;
+      text-align:center;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(11, 24, 20, 0.45);
+      display:none;
+      align-items:flex-end;
+      z-index:999;
+      padding:14px;
+    }
+
+    .modal.show{
+      display:flex;
+    }
+
+    .modal-sheet{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:28px 28px 22px 22px;
+      padding:18px;
+      box-shadow:0 24px 50px rgba(0,0,0,0.18);
+      max-height:92vh;
+      overflow:auto;
+    }
+
+    .modal-title{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-text{
+      margin:0 0 16px;
+      font-size:16px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .form-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field label{
+      font-size:14px;
+      font-weight:800;
+      color:#35534a;
+    }
+
+    .field input,
+    .field select{
+      min-height:52px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      padding:0 14px;
+      font-size:16px;
+      color:var(--text);
+      background:#fff;
+      outline:none;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .success-card{
+      display:none;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      padding:22px 18px;
+      text-align:center;
+    }
+
+    .success-card.show{
+      display:block;
+    }
+
+    .success-icon{
+      width:84px;
+      height:84px;
+      border-radius:50%;
+      margin:0 auto 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:38px;
+      background:#e4f3ea;
+    }
+
+    .success-card h3{
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:.98;
+      letter-spacing:-0.05em;
+    }
+
+    .success-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.45;
+    }
+
+    @media (max-width: 560px){
+      .hero h1{ font-size:40px; }
+      .section-head h2{ font-size:34px; }
+      .choice-title{ font-size:30px; }
+      .item-title{ font-size:28px; }
+      .slots-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <a href="index.html" class="back-btn" aria-label="Torna indietro">←</a>
+    </div>
+
+    <section id="homeSection" class="section active">
+      <div class="hero">
+        <h1>Prenota in farmacia</h1>
+        <p>Scegli in pochi secondi cosa vuoi prenotare. Tutte le richieste arriveranno anche alla versione desktop del banco.</p>
+      </div>
+
+      <div class="home-grid">
+        <article class="choice-card" onclick="openServicesSection()">
+          <img class="choice-image" src="images/fidelity.jpg" alt="Servizi farmacia" onerror="this.src='logo.png'" />
+          <div class="choice-body">
+            <div class="choice-pill service">Servizi</div>
+            <h2 class="choice-title">Servizi</h2>
+            <p class="choice-text">Prenota ECG, holter, analisi, consulenze e gli altri servizi attivi della farmacia.</p>
+            <button class="choice-btn service" type="button">Vai ai servizi</button>
+          </div>
+        </article>
+
+        <article class="choice-card" onclick="openBeautySection()">
+          <img class="choice-image" src="images/profilo.jpg" alt="Giornate beauty" onerror="this.src='logo.png'" />
+          <div class="choice-body">
+            <div class="choice-pill beauty">Giornate Beauty</div>
+            <h2 class="choice-title">Giornate Beauty</h2>
+            <p class="choice-text">Prenota il tuo posto per eventi, consulenze e giornate speciali in farmacia.</p>
+            <button class="choice-btn beauty" type="button">Vai alle giornate</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="servicesSection" class="section">
+      <div class="section-head">
+        <h2>Servizi prenotabili</h2>
+        <p>Scegli un servizio e prenota l’orario disponibile che preferisci.</p>
+      </div>
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goHome()">← Torna indietro</button>
+      </div>
+      <input id="serviceSearch" class="search" type="text" placeholder="Cerca un servizio..." oninput="renderServices()" />
+      <div id="servicesList" class="list"></div>
+    </section>
+
+    <section id="beautySection" class="section">
+      <div class="section-head">
+        <h2>Giornate Beauty</h2>
+        <p>Scegli la giornata che preferisci e prenota il tuo posto in pochi tocchi.</p>
+      </div>
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goHome()">← Torna indietro</button>
+      </div>
+      <input id="beautySearch" class="search" type="text" placeholder="Cerca una giornata..." oninput="renderBeauty()" />
+      <div id="beautyList" class="list"></div>
+    </section>
+
+    <section id="bookingSection" class="section">
+      <div class="toolbar">
+        <button class="ghost-btn" type="button" onclick="goBackFromBooking()">← Torna indietro</button>
+      </div>
+
+      <div class="booking-card">
+        <h3 id="bookingTitle">Prenota</h3>
+        <p id="bookingSubtitle" class="booking-sub">Seleziona giorno e orario.</p>
+
+        <div id="daysRow" class="days-row"></div>
+        <div id="slotsGrid" class="slots-grid"></div>
+
+        <div id="bookingSummary" class="summary" style="display:none;">
+          <div class="summary-row">
+            <span class="summary-label">Tipo</span>
+            <span id="summaryType" class="summary-value">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Titolo</span>
+            <span id="summaryTitle" class="summary-value">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Giorno</span>
+            <span id="summaryDate" class="summary-value">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Ora</span>
+            <span id="summaryTime" class="summary-value">—</span>
+          </div>
+        </div>
+
+        <div class="item-actions">
+          <button id="confirmBookingBtn" class="primary-btn" type="button" style="display:none;" onclick="continueBooking()">Conferma prenotazione</button>
+        </div>
+      </div>
+
+      <div id="successCard" class="success-card">
+        <div class="success-icon">✔️</div>
+        <h3>Prenotazione inviata</h3>
+        <p id="successText">La tua richiesta è stata salvata con successo.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="guestModal" class="modal">
+    <div class="modal-sheet">
+      <h3 class="modal-title">Completa i dati</h3>
+      <p class="modal-text">Per inviare la prenotazione ci servono pochi dati essenziali.</p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="guestName">Nome</label>
+          <input id="guestName" type="text" placeholder="Nome" />
+        </div>
+
+        <div class="field">
+          <label for="guestSurname">Cognome</label>
+          <input id="guestSurname" type="text" placeholder="Cognome" />
+        </div>
+
+        <div class="field">
+          <label for="guestBirthDate">Data di nascita</label>
+          <input id="guestBirthDate" type="date" />
+        </div>
+
+        <div class="field">
+          <label for="guestSex">Sesso</label>
+          <select id="guestSex">
+            <option value="">Seleziona</option>
+            <option value="M">Maschio</option>
+            <option value="F">Femmina</option>
+            <option value="Altro">Altro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="guestPhone">Numero di telefono</label>
+          <input id="guestPhone" type="tel" placeholder="Numero di telefono" />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="primary-btn" type="button" onclick="submitGuestBooking()">Invia prenotazione</button>
+        <button class="secondary-btn" type="button" onclick="closeGuestModal()">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const sections = {
+      home: document.getElementById("homeSection"),
+      services: document.getElementById("servicesSection"),
+      beauty: document.getElementById("beautySection"),
+      booking: document.getElementById("bookingSection")
+    };
+
+    const servicesListEl = document.getElementById("servicesList");
+    const beautyListEl = document.getElementById("beautyList");
+    const daysRowEl = document.getElementById("daysRow");
+    const slotsGridEl = document.getElementById("slotsGrid");
+    const bookingTitleEl = document.getElementById("bookingTitle");
+    const bookingSubtitleEl = document.getElementById("bookingSubtitle");
+    const bookingSummaryEl = document.getElementById("bookingSummary");
+    const confirmBookingBtn = document.getElementById("confirmBookingBtn");
+    const successCardEl = document.getElementById("successCard");
+    const successTextEl = document.getElementById("successText");
+    const guestModal = document.getElementById("guestModal");
+
+    let allServices = [];
+    let allBeauty = [];
+    let currentBookingItem = null;
+    let currentBookingType = null;
+    let selectedDate = "";
+    let selectedTime = "";
+    let availableSlots = [];
+    let lastListSection = "home";
+
+    const WORK_START_HOUR = 9;
+    const WORK_END_HOUR = 19;
+    const SLOT_STEP_MINUTES = 15;
+
+    function showSection(name){
+      Object.values(sections).forEach(section => section.classList.remove("active"));
+      sections[name].classList.add("active");
+    }
+
+    function goHome(){
+      lastListSection = "home";
+      resetBookingView();
+      showSection("home");
+    }
+
+    function openServicesSection(){
+      lastListSection = "services";
+      renderServices();
+      showSection("services");
+    }
+
+    function openBeautySection(){
+      lastListSection = "beauty";
+      renderBeauty();
+      showSection("beauty");
+    }
+
+    function goBackFromBooking(){
+      resetBookingView();
+      showSection(lastListSection === "beauty" ? "beauty" : "services");
+    }
+
+    function formatDisplayDate(dateStr){
+      const d = new Date(dateStr + "T12:00:00");
+      return d.toLocaleDateString("it-IT", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+    }
+
+    function formatDayShort(dateStr){
+      const d = new Date(dateStr + "T12:00:00");
+      return {
+        top: d.toLocaleDateString("it-IT", { weekday: "short" }),
+        num: d.toLocaleDateString("it-IT", { day: "2-digit" })
+      };
+    }
+
+    function generateNextDays(total = 14){
+      const result = [];
+      const now = new Date();
+
+      for(let i = 0; i < total; i++){
+        const d = new Date(now);
+        d.setDate(now.getDate() + i);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2,"0");
+        const day = String(d.getDate()).padStart(2,"0");
+        result.push(`${y}-${m}-${day}`);
+      }
+
+      return result;
+    }
+
+    function timeToMinutes(time){
+      const [h, m] = time.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function minutesToTime(totalMinutes){
+      const h = String(Math.floor(totalMinutes / 60)).padStart(2,"0");
+      const m = String(totalMinutes % 60).padStart(2,"0");
+      return `${h}:${m}`;
+    }
+
+    async function getBookedAppointments(dateStr){
+      const snapshot = await db.collection("appointments")
+        .where("date", "==", dateStr)
+        .where("status", "in", ["requested", "confirmed"])
+        .get();
+
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    async function buildServiceSlots(service, dateStr){
+      const duration = Number(service.durationMinuti || service.durataMinuti || service.duration || 30);
+      const appointments = await getBookedAppointments(dateStr);
+
+      const slots = [];
+      const start = WORK_START_HOUR * 60;
+      const end = WORK_END_HOUR * 60;
+
+      for(let current = start; current + duration <= end; current += SLOT_STEP_MINUTES){
+        const startTime = minutesToTime(current);
+        const endTime = minutesToTime(current + duration);
+
+        const overlaps = appointments.some(app => {
+          const appStart = timeToMinutes(app.startTime || "00:00");
+          const appEnd = timeToMinutes(app.endTime || "00:00");
+          return current < appEnd && (current + duration) > appStart;
+        });
+
+        if(!overlaps){
+          slots.push({
+            startTime,
+            endTime
+          });
+        }
+      }
+
+      return slots;
+    }
+
+    async function buildBeautySlots(eventItem, dateStr){
+      const duration = Number(eventItem.durationMinuti || 20);
+      const appointments = await getBookedAppointments(dateStr);
+      const slots = [];
+      const presetTimes = ["09:00","09:20","09:40","10:00","10:20","10:40","11:00","11:20","11:40","12:00","16:00","16:20","16:40","17:00","17:20","17:40","18:00"];
+
+      for(const time of presetTimes){
+        const start = timeToMinutes(time);
+        const end = start + duration;
+
+        const overlaps = appointments.some(app => {
+          const appStart = timeToMinutes(app.startTime || "00:00");
+          const appEnd = timeToMinutes(app.endTime || "00:00");
+          return start < appEnd && end > appStart;
+        });
+
+        if(!overlaps){
+          slots.push({
+            startTime: time,
+            endTime: minutesToTime(end)
+          });
+        }
+      }
+
+      return slots;
+    }
+
+    function renderServices(){
+      const q = document.getElementById("serviceSearch").value.trim().toLowerCase();
+
+      const items = allServices.filter(item => {
+        const text = `${item.nome || ""} ${item.titolo || ""} ${item.descrizione || ""}`.toLowerCase();
+        return item.attivo === true && text.includes(q);
+      });
+
+      if(!items.length){
+        servicesListEl.innerHTML = `<div class="empty">Nessun servizio trovato.</div>`;
+        return;
+      }
+
+      servicesListEl.innerHTML = items.map(item => `
+        <article class="item-card">
+          <img class="item-image" src="${item.immagine || item.imageUrl || "logo.png"}" alt="${escapeHtml(item.nome || item.titolo || "Servizio")}" onerror="this.src='logo.png'" />
+          <div class="item-body">
+            <div class="item-meta">
+              <span class="chip service">Servizio</span>
+              <span class="chip date">${Number(item.durationMinuti || item.durataMinuti || item.duration || 30)} min</span>
+            </div>
+            <h3 class="item-title">${escapeHtml(item.nome || item.titolo || "Servizio")}</h3>
+            <p class="item-text">${escapeHtml(item.descrizione || "Servizio della farmacia.")}</p>
+            <div class="item-actions">
+              <button class="secondary-btn" type="button" onclick="showServiceDetails('${item.id}')">Dettagli</button>
+              <button class="primary-btn" type="button" onclick="startBooking('service','${item.id}')">Prenota</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderBeauty(){
+      const q = document.getElementById("beautySearch").value.trim().toLowerCase();
+
+      const items = allBeauty.filter(item => {
+        const text = `${item.titolo || ""} ${item.nome || ""} ${item.descrizione || ""}`.toLowerCase();
+        return item.attivo === true && text.includes(q);
+      });
+
+      if(!items.length){
+        beautyListEl.innerHTML = `<div class="empty">Nessuna giornata beauty trovata.</div>`;
+        return;
+      }
+
+      beautyListEl.innerHTML = items.map(item => `
+        <article class="item-card">
+          <img class="item-image" src="${item.immagine || item.imageUrl || "logo.png"}" alt="${escapeHtml(item.titolo || item.nome || "Giornata beauty")}" onerror="this.src='logo.png'" />
+          <div class="item-body">
+            <div class="item-meta">
+              <span class="chip beauty">Giornata Beauty</span>
+              ${item.data ? `<span class="chip date">${escapeHtml(item.data)}</span>` : ``}
+            </div>
+            <h3 class="item-title">${escapeHtml(item.titolo || item.nome || "Giornata Beauty")}</h3>
+            <p class="item-text">${escapeHtml(item.descrizione || "Evento speciale in farmacia.")}</p>
+            <div class="item-actions">
+              <button class="secondary-btn" type="button" onclick="showBeautyDetails('${item.id}')">Dettagli</button>
+              <button class="primary-btn beauty" type="button" onclick="startBooking('beauty','${item.id}')">Prenota</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function showServiceDetails(id){
+      const item = allServices.find(x => x.id === id);
+      if(!item) return;
+      alert(`${item.nome || item.titolo || "Servizio"}\n\n${item.descrizione || "Nessuna descrizione disponibile."}`);
+    }
+
+    function showBeautyDetails(id){
+      const item = allBeauty.find(x => x.id === id);
+      if(!item) return;
+      alert(`${item.titolo || item.nome || "Giornata Beauty"}\n\n${item.descrizione || "Nessuna descrizione disponibile."}`);
+    }
+
+    async function startBooking(type, id){
+      currentBookingType = type;
+      currentBookingItem = type === "service"
+        ? allServices.find(x => x.id === id)
+        : allBeauty.find(x => x.id === id);
+
+      if(!currentBookingItem) return;
+
+      selectedDate = "";
+      selectedTime = "";
+      availableSlots = [];
+      successCardEl.classList.remove("show");
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+
+      bookingTitleEl.textContent = currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione";
+
+      if(type === "service"){
+        bookingSubtitleEl.textContent = `Seleziona giorno e orario per ${currentBookingItem.nome || currentBookingItem.titolo}.`;
+        renderDays(generateNextDays(14));
+      } else {
+        const beautyDate = currentBookingItem.data || "";
+        if(!beautyDate){
+          alert("Questa giornata non ha una data configurata.");
+          return;
+        }
+        bookingSubtitleEl.textContent = `Prenota il tuo posto per ${currentBookingItem.titolo || currentBookingItem.nome}.`;
+        renderDays([beautyDate]);
+      }
+
+      lastListSection = type === "beauty" ? "beauty" : "services";
+      showSection("booking");
+    }
+
+    function renderDays(days){
+      daysRowEl.innerHTML = days.map((day, index) => {
+        const formatted = formatDayShort(day);
+        return `
+          <button class="day-pill ${index === 0 ? "active" : ""}" type="button" onclick="selectDate('${day}', this)">
+            <span class="day-top">${escapeHtml(formatted.top)}</span>
+            <span class="day-num">${escapeHtml(formatted.num)}</span>
+          </button>
+        `;
+      }).join("");
+
+      if(days.length){
+        selectDate(days[0], daysRowEl.querySelector(".day-pill"));
+      }
+    }
+
+    async function selectDate(dateStr, buttonEl){
+      selectedDate = dateStr;
+      selectedTime = "";
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+
+      daysRowEl.querySelectorAll(".day-pill").forEach(btn => btn.classList.remove("active"));
+      if(buttonEl) buttonEl.classList.add("active");
+
+      slotsGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Caricamento orari...</div>`;
+
+      if(currentBookingType === "service"){
+        availableSlots = await buildServiceSlots(currentBookingItem, dateStr);
+      } else {
+        availableSlots = await buildBeautySlots(currentBookingItem, dateStr);
+      }
+
+      if(!availableSlots.length){
+        slotsGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Nessun orario disponibile per questo giorno.</div>`;
+        return;
+      }
+
+      slotsGridEl.innerHTML = availableSlots.map(slot => `
+        <button class="slot-btn" type="button" onclick="selectSlot('${slot.startTime}', this)">
+          ${escapeHtml(slot.startTime)}
+        </button>
+      `).join("");
+    }
+
+    function selectSlot(time, buttonEl){
+      selectedTime = time;
+
+      slotsGridEl.querySelectorAll(".slot-btn").forEach(btn => btn.classList.remove("active"));
+      if(buttonEl) buttonEl.classList.add("active");
+
+      document.getElementById("summaryType").textContent = currentBookingType === "service" ? "Servizio" : "Giornata Beauty";
+      document.getElementById("summaryTitle").textContent = currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione";
+      document.getElementById("summaryDate").textContent = formatDisplayDate(selectedDate);
+      document.getElementById("summaryTime").textContent = selectedTime;
+
+      bookingSummaryEl.style.display = "";
+      confirmBookingBtn.style.display = "";
+    }
+
+    function getStoredUserProfile(){
+      const candidateKeys = [
+        "montesanoUserProfile",
+        "userProfile",
+        "clienteProfile",
+        "currentUserProfile"
+      ];
+
+      for(const key of candidateKeys){
+        try{
+          const raw = localStorage.getItem(key);
+          if(!raw) continue;
+          const parsed = JSON.parse(raw);
+          if(parsed && (parsed.nome || parsed.name) && (parsed.telefono || parsed.phone)){
+            return parsed;
+          }
+        }catch(err){}
+      }
+
+      return null;
+    }
+
+    function continueBooking(){
+      const profile = getStoredUserProfile();
+
+      if(profile){
+        submitBooking({
+          nome: profile.nome || profile.name || "",
+          cognome: profile.cognome || profile.surname || "",
+          dataNascita: profile.dataNascita || profile.birthDate || "",
+          sesso: profile.sesso || profile.sex || "",
+          telefono: profile.telefono || profile.phone || "",
+          userId: profile.uid || profile.userId || null,
+          isRegistered: true
+        });
+        return;
+      }
+
+      openGuestModal();
+    }
+
+    function openGuestModal(){
+      guestModal.classList.add("show");
+    }
+
+    function closeGuestModal(){
+      guestModal.classList.remove("show");
+    }
+
+    function submitGuestBooking(){
+      const nome = document.getElementById("guestName").value.trim();
+      const cognome = document.getElementById("guestSurname").value.trim();
+      const dataNascita = document.getElementById("guestBirthDate").value;
+      const sesso = document.getElementById("guestSex").value;
+      const telefono = document.getElementById("guestPhone").value.trim();
+
+      if(!nome || !cognome || !dataNascita || !sesso || !telefono){
+        alert("Compila tutti i campi richiesti.");
+        return;
+      }
+
+      submitBooking({
+        nome,
+        cognome,
+        dataNascita,
+        sesso,
+        telefono,
+        userId: null,
+        isRegistered: false
+      });
+    }
+
+    async function submitBooking(clientData){
+      try{
+        const chosenSlot = availableSlots.find(slot => slot.startTime === selectedTime);
+        if(!chosenSlot){
+          alert("Seleziona un orario disponibile.");
+          return;
+        }
+
+        const duration = Number(
+          currentBookingItem.durationMinuti ||
+          currentBookingItem.durataMinuti ||
+          currentBookingItem.duration ||
+          20
+        );
+
+        const payload = {
+          type: currentBookingType === "service" ? "servizio" : "giornata",
+          sourceCollection: currentBookingType === "service" ? "servizi" : "beauty",
+          sourceId: currentBookingItem.id,
+          title: currentBookingItem.nome || currentBookingItem.titolo || "Prenotazione",
+          description: currentBookingItem.descrizione || "",
+          date: selectedDate,
+          startTime: chosenSlot.startTime,
+          endTime: chosenSlot.endTime,
+          durationMinuti: duration,
+          status: "requested",
+          clientName: clientData.nome,
+          clientSurname: clientData.cognome,
+          clientBirthDate: clientData.dataNascita,
+          clientSex: clientData.sesso,
+          clientPhone: clientData.telefono,
+          userId: clientData.userId,
+          isRegisteredUser: clientData.isRegistered,
+          createdByType: "customer",
+          createdByUid: clientData.userId || null,
+          createdByName: clientData.nome,
+          pharmacyViewColor: "yellow",
+          needsRecall: false,
+          notes: "",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        await db.collection("appointments").add(payload);
+
+        closeGuestModal();
+        resetGuestForm();
+
+        successTextEl.textContent =
+          `${payload.title} prenotato per ${formatDisplayDate(payload.date)} alle ${payload.startTime}.`;
+
+        successCardEl.classList.add("show");
+        bookingSummaryEl.style.display = "none";
+        confirmBookingBtn.style.display = "none";
+      }catch(err){
+        console.error(err);
+        alert("C'è stato un problema durante il salvataggio della prenotazione.");
+      }
+    }
+
+    function resetGuestForm(){
+      document.getElementById("guestName").value = "";
+      document.getElementById("guestSurname").value = "";
+      document.getElementById("guestBirthDate").value = "";
+      document.getElementById("guestSex").value = "";
+      document.getElementById("guestPhone").value = "";
+    }
+
+    function resetBookingView(){
+      currentBookingItem = null;
+      currentBookingType = null;
+      selectedDate = "";
+      selectedTime = "";
+      availableSlots = [];
+      daysRowEl.innerHTML = "";
+      slotsGridEl.innerHTML = "";
+      bookingSummaryEl.style.display = "none";
+      confirmBookingBtn.style.display = "none";
+      successCardEl.classList.remove("show");
+    }
+
+    function escapeHtml(text){
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function loadServices(){
+      const snapshot = await db.collection("servizi").get();
+      allServices = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      renderServices();
+    }
+
+    async function loadBeauty(){
+      const snapshot = await db.collection("beauty").get();
+      allBeauty = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      renderBeauty();
+    }
+
+    async function initPage(){
+      try{
+        await Promise.all([loadServices(), loadBeauty()]);
+      }catch(err){
+        console.error(err);
+        servicesListEl.innerHTML = `<div class="empty">Errore nel caricamento dei servizi.</div>`;
+        beautyListEl.innerHTML = `<div class="empty">Errore nel caricamento delle giornate beauty.</div>`;
+      }
+    }
+
+    window.openServicesSection = openServicesSection;
+    window.openBeautySection = openBeautySection;
+    window.goHome = goHome;
+    window.goBackFromBooking = goBackFromBooking;
+    window.startBooking = startBooking;
+    window.showServiceDetails = showServiceDetails;
+    window.showBeautyDetails = showBeautyDetails;
+    window.selectDate = selectDate;
+    window.selectSlot = selectSlot;
+    window.continueBooking = continueBooking;
+    window.submitGuestBooking = submitGuestBooking;
+    window.closeGuestModal = closeGuestModal;
+
+    initPage();
+  </script>
+</body>
+</html>
