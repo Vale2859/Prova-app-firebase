@@ -10,4 +10,3 @@
 - Funziona senza build, plugin o framework.
 - Puoi personalizzare testi, immagini e collegamenti pagina per pagina.
 
-
