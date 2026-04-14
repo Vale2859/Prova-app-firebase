@@ -7,55 +7,91 @@
 
   <style>
     :root{
-      --bg:#f6f8f7;
+      --bg:#f4f7f5;
       --panel:#ffffff;
-      --panel-2:#fbfcfb;
+      --panel-soft:#fbfdfb;
       --text:#16372f;
       --muted:#70827b;
-      --line:#e6ece8;
-      --shadow:0 10px 30px rgba(16,49,39,0.06);
+      --line:#e4ebe7;
+      --shadow:0 18px 40px rgba(16,49,39,0.07);
+      --shadow-soft:0 8px 22px rgba(16,49,39,0.05);
 
-      --green:#76a93a;
-      --green-dark:#5f8e2a;
-
+      --green:#6fa541;
+      --green-dark:#5a8b33;
       --blue:#4e86ea;
-      --orange:#de8b32;
-      --red:#db5454;
+      --blue-dark:#3f74dd;
+      --orange:#df8e36;
+      --orange-dark:#ca7d27;
+      --red:#da5b5b;
+      --red-dark:#c64646;
 
       --event-green:#e9f4de;
-      --event-green-border:#72a43b;
+      --event-green-border:#74a53c;
 
-      --event-yellow:#f9efc9;
-      --event-yellow-border:#e0b941;
+      --event-yellow:#f9efc8;
+      --event-yellow-border:#dfb83e;
 
-      --event-red:#f7d6d6;
-      --event-red-border:#d85d5d;
+      --event-red:#f5d7d7;
+      --event-red-border:#d45b5b;
 
       --radius-xl:24px;
       --radius-lg:18px;
       --radius-md:14px;
+      --radius-sm:12px;
+
+      --sidebar-w:310px;
+      --detail-w:355px;
+      --topbar-h:78px;
+      --hour-col-w:84px;
+      --slot-h:64px;
+
+      --day-start:8;
+      --day-end:20;
     }
 
     *{ box-sizing:border-box; }
-    html,body{ margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+
+    html,body{
+      margin:0;
+      padding:0;
+      height:100%;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fafcfb 0%, #f3f7f5 42%, #edf2ef 100%);
+      color:var(--text);
+    }
+
+    button,input,select,textarea{
+      font:inherit;
+    }
 
     .app{
       display:grid;
-      grid-template-columns: 290px 1fr 330px;
+      grid-template-columns: var(--sidebar-w) 1fr var(--detail-w);
       gap:18px;
       min-height:100vh;
       padding:18px;
     }
 
     .panel{
-      background:var(--panel);
+      background:rgba(255,255,255,0.92);
       border:1px solid var(--line);
       border-radius:var(--radius-xl);
       box-shadow:var(--shadow);
+      overflow:hidden;
+      min-height:0;
     }
 
+    /* LEFT */
     .left{
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+
+    .left-inner{
       padding:18px;
+      overflow:auto;
       display:flex;
       flex-direction:column;
       gap:16px;
@@ -65,60 +101,90 @@
       display:flex;
       align-items:center;
       gap:12px;
-      font-weight:800;
-      font-size:24px;
-      line-height:1;
-      margin-bottom:8px;
+      padding-bottom:4px;
     }
 
-    .brand-icon{
-      width:40px;
-      height:40px;
-      border-radius:10px;
+    .brand-logo{
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      background:#f2f6f4;
+      border:1px solid var(--line);
       display:grid;
       place-items:center;
-      background:#f0f4f2;
-      border:1px solid var(--line);
-      font-size:20px;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+
+    .brand-logo img{
+      width:78%;
+      height:auto;
+      object-fit:contain;
+    }
+
+    .brand-text{
+      min-width:0;
+    }
+
+    .brand-text h1{
+      margin:0;
+      font-size:1.5rem;
+      line-height:1;
+      letter-spacing:-0.03em;
+    }
+
+    .brand-text p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:.93rem;
+      font-weight:700;
     }
 
     .search{
       width:100%;
-      height:54px;
-      border-radius:14px;
-      border:1px solid #dfe5e1;
-      padding:0 16px;
-      font-size:16px;
-      outline:none;
+      min-height:52px;
+      border:1px solid #dfe6e2;
       background:#fff;
+      border-radius:14px;
+      padding:0 16px;
+      outline:none;
+      font-size:15px;
+      color:var(--text);
+      box-shadow:var(--shadow-soft);
     }
 
     .new-btn{
       width:100%;
-      height:54px;
+      min-height:54px;
       border:none;
-      border-radius:14px;
+      border-radius:16px;
       background:linear-gradient(180deg,var(--green),var(--green-dark));
       color:#fff;
       font-size:16px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
-      box-shadow:0 8px 16px rgba(118,169,58,0.22);
+      box-shadow:0 12px 22px rgba(111,165,65,0.2);
     }
 
     .mini-calendar{
+      background:var(--panel-soft);
       border:1px solid var(--line);
       border-radius:18px;
       padding:14px;
-      background:var(--panel-2);
     }
 
-    .mini-cal-head{
+    .mini-head{
       display:flex;
       justify-content:space-between;
       align-items:center;
       margin-bottom:12px;
-      font-weight:800;
+      gap:12px;
+    }
+
+    .mini-month-label{
+      font-size:15px;
+      font-weight:900;
+      text-transform:capitalize;
     }
 
     .mini-nav{
@@ -127,14 +193,16 @@
     }
 
     .mini-nav button{
-      width:30px;
-      height:30px;
+      width:32px;
+      height:32px;
       border:none;
       border-radius:10px;
       background:#fff;
       border:1px solid var(--line);
       cursor:pointer;
-      font-weight:800;
+      font-weight:900;
+      color:var(--text);
+      box-shadow:var(--shadow-soft);
     }
 
     .mini-weekdays,
@@ -142,90 +210,141 @@
       display:grid;
       grid-template-columns:repeat(7,1fr);
       gap:6px;
-      text-align:center;
+    }
+
+    .mini-weekdays{
+      margin-bottom:6px;
     }
 
     .mini-weekdays div{
+      text-align:center;
       font-size:11px;
+      font-weight:900;
       color:var(--muted);
-      font-weight:800;
-      padding-bottom:4px;
+      padding:2px 0;
     }
 
     .mini-day{
-      height:34px;
+      height:36px;
       border-radius:10px;
       display:flex;
       align-items:center;
       justify-content:center;
       font-size:13px;
+      font-weight:800;
       cursor:pointer;
+      user-select:none;
       border:1px solid transparent;
+      background:#fff;
     }
 
     .mini-day.other{
       opacity:.35;
     }
 
-    .mini-day.active{
-      background:var(--blue);
-      color:#fff;
-      font-weight:800;
+    .mini-day.today{
+      border-color:#b8cef9;
     }
 
-    .mini-day.today{
-      border-color:var(--blue);
-      font-weight:800;
+    .mini-day.active{
+      background:linear-gradient(180deg,var(--blue),var(--blue-dark));
+      color:#fff;
+      box-shadow:0 10px 18px rgba(78,134,234,0.22);
     }
 
     .filters{
-      display:flex;
-      flex-direction:column;
+      display:grid;
       gap:10px;
     }
 
     .filter-btn{
-      height:52px;
-      border-radius:14px;
+      min-height:52px;
       border:1px solid var(--line);
       background:#fff;
-      cursor:pointer;
-      text-align:left;
+      border-radius:14px;
       padding:0 16px;
-      font-size:16px;
-      font-weight:700;
-      color:var(--text);
+      cursor:pointer;
       display:flex;
       align-items:center;
       justify-content:space-between;
+      font-size:15px;
+      font-weight:800;
+      color:var(--text);
+      box-shadow:var(--shadow-soft);
     }
 
     .filter-btn.active{
-      background:#eff6ea;
-      border-color:#d5e4c7;
+      background:#eff5ea;
+      border-color:#d6e3ca;
     }
 
     .filter-count{
+      font-size:13px;
       color:var(--muted);
-      font-weight:800;
+      font-weight:900;
+      min-width:28px;
+      text-align:right;
     }
 
+    .legend{
+      display:grid;
+      gap:10px;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .legend h3{
+      margin:0;
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .legend-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      font-weight:700;
+      color:#425750;
+    }
+
+    .legend-dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      flex:0 0 auto;
+    }
+
+    .dot-green{ background:#7aa643; }
+    .dot-yellow{ background:#deb845; }
+    .dot-red{ background:#d85b5b; }
+
+    /* CENTER */
     .center{
       display:flex;
       flex-direction:column;
-      overflow:hidden;
+      min-width:0;
+      min-height:0;
     }
 
     .topbar{
-      padding:16px 18px;
+      min-height:var(--topbar-h);
+      padding:14px 18px;
+      border-bottom:1px solid var(--line);
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:18px;
-      border-bottom:1px solid var(--line);
+      gap:16px;
+      flex-wrap:wrap;
+      background:rgba(255,255,255,0.84);
+      backdrop-filter:blur(10px);
     }
 
-    .top-left{
+    .top-left,
+    .top-right{
       display:flex;
       align-items:center;
       gap:10px;
@@ -235,7 +354,7 @@
     .today-btn,
     .nav-btn,
     .view-btn{
-      height:44px;
+      min-height:44px;
       border:none;
       background:#fff;
       border:1px solid var(--line);
@@ -243,126 +362,247 @@
       padding:0 16px;
       cursor:pointer;
       font-size:15px;
-      font-weight:800;
+      font-weight:900;
       color:var(--text);
+      box-shadow:var(--shadow-soft);
     }
 
     .nav-btn{
       width:44px;
       padding:0;
+      font-size:20px;
+      line-height:1;
     }
 
     .current-label{
-      font-size:20px;
+      font-size:1.35rem;
       font-weight:900;
-      min-width:220px;
-    }
-
-    .top-right{
-      display:flex;
-      align-items:center;
-      gap:8px;
+      letter-spacing:-0.03em;
+      min-width:250px;
+      text-transform:capitalize;
     }
 
     .view-btn.active{
-      background:var(--blue);
+      background:linear-gradient(180deg,var(--blue),var(--blue-dark));
       color:#fff;
       border-color:transparent;
-      box-shadow:0 8px 18px rgba(78,134,234,0.24);
     }
 
     .calendar-wrap{
-      position:relative;
       flex:1;
+      min-height:0;
       overflow:auto;
-      background:#fff;
-      border-radius:0 0 var(--radius-xl) var(--radius-xl);
+      background:linear-gradient(180deg,#fbfdfb 0%, #f7faf8 100%);
+      padding:14px;
     }
 
+    /* DAY VIEW */
     .day-view{
+      display:none;
+      min-width:940px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .day-view.active{
       display:grid;
-      grid-template-columns:80px 1fr;
-      min-height:900px;
+      grid-template-columns:var(--hour-col-w) 1fr;
     }
 
-    .hours{
+    .hours-col{
       border-right:1px solid var(--line);
-      background:#fcfdfc;
+      background:#fbfcfb;
     }
 
-    .hour{
-      height:64px;
+    .hour-cell{
+      height:var(--slot-h);
       border-bottom:1px solid #eef2ef;
-      padding:8px 10px 0 0;
       text-align:right;
+      padding:8px 12px 0 0;
       font-size:14px;
-      color:#556a63;
-      font-weight:700;
+      font-weight:800;
+      color:#5d726a;
     }
 
     .day-grid{
       position:relative;
-      min-height:900px;
+      min-height:calc((var(--day-end) - var(--day-start)) * var(--slot-h));
       background:
         repeating-linear-gradient(
           to bottom,
-          #ffffff 0px,
-          #ffffff 63px,
-          #edf2ef 64px
+          #ffffff 0,
+          #ffffff calc(var(--slot-h) - 1px),
+          #edf2ef calc(var(--slot-h) - 1px),
+          #edf2ef var(--slot-h)
         );
       cursor:crosshair;
     }
 
-    .event{
+    .half-line{
+      position:absolute;
+      left:0;
+      right:0;
+      height:1px;
+      background:rgba(223,230,226,0.8);
+      pointer-events:none;
+    }
+
+    .event-card{
       position:absolute;
       left:10px;
       right:10px;
       border-radius:16px;
       padding:10px 12px;
       border-left:5px solid;
-      box-shadow:0 8px 18px rgba(0,0,0,0.05);
+      box-shadow:0 10px 20px rgba(16,49,39,0.06);
       cursor:pointer;
       overflow:hidden;
+      transition:transform .15s ease, box-shadow .15s ease;
     }
 
-    .event.green{
+    .event-card:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 24px rgba(16,49,39,0.1);
+    }
+
+    .event-card.selected{
+      outline:2px solid rgba(78,134,234,0.2);
+    }
+
+    .event-green{
       background:var(--event-green);
       border-left-color:var(--event-green-border);
     }
 
-    .event.yellow{
+    .event-yellow{
       background:var(--event-yellow);
       border-left-color:var(--event-yellow-border);
     }
 
-    .event.red{
+    .event-red{
       background:var(--event-red);
       border-left-color:var(--event-red-border);
     }
 
-    .event-title{
-      font-size:15px;
+    .event-client{
+      font-size:14px;
       font-weight:900;
       line-height:1.1;
       margin-bottom:4px;
+      text-transform:lowercase;
+    }
+
+    .event-title{
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:4px;
+      color:#334840;
       text-transform:uppercase;
     }
 
-    .event-client{
+    .event-time{
+      font-size:12px;
+      font-weight:800;
+      color:#4b6158;
+    }
+
+    /* WEEK VIEW */
+    .week-view{
+      display:none;
+      min-width:1280px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .week-view.active{
+      display:grid;
+      grid-template-columns:var(--hour-col-w) repeat(7, minmax(160px,1fr));
+    }
+
+    .week-head-empty{
+      min-height:68px;
+      border-bottom:1px solid var(--line);
+      background:#fbfcfb;
+    }
+
+    .week-head{
+      min-height:68px;
+      border-bottom:1px solid var(--line);
+      border-left:1px solid var(--line);
+      background:#fbfcfb;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:4px;
+      font-weight:900;
+    }
+
+    .week-head small{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:capitalize;
+    }
+
+    .week-hours-col{
+      border-right:1px solid var(--line);
+      background:#fbfcfb;
+    }
+
+    .week-hour{
+      height:var(--slot-h);
+      border-bottom:1px solid #eef2ef;
+      text-align:right;
+      padding:8px 12px 0 0;
       font-size:14px;
       font-weight:800;
-      margin-bottom:4px;
+      color:#5d726a;
     }
 
-    .event-time{
-      font-size:13px;
-      color:#40544d;
-      font-weight:700;
+    .week-day-col{
+      position:relative;
+      min-height:calc((var(--day-end) - var(--day-start)) * var(--slot-h));
+      border-left:1px solid var(--line);
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #ffffff 0,
+          #ffffff calc(var(--slot-h) - 1px),
+          #edf2ef calc(var(--slot-h) - 1px),
+          #edf2ef var(--slot-h)
+        );
+      cursor:crosshair;
     }
 
+    /* MONTH VIEW */
     .month-view{
       display:none;
-      padding:14px;
+    }
+
+    .month-view.active{
+      display:block;
+    }
+
+    .month-weekdays{
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .month-weekdays div{
+      text-align:center;
+      font-size:13px;
+      font-weight:900;
+      color:var(--muted);
+      padding:4px 0;
+      text-transform:capitalize;
     }
 
     .month-grid{
@@ -372,107 +612,159 @@
     }
 
     .month-cell{
-      min-height:140px;
+      min-height:152px;
       border:1px solid var(--line);
-      border-radius:16px;
       background:#fff;
+      border-radius:18px;
       padding:10px;
       display:flex;
       flex-direction:column;
       gap:6px;
+      box-shadow:var(--shadow-soft);
       cursor:pointer;
     }
 
     .month-cell.other{
-      opacity:.45;
+      opacity:.42;
       background:#fafbfa;
     }
 
-    .month-cell-header{
+    .month-cell.today{
+      outline:2px solid rgba(78,134,234,0.18);
+    }
+
+    .month-cell-head{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      font-weight:800;
       font-size:14px;
+      font-weight:900;
+      margin-bottom:4px;
     }
 
-    .month-cell.today{
-      outline:2px solid #b9d0ff;
+    .month-events{
+      display:grid;
+      gap:6px;
+      align-content:start;
     }
 
     .month-event{
       border-radius:10px;
       padding:5px 8px;
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+      cursor:pointer;
     }
 
-    .month-event.green{ background:var(--event-green); color:#305121; }
-    .month-event.yellow{ background:var(--event-yellow); color:#6f5514; }
-    .month-event.red{ background:var(--event-red); color:#7a2727; }
+    .month-event.green{
+      background:var(--event-green);
+      color:#355221;
+    }
 
+    .month-event.yellow{
+      background:var(--event-yellow);
+      color:#765710;
+    }
+
+    .month-event.red{
+      background:var(--event-red);
+      color:#7d2d2d;
+    }
+
+    .month-more{
+      font-size:12px;
+      font-weight:900;
+      color:#61756d;
+      padding:4px 2px 0;
+    }
+
+    /* RIGHT */
     .right{
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .right-inner{
       padding:18px;
+      overflow:auto;
       display:flex;
       flex-direction:column;
       gap:14px;
+      min-height:0;
     }
 
-    .profile-box{
+    .empty-state{
+      height:100%;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:#7a8b85;
+      font-weight:700;
+      padding:24px;
+    }
+
+    .profile-box,
+    .detail-card{
       border:1px solid var(--line);
       border-radius:20px;
       background:#fff;
       padding:18px;
+      box-shadow:var(--shadow-soft);
     }
 
     .profile-name{
-      font-size:20px;
+      font-size:1.35rem;
       font-weight:900;
-      line-height:1.1;
+      line-height:1;
       margin-bottom:8px;
       text-transform:lowercase;
     }
 
     .profile-phone{
       font-size:15px;
-      font-weight:700;
       color:#4e615a;
+      font-weight:800;
       margin-bottom:12px;
     }
 
     .status-pill{
       display:inline-flex;
       align-items:center;
-      min-height:36px;
+      min-height:34px;
       border-radius:999px;
       padding:0 14px;
-      font-size:14px;
+      font-size:13px;
       font-weight:900;
     }
 
-    .status-pill.confirmed{ background:#e8f2dd; color:#557d23; }
-    .status-pill.requested{ background:#f8edc8; color:#8b6a13; }
-    .status-pill.cancelled{ background:#f3d7d7; color:#973f3f; }
+    .status-pill.confirmed{
+      background:#e8f2dd;
+      color:#557d23;
+    }
 
-    .detail-card{
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:#fff;
-      padding:18px;
+    .status-pill.requested{
+      background:#f8edc8;
+      color:#87680d;
+    }
+
+    .status-pill.cancelled{
+      background:#f3d7d7;
+      color:#963f3f;
     }
 
     .detail-title{
-      font-size:16px;
+      font-size:15px;
       font-weight:900;
-      margin-bottom:12px;
+      margin-bottom:10px;
     }
 
     .detail-row{
       display:grid;
-      grid-template-columns:110px 1fr;
+      grid-template-columns:100px 1fr;
       gap:12px;
       padding:10px 0;
       border-bottom:1px solid #edf1ee;
@@ -483,52 +775,51 @@
     }
 
     .detail-key{
-      color:#73857d;
-      font-weight:800;
-      font-size:14px;
+      font-size:13px;
+      color:#75867f;
+      font-weight:900;
     }
 
     .detail-value{
-      font-weight:800;
-      font-size:15px;
+      font-size:14px;
       color:#1c3b34;
+      font-weight:800;
+      word-break:break-word;
     }
 
     .actions{
-      display:flex;
-      flex-direction:column;
+      display:grid;
       gap:10px;
     }
 
     .action-btn{
-      height:52px;
+      min-height:52px;
       border:none;
       border-radius:14px;
       color:#fff;
-      font-size:17px;
+      font-size:16px;
       font-weight:900;
       cursor:pointer;
+      box-shadow:var(--shadow-soft);
     }
 
-    .action-btn.blue{ background:linear-gradient(180deg,#5a8ef0,#3f74dd); }
-    .action-btn.orange{ background:linear-gradient(180deg,#e69b46,#d98128); }
-    .action-btn.red{ background:linear-gradient(180deg,#e16868,#cf4949); }
-
-    .empty-state{
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:#7b8b85;
-      font-weight:700;
-      padding:30px;
+    .action-btn.blue{
+      background:linear-gradient(180deg,var(--blue),var(--blue-dark));
     }
 
+    .action-btn.orange{
+      background:linear-gradient(180deg,var(--orange),var(--orange-dark));
+    }
+
+    .action-btn.red{
+      background:linear-gradient(180deg,var(--red),var(--red-dark));
+    }
+
+    /* MODAL */
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,0.35);
+      background:rgba(9,15,13,0.42);
       display:none;
       align-items:center;
       justify-content:center;
@@ -542,17 +833,46 @@
 
     .modal-box{
       width:100%;
-      max-width:560px;
+      max-width:620px;
       background:#fff;
       border-radius:24px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.18);
+      box-shadow:0 26px 60px rgba(0,0,0,0.18);
       padding:22px;
+      border:1px solid var(--line);
     }
 
-    .modal-box h3{
-      margin:0 0 16px;
-      font-size:28px;
-      line-height:1;
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:1.9rem;
+      line-height:.95;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-head p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .close-btn{
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:12px;
+      background:#f1f5f3;
+      color:#315148;
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
     }
 
     .form-grid{
@@ -573,8 +893,8 @@
 
     .field label{
       font-size:13px;
-      font-weight:800;
-      color:#556a63;
+      font-weight:900;
+      color:#586d65;
     }
 
     .field input,
@@ -583,15 +903,16 @@
       width:100%;
       min-height:48px;
       border-radius:12px;
-      border:1px solid #dfe5e1;
+      border:1px solid #dfe6e2;
       padding:10px 12px;
       font-size:15px;
       outline:none;
       background:#fff;
+      color:var(--text);
     }
 
     .field textarea{
-      min-height:90px;
+      min-height:88px;
       resize:vertical;
     }
 
@@ -600,34 +921,35 @@
       justify-content:flex-end;
       gap:10px;
       margin-top:18px;
+      flex-wrap:wrap;
     }
 
-    .ghost-btn{
-      height:46px;
-      padding:0 18px;
-      border:none;
-      border-radius:12px;
-      background:#eef3f0;
-      color:#23413a;
-      font-weight:800;
-      cursor:pointer;
-    }
-
+    .ghost-btn,
     .save-btn{
-      height:46px;
-      padding:0 18px;
+      min-height:46px;
       border:none;
       border-radius:12px;
-      background:linear-gradient(180deg,var(--green),var(--green-dark));
-      color:#fff;
+      padding:0 18px;
+      font-size:15px;
       font-weight:900;
       cursor:pointer;
     }
 
-    @media (max-width: 1280px){
-      .app{
-        grid-template-columns:260px 1fr 300px;
-      }
+    .ghost-btn{
+      background:#eef3f0;
+      color:#23413a;
+    }
+
+    .save-btn{
+      background:linear-gradient(180deg,var(--green),var(--green-dark));
+      color:#fff;
+    }
+
+    .hint{
+      margin-top:12px;
+      font-size:12px;
+      font-weight:800;
+      color:#75867f;
     }
   </style>
 
@@ -636,173 +958,167 @@
 </head>
 <body>
   <div class="app">
+    <!-- LEFT -->
     <aside class="panel left">
-      <div class="brand">
-        <div class="brand-icon">🗓️</div>
-        <div>Calendario</div>
-      </div>
-
-      <input id="searchInput" class="search" type="text" placeholder="Cerca cliente..." />
-
-      <button class="new-btn" onclick="openNewBookingModal()">+ Nuova Prenotazione</button>
-
-      <div class="mini-calendar">
-        <div class="mini-cal-head">
-          <div id="miniMonthLabel">Mese</div>
-          <div class="mini-nav">
-            <button onclick="changeMiniMonth(-1)">‹</button>
-            <button onclick="changeMiniMonth(1)">›</button>
+      <div class="left-inner">
+        <div class="brand">
+          <div class="brand-logo">
+            <img src="logo.png" alt="Farmacia Montesano" onerror="this.style.display='none'">
+          </div>
+          <div class="brand-text">
+            <h1>Calendario</h1>
+            <p>Prenotazioni farmacia</p>
           </div>
         </div>
 
-        <div class="mini-weekdays">
-          <div>L</div><div>M</div><div>M</div><div>G</div><div>V</div><div>S</div><div>D</div>
+        <input id="searchInput" class="search" type="text" placeholder="Cerca cliente, telefono o servizio..." />
+
+        <button class="new-btn" id="newBtn">+ Nuova Prenotazione</button>
+
+        <div class="mini-calendar">
+          <div class="mini-head">
+            <div id="miniMonthLabel" class="mini-month-label">mese</div>
+            <div class="mini-nav">
+              <button id="miniPrevBtn">‹</button>
+              <button id="miniNextBtn">›</button>
+            </div>
+          </div>
+
+          <div class="mini-weekdays">
+            <div>L</div><div>M</div><div>M</div><div>G</div><div>V</div><div>S</div><div>D</div>
+          </div>
+          <div id="miniGrid" class="mini-grid"></div>
         </div>
-        <div id="miniGrid" class="mini-grid"></div>
-      </div>
 
-      <div class="filters">
-        <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
-          <span>Tutte</span>
-          <span class="filter-count" id="countAll">0</span>
-        </button>
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">
+            <span>Tutte</span>
+            <span id="countAll" class="filter-count">0</span>
+          </button>
 
-        <button class="filter-btn" data-filter="recall" onclick="setFilter('recall', this)">
-          <span>Da richiamare</span>
-          <span class="filter-count" id="countRecall">0</span>
-        </button>
+          <button class="filter-btn" data-filter="recall">
+            <span>Da richiamare</span>
+            <span id="countRecall" class="filter-count">0</span>
+          </button>
 
-        <button class="filter-btn" data-filter="cancelled" onclick="setFilter('cancelled', this)">
-          <span>Cancellate</span>
-          <span class="filter-count" id="countCancelled">0</span>
-        </button>
+          <button class="filter-btn" data-filter="cancelled">
+            <span>Cancellate</span>
+            <span id="countCancelled" class="filter-count">0</span>
+          </button>
+        </div>
+
+        <div class="legend">
+          <h3>Legenda rapida</h3>
+          <div class="legend-row">
+            <span class="legend-dot dot-green"></span>
+            <span>Attive / confermate</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-dot dot-yellow"></span>
+            <span>Da richiamare</span>
+          </div>
+          <div class="legend-row">
+            <span class="legend-dot dot-red"></span>
+            <span>Cancellate</span>
+          </div>
+        </div>
       </div>
     </aside>
 
+    <!-- CENTER -->
     <main class="panel center">
       <div class="topbar">
         <div class="top-left">
-          <button class="today-btn" onclick="goToday()">Oggi</button>
-          <button class="nav-btn" onclick="changeDate(-1)">‹</button>
-          <div class="current-label" id="currentLabel">Data</div>
-          <button class="nav-btn" onclick="changeDate(1)">›</button>
+          <button class="today-btn" id="todayBtn">Oggi</button>
+          <button class="nav-btn" id="prevBtn">‹</button>
+          <div id="currentLabel" class="current-label">Data</div>
+          <button class="nav-btn" id="nextBtn">›</button>
         </div>
 
         <div class="top-right">
-          <button class="view-btn active" id="viewDayBtn" onclick="setView('day')">Giorno</button>
-          <button class="view-btn" id="viewMonthBtn" onclick="setView('month')">Mese</button>
+          <button class="view-btn active" data-view="day">Giorno</button>
+          <button class="view-btn" data-view="week">Settimana</button>
+          <button class="view-btn" data-view="month">Mese</button>
         </div>
       </div>
 
       <div class="calendar-wrap">
-        <div id="dayView" class="day-view">
-          <div id="hoursCol" class="hours"></div>
-          <div id="dayGrid" class="day-grid"></div>
-        </div>
-
+        <div id="dayView" class="day-view active"></div>
+        <div id="weekView" class="week-view"></div>
         <div id="monthView" class="month-view">
+          <div class="month-weekdays">
+            <div>Lunedì</div>
+            <div>Martedì</div>
+            <div>Mercoledì</div>
+            <div>Giovedì</div>
+            <div>Venerdì</div>
+            <div>Sabato</div>
+            <div>Domenica</div>
+          </div>
           <div id="monthGrid" class="month-grid"></div>
         </div>
       </div>
     </main>
 
+    <!-- RIGHT -->
     <aside class="panel right">
-      <div id="detailEmpty" class="empty-state">
-        Seleziona una prenotazione per vedere il dettaglio.
-      </div>
-
-      <div id="detailContent" style="display:none;">
-        <div class="profile-box">
-          <div id="detailName" class="profile-name">—</div>
-          <div id="detailPhone" class="profile-phone">—</div>
-          <div id="detailStatus" class="status-pill confirmed">—</div>
-        </div>
-
-        <div class="detail-card">
-          <div class="detail-title">Dettaglio appuntamento</div>
-
-          <div class="detail-row">
-            <div class="detail-key">Data</div>
-            <div class="detail-value" id="detailDate">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Ora</div>
-            <div class="detail-value" id="detailTime">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Tipo</div>
-            <div class="detail-value" id="detailType">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Titolo</div>
-            <div class="detail-value" id="detailTitle">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Durata</div>
-            <div class="detail-value" id="detailDuration">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Operatore</div>
-            <div class="detail-value" id="detailOperator">—</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Note</div>
-            <div class="detail-value" id="detailNotes">—</div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="action-btn blue" onclick="openEditSelected()">Modifica</button>
-          <button class="action-btn orange" onclick="openMoveSelected()">Sposta</button>
-          <button class="action-btn red" onclick="cancelSelected()">Cancella</button>
+      <div class="right-inner" id="detailInner">
+        <div class="empty-state">
+          Seleziona una prenotazione per vedere il dettaglio completo.
         </div>
       </div>
     </aside>
   </div>
 
+  <!-- MODAL -->
   <div id="bookingModal" class="modal">
     <div class="modal-box">
-      <h3 id="modalTitle">Nuova prenotazione</h3>
+      <div class="modal-head">
+        <div>
+          <h3 id="modalTitle">Nuova prenotazione</h3>
+          <p>Puoi creare, modificare o spostare una prenotazione direttamente da qui.</p>
+        </div>
+        <button class="close-btn" id="closeModalBtn">✕</button>
+      </div>
 
       <div class="form-grid">
         <div class="field">
-          <label>Nome</label>
+          <label for="fName">Nome</label>
           <input id="fName" type="text" />
         </div>
 
         <div class="field">
-          <label>Cognome</label>
+          <label for="fSurname">Cognome</label>
           <input id="fSurname" type="text" />
         </div>
 
         <div class="field">
-          <label>Telefono</label>
+          <label for="fPhone">Telefono</label>
           <input id="fPhone" type="text" />
         </div>
 
         <div class="field">
-          <label>Data</label>
+          <label for="fOperator">Operatore</label>
+          <input id="fOperator" type="text" placeholder="Es. Cosimo" />
+        </div>
+
+        <div class="field">
+          <label for="fDate">Data</label>
           <input id="fDate" type="date" />
         </div>
 
         <div class="field">
-          <label>Ora inizio</label>
+          <label for="fStartTime">Ora inizio</label>
           <input id="fStartTime" type="time" />
         </div>
 
         <div class="field">
-          <label>Durata minuti</label>
+          <label for="fDuration">Durata minuti</label>
           <input id="fDuration" type="number" min="5" step="5" value="30" />
         </div>
 
         <div class="field">
-          <label>Tipo</label>
+          <label for="fType">Tipo</label>
           <select id="fType">
             <option value="servizio">Servizio</option>
             <option value="giornata">Giornata</option>
@@ -810,25 +1126,24 @@
           </select>
         </div>
 
-        <div class="field">
-          <label>Operatore</label>
-          <input id="fOperator" type="text" placeholder="Es. Cosimo" />
-        </div>
-
         <div class="field full">
-          <label>Titolo</label>
+          <label for="fTitle">Titolo</label>
           <input id="fTitle" type="text" placeholder="Es. Holter cardiaco" />
         </div>
 
         <div class="field full">
-          <label>Note</label>
+          <label for="fNotes">Note</label>
           <textarea id="fNotes"></textarea>
         </div>
       </div>
 
+      <div class="hint">
+        Cliccando direttamente sul calendario, data e orario verranno già impostati in automatico.
+      </div>
+
       <div class="modal-actions">
-        <button class="ghost-btn" onclick="closeBookingModal()">Chiudi</button>
-        <button class="save-btn" onclick="saveBooking()">Salva</button>
+        <button class="ghost-btn" id="cancelModalBtn">Chiudi</button>
+        <button class="save-btn" id="saveBookingBtn">Salva</button>
       </div>
     </div>
   </div>
@@ -845,73 +1160,95 @@
 
     const db = firebase.firestore();
 
-    const HOURS_START = 8;
-    const HOURS_END = 20;
-    const HOUR_HEIGHT = 64;
+    const DAY_START = 8;
+    const DAY_END = 20;
+    const SLOT_HEIGHT = 64;
 
     let currentDate = new Date();
     let currentView = "day";
     let currentFilter = "all";
-    let allAppointments = [];
-    let selectedAppointment = null;
-    let editingId = null;
-
     let miniMonthDate = new Date();
 
-    const hoursCol = document.getElementById("hoursCol");
-    const dayGrid = document.getElementById("dayGrid");
-    const monthGrid = document.getElementById("monthGrid");
-    const currentLabel = document.getElementById("currentLabel");
-    const searchInput = document.getElementById("searchInput");
+    let appointments = [];
+    let selectedAppointment = null;
+    let editingAppointmentId = null;
+    let modalMode = "new";
 
-    const detailEmpty = document.getElementById("detailEmpty");
-    const detailContent = document.getElementById("detailContent");
+    const searchInput = document.getElementById("searchInput");
+    const currentLabel = document.getElementById("currentLabel");
+    const miniMonthLabel = document.getElementById("miniMonthLabel");
+    const miniGrid = document.getElementById("miniGrid");
+    const detailInner = document.getElementById("detailInner");
+
+    const dayView = document.getElementById("dayView");
+    const weekView = document.getElementById("weekView");
+    const monthView = document.getElementById("monthView");
+    const monthGrid = document.getElementById("monthGrid");
 
     const bookingModal = document.getElementById("bookingModal");
+    const modalTitle = document.getElementById("modalTitle");
+
+    const fName = document.getElementById("fName");
+    const fSurname = document.getElementById("fSurname");
+    const fPhone = document.getElementById("fPhone");
+    const fOperator = document.getElementById("fOperator");
+    const fDate = document.getElementById("fDate");
+    const fStartTime = document.getElementById("fStartTime");
+    const fDuration = document.getElementById("fDuration");
+    const fType = document.getElementById("fType");
+    const fTitle = document.getElementById("fTitle");
+    const fNotes = document.getElementById("fNotes");
 
     function pad(n){
       return String(n).padStart(2, "0");
     }
 
     function formatDateKey(date){
-      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+      const d = new Date(date);
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
 
     function formatLongDate(date){
-      return date.toLocaleDateString("it-IT", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
+      const d = new Date(date);
+      return d.toLocaleDateString("it-IT", {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
       });
     }
 
-    function timeToMinutes(t){
-      const [h,m] = String(t || "00:00").split(":").map(Number);
+    function formatShortDay(date){
+      const d = new Date(date);
+      return d.toLocaleDateString("it-IT", {
+        weekday:"short",
+        day:"numeric",
+        month:"short"
+      });
+    }
+
+    function timeToMinutes(time){
+      if(!time) return 0;
+      const [h,m] = String(time).split(":").map(Number);
       return h * 60 + m;
     }
 
-    function minutesToTime(min){
-      const h = Math.floor(min / 60);
-      const m = min % 60;
+    function minutesToTime(minutes){
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
       return `${pad(h)}:${pad(m)}`;
     }
 
-    function addMinutesToTime(time, minutes){
-      return minutesToTime(timeToMinutes(time) + minutes);
+    function addMinutes(time, mins){
+      return minutesToTime(timeToMinutes(time) + mins);
     }
 
-    function daysBetween(dateStr){
+    function daysFromToday(dateStr){
+      if(!dateStr) return 0;
       const target = new Date(dateStr + "T00:00:00");
-      const now = new Date();
-      const diff = now - target;
-      return diff / (1000 * 60 * 60 * 24);
-    }
-
-    function getStatusClass(status){
-      if(status === "cancelled") return "cancelled";
-      if(status === "requested") return "requested";
-      return "confirmed";
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      return Math.floor((today - target) / (1000 * 60 * 60 * 24));
     }
 
     function getStatusLabel(status){
@@ -920,434 +1257,16 @@
       return "Confermata";
     }
 
-    function getEventColorClass(app){
+    function getStatusClass(status){
+      if(status === "cancelled") return "cancelled";
+      if(status === "requested") return "requested";
+      return "confirmed";
+    }
+
+    function getEventColor(app){
       if(app.status === "cancelled") return "red";
-      if(currentFilter === "recall") return "yellow";
-      if(daysBetween(app.date) >= 30 && app.status !== "cancelled") return "yellow";
+      if(daysFromToday(app.date) >= 30) return "yellow";
       return "green";
-    }
-
-    function buildHours(){
-      hoursCol.innerHTML = "";
-      for(let h = HOURS_START; h < HOURS_END; h++){
-        const row = document.createElement("div");
-        row.className = "hour";
-        row.textContent = `${pad(h)}:00`;
-        hoursCol.appendChild(row);
-      }
-      dayGrid.style.height = `${(HOURS_END - HOURS_START) * HOUR_HEIGHT}px`;
-    }
-
-    function setView(view){
-      currentView = view;
-
-      document.getElementById("viewDayBtn").classList.toggle("active", view === "day");
-      document.getElementById("viewMonthBtn").classList.toggle("active", view === "month");
-
-      document.getElementById("dayView").style.display = view === "day" ? "grid" : "none";
-      document.getElementById("monthView").style.display = view === "month" ? "block" : "none";
-
-      renderCalendar();
-    }
-
-    function goToday(){
-      currentDate = new Date();
-      miniMonthDate = new Date(currentDate);
-      renderMiniCalendar();
-      renderCalendar();
-    }
-
-    function changeDate(step){
-      if(currentView === "day"){
-        currentDate.setDate(currentDate.getDate() + step);
-      } else {
-        currentDate.setMonth(currentDate.getMonth() + step);
-      }
-      miniMonthDate = new Date(currentDate);
-      renderMiniCalendar();
-      renderCalendar();
-    }
-
-    function setFilter(filter, el){
-      currentFilter = filter;
-      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-      if(el) el.classList.add("active");
-      renderCalendar();
-      updateCounts();
-    }
-
-    function changeMiniMonth(step){
-      miniMonthDate.setMonth(miniMonthDate.getMonth() + step);
-      renderMiniCalendar();
-    }
-
-    function renderMiniCalendar(){
-      const miniGrid = document.getElementById("miniGrid");
-      const label = document.getElementById("miniMonthLabel");
-
-      const year = miniMonthDate.getFullYear();
-      const month = miniMonthDate.getMonth();
-
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-
-      let startWeekDay = firstDay.getDay();
-      startWeekDay = startWeekDay === 0 ? 6 : startWeekDay - 1;
-
-      label.textContent = firstDay.toLocaleDateString("it-IT", {
-        month: "long",
-        year: "numeric"
-      });
-
-      miniGrid.innerHTML = "";
-
-      const prevMonthLast = new Date(year, month, 0).getDate();
-
-      for(let i = 0; i < startWeekDay; i++){
-        const d = document.createElement("div");
-        d.className = "mini-day other";
-        d.textContent = prevMonthLast - startWeekDay + i + 1;
-        miniGrid.appendChild(d);
-      }
-
-      for(let day = 1; day <= lastDay.getDate(); day++){
-        const d = new Date(year, month, day);
-        const el = document.createElement("div");
-        el.className = "mini-day";
-        el.textContent = day;
-
-        if(formatDateKey(d) === formatDateKey(new Date())){
-          el.classList.add("today");
-        }
-
-        if(formatDateKey(d) === formatDateKey(currentDate)){
-          el.classList.add("active");
-        }
-
-        el.onclick = () => {
-          currentDate = new Date(d);
-          currentView = "day";
-          document.getElementById("viewDayBtn").classList.add("active");
-          document.getElementById("viewMonthBtn").classList.remove("active");
-          document.getElementById("dayView").style.display = "grid";
-          document.getElementById("monthView").style.display = "none";
-          renderMiniCalendar();
-          renderCalendar();
-        };
-
-        miniGrid.appendChild(el);
-      }
-
-      const totalShown = startWeekDay + lastDay.getDate();
-      const remaining = (7 - (totalShown % 7)) % 7;
-
-      for(let i = 1; i <= remaining; i++){
-        const d = document.createElement("div");
-        d.className = "mini-day other";
-        d.textContent = i;
-        miniGrid.appendChild(d);
-      }
-    }
-
-    function getFilteredAppointments(){
-      const query = searchInput.value.trim().toLowerCase();
-
-      return allAppointments.filter(app => {
-        const fullName = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
-        const phone = String(app.clientPhone || "").toLowerCase();
-        const title = String(app.title || "").toLowerCase();
-
-        const matchesSearch = !query || fullName.includes(query) || phone.includes(query) || title.includes(query);
-        if(!matchesSearch) return false;
-
-        if(currentFilter === "cancelled"){
-          return app.status === "cancelled";
-        }
-
-        if(currentFilter === "recall"){
-          return app.status !== "cancelled" && app.date && daysBetween(app.date) >= 30;
-        }
-
-        return true;
-      });
-    }
-
-    function updateCounts(){
-      const query = searchInput.value.trim().toLowerCase();
-
-      const filteredBase = allAppointments.filter(app => {
-        const fullName = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
-        const phone = String(app.clientPhone || "").toLowerCase();
-        const title = String(app.title || "").toLowerCase();
-        return !query || fullName.includes(query) || phone.includes(query) || title.includes(query);
-      });
-
-      document.getElementById("countAll").textContent = filteredBase.length;
-      document.getElementById("countRecall").textContent = filteredBase.filter(app => app.status !== "cancelled" && app.date && daysBetween(app.date) >= 30).length;
-      document.getElementById("countCancelled").textContent = filteredBase.filter(app => app.status === "cancelled").length;
-    }
-
-    function renderCalendar(){
-      currentLabel.textContent = formatLongDate(currentDate);
-      if(currentView === "day"){
-        renderDayView();
-      } else {
-        renderMonthView();
-      }
-    }
-
-    function renderDayView(){
-      dayGrid.innerHTML = "";
-
-      const dateKey = formatDateKey(currentDate);
-      const apps = getFilteredAppointments()
-        .filter(app => app.date === dateKey)
-        .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-
-      dayGrid.onclick = (e) => {
-        if(e.target !== dayGrid) return;
-
-        const rect = dayGrid.getBoundingClientRect();
-        const y = e.clientY - rect.top;
-        const totalMinutes = Math.floor((y / HOUR_HEIGHT) * 60) + (HOURS_START * 60);
-        const snapped = Math.max(HOURS_START * 60, Math.min((HOURS_END * 60) - 30, Math.round(totalMinutes / 15) * 15));
-        openNewBookingModal(dateKey, minutesToTime(snapped));
-      };
-
-      apps.forEach(app => {
-        const startMin = timeToMinutes(app.startTime);
-        const endMin = timeToMinutes(app.endTime || addMinutesToTime(app.startTime, app.durationMinuti || 30));
-        const top = ((startMin - (HOURS_START * 60)) / 60) * HOUR_HEIGHT;
-        const height = Math.max(42, ((endMin - startMin) / 60) * HOUR_HEIGHT - 4);
-
-        const ev = document.createElement("div");
-        ev.className = `event ${getEventColorClass(app)}`;
-        ev.style.top = `${top + 2}px`;
-        ev.style.height = `${height}px`;
-
-        ev.innerHTML = `
-          <div class="event-client">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
-          <div class="event-title">${escapeHtml(app.title || "Prenotazione")}</div>
-          <div class="event-time">${escapeHtml(app.startTime || "")} - ${escapeHtml(app.endTime || "")}</div>
-        `;
-
-        ev.onclick = (event) => {
-          event.stopPropagation();
-          selectAppointment(app);
-        };
-
-        dayGrid.appendChild(ev);
-      });
-    }
-
-    function renderMonthView(){
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-
-      let startWeekDay = firstDay.getDay();
-      startWeekDay = startWeekDay === 0 ? 6 : startWeekDay - 1;
-
-      const days = [];
-      const prevMonthLast = new Date(year, month, 0).getDate();
-
-      for(let i = 0; i < startWeekDay; i++){
-        days.push({
-          date: new Date(year, month - 1, prevMonthLast - startWeekDay + i + 1),
-          other: true
-        });
-      }
-
-      for(let day = 1; day <= lastDay.getDate(); day++){
-        days.push({
-          date: new Date(year, month, day),
-          other: false
-        });
-      }
-
-      while(days.length % 7 !== 0){
-        const nextDay = days.length - (startWeekDay + lastDay.getDate()) + 1;
-        days.push({
-          date: new Date(year, month + 1, nextDay),
-          other: true
-        });
-      }
-
-      const filtered = getFilteredAppointments();
-      monthGrid.innerHTML = "";
-
-      days.forEach(item => {
-        const key = formatDateKey(item.date);
-        const dayApps = filtered.filter(app => app.date === key).sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-        const cell = document.createElement("div");
-        cell.className = `month-cell ${item.other ? "other" : ""} ${formatDateKey(item.date) === formatDateKey(new Date()) ? "today" : ""}`;
-
-        cell.onclick = () => {
-          currentDate = new Date(item.date);
-          setView("day");
-          renderMiniCalendar();
-        };
-
-        let inner = `
-          <div class="month-cell-header">
-            <span>${item.date.getDate()}</span>
-            <span></span>
-          </div>
-        `;
-
-        dayApps.slice(0,4).forEach(app => {
-          inner += `<div class="month-event ${getEventColorClass(app)}">${escapeHtml(app.startTime || "")} ${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>`;
-        });
-
-        if(dayApps.length > 4){
-          inner += `<div class="month-event" style="background:#f1f4f2;color:#60716b;">+${dayApps.length - 4} altri</div>`;
-        }
-
-        cell.innerHTML = inner;
-        monthGrid.appendChild(cell);
-      });
-    }
-
-    function selectAppointment(app){
-      selectedAppointment = app;
-
-      detailEmpty.style.display = "none";
-      detailContent.style.display = "block";
-
-      document.getElementById("detailName").textContent = `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Cliente";
-      document.getElementById("detailPhone").textContent = app.clientPhone || "—";
-
-      const statusEl = document.getElementById("detailStatus");
-      statusEl.className = `status-pill ${getStatusClass(app.status)}`;
-      statusEl.textContent = getStatusLabel(app.status);
-
-      document.getElementById("detailDate").textContent = app.date || "—";
-      document.getElementById("detailTime").textContent = `${app.startTime || "—"} - ${app.endTime || "—"}`;
-      document.getElementById("detailType").textContent = app.type || "—";
-      document.getElementById("detailTitle").textContent = app.title || "—";
-      document.getElementById("detailDuration").textContent = `${app.durationMinuti || 30} min`;
-      document.getElementById("detailOperator").textContent = app.operatorName || "—";
-      document.getElementById("detailNotes").textContent = app.notes || "—";
-    }
-
-    function openNewBookingModal(date = "", time = ""){
-      editingId = null;
-      document.getElementById("modalTitle").textContent = "Nuova prenotazione";
-
-      document.getElementById("fName").value = "";
-      document.getElementById("fSurname").value = "";
-      document.getElementById("fPhone").value = "";
-      document.getElementById("fDate").value = date || formatDateKey(currentDate);
-      document.getElementById("fStartTime").value = time || "09:00";
-      document.getElementById("fDuration").value = 30;
-      document.getElementById("fType").value = "servizio";
-      document.getElementById("fOperator").value = "";
-      document.getElementById("fTitle").value = "";
-      document.getElementById("fNotes").value = "";
-
-      bookingModal.classList.add("show");
-    }
-
-    function openEditSelected(){
-      if(!selectedAppointment) return;
-
-      editingId = selectedAppointment.id;
-      document.getElementById("modalTitle").textContent = "Modifica prenotazione";
-
-      document.getElementById("fName").value = selectedAppointment.clientName || "";
-      document.getElementById("fSurname").value = selectedAppointment.clientSurname || "";
-      document.getElementById("fPhone").value = selectedAppointment.clientPhone || "";
-      document.getElementById("fDate").value = selectedAppointment.date || "";
-      document.getElementById("fStartTime").value = selectedAppointment.startTime || "09:00";
-      document.getElementById("fDuration").value = selectedAppointment.durationMinuti || 30;
-      document.getElementById("fType").value = selectedAppointment.type || "servizio";
-      document.getElementById("fOperator").value = selectedAppointment.operatorName || "";
-      document.getElementById("fTitle").value = selectedAppointment.title || "";
-      document.getElementById("fNotes").value = selectedAppointment.notes || "";
-
-      bookingModal.classList.add("show");
-    }
-
-    function openMoveSelected(){
-      if(!selectedAppointment) return;
-
-      editingId = selectedAppointment.id;
-      document.getElementById("modalTitle").textContent = "Sposta prenotazione";
-
-      document.getElementById("fName").value = selectedAppointment.clientName || "";
-      document.getElementById("fSurname").value = selectedAppointment.clientSurname || "";
-      document.getElementById("fPhone").value = selectedAppointment.clientPhone || "";
-      document.getElementById("fDate").value = selectedAppointment.date || "";
-      document.getElementById("fStartTime").value = selectedAppointment.startTime || "09:00";
-      document.getElementById("fDuration").value = selectedAppointment.durationMinuti || 30;
-      document.getElementById("fType").value = selectedAppointment.type || "servizio";
-      document.getElementById("fOperator").value = selectedAppointment.operatorName || "";
-      document.getElementById("fTitle").value = selectedAppointment.title || "";
-      document.getElementById("fNotes").value = selectedAppointment.notes || "";
-
-      bookingModal.classList.add("show");
-    }
-
-    function closeBookingModal(){
-      bookingModal.classList.remove("show");
-    }
-
-    async function saveBooking(){
-      const name = document.getElementById("fName").value.trim();
-      const surname = document.getElementById("fSurname").value.trim();
-      const phone = document.getElementById("fPhone").value.trim();
-      const date = document.getElementById("fDate").value;
-      const startTime = document.getElementById("fStartTime").value;
-      const duration = parseInt(document.getElementById("fDuration").value || "30", 10);
-      const type = document.getElementById("fType").value;
-      const operatorName = document.getElementById("fOperator").value.trim();
-      const title = document.getElementById("fTitle").value.trim();
-      const notes = document.getElementById("fNotes").value.trim();
-
-      if(!name || !phone || !date || !startTime || !title){
-        alert("Compila almeno nome, telefono, data, ora e titolo.");
-        return;
-      }
-
-      const endTime = addMinutesToTime(startTime, duration);
-
-      const payload = {
-        clientName: name,
-        clientSurname: surname,
-        clientPhone: phone,
-        date,
-        startTime,
-        endTime,
-        durationMinuti: duration,
-        type,
-        title,
-        operatorName,
-        notes,
-        status: editingId && selectedAppointment ? (selectedAppointment.status || "confirmed") : "confirmed",
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      if(editingId){
-        await db.collection("appointments").doc(editingId).update(payload);
-      } else {
-        payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        await db.collection("appointments").add(payload);
-      }
-
-      closeBookingModal();
-    }
-
-    async function cancelSelected(){
-      if(!selectedAppointment || !selectedAppointment.id) return;
-      const ok = confirm("Vuoi davvero cancellare questa prenotazione?");
-      if(!ok) return;
-
-      await db.collection("appointments").doc(selectedAppointment.id).update({
-        status: "cancelled",
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
     }
 
     function escapeHtml(text){
@@ -1359,40 +1278,637 @@
         .replace(/'/g,"&#039;");
     }
 
-    function listenAppointments(){
-      db.collection("appointments").onSnapshot((snap) => {
-        allAppointments = snap.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+    function getFilteredAppointments(){
+      const q = searchInput.value.trim().toLowerCase();
 
-        const stillSelected = selectedAppointment
-          ? allAppointments.find(a => a.id === selectedAppointment.id)
-          : null;
+      return appointments.filter(app => {
+        const name = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
+        const phone = String(app.clientPhone || "").toLowerCase();
+        const title = String(app.title || "").toLowerCase();
 
-        if(stillSelected){
-          selectedAppointment = stillSelected;
-          selectAppointment(stillSelected);
-        } else {
-          selectedAppointment = null;
-          detailEmpty.style.display = "flex";
-          detailContent.style.display = "none";
-        }
+        const matchSearch = !q || name.includes(q) || phone.includes(q) || title.includes(q);
+        if(!matchSearch) return false;
 
-        updateCounts();
-        renderCalendar();
+        if(currentFilter === "cancelled") return app.status === "cancelled";
+        if(currentFilter === "recall") return app.status !== "cancelled" && daysFromToday(app.date) >= 30;
+        return true;
       });
     }
 
-    searchInput.addEventListener("input", () => {
+    function updateCounts(){
+      const q = searchInput.value.trim().toLowerCase();
+
+      const base = appointments.filter(app => {
+        const name = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
+        const phone = String(app.clientPhone || "").toLowerCase();
+        const title = String(app.title || "").toLowerCase();
+        return !q || name.includes(q) || phone.includes(q) || title.includes(q);
+      });
+
+      document.getElementById("countAll").textContent = base.length;
+      document.getElementById("countRecall").textContent = base.filter(app => app.status !== "cancelled" && daysFromToday(app.date) >= 30).length;
+      document.getElementById("countCancelled").textContent = base.filter(app => app.status === "cancelled").length;
+    }
+
+    function renderMiniCalendar(){
+      const year = miniMonthDate.getFullYear();
+      const month = miniMonthDate.getMonth();
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      let firstWeekDay = firstDay.getDay();
+      firstWeekDay = firstWeekDay === 0 ? 6 : firstWeekDay - 1;
+
+      miniMonthLabel.textContent = firstDay.toLocaleDateString("it-IT", {
+        month:"long",
+        year:"numeric"
+      });
+
+      miniGrid.innerHTML = "";
+
+      const prevLast = new Date(year, month, 0).getDate();
+
+      for(let i=0; i<firstWeekDay; i++){
+        const d = document.createElement("div");
+        d.className = "mini-day other";
+        d.textContent = prevLast - firstWeekDay + i + 1;
+        miniGrid.appendChild(d);
+      }
+
+      for(let day=1; day<=lastDay.getDate(); day++){
+        const date = new Date(year, month, day);
+        const el = document.createElement("div");
+        el.className = "mini-day";
+        el.textContent = day;
+
+        if(formatDateKey(date) === formatDateKey(new Date())){
+          el.classList.add("today");
+        }
+
+        if(formatDateKey(date) === formatDateKey(currentDate)){
+          el.classList.add("active");
+        }
+
+        el.onclick = () => {
+          currentDate = new Date(date);
+          currentView = "day";
+          syncViewButtons();
+          renderMiniCalendar();
+          renderCalendar();
+        };
+
+        miniGrid.appendChild(el);
+      }
+
+      const shown = firstWeekDay + lastDay.getDate();
+      const remain = (7 - (shown % 7)) % 7;
+
+      for(let i=1; i<=remain; i++){
+        const d = document.createElement("div");
+        d.className = "mini-day other";
+        d.textContent = i;
+        miniGrid.appendChild(d);
+      }
+    }
+
+    function syncViewButtons(){
+      document.querySelectorAll("[data-view]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === currentView);
+      });
+
+      dayView.classList.toggle("active", currentView === "day");
+      weekView.classList.toggle("active", currentView === "week");
+      monthView.classList.toggle("active", currentView === "month");
+    }
+
+    function renderCalendar(){
+      currentLabel.textContent =
+        currentView === "month"
+          ? new Date(currentDate).toLocaleDateString("it-IT", { month:"long", year:"numeric" })
+          : formatLongDate(currentDate);
+
+      if(currentView === "day") renderDayView();
+      if(currentView === "week") renderWeekView();
+      if(currentView === "month") renderMonthView();
       updateCounts();
+    }
+
+    function renderDayView(){
+      const dateKey = formatDateKey(currentDate);
+      const items = getFilteredAppointments()
+        .filter(app => app.date === dateKey)
+        .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+      let html = `
+        <div class="hours-col">
+          ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="hour-cell">${pad(DAY_START + i)}:00</div>`).join("")}
+        </div>
+        <div class="day-grid" id="dayGridInner">
+          ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="half-line" style="top:${(i * SLOT_HEIGHT) + (SLOT_HEIGHT / 2)}px;"></div>`).join("")}
+        </div>
+      `;
+
+      dayView.innerHTML = html;
+
+      const grid = document.getElementById("dayGridInner");
+
+      grid.addEventListener("click", (e) => {
+        if(e.target !== grid) return;
+        const rect = grid.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const minuteOffset = Math.round((y / (SLOT_HEIGHT / 2))) * 30;
+        const totalMinutes = (DAY_START * 60) + minuteOffset;
+        const safeMinutes = Math.max(DAY_START * 60, Math.min((DAY_END * 60) - 30, totalMinutes));
+        openNewBookingModal(dateKey, minutesToTime(safeMinutes));
+      });
+
+      items.forEach(app => {
+        const start = timeToMinutes(app.startTime);
+        const end = timeToMinutes(app.endTime || addMinutes(app.startTime, Number(app.durationMinuti || 30)));
+        const top = ((start - DAY_START * 60) / 60) * SLOT_HEIGHT;
+        const height = Math.max((((end - start) / 60) * SLOT_HEIGHT) - 6, 46);
+
+        const card = document.createElement("div");
+        card.className = `event-card event-${getEventColor(app)} ${selectedAppointment?.id === app.id ? "selected" : ""}`;
+        card.style.top = `${top + 3}px`;
+        card.style.height = `${height}px`;
+        card.innerHTML = `
+          <div class="event-client">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
+          <div class="event-title">${escapeHtml(app.title || "Prenotazione")}</div>
+          <div class="event-time">${escapeHtml(app.startTime || "")} - ${escapeHtml(app.endTime || "")}</div>
+        `;
+        card.onclick = (event) => {
+          event.stopPropagation();
+          selectAppointment(app);
+        };
+
+        grid.appendChild(card);
+      });
+    }
+
+    function getStartOfWeek(date){
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setDate(d.getDate() + diff);
+      d.setHours(0,0,0,0);
+      return d;
+    }
+
+    function renderWeekView(){
+      const start = getStartOfWeek(currentDate);
+      const days = [];
+      for(let i=0; i<7; i++){
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        days.push(d);
+      }
+
+      let html = `<div class="week-head-empty"></div>`;
+      html += days.map(d => `
+        <div class="week-head">
+          <small>${d.toLocaleDateString("it-IT",{ weekday:"long" })}</small>
+          <span>${d.toLocaleDateString("it-IT",{ day:"numeric", month:"short" })}</span>
+        </div>
+      `).join("");
+
+      html += `<div class="week-hours-col">
+        ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="week-hour">${pad(DAY_START + i)}:00</div>`).join("")}
+      </div>`;
+
+      days.forEach(d => {
+        const key = formatDateKey(d);
+        html += `<div class="week-day-col" data-date="${key}">
+          ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="half-line" style="top:${(i * SLOT_HEIGHT) + (SLOT_HEIGHT / 2)}px;"></div>`).join("")}
+        </div>`;
+      });
+
+      weekView.innerHTML = html;
+
+      weekView.querySelectorAll(".week-day-col").forEach(col => {
+        const key = col.dataset.date;
+
+        col.addEventListener("click", (e) => {
+          if(e.target !== col) return;
+          const rect = col.getBoundingClientRect();
+          const y = e.clientY - rect.top;
+          const minuteOffset = Math.round((y / (SLOT_HEIGHT / 2))) * 30;
+          const totalMinutes = (DAY_START * 60) + minuteOffset;
+          const safeMinutes = Math.max(DAY_START * 60, Math.min((DAY_END * 60) - 30, totalMinutes));
+          openNewBookingModal(key, minutesToTime(safeMinutes));
+        });
+
+        const items = getFilteredAppointments()
+          .filter(app => app.date === key)
+          .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+        items.forEach(app => {
+          const start = timeToMinutes(app.startTime);
+          const end = timeToMinutes(app.endTime || addMinutes(app.startTime, Number(app.durationMinuti || 30)));
+          const top = ((start - DAY_START * 60) / 60) * SLOT_HEIGHT;
+          const height = Math.max((((end - start) / 60) * SLOT_HEIGHT) - 6, 44);
+
+          const card = document.createElement("div");
+          card.className = `event-card event-${getEventColor(app)} ${selectedAppointment?.id === app.id ? "selected" : ""}`;
+          card.style.top = `${top + 3}px`;
+          card.style.height = `${height}px`;
+          card.innerHTML = `
+            <div class="event-client">${escapeHtml(app.clientName || "")}</div>
+            <div class="event-title">${escapeHtml(app.title || "")}</div>
+            <div class="event-time">${escapeHtml(app.startTime || "")}</div>
+          `;
+          card.onclick = (event) => {
+            event.stopPropagation();
+            selectAppointment(app);
+          };
+          col.appendChild(card);
+        });
+      });
+    }
+
+    function renderMonthView(){
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      let firstWeekDay = firstDay.getDay();
+      firstWeekDay = firstWeekDay === 0 ? 6 : firstWeekDay - 1;
+
+      const cells = [];
+      const prevMonthLast = new Date(year, month, 0).getDate();
+
+      for(let i=0; i<firstWeekDay; i++){
+        cells.push({
+          date:new Date(year, month - 1, prevMonthLast - firstWeekDay + i + 1),
+          other:true
+        });
+      }
+
+      for(let d=1; d<=lastDay.getDate(); d++){
+        cells.push({
+          date:new Date(year, month, d),
+          other:false
+        });
+      }
+
+      while(cells.length % 7 !== 0){
+        const nextDay = cells.length - (firstWeekDay + lastDay.getDate()) + 1;
+        cells.push({
+          date:new Date(year, month + 1, nextDay),
+          other:true
+        });
+      }
+
+      const filtered = getFilteredAppointments();
+      monthGrid.innerHTML = "";
+
+      cells.forEach(cellData => {
+        const key = formatDateKey(cellData.date);
+        const dayItems = filtered
+          .filter(app => app.date === key)
+          .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+        const cell = document.createElement("div");
+        cell.className = `month-cell ${cellData.other ? "other" : ""} ${key === formatDateKey(new Date()) ? "today" : ""}`;
+        cell.innerHTML = `
+          <div class="month-cell-head">
+            <span>${cellData.date.getDate()}</span>
+            <span></span>
+          </div>
+          <div class="month-events">
+            ${dayItems.slice(0,4).map(app => `
+              <div class="month-event ${getEventColor(app)}" data-app-id="${app.id}">
+                ${escapeHtml(app.startTime || "")} · ${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}
+              </div>
+            `).join("")}
+            ${dayItems.length > 4 ? `<div class="month-more">+${dayItems.length - 4} altri</div>` : ``}
+          </div>
+        `;
+
+        cell.onclick = (e) => {
+          const appId = e.target?.dataset?.appId;
+          if(appId){
+            const app = appointments.find(a => a.id === appId);
+            if(app) selectAppointment(app);
+            return;
+          }
+          currentDate = new Date(cellData.date);
+          currentView = "day";
+          syncViewButtons();
+          renderMiniCalendar();
+          renderCalendar();
+        };
+
+        monthGrid.appendChild(cell);
+      });
+    }
+
+    function renderDetailEmpty(){
+      detailInner.innerHTML = `
+        <div class="empty-state">
+          Seleziona una prenotazione per vedere il dettaglio completo.
+        </div>
+      `;
+    }
+
+    function selectAppointment(app){
+      selectedAppointment = app;
+
+      detailInner.innerHTML = `
+        <div class="profile-box">
+          <div class="profile-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
+          <div class="profile-phone">${escapeHtml(app.clientPhone || "—")}</div>
+          <div class="status-pill ${getStatusClass(app.status)}">${escapeHtml(getStatusLabel(app.status))}</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-title">Dettaglio appuntamento</div>
+
+          <div class="detail-row">
+            <div class="detail-key">Data</div>
+            <div class="detail-value">${escapeHtml(app.date || "—")}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Ora</div>
+            <div class="detail-value">${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Tipo</div>
+            <div class="detail-value">${escapeHtml(app.type || "—")}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Titolo</div>
+            <div class="detail-value">${escapeHtml(app.title || "—")}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Durata</div>
+            <div class="detail-value">${escapeHtml(String(app.durationMinuti || 30))} min</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Operatore</div>
+            <div class="detail-value">${escapeHtml(app.operatorName || "—")}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Note</div>
+            <div class="detail-value">${escapeHtml(app.notes || "—")}</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn blue" id="editSelectedBtn">Modifica</button>
+          <button class="action-btn orange" id="moveSelectedBtn">Sposta</button>
+          <button class="action-btn red" id="cancelSelectedBtn">Cancella</button>
+        </div>
+      `;
+
+      document.getElementById("editSelectedBtn").onclick = openEditSelected;
+      document.getElementById("moveSelectedBtn").onclick = openMoveSelected;
+      document.getElementById("cancelSelectedBtn").onclick = cancelSelected;
+    }
+
+    function openModal(){
+      bookingModal.classList.add("show");
+    }
+
+    function closeModal(){
+      bookingModal.classList.remove("show");
+    }
+
+    function clearForm(){
+      fName.value = "";
+      fSurname.value = "";
+      fPhone.value = "";
+      fOperator.value = "";
+      fDate.value = formatDateKey(currentDate);
+      fStartTime.value = "09:00";
+      fDuration.value = "30";
+      fType.value = "servizio";
+      fTitle.value = "";
+      fNotes.value = "";
+    }
+
+    function openNewBookingModal(dateKey = "", time = ""){
+      modalMode = "new";
+      editingAppointmentId = null;
+      modalTitle.textContent = "Nuova prenotazione";
+      clearForm();
+      if(dateKey) fDate.value = dateKey;
+      if(time) fStartTime.value = time;
+      openModal();
+    }
+
+    function openEditSelected(){
+      if(!selectedAppointment) return;
+      modalMode = "edit";
+      editingAppointmentId = selectedAppointment.id;
+      modalTitle.textContent = "Modifica prenotazione";
+
+      fName.value = selectedAppointment.clientName || "";
+      fSurname.value = selectedAppointment.clientSurname || "";
+      fPhone.value = selectedAppointment.clientPhone || "";
+      fOperator.value = selectedAppointment.operatorName || "";
+      fDate.value = selectedAppointment.date || formatDateKey(currentDate);
+      fStartTime.value = selectedAppointment.startTime || "09:00";
+      fDuration.value = String(selectedAppointment.durationMinuti || 30);
+      fType.value = selectedAppointment.type || "servizio";
+      fTitle.value = selectedAppointment.title || "";
+      fNotes.value = selectedAppointment.notes || "";
+
+      openModal();
+    }
+
+    function openMoveSelected(){
+      if(!selectedAppointment) return;
+      modalMode = "move";
+      editingAppointmentId = selectedAppointment.id;
+      modalTitle.textContent = "Sposta prenotazione";
+
+      fName.value = selectedAppointment.clientName || "";
+      fSurname.value = selectedAppointment.clientSurname || "";
+      fPhone.value = selectedAppointment.clientPhone || "";
+      fOperator.value = selectedAppointment.operatorName || "";
+      fDate.value = selectedAppointment.date || formatDateKey(currentDate);
+      fStartTime.value = selectedAppointment.startTime || "09:00";
+      fDuration.value = String(selectedAppointment.durationMinuti || 30);
+      fType.value = selectedAppointment.type || "servizio";
+      fTitle.value = selectedAppointment.title || "";
+      fNotes.value = selectedAppointment.notes || "";
+
+      openModal();
+    }
+
+    function hasOverlap(targetDate, targetStart, targetEnd, ignoreId = null){
+      return appointments.some(app => {
+        if(ignoreId && app.id === ignoreId) return false;
+        if(app.status === "cancelled") return false;
+        if(app.date !== targetDate) return false;
+
+        const aStart = timeToMinutes(app.startTime);
+        const aEnd = timeToMinutes(app.endTime || addMinutes(app.startTime, Number(app.durationMinuti || 30)));
+        const bStart = timeToMinutes(targetStart);
+        const bEnd = timeToMinutes(targetEnd);
+
+        return bStart < aEnd && bEnd > aStart;
+      });
+    }
+
+    async function saveBooking(){
+      const payload = {
+        clientName: fName.value.trim(),
+        clientSurname: fSurname.value.trim(),
+        clientPhone: fPhone.value.trim(),
+        operatorName: fOperator.value.trim(),
+        date: fDate.value,
+        startTime: fStartTime.value,
+        durationMinuti: Number(fDuration.value || 30),
+        type: fType.value,
+        title: fTitle.value.trim(),
+        notes: fNotes.value.trim()
+      };
+
+      if(!payload.clientName || !payload.clientPhone || !payload.date || !payload.startTime || !payload.title){
+        alert("Compila almeno nome, telefono, data, orario e titolo.");
+        return;
+      }
+
+      payload.endTime = addMinutes(payload.startTime, payload.durationMinuti);
+
+      if(hasOverlap(payload.date, payload.startTime, payload.endTime, editingAppointmentId)){
+        alert("C'è già una prenotazione che si sovrappone a questo orario.");
+        return;
+      }
+
+      if(editingAppointmentId){
+        const currentStatus = selectedAppointment?.status || "confirmed";
+        await db.collection("appointments").doc(editingAppointmentId).update({
+          ...payload,
+          status: currentStatus,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } else {
+        await db.collection("appointments").add({
+          ...payload,
+          status: "confirmed",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+
+      closeModal();
+    }
+
+    async function cancelSelected(){
+      if(!selectedAppointment?.id) return;
+      const ok = confirm("Vuoi davvero cancellare questa prenotazione?");
+      if(!ok) return;
+
+      await db.collection("appointments").doc(selectedAppointment.id).update({
+        status: "cancelled",
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    function shiftCurrentDate(step){
+      if(currentView === "day"){
+        currentDate.setDate(currentDate.getDate() + step);
+      } else if(currentView === "week"){
+        currentDate.setDate(currentDate.getDate() + (step * 7));
+      } else {
+        currentDate.setMonth(currentDate.getMonth() + step);
+      }
+      currentDate = new Date(currentDate);
+      miniMonthDate = new Date(currentDate);
+      renderMiniCalendar();
+      renderCalendar();
+    }
+
+    function goToday(){
+      currentDate = new Date();
+      miniMonthDate = new Date(currentDate);
+      renderMiniCalendar();
+      renderCalendar();
+    }
+
+    function setFilter(filter){
+      currentFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === filter);
+      });
+      renderCalendar();
+    }
+
+    function setView(view){
+      currentView = view;
+      syncViewButtons();
+      renderCalendar();
+    }
+
+    document.getElementById("newBtn").addEventListener("click", () => openNewBookingModal());
+    document.getElementById("todayBtn").addEventListener("click", goToday);
+    document.getElementById("prevBtn").addEventListener("click", () => shiftCurrentDate(-1));
+    document.getElementById("nextBtn").addEventListener("click", () => shiftCurrentDate(1));
+    document.getElementById("miniPrevBtn").addEventListener("click", () => {
+      miniMonthDate.setMonth(miniMonthDate.getMonth() - 1);
+      renderMiniCalendar();
+    });
+    document.getElementById("miniNextBtn").addEventListener("click", () => {
+      miniMonthDate.setMonth(miniMonthDate.getMonth() + 1);
+      renderMiniCalendar();
+    });
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => setFilter(btn.dataset.filter));
+    });
+
+    document.querySelectorAll("[data-view]").forEach(btn => {
+      btn.addEventListener("click", () => setView(btn.dataset.view));
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+    document.getElementById("cancelModalBtn").addEventListener("click", closeModal);
+    document.getElementById("saveBookingBtn").addEventListener("click", saveBooking);
+
+    bookingModal.addEventListener("click", (e) => {
+      if(e.target === bookingModal) closeModal();
+    });
+
+    searchInput.addEventListener("input", () => {
       renderCalendar();
     });
 
-    buildHours();
+    db.collection("appointments").onSnapshot(snapshot => {
+      appointments = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      if(selectedAppointment){
+        const updated = appointments.find(a => a.id === selectedAppointment.id);
+        if(updated){
+          selectedAppointment = updated;
+          selectAppointment(updated);
+        } else {
+          selectedAppointment = null;
+          renderDetailEmpty();
+        }
+      }
+
+      renderCalendar();
+    });
+
     renderMiniCalendar();
+    syncViewButtons();
     renderCalendar();
-    listenAppointments();
+    renderDetailEmpty();
   </script>
 </body>
 </html>
