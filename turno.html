@@ -1447,8 +1447,7 @@ function startClock(){
   setInterval(updateClock, 1000);
 }
    renderTurni();
-   updateTurniDataScript();
-   startClock();
+startClock();
   </script>
   <script src="app-fixes.js"></script>
 
@@ -1457,44 +1456,6 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("sw.js");
   });
-}
-</script>
-<script id="turni-data" type="application/json">
-[
-  {
-    "data": "2026-04-14",
-    "stato": "turno",
-    "farmacia": "montesano"
-  }
-]
-</script>
-
-<script>
-function updateTurniDataScript() {
-  const result = [];
-
-  Object.entries(turni).forEach(([data, info]) => {
-    if ((info.turno || "").toUpperCase() === "MONTESANO") {
-      result.push({
-        data,
-        stato: "turno",
-        farmacia: "montesano"
-      });
-    }
-
-    if ((info.appoggio || "").toUpperCase() === "MONTESANO") {
-      result.push({
-        data,
-        stato: "appoggio",
-        farmacia: "montesano"
-      });
-    }
-  });
-
-  const scriptEl = document.getElementById("turni-data");
-  if (scriptEl) {
-    scriptEl.textContent = JSON.stringify(result, null, 2);
-  }
 }
 </script>
 </body>
