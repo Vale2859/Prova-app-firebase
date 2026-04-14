@@ -5,18 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Farmacia Montesano</title>
   <meta name="description" content="Farmacia Montesano: servizi, prevenzione, promozioni e assistenza." />
-  <script>
-    (function () {
-      var isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-      if (isMobile) {
-        document.documentElement.classList.add('mobile-preload');
-      }
-    })();
-  </script>
-  <style>
-    html.mobile-preload body{opacity:0;}
-    html.mobile-preload body.mobile-ready{opacity:1;transition:opacity .18s ease;}
-  </style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,8 +16,14 @@
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f8f55">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script>document.documentElement.classList.add(window.matchMedia('(display-mode: standalone)').matches ? 'is-standalone' : 'is-browser');</script>
 </head>
 
 <body class="season-primavera">
@@ -480,12 +474,7 @@
 
   <script src="mobile-preview.js"></script>
 
-<script src="mobile-only.js"></script>
 <script src="app-fixes.js"></script>
-
-<script>
-if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js');}
-</script>
 
 <script>
 if ("serviceWorker" in navigator) {

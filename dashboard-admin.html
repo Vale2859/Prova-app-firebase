@@ -2,452 +2,213 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dashboard Admin | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f8f55" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Montesano Admin" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <style>
     :root{
-      --bg:#eef6f2;
-      --bg2:#f8fcfa;
-      --card:rgba(255,255,255,.92);
-      --line:#d8e6df;
-      --text:#16362f;
-      --muted:#6a7d76;
-      --green:#0f8f55;
-      --green2:#4fb182;
-      --greenSoft:#eaf6ef;
-      --shadow:0 24px 60px rgba(18,58,46,.10);
-      --safe-top:max(16px, env(safe-area-inset-top));
-      --safe-right:max(14px, env(safe-area-inset-right));
-      --safe-bottom:max(18px, env(safe-area-inset-bottom));
-      --safe-left:max(14px, env(safe-area-inset-left));
+      --bg:#eff4f1;--panel:#ffffffd9;--panel-strong:#ffffff;--line:#dfe9e3;--text:#14352e;--muted:#6f817b;
+      --green:#0f8f55;--green-dark:#0b6d42;--soft:#eef8f3;--shadow:0 22px 48px rgba(16,49,39,.10);--radius:26px;
+      --safe-top:max(16px, env(safe-area-inset-top));--safe-bottom:max(18px, env(safe-area-inset-bottom));
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;min-height:100%}
-    body{
-      font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(15,143,85,.10), transparent 26%),
-        radial-gradient(circle at right top, rgba(79,177,130,.12), transparent 24%),
-        linear-gradient(180deg,var(--bg2) 0%, var(--bg) 100%);
-    }
-    a,button,input,select,textarea{font:inherit}
-    .app-shell{max-width:1560px;margin:0 auto;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)}
-    .topbar{position:sticky;top:var(--safe-top);z-index:40;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.88);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-bottom:18px}
-    .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .brand img{width:58px;height:58px;object-fit:contain;border-radius:18px;background:#fff;border:1px solid #e4efe9;padding:7px}
-    .brand-copy{min-width:0}
-    .brand-copy h1{margin:0;font-size:24px;line-height:.92;letter-spacing:-.05em}
-    .brand-copy p{margin:5px 0 0;color:var(--muted);font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .pill,.ghost,.cta,.btn{min-height:46px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:850;cursor:pointer}
-    .pill,.ghost{border:1px solid #d7e5de}
-    .pill{background:var(--greenSoft);color:var(--green)}
-    .ghost{background:#fff;color:#20453d}
-    .cta,.btn-primary{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff;border:none;box-shadow:0 16px 28px rgba(15,143,85,.22)}
-    .btn-secondary{background:#eff6f2;color:#22433c;border:1px solid #dce8e2}
-    .layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px;align-items:start}
-    .sidebar,.mobile-nav,.hero,.metric,.workspace,.section-card,.side-card,.notification-bar{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
-    .sidebar{position:sticky;top:calc(var(--safe-top) + 86px);border-radius:28px;padding:18px}
-    .sidebar h2,.side-card h3{margin:0 0 12px;font-size:13px;letter-spacing:.10em;text-transform:uppercase;color:#7c8e88}
-    .nav{display:flex;flex-direction:column;gap:10px}
-    .nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:none;border-radius:18px;background:#fff;border:1px solid #e2ece7;color:#27433d;text-align:left;cursor:pointer;font-weight:850;transition:.18s ease}
-    .nav-btn .dot{width:11px;height:11px;border-radius:50%;background:#b7d3c5;flex:0 0 auto}
-    .nav-btn .meta{display:flex;flex-direction:column;gap:4px}
-    .nav-btn .meta small{color:var(--muted);font-size:12px;font-weight:700}
-    .nav-btn.active{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff;box-shadow:0 18px 28px rgba(15,143,85,.24)}
-    .nav-btn.active .dot{background:#fff}
-    .nav-btn.active small{color:rgba(255,255,255,.82)}
-    .sidebar-note{margin-top:14px;padding:16px;border-radius:18px;background:#f8fcfa;border:1px solid #e4eee8;color:var(--muted);font-size:14px;line-height:1.5;font-weight:600}
-    .main{display:flex;flex-direction:column;gap:18px;min-width:0}
-    .mobile-nav{display:none;gap:10px;padding:12px;border-radius:24px;overflow:auto;scrollbar-width:none}
-    .mobile-nav::-webkit-scrollbar{display:none}
-    .mobile-nav .nav-btn{min-width:210px}
-    .hero{border-radius:30px;padding:24px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;background:linear-gradient(135deg, rgba(15,143,85,.14) 0%, rgba(255,255,255,.96) 56%, rgba(79,177,130,.16) 100%)}
-    .eyebrow{display:inline-flex;align-items:center;gap:9px;min-height:40px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid #dce9e2;font-size:13px;font-weight:900;color:var(--green);margin-bottom:14px}
-    .eyebrow:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--green)}
-    .hero h2{margin:0 0 10px;font-size:clamp(34px,5vw,58px);line-height:.92;letter-spacing:-.07em;max-width:12ch}
-    .hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.55;font-weight:600;max-width:780px}
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-    .hero-grid{display:grid;gap:12px}
-    .quick{padding:18px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid #dce8e2}
-    .quick strong{display:block;font-size:16px;margin-bottom:4px}
-    .quick span{display:block;color:var(--muted);line-height:1.45;font-size:14px;font-weight:600}
-    .notification-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;border-radius:24px}
-    .notification-copy strong{display:block;font-size:17px;margin-bottom:4px}
-    .notification-copy span{color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
-    .notification-status{font-size:13px;font-weight:800;color:var(--muted)}
-    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-    .metric{position:relative;overflow:hidden;border-radius:24px;padding:20px;background:linear-gradient(180deg,#fff 0%,#f9fcfa 100%)}
-    .metric:after{content:"";position:absolute;right:-28px;bottom:-30px;width:118px;height:118px;border-radius:50%;background:radial-gradient(circle, rgba(15,143,85,.12), transparent 68%)}
-    .metric .label{font-size:14px;color:#647872;font-weight:800;margin-bottom:10px}
-    .metric .value{font-size:42px;line-height:1;font-weight:900;letter-spacing:-.06em}
-    .metric .note{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
-    .workspace-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:18px;align-items:start}
-    .sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .section-card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column}
-    .section-cover{position:relative;height:168px;overflow:hidden}
-    .section-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .28s ease}
-    .section-card:hover .section-cover img{transform:scale(1.04)}
-    .tag{position:absolute;left:14px;top:14px;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.92);display:inline-flex;align-items:center;border:1px solid rgba(221,233,227,.9);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-    .section-body{padding:18px;display:flex;flex-direction:column;gap:10px}
-    .section-body h3{margin:0;font-size:28px;line-height:.94;letter-spacing:-.05em}
-    .section-body p{margin:0;color:var(--muted);font-size:15px;line-height:1.5;font-weight:600}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-    .workspace{border-radius:30px;padding:18px}
-    .workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
-    .workspace-head h3{margin:0;font-size:34px;line-height:.94;letter-spacing:-.06em}
-    .workspace-head p{margin:8px 0 0;color:var(--muted);font-size:15px;line-height:1.5;font-weight:600;max-width:840px}
-    .subtabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .subtab{min-height:40px;padding:0 14px;border:none;border-radius:999px;background:#eef5f1;color:#25443d;font-size:13px;font-weight:850;cursor:pointer}
-    .subtab.active{background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);color:#fff}
-    .summary{padding:18px;border:1px solid #e4efe8;border-radius:22px;background:linear-gradient(180deg,#fff 0%,#f9fcfa 100%);margin-bottom:14px}
-    .summary p{margin:0;color:var(--muted);font-size:15px;line-height:1.55;font-weight:600}
-    .summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
-    .mini{padding:16px;border-radius:18px;background:#fff;border:1px solid #e3ede7}
-    .mini .k{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-    .mini .v{font-size:28px;font-weight:900;letter-spacing:-.04em}
-    .frame-wrap{display:none;border:1px solid #e3ede7;border-radius:24px;background:#fff;padding:12px}
-    .frame-wrap.open{display:block}
-    .frame-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 4px 14px;border-bottom:1px solid #edf3ef;margin-bottom:12px}
-    .frame-head strong{font-size:16px}
-    .frame-head span{display:block;color:var(--muted);font-size:13px;font-weight:700;margin-top:4px}
-    iframe{display:block;width:100%;min-height:920px;border:none;border-radius:18px;background:#fff}
-    .side-stack{display:grid;gap:18px}
-    .side-card{border-radius:24px;padding:18px}
-    .side-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;font-weight:600}
-    .health-list,.quick-links{display:grid;gap:10px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:16px;background:#fbfdfc;border:1px solid #e3ede7}
-    .row strong{font-size:14px}
-    .row span{color:var(--muted);font-size:13px;font-weight:800;text-align:right}
-    .quick-link{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-radius:16px;text-decoration:none;background:#fbfdfc;border:1px solid #e3ede7;color:#21443c;font-weight:850}
-    .quick-link span{color:var(--green)}
-    .tiny{font-size:12px;color:var(--muted);font-weight:700;margin-top:10px;line-height:1.45}
-    @media (max-width: 1200px){
-      .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .workspace-grid{grid-template-columns:1fr}
-      .hero{grid-template-columns:1fr}
-      .side-stack{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media (max-width: 980px){
-      .layout{grid-template-columns:1fr}
-      .sidebar{display:none}
-      .mobile-nav{display:flex}
-      .topbar{grid-template-columns:1fr}
-      .top-actions{justify-content:flex-start}
-      .sections{grid-template-columns:1fr 1fr}
-      .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media (max-width: 720px){
-      .topbar{padding:14px}
-      .brand img{width:50px;height:50px}
-      .brand-copy h1{font-size:20px}
-      .brand-copy p{font-size:13px}
-      .hero,.workspace,.side-card,.notification-bar,.metric{border-radius:22px}
-      .hero{padding:18px}
-      .hero h2{font-size:38px;max-width:11ch}
-      .hero p{font-size:15px}
-      .notification-bar{flex-direction:column;align-items:flex-start}
-      .metrics,.sections,.summary-grid,.side-stack{grid-template-columns:1fr}
-      .section-cover{height:190px}
-      .workspace-head{flex-direction:column}
-      .workspace-head h3{font-size:28px}
-      .mobile-nav .nav-btn{min-width:190px}
-      iframe{min-height:780px}
-    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0} body{font-family:"Inter",system-ui,sans-serif;background:linear-gradient(180deg,#f6faf8 0%,var(--bg) 100%);color:var(--text);}
+    .app{max-width:1480px;margin:0 auto;padding:calc(var(--safe-top) + 12px) 16px calc(var(--safe-bottom) + 16px);} 
+    .shell{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start}
+    .sidebar,.panel,.hero,.stat,.workspace{background:var(--panel);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .sidebar{padding:18px;position:sticky;top:20px}
+    .logo{width:180px;max-width:100%;display:block;margin-bottom:14px}
+    .side-title{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:0 0 6px}
+    .side-copy{margin:0 0 16px;color:var(--muted);line-height:1.45;font-size:14px}
+    .nav{display:grid;gap:10px}
+    .nav button{appearance:none;border:none;background:#f7faf8;color:var(--text);border:1px solid var(--line);border-radius:18px;min-height:54px;padding:0 16px;text-align:left;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .nav button.active{background:linear-gradient(135deg,var(--green) 0%, #38ad77 100%);color:#fff;border-color:transparent;box-shadow:0 14px 30px rgba(15,143,85,.24)}
+    .sidebar-foot{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);display:grid;gap:10px}
+    .sidebar-link{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--text);font-weight:700;background:#fff}
+    .main{display:grid;gap:18px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .hero{padding:22px}
+    .hero-kicker{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--soft);color:var(--green-dark);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:clamp(2rem,4vw,3.3rem);line-height:.96;letter-spacing:-.05em}
+    .hero p{margin:0;color:var(--muted);font-size:16px;line-height:1.55;max-width:760px}
+    .quick-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+    .stat{padding:16px}
+    .stat small{display:block;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .stat strong{display:block;font-size:32px;letter-spacing:-.05em;margin-bottom:4px}
+    .stat span{color:var(--muted);font-size:13px;font-weight:600}
+    .mobile-chips{display:none;gap:10px;overflow:auto;padding-bottom:2px}
+    .mobile-chips button{white-space:nowrap;border:none;border-radius:999px;padding:10px 14px;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--text)}
+    .mobile-chips button.active{background:var(--green);border-color:var(--green);color:#fff}
+    .workspace{padding:18px}
+    .workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+    .workspace-title{margin:0;font-size:28px;letter-spacing:-.04em}
+    .workspace-sub{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.45;max-width:720px}
+    .workspace-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--text);font-weight:800;text-decoration:none;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,var(--green) 0%, #39b078 100%);color:#fff;border-color:transparent}
+    .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px}
+    .feature{position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);background:#fff;min-height:190px;display:flex;align-items:flex-end;padding:16px;text-decoration:none;color:#fff}
+    .feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .feature::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,28,21,.05),rgba(9,28,21,.72))}
+    .feature-copy{position:relative;z-index:1}
+    .feature-copy b{display:block;font-size:24px;letter-spacing:-.04em;margin-bottom:6px}
+    .feature-copy span{display:block;font-size:14px;line-height:1.4;max-width:420px;color:rgba(255,255,255,.92)}
+    .iframe-wrap{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;min-height:720px}
+    iframe{width:100%;height:720px;border:none;background:#fff}
+    @media (max-width:1200px){.quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:1024px){.shell{grid-template-columns:1fr}.sidebar{position:static}.nav{display:none}.mobile-chips{display:flex}.feature-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:640px){.app{padding:calc(var(--safe-top) + 10px) 12px calc(var(--safe-bottom) + 14px)}.hero{padding:18px}.hero p{font-size:15px}.quick-grid{grid-template-columns:1fr 1fr;gap:12px}.stat{padding:14px}.stat strong{font-size:28px}.workspace{padding:14px}.workspace-title{font-size:24px}.feature-grid{grid-template-columns:1fr}.feature{min-height:180px}.iframe-wrap{min-height:660px}iframe{height:660px}}
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <img src="logo.png" alt="Farmacia Montesano" />
-        <div class="brand-copy">
-          <h1>Dashboard Admin</h1>
-          <p>Pannello premium unificato · Home Screen ready · Firebase collegato</p>
-        </div>
-      </div>
-      <div class="top-actions">
-        <span class="pill">Online · farmaciamontesano</span>
-        <button class="ghost" type="button" id="enableNotifications">Notifiche</button>
-        <a class="ghost" href="index.html">Vai alla home</a>
-      </div>
-    </header>
-
-    <div class="layout">
+  <div class="app">
+    <div class="shell">
       <aside class="sidebar">
-        <h2>Navigazione</h2>
-        <div class="nav" id="desktopNav"></div>
-        <div class="sidebar-note">Questa dashboard è pensata per iPhone, Android, tablet e pc. Le sezioni restano leggibili e puoi aprire l'editor completo senza rompere il layout.</div>
+        <img src="logo.png" alt="Farmacia Montesano" class="logo" />
+        <p class="side-title">Pannello amministrativo</p>
+        <p class="side-copy">Un’unica dashboard premium per gestire i contenuti della web-app, pensata per telefono, tablet e pc.</p>
+        <div class="nav" id="navButtons"></div>
+        <div class="sidebar-foot">
+          <a class="sidebar-link" href="operatori.html">Area operatori <span>↗</span></a>
+          <a class="sidebar-link" href="index.html">Vai alla home <span>↗</span></a>
+        </div>
       </aside>
 
       <main class="main">
-        <div class="mobile-nav" id="mobileNav"></div>
-
         <section class="hero">
-          <div>
-            <div class="eyebrow">Area amministrativa premium</div>
-            <h2 id="activeTitle">Offerte</h2>
-            <p id="activeDesc">Gestisci promozioni, servizi, giornate beauty, fortuna e premi con una struttura molto più ordinata su telefono e desktop.</p>
-            <div class="hero-actions">
-              <button class="cta" type="button" id="openWorkspaceBtn">Apri editor nel pannello</button>
-              <a class="ghost" id="openStandalone" href="offerte-admin.html" target="_blank" rel="noopener">Apri pagina completa</a>
+          <span class="hero-kicker">Dashboard Admin • Firebase live</span>
+          <h1>Contenuti ordinati, sezioni chiare, resa premium.</h1>
+          <p>Questa pagina è stata riorganizzata come vera dashboard. Scegli una sezione, controlla i dati principali e lavora dentro un’area unica, stabile anche quando la web-app è aggiunta alla Home Screen.</p>
+        </section>
+
+        <section class="quick-grid" id="statsGrid">
+          <div class="stat"><small>Offerte</small><strong id="statOffers">—</strong><span>Promo presenti nel catalogo</span></div>
+          <div class="stat"><small>Servizi</small><strong id="statServices">—</strong><span>Servizi disponibili in app</span></div>
+          <div class="stat"><small>Beauty</small><strong id="statBeauty">—</strong><span>Eventi e giornate attive</span></div>
+          <div class="stat"><small>Fortuna</small><strong id="statFortuna">—</strong><span>Premi per la ruota</span></div>
+          <div class="stat"><small>Premi</small><strong id="statRewards">—</strong><span>Catalogo premi fidelity</span></div>
+        </section>
+
+        <div class="mobile-chips" id="mobileChips"></div>
+
+        <section class="workspace">
+          <div class="workspace-head">
+            <div>
+              <h2 class="workspace-title" id="workspaceTitle">Offerte</h2>
+              <p class="workspace-sub" id="workspaceSub">Gestisci promozioni, immagini, prezzi e visibilità. La sezione si apre qui sotto senza cambiare pagina.</p>
+            </div>
+            <div class="workspace-actions">
+              <a class="btn" id="openSectionLink" href="offerte-admin.html" target="_blank" rel="noopener">Apri a piena pagina</a>
+              <button class="btn btn-primary" id="refreshStatsBtn" type="button">Aggiorna contatori</button>
             </div>
           </div>
-          <div class="hero-grid">
-            <div class="quick"><strong>Una sola dashboard</strong><span>Niente pannelli buttati uno sotto l'altro. Selezioni una sezione e lavori in modo pulito.</span></div>
-            <div class="quick"><strong>Responsive vero</strong><span>Chip su mobile, sidebar su desktop, safe area rispettate e editor dentro area di lavoro dedicata.</span></div>
-            <div class="quick"><strong>Base per notifiche</strong><span>Da qui puoi attivare il permesso notifiche della web app. La parte automatica via backend Firebase resta il prossimo step.</span></div>
-          </div>
-        </section>
 
-        <section class="notification-bar">
-          <div class="notification-copy">
-            <strong>Notifiche web app</strong>
-            <span>Giornate beauty pubblicate, giornata in corso, farmacia di turno o di appoggio: la base lato app è pronta, ma per l'invio automatico serve ancora la funzione backend collegata a Firebase.</span>
-          </div>
-          <div class="notification-status" id="notificationStatus">Permesso non verificato</div>
-        </section>
+          <div class="feature-grid" id="featureGrid"></div>
 
-        <section class="metrics">
-          <article class="metric"><div class="label">Offerte attive / totali</div><div class="value" id="metricOffers">--</div><div class="note">Collection offers</div></article>
-          <article class="metric"><div class="label">Servizi visibili / totali</div><div class="value" id="metricServices">--</div><div class="note">Collection servizi</div></article>
-          <article class="metric"><div class="label">Beauty attivi / totali</div><div class="value" id="metricBeauty">--</div><div class="note">Collection beauty</div></article>
-          <article class="metric"><div class="label">Premi + fortuna</div><div class="value" id="metricRewards">--</div><div class="note">rewards_catalog + fortune_rewards</div></article>
-        </section>
-
-        <section class="workspace-grid">
-          <div>
-            <section class="sections" id="sectionsBoard"></section>
-            <section class="workspace">
-              <div class="workspace-head">
-                <div>
-                  <h3 id="workspaceTitle">Offerte</h3>
-                  <p id="workspaceDesc">Gestione ordinata della sezione attiva con riepilogo veloce e accesso immediato all'editor.</p>
-                </div>
-                <button class="btn btn-secondary" type="button" id="closeWorkspaceBtn">Chiudi editor</button>
-              </div>
-              <div class="subtabs" id="subtabs"></div>
-              <div class="summary">
-                <p id="summaryText">Promozioni, immagini, validità e ordine di pubblicazione della vetrina promo.</p>
-                <div class="summary-grid" id="summaryStats"></div>
-              </div>
-              <div class="frame-wrap" id="frameWrap">
-                <div class="frame-head">
-                  <div><strong id="frameTitle">Offerte</strong><span id="frameSub">Editor operativo collegato a Firebase</span></div>
-                  <a class="btn btn-secondary" id="frameLink" href="offerte-admin.html" target="_blank" rel="noopener">Apri in pagina separata</a>
-                </div>
-                <iframe id="contentFrame" title="Area di lavoro amministrativa" loading="lazy"></iframe>
-              </div>
-            </section>
+          <div class="iframe-wrap">
+            <iframe id="adminFrame" title="Sezione amministrativa" src="offerte-admin.html" loading="lazy"></iframe>
           </div>
-          <aside class="side-stack">
-            <section class="side-card">
-              <h3>Stato sistema</h3>
-              <div class="health-list">
-                <div class="row"><strong>Utenti fidelity</strong><span id="healthUsers">Caricamento…</span></div>
-                <div class="row"><strong>Richieste premio</strong><span id="healthRequests">Caricamento…</span></div>
-                <div class="row"><strong>Sezione attiva</strong><span id="healthSection">Offerte</span></div>
-                <div class="row"><strong>Permesso notifiche</strong><span id="healthNotifications">Da verificare</span></div>
-              </div>
-            </section>
-            <section class="side-card">
-              <h3>Accessi rapidi</h3>
-              <div class="quick-links">
-                <a class="quick-link" href="operatori.html">Operatori <span>→</span></a>
-                <a class="quick-link" href="fidelity.html">Fidelity <span>→</span></a>
-                <a class="quick-link" href="report.html">Report <span>→</span></a>
-                <a class="quick-link" href="admin.html">Redirect admin <span>→</span></a>
-              </div>
-              <div class="tiny">Il redirect da admin.html resta attivo. La dashboard usa le stesse pagine gestionali già collegate al tuo Firebase.</div>
-            </section>
-          </aside>
         </section>
       </main>
     </div>
   </div>
 
   <script type="module">
-    import { firestore, collection, getDocs } from './firebase.js';
-    import { registerMontesanoNotifications } from './notifications.js';
+    import { firestore, collection, getDocs } from "./firebase.js";
 
-    const sections = {
-      offerte: { title:'Offerte', short:'Promo', src:'offerte-admin.html', image:'images/promo.jpg', desc:'Promozioni, immagini, prezzi, validità e ordine di pubblicazione.', summary:'Gestisci le promozioni pubbliche, metti in evidenza quelle attive e controlla visibilità e contenuti senza sporcare la dashboard.', stats:[['Attive','metricOffers'],['Collezione','offers'],['Uso','Home + promo']] },
-      servizi: { title:'Servizi', short:'Servizi', src:'servizi-admin.html', image:'images/servizi.jpg', desc:'Servizi farmacia, descrizioni, immagini, ordine e visibilità.', summary:'Organizza i servizi con copertine, priorità e testo in una vista molto più leggibile su telefono e desktop.', stats:[['Visibili','metricServices'],['Collezione','servizi'],['Uso','Home + servizi']] },
-      beauty: { title:'Giornate Beauty', short:'Beauty', src:'beauty-admin.html', image:'images/beauty.jpg', desc:'Eventi beauty con date, pubblicazione e grafiche collegate.', summary:'Controlla le giornate beauty con date, immagini, testo promozionale e stato di pubblicazione.', stats:[['Attivi','metricBeauty'],['Collezione','beauty'],['Uso','Home + beauty']] },
-      fortuna: { title:'Fortuna', short:'Fortuna', src:'fortuna-admin.html', image:'images/fortuna.jpg', desc:'Ruota clienti, premi fortuna, probabilità e disponibilità.', summary:'Da qui controlli tutta la parte fortuna: premi, regole, probabilità e disponibilità della ruota clienti.', stats:[['Catalogo','fortune_rewards'],['Uso','Ruota clienti'],['Tipo','Premi dinamici']] },
-      premi: { title:'Premi', short:'Premi', src:'premi-admin.html', image:'images/premi.jpg', desc:'Catalogo premi, punti richiesti e stato del catalogo.', summary:'Gestisci il catalogo premi, i punti necessari, le immagini e la coerenza con richieste e consegne.', stats:[['Totale','metricRewards'],['Collezione','rewards_catalog'],['Uso','Catalogo premi']] },
-      operatori: { title:'Operatori', short:'Operatori', src:'operatori.html', image:'images/fidelity.jpg', desc:'Accumulo, richieste premi e report con grafici premium.', summary:'Pagina operatore ottimizzata per telefono e pc, con grafici corretti, filtri e area di lavoro molto più pulita.', stats:[['Vista','mobile + desktop'],['Focus','Accumulo / premi / report'],['Uso','Banco farmacia']] },
-      fidelity: { title:'Fidelity', short:'Fidelity', src:'fidelity.html', image:'images/fidelity.jpg', desc:'Utenti, gruppi, card e storico fedeltà.', summary:'Area dedicata al programma fedeltà con dati persistenti su Firebase.', stats:[['Collezione','users'],['Area','Fidelity'],['Uso','Clienti + gruppi']] },
-      report: { title:'Report', short:'Report', src:'report.html', image:'images/premi.jpg', desc:'Report e panoramiche sintetiche dei dati.', summary:'Controlla andamento generale e numeri sintetici in una vista ordinata.', stats:[['Area','Report'],['Uso','Sintesi'],['Stile','Pulito']] }
+    const sections = [
+      { key:"offerte", title:"Offerte", subtitle:"Gestisci promozioni, immagini, prezzi e visibilità.", href:"offerte-admin.html", image:"images/promo.jpg", badge:"PROMO", collection:"offers" },
+      { key:"servizi", title:"Servizi", subtitle:"Aggiorna servizi, servizio del momento e descrizioni.", href:"servizi-admin.html", image:"images/servizi.jpg", badge:"SERVIZI", collection:"servizi" },
+      { key:"beauty", title:"Giornate Beauty", subtitle:"Controlla eventi, date e pubblicazione delle giornate.", href:"beauty-admin.html", image:"images/beauty.jpg", badge:"BEAUTY", collection:"beauty" },
+      { key:"fortuna", title:"Fortuna", subtitle:"Gestisci premi della ruota, probabilità e attivazioni.", href:"fortuna-admin.html", image:"images/fortuna.jpg", badge:"FORTUNA", collection:"fortune_rewards" },
+      { key:"premi", title:"Premi", subtitle:"Catalogo premi fidelity e impostazioni di riscatto.", href:"premi-admin.html", image:"images/premi.jpg", badge:"PREMI", collection:"rewards_catalog" }
+    ];
+
+    const statMap = {
+      offerte: document.getElementById("statOffers"),
+      servizi: document.getElementById("statServices"),
+      beauty: document.getElementById("statBeauty"),
+      fortuna: document.getElementById("statFortuna"),
+      premi: document.getElementById("statRewards")
     };
 
-    const navKeys = ['offerte','servizi','beauty','fortuna','premi','operatori','fidelity','report'];
-    const boardKeys = ['offerte','servizi','beauty','fortuna','premi','operatori'];
-    const desktopNav = document.getElementById('desktopNav');
-    const mobileNav = document.getElementById('mobileNav');
-    const sectionsBoard = document.getElementById('sectionsBoard');
-    const frameWrap = document.getElementById('frameWrap');
-    const frame = document.getElementById('contentFrame');
-    const openWorkspaceBtn = document.getElementById('openWorkspaceBtn');
-    const closeWorkspaceBtn = document.getElementById('closeWorkspaceBtn');
-    const openStandalone = document.getElementById('openStandalone');
-    const frameLink = document.getElementById('frameLink');
-    const subtabs = document.getElementById('subtabs');
-    const activeTitle = document.getElementById('activeTitle');
-    const activeDesc = document.getElementById('activeDesc');
-    const workspaceTitle = document.getElementById('workspaceTitle');
-    const workspaceDesc = document.getElementById('workspaceDesc');
-    const frameTitle = document.getElementById('frameTitle');
-    const frameSub = document.getElementById('frameSub');
-    const summaryText = document.getElementById('summaryText');
-    const summaryStats = document.getElementById('summaryStats');
-    const enableNotifications = document.getElementById('enableNotifications');
-    const notificationStatus = document.getElementById('notificationStatus');
-    const healthNotifications = document.getElementById('healthNotifications');
-    const healthSection = document.getElementById('healthSection');
+    const navButtons = document.getElementById("navButtons");
+    const mobileChips = document.getElementById("mobileChips");
+    const frame = document.getElementById("adminFrame");
+    const workspaceTitle = document.getElementById("workspaceTitle");
+    const workspaceSub = document.getElementById("workspaceSub");
+    const openSectionLink = document.getElementById("openSectionLink");
+    const featureGrid = document.getElementById("featureGrid");
+    const refreshStatsBtn = document.getElementById("refreshStatsBtn");
+    let activeKey = "offerte";
 
-    const navMarkup = (key) => {
-      const s = sections[key];
-      return `<button class="nav-btn" type="button" data-section="${key}"><span class="dot"></span><span class="meta">${s.title}<small>${s.short}</small></span></button>`;
-    };
-
-    desktopNav.innerHTML = navKeys.map(navMarkup).join('');
-    mobileNav.innerHTML = navKeys.map(navMarkup).join('');
-    subtabs.innerHTML = boardKeys.map(key => `<button class="subtab" data-section="${key}" type="button">${sections[key].title}</button>`).join('');
-    sectionsBoard.innerHTML = boardKeys.map((key) => {
-      const s = sections[key];
-      return `<article class="section-card"><div class="section-cover"><img src="${s.image}" alt="${s.title}" /><span class="tag">${s.short}</span></div><div class="section-body"><h3>${s.title}</h3><p>${s.desc}</p><div class="actions"><button class="btn btn-primary" type="button" data-open-workspace="${key}">Apri qui</button><a class="btn btn-secondary" href="${s.src}" target="_blank" rel="noopener">Pagina completa</a></div></div></article>`;
-    }).join('');
-
-    function fillSummary(section){
-      const s = sections[section] || sections.offerte;
-      summaryText.textContent = s.summary;
-      summaryStats.innerHTML = s.stats.map(([label, value]) => {
-        const actual = String(value).startsWith('metric') ? (document.getElementById(value)?.textContent || '--') : value;
-        return `<div class="mini"><div class="k">${label}</div><div class="v">${actual}</div></div>`;
-      }).join('');
+    function renderNav(){
+      const buttonMarkup = sections.map(section => `<button type="button" data-key="${section.key}"><span>${section.title}</span><span>›</span></button>`).join("");
+      const chipMarkup = sections.map(section => `<button type="button" data-key="${section.key}">${section.title}</button>`).join("");
+      navButtons.innerHTML = buttonMarkup;
+      mobileChips.innerHTML = chipMarkup;
+      [...navButtons.querySelectorAll("button"), ...mobileChips.querySelectorAll("button")].forEach(btn => btn.addEventListener("click", () => openSection(btn.dataset.key)));
     }
 
-    function setActive(section, push=true){
-      const s = sections[section] || sections.offerte;
-      activeTitle.textContent = s.title;
-      activeDesc.textContent = s.desc;
-      workspaceTitle.textContent = s.title;
-      workspaceDesc.textContent = `${s.summary} ${section === 'operatori' ? 'Grafici e filtri sono stati riorganizzati per una lettura migliore.' : ''}`;
-      frameTitle.textContent = s.title;
-      frameSub.textContent = `Editor operativo · ${s.short}`;
-      openStandalone.href = s.src;
-      frameLink.href = s.src;
-      healthSection.textContent = s.title;
-      document.querySelectorAll('[data-section]').forEach((el) => el.classList.toggle('active', el.dataset.section === section));
-      document.querySelectorAll('.subtab').forEach((el) => el.classList.toggle('active', el.dataset.section === section));
-      fillSummary(section);
-      localStorage.setItem('montesanoAdminSection', section);
-      if (push) {
-        const url = new URL(location.href);
-        url.searchParams.set('section', section);
-        history.replaceState({}, '', url);
-      }
+    function renderFeatures(){
+      featureGrid.innerHTML = sections.map(section => `
+        <a class="feature" href="#" data-key="${section.key}">
+          <img src="${section.image}" alt="${section.title}" />
+          <div class="feature-copy">
+            <b>${section.title}</b>
+            <span>${section.subtitle}</span>
+          </div>
+        </a>
+      `).join("");
+      featureGrid.querySelectorAll(".feature").forEach(card => card.addEventListener("click", (event) => { event.preventDefault(); openSection(card.dataset.key); }));
     }
 
-    function openWorkspace(section){
-      const s = sections[section] || sections.offerte;
-      setActive(section);
-      frame.src = s.src;
-      frameWrap.classList.add('open');
-      if (window.innerWidth < 980) frameWrap.scrollIntoView({behavior:'smooth', block:'start'});
+    function updateActiveUI(){
+      [...navButtons.querySelectorAll("button"), ...mobileChips.querySelectorAll("button")].forEach(btn => btn.classList.toggle("active", btn.dataset.key === activeKey));
     }
 
-    document.addEventListener('click', (event) => {
-      const nav = event.target.closest('[data-section]');
-      if (nav) {
-        event.preventDefault();
-        setActive(nav.dataset.section);
-      }
-      const openBtn = event.target.closest('[data-open-workspace]');
-      if (openBtn) {
-        event.preventDefault();
-        openWorkspace(openBtn.dataset.openWorkspace);
-      }
-    });
-
-    openWorkspaceBtn.addEventListener('click', () => openWorkspace(localStorage.getItem('montesanoAdminSection') || 'offerte'));
-    closeWorkspaceBtn.addEventListener('click', () => frameWrap.classList.remove('open'));
-
-    window.addEventListener('message', (event) => {
-      const data = event.data || {};
-      if (data.type === 'montesano:iframeHeight' && typeof data.height === 'number') {
-        frame.style.height = Math.max(780, data.height + 28) + 'px';
-      }
-    });
-
-    function updatePermissionUi(){
-      const permission = (typeof Notification !== 'undefined' && Notification.permission) ? Notification.permission : 'unsupported';
-      const map = { granted: 'Attive', denied: 'Bloccate', default: 'Non concesse', unsupported: 'Non supportate' };
-      const label = map[permission] || permission;
-      notificationStatus.textContent = `Permesso notifiche: ${label}`;
-      healthNotifications.textContent = label;
+    function openSection(key){
+      const section = sections.find(item => item.key === key) || sections[0];
+      activeKey = section.key;
+      workspaceTitle.textContent = section.title;
+      workspaceSub.textContent = section.subtitle;
+      openSectionLink.href = section.href;
+      frame.src = section.href;
+      updateActiveUI();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    enableNotifications.addEventListener('click', async () => {
+    async function countCollection(name){
       try {
-        const result = await registerMontesanoNotifications();
-        updatePermissionUi();
-        if (!result.ok) alert(result.reason || 'Notifiche non attivate.');
+        const snap = await getDocs(collection(firestore, name));
+        return snap.size;
       } catch (error) {
-        console.error(error);
-        updatePermissionUi();
-        alert('Non sono riuscito ad attivare le notifiche su questo dispositivo.');
+        console.error("Errore conteggio", name, error);
+        return "—";
       }
-    });
-
-    async function loadStats(){
-      const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
-      try {
-        const [offersSnap, serviziSnap, beautySnap, rewardsSnap, fortuneSnap, usersSnap, requestsSnap] = await Promise.all([
-          getDocs(collection(firestore, 'offers')),
-          getDocs(collection(firestore, 'servizi')),
-          getDocs(collection(firestore, 'beauty')),
-          getDocs(collection(firestore, 'rewards_catalog')),
-          getDocs(collection(firestore, 'fortune_rewards')),
-          getDocs(collection(firestore, 'users')),
-          getDocs(collection(firestore, 'reward_requests')),
-        ]);
-        const activeOffers = offersSnap.docs.filter((d) => d.data()?.attiva === true).length;
-        const activeServices = serviziSnap.docs.filter((d) => d.data()?.attivo === true).length;
-        const activeBeauty = beautySnap.docs.filter((d) => d.data()?.attivo === true).length;
-        setText('metricOffers', `${activeOffers} / ${offersSnap.size}`);
-        setText('metricServices', `${activeServices} / ${serviziSnap.size}`);
-        setText('metricBeauty', `${activeBeauty} / ${beautySnap.size}`);
-        setText('metricRewards', `${rewardsSnap.size + fortuneSnap.size}`);
-        setText('healthUsers', `${usersSnap.size} profili`);
-        setText('healthRequests', `${requestsSnap.size} richieste`);
-      } catch (error) {
-        console.error(error);
-        ['metricOffers','metricServices','metricBeauty','metricRewards'].forEach((id) => setText(id, 'Errore'));
-        setText('healthUsers', 'Errore lettura');
-        setText('healthRequests', 'Errore lettura');
-      }
-      fillSummary(localStorage.getItem('montesanoAdminSection') || 'offerte');
     }
 
-    const initial = new URLSearchParams(location.search).get('section') || localStorage.getItem('montesanoAdminSection') || 'offerte';
-    setActive(initial, false);
-    updatePermissionUi();
-    loadStats();
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+    async function refreshStats(){
+      refreshStatsBtn.disabled = true;
+      const mapping = { offerte:"offers", servizi:"servizi", beauty:"beauty", fortuna:"fortune_rewards", premi:"rewards_catalog" };
+      for (const [key, collectionName] of Object.entries(mapping)) {
+        statMap[key].textContent = await countCollection(collectionName);
+      }
+      refreshStatsBtn.disabled = false;
     }
+
+    renderNav();
+    renderFeatures();
+    openSection(activeKey);
+    refreshStats();
   </script>
 </body>
 </html>

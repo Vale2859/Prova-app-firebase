@@ -769,27 +769,5 @@
     await loadSettings();
     await loadRewards();
   </script>
-
-<script>
-(function(){
-  function sendHeight(){
-    try {
-      const body = document.body;
-      const html = document.documentElement;
-      const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ type:'montesano:iframeHeight', height }, '*');
-      }
-    } catch (e) {}
-  }
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', sendHeight);
-  const observer = new MutationObserver(() => sendHeight());
-  observer.observe(document.documentElement, { childList:true, subtree:true, attributes:true, characterData:true });
-  setTimeout(sendHeight, 300);
-  setTimeout(sendHeight, 1000);
-})();
-</script>
-
 </body>
 </html>

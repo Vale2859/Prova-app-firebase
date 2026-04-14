@@ -2,11 +2,9 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f8f55" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Operatori | Farmacia Montesano</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,78 +20,69 @@
       --muted:#6c7c76;
       --green:#0d7a5f;
       --green2:#1b8b6d;
-      --green-soft:#e8f6f0;
       --blue:#2f6f94;
       --gold:#b87900;
       --red:#c94646;
-      --shadow:0 18px 40px rgba(16,50,42,0.08);
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
       --radius:24px;
+      --safe-top:max(14px, env(safe-area-inset-top));
+      --safe-bottom:max(16px, env(safe-area-inset-bottom));
     }
     *{box-sizing:border-box}
-    html,body{min-height:100%}
     body{
       margin:0;
       font-family:"Inter",sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(13,122,95,0.08), transparent 30%),
-        linear-gradient(180deg,#f8fbf9 0%, #eef5f1 100%);
+      background:linear-gradient(180deg,#f7faf8 0%, #eff4f1 100%);
       color:var(--text);
-      --safe-top:max(14px, env(safe-area-inset-top));
-      --safe-right:max(12px, env(safe-area-inset-right));
-      --safe-bottom:max(16px, env(safe-area-inset-bottom));
-      --safe-left:max(12px, env(safe-area-inset-left));
-      padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+      padding-top:var(--safe-top);
+      padding-bottom:var(--safe-bottom);
     }
     .page{
-      max-width:1480px;
+      max-width:1460px;
       margin:0 auto;
-      background:rgba(255,255,255,0.92);
-      border:1px solid rgba(211,226,218,0.8);
-      border-radius:32px;
-      box-shadow:0 24px 54px rgba(15,43,35,0.08);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.07);
       overflow:hidden;
-      backdrop-filter:blur(14px);
     }
     .topbar{
-      position:sticky;top:0;z-index:45;
-      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:18px;
-      padding:24px 28px;
+      padding:20px 22px;
+      position:sticky;
+      top:0;
+      z-index:15;
       border-bottom:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,0.95) 0%, rgba(248,252,250,0.92) 100%);
+      background:#fff;
     }
     .brand img{height:54px;width:auto;display:block}
     .menu{
       display:flex;
-      gap:10px;
+      gap:12px;
+      background:#f7faf8;
+      border:1px solid var(--line);
+      padding:6px;
+      border-radius:18px;
       align-items:center;
-      padding:8px;
-      background:rgba(238,248,244,0.9);
-      border:1px solid #dcebe5;
-      border-radius:999px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);
+      font-size:18px;
+      font-weight:700;
     }
     .menu button{
-      background:transparent;
+      background:none;
       border:none;
-      color:#49615b;
-      min-height:48px;
-      padding:0 18px;
-      border-radius:999px;
+      color:#334944;
+      padding:12px 16px;
+      border-bottom:0;
+      border-radius:14px;
       font:inherit;
-      font-size:15px;
-      font-weight:800;
+      font-weight:700;
       cursor:pointer;
-      transition:all .18s ease;
-      white-space:nowrap;
     }
     .menu button.active{
       color:#fff;
-      background:linear-gradient(135deg,var(--green) 0%, #4fa38c 100%);
-      box-shadow:0 12px 24px rgba(13,122,95,0.2);
+      background:linear-gradient(135deg,var(--green) 0%, var(--green2) 100%);
     }
     .top-actions{
       display:flex;
@@ -104,23 +93,21 @@
       border:none;
       background:#fff;
       border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px 16px;
-      font-weight:800;
+      border-radius:14px;
+      padding:10px 16px;
+      font-weight:700;
       cursor:pointer;
-      box-shadow:0 10px 20px rgba(15,43,35,0.04);
     }
     .operator-pill{
-      min-height:46px;
+      min-height:44px;
       display:flex;
       align-items:center;
-      padding:0 16px;
+      padding:0 14px;
       border-radius:999px;
-      background:var(--green-soft);
+      background:#eef8f4;
       color:var(--green);
-      font-weight:900;
+      font-weight:800;
       border:1px solid #d7ebe2;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.7);
     }
     .content{padding:26px}
     .layout{
@@ -138,7 +125,7 @@
     .sidebar-card{
       padding:18px;
       position:sticky;
-      top:92px;
+      top:20px;
     }
     .sidebar-title,.panel-title{
       margin:0 0 14px;
@@ -190,63 +177,8 @@
       gap:18px;
       margin-bottom:22px;
     }
-    .premium-intro{
-      align-items:flex-start;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:18px;
-      padding:22px 24px;
-      margin-bottom:20px;
-      background:linear-gradient(135deg, rgba(13,122,95,0.12) 0%, rgba(255,255,255,0.96) 58%, rgba(47,111,148,0.08) 100%);
-      border:1px solid #dceae4;
-      border-radius:26px;
-      box-shadow:var(--shadow);
-    }
-    .premium-intro h1{
-      margin:0 0 8px;
-      font-size:34px;
-      line-height:0.95;
-      letter-spacing:-0.05em;
-    }
-    .premium-intro p{
-      margin:0;
-      max-width:700px;
-      color:var(--muted);
-      font-weight:600;
-      line-height:1.45;
-    }
-    .premium-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:42px;
-      padding:0 14px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #dfe9e4;
-      font-weight:800;
-      color:var(--green);
-      white-space:nowrap;
-      box-shadow:0 10px 18px rgba(15,43,35,0.05);
-    }
-    .stat-card{
-      padding:22px;
-      position:relative;
-      overflow:hidden;
-      background:linear-gradient(180deg,#ffffff 0%, #f9fcfa 100%);
-    }
-    .stat-card::after{
-      content:"";
-      position:absolute;
-      inset:auto -14px -24px auto;
-      width:96px;
-      height:96px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(13,122,95,0.12) 0%, rgba(13,122,95,0) 70%);
-      pointer-events:none;
-    }
     .stats.report-stats{grid-template-columns:repeat(6,1fr)}
+    .stat-card{padding:20px 22px}
     .stat-label{
       font-size:15px;
       color:#586b66;
@@ -259,7 +191,7 @@
       font-weight:900;
       letter-spacing:-0.05em;
     }
-    .main-card{padding:28px 30px;min-height:500px;background:rgba(255,255,255,0.94)}
+    .main-card{padding:28px 30px;min-height:500px}
     .view{display:none}
     .view.active{display:block}
     .accumulo-panel{
@@ -435,34 +367,39 @@
       margin-bottom:20px;
     }
     .panel{padding:18px}
-    .report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
-    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
-    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
     .chart-grid{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
       margin-top:20px;
     }
     .chart-box{
       background:#fff;
       border:1px solid var(--line);
-      border-radius:22px;
+      border-radius:18px;
       padding:16px;
       box-shadow:var(--shadow);
-      min-height:340px;
+      min-height:380px;
+      height:380px;
       display:flex;
       flex-direction:column;
       overflow:hidden;
     }
-    .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-    .chart-note{font-size:12px;color:var(--muted);font-weight:700}
-    .chart-canvas-wrap{position:relative;flex:1;min-height:280px;height:280px;max-height:280px;overflow:hidden;border-radius:18px}
-    .chart-canvas-wrap canvas{position:absolute;inset:0;width:100% !important;height:100% !important;display:block;max-width:100%;}
     .chart-title{
       margin:0 0 12px;
       font-size:16px;
       font-weight:900;
+    }
+    .chart-canvas-wrap{
+      position:relative;
+      flex:1;
+      min-height:0;
+    }
+    .chart-canvas-wrap canvas{
+      position:absolute;
+      inset:0;
+      width:100% !important;
+      height:100% !important;
     }
     .empty{
       padding:34px 18px;
@@ -622,8 +559,6 @@
         box-shadow:none;
       }
       .topbar{
-      position:sticky;top:0;z-index:45;
-      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
         flex-direction:column;
         align-items:stretch;
         gap:14px;
@@ -712,10 +647,10 @@
         min-width:860px;
       }
       .chart-box{
-        min-height:300px;
+        min-height:280px;
+        height:280px;
         padding:14px;
       }
-      .chart-canvas-wrap{min-height:240px;height:240px;max-height:240px}
       .modal-card{
         width:min(100%, 94vw);
         border-radius:20px;
@@ -763,10 +698,7 @@
 
     @media (max-width: 1280px){
       .stats.report-stats{grid-template-columns:repeat(3,1fr)}
-      .grid,.report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
-    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
-    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
-    .chart-grid{grid-template-columns:1fr}
+      .grid,.chart-grid{grid-template-columns:1fr}
     }
     @media (max-width: 1180px){
       .layout{grid-template-columns:1fr}
@@ -781,9 +713,7 @@
     @media (max-width: 900px){
       .page{margin:0;border-radius:0;border-left:none;border-right:none;min-height:100vh;}
       .content{padding:16px;}
-      .topbar{
-      position:sticky;top:0;z-index:45;
-      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+      .topbar{padding:16px;align-items:flex-start;gap:12px;flex-wrap:wrap;}
       .brand{width:100%;display:flex;justify-content:center;}
       .brand img{height:48px;}
       .menu{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -802,12 +732,8 @@
       .row{flex-direction:column;align-items:stretch;}
       .archive-btn{width:100%;min-width:0;}
       .toolbar,.toolbar.report-toolbar{grid-template-columns:1fr;}
-      .report-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:16px 0 10px}
-    .report-meta p{margin:0;color:var(--muted);font-size:14px;font-weight:600;line-height:1.45}
-    .report-meta .badge-lite{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#eff6f2;border:1px solid #dce8e2;color:#23463e;font-size:12px;font-weight:850}
-    .chart-grid{grid-template-columns:1fr;}
-      .chart-box{min-height:320px;}
-      .chart-canvas-wrap{min-height:240px;height:240px;max-height:240px;}
+      .chart-grid{grid-template-columns:1fr;}
+      .chart-box{min-height:320px;height:320px;}
       .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
       table{min-width:880px;}
       .modal-card{width:min(100%, 95vw);max-height:85vh;overflow:auto;}
@@ -840,106 +766,14 @@
       .modal-head{padding:14px 16px;}
       .modal-body{padding:14px 16px 16px;}
       .modal-actions{flex-direction:column;}
-      .premium-intro{
-      align-items:flex-start;flex-direction:column; padding:18px; border-radius:22px;}
-      .premium-intro h1{font-size:28px;}
-      .premium-badge{width:100%; justify-content:center;}
-      .menu{width:100%; overflow:auto; padding:6px; gap:8px;}
-      .menu button{min-width:max-content; padding:0 14px; min-height:44px; font-size:14px;}
-      .stats,
-      .stats.report-stats,
-      .grid,
-      .chart-grid,
-      .toolbar,
-      .toolbar.report-toolbar{
-        grid-template-columns:1fr;
-      }
-      .page{margin:0; border-radius:0;}
-      .topbar{
-      position:sticky;top:0;z-index:45;
-      background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:18px 16px; position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);}
-      .content{padding:16px;}
-      body{padding:0;}
-      .page{border-radius:0; border-left:none; border-right:none; min-height:100dvh;}
-      .topbar{padding:calc(var(--safe-top) + 10px) 16px 14px;}
-      .content{padding:16px;}
-      .layout{gap:16px;}
-      .main-card,.sidebar-card,.panel,.chart-box,.stat-card,.accumulo-panel{border-radius:20px;}
-      .accumulo-panel{padding:18px;}
-      .field label{font-size:15px;}
-      .send-btn{min-height:58px; font-size:20px;}
-      .toolbar{gap:10px;}
-      .table-wrap{border-radius:16px; overflow-x:auto;}
-      table{min-width:760px;}
-      .modal-card{width:min(100%, 94vw); border-radius:20px;}
-      .modal-head{padding:14px 16px;}
-      .modal-body{padding:14px 16px 16px;}
-      .modal-actions{flex-direction:column;}
       .operator-pill{justify-content:center; width:100%;}
-      .top-actions{flex-direction:column; align-items:stretch; width:100%;}
+      .top-actions{flex-direction:column; align-items:stretch;}
       .top-actions button{width:100%;}
-    }
-
-
-    @media (max-width: 700px){
-      .premium-intro{
-      align-items:flex-start;padding:18px 16px}
-      .premium-intro h1{font-size:30px}
-      .premium-intro p{font-size:14px}
-      .sidebar-card{padding:16px}
-      .table-wrap{border:none;background:transparent;overflow:visible}
-      .table-wrap table,
-      .table-wrap thead,
-      .table-wrap tbody,
-      .table-wrap tr,
-      .table-wrap th,
-      .table-wrap td{display:block;width:100%;min-width:0!important}
-      .table-wrap thead{display:none}
-      .table-wrap tbody{display:grid;gap:12px}
-      .table-wrap tr{
-        background:#fff;
-        border:1px solid var(--line);
-        border-radius:18px;
-        box-shadow:var(--shadow);
-        padding:10px 12px;
-        overflow:hidden;
-      }
-      .table-wrap td{
-        border-bottom:1px solid #eef3f0;
-        padding:10px 0 10px 116px;
-        position:relative;
-        min-height:38px;
-        font-size:14px;
-      }
-      .table-wrap td:last-child{border-bottom:none}
-      .table-wrap td::before{
-        content:attr(data-label);
-        position:absolute;
-        left:0;
-        top:10px;
-        width:104px;
-        color:#6b7e78;
-        font-size:11px;
-        line-height:1.2;
-        font-weight:900;
-        text-transform:uppercase;
-        letter-spacing:.04em;
-      }
-      .table-wrap td[colspan]{padding:18px 12px!important}
-      .table-wrap td[colspan]::before{display:none}
-      .action-group{gap:8px}
-      .action-btn{min-height:40px}
     }
 
   </style>
 </head>
 <body>
-  <script>
-    if (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone)) {
-      document.documentElement.classList.add("standalone");
-      document.body.classList.add("standalone");
-    }
-  </script>
   <div class="page">
     <div class="topbar">
       <div class="brand">
@@ -967,14 +801,6 @@
         </aside>
 
         <main>
-          <div class="premium-intro">
-            <div>
-              <h1>Dashboard operatore</h1>
-              <p>Interfaccia premium per accumulo punti, gestione premi e controllo report. Pensata per essere più chiara, veloce e comoda anche da smartphone.</p>
-            </div>
-            <div class="premium-badge">✨ Esperienza mobile ottimizzata</div>
-          </div>
-
           <section class="view active" id="accumuloView">
             <div class="stats">
               <div class="stat-card">
@@ -1075,33 +901,22 @@
               <input type="date" id="fromDate" />
               <input type="date" id="toDate" />
               <input type="text" id="searchText" placeholder="Cerca cliente o numero card" />
-              <button class="filter-btn" id="applyFiltersBtn">Filtra</button>
-            </div>
-
-            <div class="toolbar report-toolbar" style="grid-template-columns: 170px 170px minmax(0,1fr) 180px 180px; margin-top:-4px;">
-              <select id="reportPeriod">
-                <option value="all">Periodo grafici: tutto</option>
-                <option value="7">Ultimi 7 giorni</option>
-                <option value="30" selected>Ultimi 30 giorni</option>
-                <option value="90">Ultimi 90 giorni</option>
-              </select>
-              <select id="chartGroupBy">
-                <option value="day" selected>Grafici per giorno</option>
-                <option value="month">Grafici per mese</option>
-              </select>
-              <select id="chartOperatorFilter">
+              <select id="reportOperatorFilter">
                 <option value="all">Tutti gli operatori</option>
               </select>
-              <select id="reportMovementType">
-                <option value="all">Tutti i movimenti</option>
-              </select>
-              <select id="reportRequestStatus">
-                <option value="all">Tutte le richieste</option>
+              <select id="reportRequestStatusFilter">
+                <option value="all">Tutti gli stati premio</option>
                 <option value="voucher_emesso">Voucher emessi</option>
-                <option value="consegnata">Consegnate</option>
-                <option value="rifiutata">Rifiutate</option>
+                <option value="consegnata">Consegnati</option>
+                <option value="rifiutata">Annullati</option>
               </select>
+              <select id="reportGroupBy">
+                <option value="day">Grafici per giorno</option>
+                <option value="month">Grafici per mese</option>
+              </select>
+              <button class="filter-btn" id="applyFiltersBtn">Filtra</button>
             </div>
+            <div class="report-filters-note">Filtra report e grafici per periodo, operatore, stato richieste e livello di aggregazione.</div>
 
             <div class="stats report-stats">
               <div class="stat-card"><div class="stat-label">Parafarmaco</div><div class="stat-value" id="totRevenue">0,00 €</div></div>
@@ -1112,26 +927,21 @@
               <div class="stat-card"><div class="stat-label">Premi consegnati</div><div class="stat-value" id="totDelivered">0</div></div>
             </div>
 
-            <div class="report-meta">
-              <p>I grafici ora hanno contenitori stabili, resize controllato e filtri dedicati per periodo, operatore, tipo movimento e stato richieste.</p>
-              <span class="badge-lite">Report premium responsive</span>
-            </div>
-
             <div class="chart-grid">
               <div class="chart-box">
-                <div class="chart-head"><div><h3 class="chart-title">Punti nel tempo</h3><div class="chart-note">Andamento punti assegnati filtrato per periodo e operatore</div></div></div>
+                <h3 class="chart-title">Punti assegnati</h3>
                 <div class="chart-canvas-wrap"><canvas id="pointsByDayChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <div class="chart-head"><div><h3 class="chart-title">Parafarmaco nel tempo</h3><div class="chart-note">Valore parafarmaco generato nel periodo selezionato</div></div></div>
+                <h3 class="chart-title">Parafarmaco</h3>
                 <div class="chart-canvas-wrap"><canvas id="revenueByDayChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <div class="chart-head"><div><h3 class="chart-title">Accumuli per operatore</h3><div class="chart-note">Confronto punti assegnati dagli operatori</div></div></div>
+                <h3 class="chart-title">Accumuli per operatore</h3>
                 <div class="chart-canvas-wrap"><canvas id="operatorPointsChart"></canvas></div>
               </div>
               <div class="chart-box">
-                <div class="chart-head"><div><h3 class="chart-title">Richieste premi per stato</h3><div class="chart-note">Distribuzione richieste filtrata</div></div></div>
+                <h3 class="chart-title">Richieste premi per stato</h3>
                 <div class="chart-canvas-wrap"><canvas id="rewardStatusChart"></canvas></div>
               </div>
             </div>
@@ -1313,12 +1123,10 @@
     const fromDate = document.getElementById("fromDate");
     const toDate = document.getElementById("toDate");
     const searchText = document.getElementById("searchText");
+    const reportOperatorFilter = document.getElementById("reportOperatorFilter");
+    const reportRequestStatusFilter = document.getElementById("reportRequestStatusFilter");
+    const reportGroupBy = document.getElementById("reportGroupBy");
     const applyFiltersBtn = document.getElementById("applyFiltersBtn");
-    const reportPeriod = document.getElementById("reportPeriod");
-    const chartGroupBy = document.getElementById("chartGroupBy");
-    const chartOperatorFilter = document.getElementById("chartOperatorFilter");
-    const reportMovementType = document.getElementById("reportMovementType");
-    const reportRequestStatus = document.getElementById("reportRequestStatus");
     const totRevenue = document.getElementById("totRevenue");
     const totPoints = document.getElementById("totPoints");
     const totClients = document.getElementById("totClients");
@@ -1672,15 +1480,15 @@
         const groupLabel = item.requestType === "group" ? `${item.groupName || "Gruppo"} • ${item.memberCount || 0} membri` : "—";
         return `
           <tr>
-            <td data-label="Cliente"><div class="client-name">${item.clienteNome || "Cliente"}</div><div class="client-sub">${item.card || "-"}</div></td>
-            <td data-label="Tipo">${requestTypeLabel}</td>
-            <td data-label="Gruppo">${groupLabel}</td>
-            <td data-label="Premio">${item.premioNome || "-"}</td>
-            <td data-label="Punti spesi">${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
-            <td data-label="Data richiesta">${formatDate(item.createdAt)}</td>
-            <td data-label="Voucher"><span class="badge badge-gray">${item.voucherCode || "-"}</span></td>
-            <td data-label="Stato">${statusBadge(item.status)}</td>
-            <td data-label="Azioni">${buildRequestActions(item)}</td>
+            <td><div class="client-name">${item.clienteNome || "Cliente"}</div><div class="client-sub">${item.card || "-"}</div></td>
+            <td>${requestTypeLabel}</td>
+            <td>${groupLabel}</td>
+            <td>${item.premioNome || "-"}</td>
+            <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+            <td>${formatDate(item.createdAt)}</td>
+            <td><span class="badge badge-gray">${item.voucherCode || "-"}</span></td>
+            <td>${statusBadge(item.status)}</td>
+            <td>${buildRequestActions(item)}</td>
           </tr>`;
       }).join("");
 
@@ -1800,99 +1608,62 @@
     }
 
 
-    function populateOperatorFilter(){
-      const current = chartOperatorFilter.value || "all";
-      const names = [...new Set(allMovements.map(row => String(row.operatorName || "").trim()).filter(Boolean).filter(v => v !== "-"))].sort((a,b) => a.localeCompare(b, "it"));
-      chartOperatorFilter.innerHTML = `<option value="all">Tutti gli operatori</option>` + names.map(name => `<option value="${name.replace(/"/g,'&quot;')}">${name}</option>`).join('');
-      chartOperatorFilter.value = names.includes(current) ? current : 'all';
-    }
-
-
-    function populateMovementTypeFilter(){
-      const current = reportMovementType.value || "all";
-      const types = [...new Set(allMovements.map(row => String(row.type || "").trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, "it"));
-      reportMovementType.innerHTML = `<option value="all">Tutti i movimenti</option>` + types.map(type => `<option value="${type.replace(/"/g,'&quot;')}">${type}</option>`).join('');
-      reportMovementType.value = types.includes(current) ? current : 'all';
-    }
-
-    function getChartDateKey(dateValue, mode){
-      const d = new Date(dateValue);
-      if (Number.isNaN(d.getTime())) return 'Senza data';
-      if (mode === 'month') return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    function getGroupKey(value){
+      if (!value) return "Senza data";
+      const d = new Date(value);
+      if (isNaN(d.getTime())) return "Senza data";
+      if (reportGroupBy && reportGroupBy.value === "month") {
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+      }
       return d.toISOString().slice(0,10);
     }
 
-    function inRecentWindow(dateValue, days){
-      if (!days || days === 'all') return true;
-      const d = new Date(dateValue);
-      if (Number.isNaN(d.getTime())) return false;
-      const now = new Date();
-      const limit = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      limit.setDate(limit.getDate() - Number(days) + 1);
-      return d >= limit;
-    }
-
-    function formatChartLabel(key, mode){
-      if (!key || key === 'Senza data') return key;
-      if (mode === 'month') {
-        const [year, month] = String(key).split('-');
-        return `${month}/${year}`;
-      }
-      const d = new Date(key);
-      return Number.isNaN(d.getTime()) ? key : d.toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit' });
-    }
-
-    function chartBaseOptions(){
-      const compact = window.innerWidth < 700;
+    function chartOptions(){
       return {
         responsive:true,
         maintainAspectRatio:false,
         animation:false,
-        normalized:true,
-        parsing:false,
-        resizeDelay:160,
-        interaction:{mode:'index', intersect:false},
-        plugins:{legend:{display:true, position: compact ? 'bottom' : 'top', labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}},
-        layout:{padding:{top:6,right:6,bottom:2,left:2}},
-        elements:{line:{capBezierPoints:true}, point:{hitRadius:10}},
-        scales:{
-          x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: compact ? 4 : 8, font:{size:11, weight:'700'}}},
-          y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}
-        }
+        interaction:{mode:"index",intersect:false},
+        plugins:{legend:{position:"bottom"}},
+        scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } }
       };
     }
 
+    function updateReportOperatorFilter(){
+      const operators = [...new Set(allMovements.map(item => item.operatorName).filter(Boolean))].sort((a,b)=> String(a).localeCompare(String(b),"it"));
+      const current = reportOperatorFilter.value || "all";
+      reportOperatorFilter.innerHTML = `<option value="all">Tutti gli operatori</option>` + operators.map(op => `<option value="${op}">${op}</option>`).join("");
+      if (operators.includes(current)) reportOperatorFilter.value = current;
+    }
+
     function renderReport(){
-      const operatorFilterValue = chartOperatorFilter.value;
-      const movementTypeValue = reportMovementType.value;
-      const requestStatusValue = reportRequestStatus.value;
-      const chartDays = reportPeriod.value;
+      const selectedOperator = reportOperatorFilter.value;
+      const selectedRequestStatus = reportRequestStatusFilter.value;
+      const query = normalizeText(searchText.value);
 
       const filteredMovements = allMovements.filter(row => {
         if (!inDateRange(row.date)) return false;
-        if (!inRecentWindow(row.date, chartDays)) return false;
-        if (operatorFilterValue !== "all" && (row.operatorName || "-") !== operatorFilterValue) return false;
-        if (movementTypeValue !== "all" && (row.type || "") !== movementTypeValue) return false;
-        const q = normalizeText(searchText.value);
-        if (!q) return true;
-        return `${row.clientName} ${row.card} ${row.operatorName || ""}`.toLowerCase().includes(q);
+        if (selectedOperator !== "all" && (row.operatorName || "") !== selectedOperator) return false;
+        if (!query) return true;
+        return `${row.clientName} ${row.card}`.toLowerCase().includes(query);
       });
 
       const filteredRequests = allRequests.filter(row => {
         if (!inDateRange(row.createdAt)) return false;
-        if (!inRecentWindow(row.createdAt, chartDays)) return false;
-        if (requestStatusValue !== "all" && row.status !== requestStatusValue) return false;
-        const q = normalizeText(searchText.value);
-        if (!q) return true;
-        return `${row.clienteNome} ${row.card} ${row.groupName || ""}`.toLowerCase().includes(q);
+        if (selectedRequestStatus !== "all" && row.status !== selectedRequestStatus) return false;
+        if (selectedOperator !== "all") {
+          const requestOperator = row.approvedByName || row.deliveredByName || row.rejectedByName || row.operatorName || "";
+          if (requestOperator !== selectedOperator) return false;
+        }
+        if (!query) return true;
+        return `${row.clienteNome} ${row.card}`.toLowerCase().includes(query);
       });
 
       const filteredUsers = allClients.filter(user => {
-        const q = normalizeText(searchText.value);
-        if (!q) return true;
+        if (!query) return true;
         const name = `${user.nome || ""} ${user.cognome || ""}`.trim();
         const card = user.clientCode || user.fidelityCard || "-";
-        return `${name} ${card}`.toLowerCase().includes(q);
+        return `${name} ${card}`.toLowerCase().includes(query);
       });
 
       const totalRevenueValue = filteredMovements.reduce((sum, row) => sum + Number(row.amount || 0), 0);
@@ -1947,13 +1718,13 @@
 
       movementsBody.innerHTML = rows.map(row => `
         <tr>
-          <td data-label="Cliente">${row.clientName}</td>
-          <td data-label="Card">${row.card}</td>
-          <td data-label="Punti"><span class="badge badge-green">${row.points}</span></td>
-          <td data-label="Importo">${formatEuro(row.amount)}</td>
-          <td data-label="Operatore">${row.operatorName || "-"}</td>
-          <td data-label="Tipo"><span class="badge badge-gray">${row.type}</span></td>
-          <td data-label="Data">${formatDate(row.date)}</td>
+          <td>${row.clientName}</td>
+          <td>${row.card}</td>
+          <td><span class="badge badge-green">${row.points}</span></td>
+          <td>${formatEuro(row.amount)}</td>
+          <td>${row.operatorName || "-"}</td>
+          <td><span class="badge badge-gray">${row.type}</span></td>
+          <td>${formatDate(row.date)}</td>
         </tr>
       `).join("");
     }
@@ -1972,14 +1743,14 @@
 
         return `
         <tr>
-          <td data-label="Cliente">${row.clienteNome || "Cliente"}</td>
-          <td data-label="Tipo">${requestTypeLabel}</td>
-          <td data-label="Gruppo">${groupLabel}</td>
-          <td data-label="Premio">${row.premioNome || "-"}</td>
-          <td data-label="Punti spesi">${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
-          <td data-label="Stato">${statusBadge(row.status)}</td>
-          <td data-label="Operatore">${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
-          <td data-label="Data richiesta">${formatDate(row.createdAt)}</td>
+          <td>${row.clienteNome || "Cliente"}</td>
+          <td>${requestTypeLabel}</td>
+          <td>${groupLabel}</td>
+          <td>${row.premioNome || "-"}</td>
+          <td>${Number(row.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+          <td>${statusBadge(row.status)}</td>
+          <td>${row.approvedByName || row.deliveredByName || row.rejectedByName || "-"}</td>
+          <td>${formatDate(row.createdAt)}</td>
         </tr>`;
       }).join("");
     }
@@ -1992,87 +1763,75 @@
       const dayPoints = {};
       const dayRevenue = {};
       const operatorPoints = {};
-      const rewardStatus = { voucher_emesso:0, consegnata:0, rifiutata:0 };
-      const groupMode = chartGroupBy.value || 'day';
+      const rewardStatus = { in_lavorazione:0, voucher_emesso:0, consegnata:0, rifiutata:0 };
 
       filteredMovements.forEach(row => {
-        const key = getChartDateKey(row.date, groupMode);
-        dayPoints[key] = (dayPoints[key] || 0) + Number(row.points || 0);
-        dayRevenue[key] = (dayRevenue[key] || 0) + Number(row.amount || 0);
-        const op = row.operatorName || 'Senza operatore';
+        const d = getGroupKey(row.date);
+        dayPoints[d] = (dayPoints[d] || 0) + Number(row.points || 0);
+        dayRevenue[d] = (dayRevenue[d] || 0) + Number(row.amount || 0);
+        const op = row.operatorName || "Senza operatore";
         operatorPoints[op] = (operatorPoints[op] || 0) + Number(row.points || 0);
       });
 
       filteredRequests.forEach(row => {
-        rewardStatus[row.status || 'voucher_emesso'] = (rewardStatus[row.status || 'voucher_emesso'] || 0) + 1;
+        rewardStatus[row.status || "in_lavorazione"] = (rewardStatus[row.status || "in_lavorazione"] || 0) + 1;
       });
 
-      const pointKeys = Object.keys(dayPoints).sort();
-      const revenueKeys = Object.keys(dayRevenue).sort();
-      const operatorLabels = Object.keys(operatorPoints).sort((a,b) => (operatorPoints[b]||0) - (operatorPoints[a]||0));
-      const pointLabels = pointKeys.length ? pointKeys.map(key => formatChartLabel(key, groupMode)) : ['Nessun dato'];
-      const revenueLabels = revenueKeys.length ? revenueKeys.map(key => formatChartLabel(key, groupMode)) : ['Nessun dato'];
-      const rewardLabels = ['Voucher emessi', 'Consegnate', 'Rifiutate'];
+      const pointLabels = Object.keys(dayPoints).sort();
+      const revenueLabels = Object.keys(dayRevenue).sort();
+      const operatorLabels = Object.keys(operatorPoints);
+      const rewardLabels = ["In attesa", "Approvate", "Consegnate", "Rifiutate"];
 
+      document.querySelectorAll("#reportView .chart-title")[0].textContent = reportGroupBy.value === "month" ? "Punti assegnati per mese" : "Punti assegnati per giorno";
+      document.querySelectorAll("#reportView .chart-title")[1].textContent = reportGroupBy.value === "month" ? "Parafarmaco per mese" : "Parafarmaco per giorno";
       destroyChart(pointsByDayChart);
       destroyChart(revenueByDayChart);
       destroyChart(operatorPointsChart);
       destroyChart(rewardStatusChart);
 
-      const commonGreen = '#158a67';
-      const softGreen = 'rgba(21,138,103,0.16)';
-      const accentBlue = '#5b93c8';
-      const accentGold = '#d8a438';
-      const accentRed = '#d36a6a';
-
-      pointsByDayChart = new Chart(document.getElementById('pointsByDayChart'), {
-        type: 'line',
-        data: { labels: pointLabels, datasets: [{ label: 'Punti', data: pointKeys.length ? pointKeys.map(k => dayPoints[k]) : [0], tension: 0.34, fill: true, backgroundColor: softGreen, borderColor: commonGreen, borderWidth: 3, pointRadius: 2.5, pointHoverRadius: 4, spanGaps:true }] },
-        options: chartBaseOptions()
+      pointsByDayChart = new Chart(document.getElementById("pointsByDayChart"), {
+        type: "line",
+        data: {
+          labels: pointLabels,
+          datasets: [{ label: "Punti", data: pointLabels.map(k => dayPoints[k]), tension: 0.35 }]
+        },
+        options: chartOptions()
       });
 
-      revenueByDayChart = new Chart(document.getElementById('revenueByDayChart'), {
-        type: 'bar',
-        data: { labels: revenueLabels, datasets: [{ label: 'Parafarmaco €', data: revenueKeys.length ? revenueKeys.map(k => dayRevenue[k]) : [0], backgroundColor: 'rgba(91,147,200,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
-        options: { ...chartBaseOptions(), scales:{x:{grid:{display:false}, ticks:{maxRotation:0, autoSkip:true, maxTicksLimit: window.innerWidth < 700 ? 4 : 8, font:{size:11, weight:'700'}}}, y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{callback:(v)=> Number(v).toLocaleString('it-IT'), font:{size:11, weight:'700'}}}} }
+      revenueByDayChart = new Chart(document.getElementById("revenueByDayChart"), {
+        type: "bar",
+        data: {
+          labels: revenueLabels,
+          datasets: [{ label: "Parafarmaco", data: revenueLabels.map(k => dayRevenue[k]) }]
+        },
+        options: chartOptions()
       });
 
-      operatorPointsChart = new Chart(document.getElementById('operatorPointsChart'), {
-        type: 'bar',
-        data: { labels: operatorLabels, datasets: [{ label: 'Punti assegnati', data: operatorLabels.map(k => operatorPoints[k]), backgroundColor: 'rgba(21,138,103,0.82)', borderRadius: 10, maxBarThickness: window.innerWidth < 700 ? 28 : 42 }] },
-        options: { ...chartBaseOptions(), indexAxis: window.innerWidth < 700 ? 'y' : 'x', scales: window.innerWidth < 700 ? {x:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}, y:{grid:{display:false}, ticks:{font:{size:11, weight:'700'}}}} : {x:{grid:{display:false}, ticks:{font:{size:11, weight:'700'}}}, y:{beginAtZero:true, grace:'8%', grid:{color:'rgba(22,53,46,.08)'}, ticks:{font:{size:11, weight:'700'}}}} }
+      operatorPointsChart = new Chart(document.getElementById("operatorPointsChart"), {
+        type: "bar",
+        data: {
+          labels: operatorLabels,
+          datasets: [{ label: "Punti assegnati", data: operatorLabels.map(k => operatorPoints[k]) }]
+        },
+        options: chartOptions()
       });
 
-      rewardStatusChart = new Chart(document.getElementById('rewardStatusChart'), {
-        type: 'doughnut',
-        data: { labels: rewardLabels, datasets: [{ data: [rewardStatus.voucher_emesso || 0, rewardStatus.consegnata || 0, rewardStatus.rifiutata || 0], backgroundColor:[accentBlue, accentGold, accentRed], borderWidth: 0, hoverOffset: 6 }] },
-        options: { responsive:true, maintainAspectRatio:false, animation:false, cutout:'68%', plugins:{legend:{position:'bottom', labels:{boxWidth:10, padding:14, usePointStyle:true, pointStyle:'circle', font:{weight:'700', size:12}}}} }
+      rewardStatusChart = new Chart(document.getElementById("rewardStatusChart"), {
+        type: "doughnut",
+        data: {
+          labels: rewardLabels,
+          datasets: [{
+            data: [
+              rewardStatus.in_lavorazione || 0,
+              rewardStatus.voucher_emesso || 0,
+              rewardStatus.consegnata || 0,
+              rewardStatus.rifiutata || 0
+            ]
+          }]
+        },
+        options: chartOptions()
       });
     }
-
-
-    function resizeAllCharts(){
-      [pointsByDayChart, revenueByDayChart, operatorPointsChart, rewardStatusChart].forEach((chart) => {
-        if (chart) {
-          chart.resize();
-          chart.update('none');
-        }
-      });
-    }
-
-    let resizeTimer = null;
-    function scheduleReportResize(){
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (document.getElementById('reportView')?.classList.contains('active')) {
-          renderReport();
-        } else {
-          resizeAllCharts();
-        }
-      }, 180);
-    }
-    window.addEventListener('resize', scheduleReportResize, { passive:true });
-    window.addEventListener('orientationchange', scheduleReportResize, { passive:true });
 
     async function loadClientsAndMovements(){
       const usersSnap = await getDocs(collection(firestore, "users"));
@@ -2107,6 +1866,7 @@
       const topClients = [...allClients].sort((a,b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0)).slice(0,5);
       renderVipSidebar(topClients);
       renderClientList(allClients);
+      updateReportOperatorFilter();
     }
 
     async function loadRequests(){
@@ -2121,8 +1881,6 @@
         await loadRequests();
         await loadAccumuloStats();
         renderRequestsTable();
-        populateOperatorFilter();
-        populateMovementTypeFilter();
         renderReport();
       } catch (error) {
         console.error("Errore refresh operatori:", error);
@@ -2195,11 +1953,14 @@
 
     applyFiltersBtn.addEventListener("click", renderReport);
     searchText.addEventListener("input", renderReport);
-    reportPeriod.addEventListener("change", renderReport);
-    chartGroupBy.addEventListener("change", renderReport);
-    chartOperatorFilter.addEventListener("change", renderReport);
-    reportMovementType.addEventListener("change", renderReport);
-    reportRequestStatus.addEventListener("change", renderReport);
+    reportOperatorFilter.addEventListener("change", renderReport);
+    reportRequestStatusFilter.addEventListener("change", renderReport);
+    reportGroupBy.addEventListener("change", renderReport);
+    window.addEventListener("resize", () => { [pointsByDayChart, revenueByDayChart, operatorPointsChart, rewardStatusChart].forEach(chart => chart && chart.resize()); });
+
+    const today = new Date();
+    fromDate.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-01`;
+    toDate.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(new Date(today.getFullYear(), today.getMonth()+1, 0).getDate()).padStart(2,"0")}`;
 
     try {
       await refreshAllData();
@@ -2208,51 +1969,5 @@
     }
     openModal(badgeModal);
   </script>
-
-
-<script>
-(function(){
-  function applyResponsiveTableLabels(){
-    if (window.innerWidth > 700) return;
-    document.querySelectorAll('.table-wrap table').forEach((table)=>{
-      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
-      table.querySelectorAll('tbody tr').forEach((row)=>{
-        Array.from(row.children).forEach((cell, index)=>{
-          if (!cell.hasAttribute('colspan')) {
-            cell.setAttribute('data-label', headers[index] || 'Dato');
-          }
-        });
-      });
-    });
-  }
-  const run = ()=>requestAnimationFrame(applyResponsiveTableLabels);
-  window.addEventListener('load', run);
-  window.addEventListener('resize', run);
-  const observer = new MutationObserver(run);
-  document.querySelectorAll('.table-wrap tbody').forEach(tbody => observer.observe(tbody, {childList:true, subtree:true}));
-})();
-</script>
-
-<script>
-(function(){
-  function sendHeight(){
-    try {
-      const body = document.body;
-      const html = document.documentElement;
-      const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage({ type:'montesano:iframeHeight', height }, '*');
-      }
-    } catch (e) {}
-  }
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', sendHeight);
-  const observer = new MutationObserver(() => sendHeight());
-  observer.observe(document.documentElement, { childList:true, subtree:true, attributes:true, characterData:true });
-  setTimeout(sendHeight, 300);
-  setTimeout(sendHeight, 1000);
-})();
-</script>
-
 </body>
 </html>

@@ -1,17 +1,9 @@
-/* Mobile-only cleanup */
-html,body{max-width:100%;overflow-x:hidden!important;-webkit-text-size-adjust:100%;}
-body{min-width:0!important;}
-img,video,canvas,svg{max-width:100%;height:auto;}
+/* Lightweight helpers only: no global layout forcing */
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+body{min-width:0;}
+img,video,canvas,svg{max-width:100%;}
 input,select,textarea,button{font:inherit;}
 .home-page-bg{pointer-events:none;}
-@media (min-width: 641px){
-  body{max-width:430px;margin:0 auto!important;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 16px 44px rgba(0,0,0,.10);background-attachment:scroll!important;}
+@supports (padding: max(0px)){
+  body{padding-left:max(0px, env(safe-area-inset-left));padding-right:max(0px, env(safe-area-inset-right));}
 }
-/* remove desktop nav globally */
-.home-desktop-nav,.home-nav-actions{display:none!important;}
-.home-shell.home-nav-wrap,.home-nav-wrap{display:flex!important;justify-content:center!important;align-items:center!important;gap:0!important;}
-.home-brand{margin:0 auto!important;display:flex!important;justify-content:center!important;align-items:center!important;}
-.home-brand-logo{display:block!important;height:58px!important;width:auto!important;max-width:190px!important;}
-.home-site-header{padding-top:12px!important;}
-/* safer spacing on pages */
-.page,.main,.container,.promo-page,.beauty-page,.services-page,.turni-shell{max-width:100%!important;}
