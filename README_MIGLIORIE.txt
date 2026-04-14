@@ -7,3 +7,4 @@ Migliorie applicate senza rompere la base:
 - beauty-admin.html, servizi-admin.html, premi-admin.html, fortuna-admin.html, dashboard-admin.html sincronizzati con versioni modulari ove disponibili
 - offerte-admin.html reso sicuro con guard firebase.apps.length
 - effetto no-flash aggiunto alle pagine principali
+
