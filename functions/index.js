@@ -163,7 +163,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
     const response = await fetch(`${app.baseUrl}/turno.html`);
     const html = await response.text();
 
-    const match = html.match(/const turni = (\{[\s\S]*?\n \})/);
+    const match = html.match(/const turni = (\{[\s\S]*?\});/);
 
     if (!match) {
       console.log("Oggetto turni non trovato in turno.html");
