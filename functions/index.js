@@ -87,10 +87,12 @@ async function sendPushToMany(userDocs, payload) {
  * 1) GIORNATE: quando viene pubblicata una nuova giornata
  */
 exports.onGiornataCreated = functions.firestore
-  .document("giornate/{giornataId}")
+  .document("beauty/{giornataId}")
   .onCreate(async (snap) => {
     const data = snap.data() || {};
     const users = await getEligibleUsersByFlag("giornate");
+
+    if (data.attivo !== true) return null;
 
     const title = "Nuova giornata in farmacia";
     const body = data.titolo
@@ -103,6 +105,8 @@ exports.onGiornataCreated = functions.firestore
       url: `${app.baseUrl}/beauty.html`,
       tag: `giornata-created-${snap.id}`
     });
+
+    return null;
   });
 
 /**
@@ -119,23 +123,24 @@ exports.notifyGiornateOggi = functions.pubsub
     const dd = String(today.getDate()).padStart(2, "0");
     const todayKey = `${yyyy}-${mm}-${dd}`;
 
-    const giornateSnap = await db.collection("giornate").get();
+    const giornateSnap = await db.collection("beauty").get();
     const users = await getEligibleUsersByFlag("giornate");
 
     for (const doc of giornateSnap.docs) {
       const data = doc.data() || {};
       const dataEvento = data.data || data.date || data.dataEvento || "";
 
-      if (dataEvento === todayKey) {
-        await sendPushToMany(users, {
-          title: "La giornata è oggi",
-          body: data.titolo
-            ? `Oggi c'è: ${data.titolo}`
-            : "Oggi c'è una giornata in farmacia.",
-          url: `${app.baseUrl}/beauty.html`,
-          tag: `giornata-today-${doc.id}-${todayKey}`
-        });
-      }
+      if (data.attivo !== true) continue;
+      if (dataEvento !== todayKey) continue;
+
+      await sendPushToMany(users, {
+        title: "La giornata è oggi",
+        body: data.titolo
+          ? `Oggi c'è: ${data.titolo}`
+          : "Oggi c'è una giornata in farmacia.",
+        url: `${app.baseUrl}/beauty.html`,
+        tag: `giornata-today-${doc.id}-${todayKey}`
+      });
     }
 
     return null;
