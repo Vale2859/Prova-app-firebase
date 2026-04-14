@@ -274,3 +274,23 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Errore");
   }
 });
+
+
+
+exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
+  try {
+    const users = await getEligibleUsersByFlag("turno");
+
+    await sendPushToMany(users, {
+      title: "Farmacia Montesano di turno",
+      body: "Test turno: la notifica funziona 🔔",
+      url: `${app.baseUrl}/turni.html`,
+      tag: "test-turno"
+    });
+
+    res.send("Notifica turno inviata");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Errore");
+  }
+});
