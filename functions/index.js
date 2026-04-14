@@ -255,6 +255,7 @@ exports.notifyFortunaReady = functions.pubsub
 
     return null;
   });
+
 exports.testPush = functions.https.onRequest(async (req, res) => {
   try {
     const users = await db.collection("users").get();
