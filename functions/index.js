@@ -171,9 +171,9 @@ exports.notifyTurniEAppoggi = functions.pubsub
     const response = await fetch(`${app.baseUrl}/turno.html`);
     const html = await response.text();
 
-    const match = html.match(
-      /<script id="turni-data" type="application\\/json">([\\s\\S]*?)<\\/script>/
-    );
+   const match = html.match(
+  /<script id="turni-data" type="application\/json">([\s\S]*?)<\/script>/
+);
 
     if (!match) return null;
 
