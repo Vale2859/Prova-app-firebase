@@ -84,7 +84,7 @@ async function sendPushToMany(userDocs, payload) {
 }
 
 /**
- * 1) GIORNATE: quando viene pubblicata una nuova giornata
+ * 1) GIORNATE BEAUTY: quando viene pubblicata una nuova giornata
  */
 exports.onGiornataCreated = functions.firestore
   .document("beauty/{giornataId}")
@@ -94,10 +94,10 @@ exports.onGiornataCreated = functions.firestore
 
     if (data.attivo !== true) return null;
 
-    const title = "Nuova giornata in farmacia";
+    const title = "Nuova giornata beauty ✨";
     const body = data.titolo
-      ? `${data.titolo} è ora disponibile.`
-      : "È stata pubblicata una nuova giornata.";
+      ? `${data.titolo} è ora disponibile. Tocca per scoprire i dettagli.`
+      : "Abbiamo pubblicato un nuovo evento beauty. Tocca per scoprirlo.";
 
     await sendPushToMany(users, {
       title,
@@ -110,8 +110,8 @@ exports.onGiornataCreated = functions.firestore
   });
 
 /**
- * 2) GIORNATE: notifica il giorno stesso
- * Ogni 30 minuti controlla gli eventi di oggi
+ * 2) GIORNATE BEAUTY: promemoria il giorno stesso
+ * Controlla ogni 30 minuti
  */
 exports.notifyGiornateOggi = functions.pubsub
   .schedule("every 30 minutes")
@@ -134,10 +134,10 @@ exports.notifyGiornateOggi = functions.pubsub
       if (dataEvento !== todayKey) continue;
 
       await sendPushToMany(users, {
-        title: "La giornata è oggi",
+        title: "La giornata beauty è oggi 💆‍♀️",
         body: data.titolo
-          ? `Oggi c'è: ${data.titolo}`
-          : "Oggi c'è una giornata in farmacia.",
+          ? `${data.titolo} è prevista per oggi. Tocca per vedere tutte le informazioni.`
+          : "Oggi c'è una giornata beauty in farmacia. Tocca per i dettagli.",
         url: `${app.baseUrl}/beauty.html`,
         tag: `giornata-today-${doc.id}-${todayKey}`
       });
@@ -203,8 +203,8 @@ exports.notifyTurniEAppoggi = functions.pubsub
       const users = await getEligibleUsersByFlag("turno");
 
       await sendPushToMany(users, {
-        title: "Farmacia Montesano di turno",
-        body: "Oggi la Farmacia Montesano è di turno.",
+        title: "Farmacia Montesano di turno oggi 🏥",
+        body: "Oggi siamo la farmacia di turno. Tocca per posizione, contatti e dettagli.",
         url: `${app.baseUrl}/turno.html`,
         tag: `turno-${todayKey}`
       });
@@ -216,8 +216,8 @@ exports.notifyTurniEAppoggi = functions.pubsub
       const users = await getEligibleUsersByFlag("appoggio");
 
       await sendPushToMany(users, {
-        title: "Farmacia Montesano di appoggio",
-        body: "Oggi la Farmacia Montesano è di appoggio.",
+        title: "Farmacia Montesano di appoggio oggi 📍",
+        body: "Oggi siamo farmacia di appoggio. Tocca per tutte le informazioni utili.",
         url: `${app.baseUrl}/turno.html`,
         tag: `appoggio-${todayKey}`
       });
@@ -234,6 +234,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
 
     return null;
   });
+
 /**
  * 4) FORTUNA
  * Controlla ogni 30 minuti chi può ritentare
@@ -266,8 +267,8 @@ exports.notifyFortunaReady = functions.pubsub
       if (alreadyToday) continue;
 
       await sendPushToUser(doc.id, {
-        title: "Fortuna disponibile",
-        body: "Puoi tentare di nuovo la fortuna.",
+        title: "La tua fortuna è pronta 🍀",
+        body: "Hai un nuovo tentativo disponibile. Tocca ora e prova la ruota.",
         url: `${app.baseUrl}/fortuna.html`,
         tag: `fortuna-ready-${doc.id}`
       });
@@ -286,14 +287,17 @@ exports.notifyFortunaReady = functions.pubsub
     return null;
   });
 
+/**
+ * TEST NOTIFICA GENERALE
+ */
 exports.testPush = functions.https.onRequest(async (req, res) => {
   try {
     const users = await db.collection("users").get();
 
     for (const doc of users.docs) {
       await sendPushToUser(doc.id, {
-        title: "🚀 TEST NOTIFICA",
-        body: "Funziona davvero! 🔔",
+        title: "Test notifica premium ✨",
+        body: "Le notifiche della Farmacia Montesano funzionano correttamente.",
         url: app.baseUrl,
         tag: "test-notifica"
       });
@@ -305,13 +309,17 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Errore");
   }
 });
+
+/**
+ * TEST NOTIFICA TURNO
+ */
 exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
   try {
     const users = await getEligibleUsersByFlag("turno");
 
     await sendPushToMany(users, {
-      title: "Farmacia Montesano di turno",
-      body: "Test turno: la notifica funziona 🔔",
+      title: "Farmacia Montesano di turno oggi 🏥",
+      body: "Questa è una prova della nuova notifica premium del turno.",
       url: `${app.baseUrl}/turno.html`,
       tag: "test-turno"
     });
