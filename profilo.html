@@ -235,6 +235,12 @@
       border:1px solid #f3d2d2;
     }
 
+    .ghost-btn{
+      background:#eef6f2;
+      color:var(--green);
+      border:1px solid #d6ebe3;
+    }
+
     .note{
       margin:14px 4px 0;
       color:var(--text-soft);
@@ -327,6 +333,165 @@
       color:var(--text-soft);
     }
 
+    .barcode-card{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      text-align:center;
+    }
+
+    .barcode-title{
+      margin:0 0 10px;
+      font-size:1.1rem;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .barcode-sub{
+      margin:0 0 10px;
+      font-size:.92rem;
+      color:var(--text-soft);
+      font-weight:600;
+    }
+
+    .barcode-wrap{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      overflow:hidden;
+    }
+
+    .barcode-svg{
+      width:100%;
+      height:90px;
+      display:block;
+    }
+
+    .barcode-code{
+      margin:10px 0 0;
+      font-size:1.02rem;
+      font-weight:900;
+      letter-spacing:.22em;
+      color:var(--text);
+    }
+
+    .notif-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .notif-sub{
+      margin:0 0 14px;
+      font-size:.94rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.45;
+    }
+
+    .notif-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin:14px 0 0;
+    }
+
+    .notif-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fbfdfc;
+    }
+
+    .notif-left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+
+    .notif-name{
+      font-size:1rem;
+      font-weight:800;
+      color:var(--text);
+    }
+
+    .notif-desc{
+      font-size:.86rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .switch{
+      position:relative;
+      display:inline-block;
+      width:56px;
+      height:32px;
+      flex:0 0 56px;
+    }
+
+    .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+
+    .slider{
+      position:absolute;
+      inset:0;
+      cursor:pointer;
+      background:#d7e2dd;
+      border-radius:999px;
+      transition:.25s ease;
+    }
+
+    .slider:before{
+      content:"";
+      position:absolute;
+      height:24px;
+      width:24px;
+      left:4px;
+      top:4px;
+      background:white;
+      border-radius:50%;
+      transition:.25s ease;
+      box-shadow:0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .switch input:checked + .slider{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+    }
+
+    .switch input:checked + .slider:before{
+      transform:translateX(24px);
+    }
+
+    .notif-actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .notif-status{
+      margin-top:12px;
+      font-size:.9rem;
+      font-weight:700;
+      color:var(--text-soft);
+      text-align:center;
+    }
+
     @media (max-width:390px){
       .page{padding:12px 12px 24px}
       .data-row{
@@ -337,13 +502,6 @@
       .page-title{font-size:1.65rem}
       .hero-name{font-size:1.3rem}
     }
-  
-    .barcode-card{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:18px;text-align:center;}
-    .barcode-title{margin:0 0 10px;font-size:1.1rem;font-weight:900;color:var(--text);}
-    .barcode-sub{margin:0 0 10px;font-size:.92rem;color:var(--text-soft);font-weight:600;}
-    .barcode-wrap{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;overflow:hidden;}
-    .barcode-svg{width:100%;height:90px;display:block;}
-    .barcode-code{margin:10px 0 0;font-size:1.02rem;font-weight:900;letter-spacing:.22em;color:var(--text);}
   </style>
 
   <link rel="stylesheet" href="mobile-only.css" />
@@ -430,6 +588,77 @@
         </div>
       </section>
 
+      <section class="section">
+        <h2 class="section-title">Notifiche</h2>
+        <div class="notif-card">
+          <p class="notif-sub">
+            Attiva le notifiche e scegli cosa vuoi ricevere sul telefono.
+          </p>
+
+          <div class="notif-actions">
+            <button class="action-btn ghost-btn" onclick="attivaNotifiche()">
+              <span>🔔</span>
+              <span>Attiva notifiche</span>
+            </button>
+          </div>
+
+          <div class="notif-list">
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Turno</div>
+                <div class="notif-desc">Ti avvisa quando la Farmacia Montesano è di turno.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-turno">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Appoggio</div>
+                <div class="notif-desc">Ti avvisa quando la Farmacia Montesano è di appoggio.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-appoggio">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Giornate</div>
+                <div class="notif-desc">Ti avvisa quando pubblichiamo una giornata e quando arriva il giorno.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-giornate">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Fortuna</div>
+                <div class="notif-desc">Ti avvisa quando puoi tentare di nuovo la fortuna.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-fortuna">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="notif-actions">
+            <button class="action-btn logout-btn" onclick="salvaPreferenzeNotifiche()">
+              <span>💾</span>
+              <span>Salva preferenze</span>
+            </button>
+          </div>
+
+          <div id="notifStatus" class="notif-status"></div>
+        </div>
+      </section>
+
       <div class="actions">
         <button class="action-btn logout-btn" onclick="openLogoutModal()">
           <span>↩</span>
@@ -492,6 +721,11 @@
       deleteDoc
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    import {
+      askNotificationPermission,
+      saveNotificationSettings
+    } from "./notification-utils.js";
+
     function renderBarcode(svgId, code) {
       const svg = document.getElementById(svgId);
       if (!svg) return;
@@ -508,6 +742,20 @@
       } catch (e) {
         while (svg.firstChild) svg.removeChild(svg.firstChild);
       }
+    }
+
+    function setNotifStatus(message, isError = false) {
+      const el = document.getElementById("notifStatus");
+      if (!el) return;
+      el.textContent = message || "";
+      el.style.color = isError ? "#c94646" : "#6c7c76";
+    }
+
+    function applyNotificationSettings(settings = {}) {
+      document.getElementById("notif-turno").checked = !!settings.turno;
+      document.getElementById("notif-appoggio").checked = !!settings.appoggio;
+      document.getElementById("notif-giornate").checked = !!settings.giornate;
+      document.getElementById("notif-fortuna").checked = !!settings.fortuna;
     }
 
     async function loadProfile(uid, user) {
@@ -536,10 +784,42 @@
       document.getElementById("profileBarcodeText").textContent = clientCode || "-";
 
       renderBarcode("profileBarcodeSvg", clientCode || "FM000000");
+      applyNotificationSettings(data.notificationSettings || {});
 
       document.getElementById("loadingBox").style.display = "none";
       document.getElementById("profileContent").style.display = "block";
     }
+
+    window.attivaNotifiche = async function() {
+      try {
+        await askNotificationPermission();
+        setNotifStatus("Notifiche attivate correttamente 🔔");
+        alert("Notifiche attivate 🔔");
+      } catch (e) {
+        console.error(e);
+        setNotifStatus("Errore nell’attivazione delle notifiche", true);
+        alert("Errore notifiche");
+      }
+    };
+
+    window.salvaPreferenzeNotifiche = async function() {
+      try {
+        const settings = {
+          turno: document.getElementById("notif-turno").checked,
+          appoggio: document.getElementById("notif-appoggio").checked,
+          giornate: document.getElementById("notif-giornate").checked,
+          fortuna: document.getElementById("notif-fortuna").checked
+        };
+
+        await saveNotificationSettings(settings);
+        setNotifStatus("Preferenze salvate ✅");
+        alert("Preferenze salvate ✅");
+      } catch (e) {
+        console.error(e);
+        setNotifStatus("Errore nel salvataggio delle preferenze", true);
+        alert("Errore salvataggio");
+      }
+    };
 
     window.openLogoutModal = function() {
       document.getElementById("logoutModal").classList.add("open");
@@ -609,11 +889,11 @@
   <script src="app-fixes.js"></script>
 
   <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js");
-    });
-  }
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
   </script>
 
 </body>
