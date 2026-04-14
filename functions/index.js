@@ -102,7 +102,7 @@ exports.onGiornataCreated = functions.firestore
     await sendPushToMany(users, {
       title,
       body,
-      url: `${app.baseUrl}/beauty.html`,
+      url: "https://farmaciamontesano.web.app/giornate.html",
       tag: `giornata-created-${snap.id}`
     });
 
@@ -138,7 +138,7 @@ exports.notifyGiornateOggi = functions.pubsub
         body: data.titolo
           ? `${data.titolo} è prevista per oggi. Tocca per vedere tutte le informazioni.`
           : "Oggi c'è una giornata beauty in farmacia. Tocca per i dettagli.",
-        url: `${app.baseUrl}/beauty.html`,
+        url: "https://farmaciamontesano.web.app/giornate.html",
         tag: `giornata-today-${doc.id}-${todayKey}`
       });
     }
@@ -165,7 +165,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
     const hour = now.getHours();
     if (hour !== 8) return null;
 
-    const response = await fetch(`${app.baseUrl}/turno.html`);
+    const response = await fetch("https://farmaciamontesano.web.app/turno.html");
     const html = await response.text();
 
     const match = html.match(/const turni = (\{[\s\S]*?\});/);
@@ -205,7 +205,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
       await sendPushToMany(users, {
         title: "Farmacia Montesano di turno oggi 🏥",
         body: "Oggi siamo la farmacia di turno. Tocca per posizione, contatti e dettagli.",
-        url: `${app.baseUrl}/turno.html`,
+        url: "https://farmaciamontesano.web.app/turno.html",
         tag: `turno-${todayKey}`
       });
 
@@ -218,7 +218,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
       await sendPushToMany(users, {
         title: "Farmacia Montesano di appoggio oggi 📍",
         body: "Oggi siamo farmacia di appoggio. Tocca per tutte le informazioni utili.",
-        url: `${app.baseUrl}/turno.html`,
+        url: "https://farmaciamontesano.web.app/turno.html",
         tag: `appoggio-${todayKey}`
       });
 
@@ -269,7 +269,7 @@ exports.notifyFortunaReady = functions.pubsub
       await sendPushToUser(doc.id, {
         title: "La tua fortuna è pronta 🍀",
         body: "Hai un nuovo tentativo disponibile. Tocca ora e prova la ruota.",
-        url: `${app.baseUrl}/fortuna.html`,
+        url: "https://farmaciamontesano.web.app/fortuna.html",
         tag: `fortuna-ready-${doc.id}`
       });
 
@@ -298,7 +298,7 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
       await sendPushToUser(doc.id, {
         title: "Test notifica premium ✨",
         body: "Le notifiche della Farmacia Montesano funzionano correttamente.",
-        url: app.baseUrl,
+        url: "https://farmaciamontesano.web.app",
         tag: "test-notifica"
       });
     }
@@ -320,7 +320,7 @@ exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
     await sendPushToMany(users, {
       title: "Farmacia Montesano di turno oggi 🏥",
       body: "Questa è una prova della nuova notifica premium del turno.",
-      url: `${app.baseUrl}/turno.html`,
+      url: "https://farmaciamontesano.web.app/turno.html",
       tag: "test-turno"
     });
 
