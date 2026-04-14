@@ -156,17 +156,23 @@ exports.notifyTurniEAppoggi = functions.pubsub
   .schedule("every 30 minutes")
   .timeZone("Europe/Rome")
   .onRun(async () => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
+    const now = new Date();
+
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
     const todayKey = `${yyyy}-${mm}-${dd}`;
+
+    const hour = now.getHours();
+
+    // 🔥 BLOCCO: manda SOLO alle 8
+    if (hour !== 8) return null;
 
     const response = await fetch(`${app.baseUrl}/turno.html`);
     const html = await response.text();
 
     const match = html.match(
-      /<script id="turni-data" type="application\/json">([\s\S]*?)<\/script>/
+      /<script id="turni-data" type="application\\/json">([\\s\\S]*?)<\\/script>/
     );
 
     if (!match) return null;
@@ -180,25 +186,42 @@ exports.notifyTurniEAppoggi = functions.pubsub
 
       if (data !== todayKey || farmacia !== "montesano") continue;
 
+      // 🔥 CONTROLLA SE GIÀ INVIATA OGGI
+      const docRef = db.collection("system").doc(`notifiche_${todayKey}`);
+      const docSnap = await docRef.get();
+
+      if (docSnap.exists) {
+        console.log("Notifica già inviata oggi");
+        return null;
+      }
+
       if (stato === "turno") {
         const users = await getEligibleUsersByFlag("turno");
+
         await sendPushToMany(users, {
           title: "Farmacia Montesano di turno",
           body: "Oggi la Farmacia Montesano è di turno.",
-          url: `${app.baseUrl}/turni.html`,
+          url: `${app.baseUrl}/turno.html`,
           tag: `turno-${todayKey}`
         });
       }
 
       if (stato === "appoggio") {
         const users = await getEligibleUsersByFlag("appoggio");
+
         await sendPushToMany(users, {
           title: "Farmacia Montesano di appoggio",
           body: "Oggi la Farmacia Montesano è di appoggio.",
-          url: `${app.baseUrl}/turni.html`,
+          url: `${app.baseUrl}/turno.html`,
           tag: `appoggio-${todayKey}`
         });
       }
+
+      // 🔥 SEGNA COME INVIATA
+      await docRef.set({
+        data: todayKey,
+        sentAt: admin.firestore.FieldValue.serverTimestamp()
+      });
     }
 
     return null;
