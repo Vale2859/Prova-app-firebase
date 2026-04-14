@@ -275,8 +275,6 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
   }
 });
 
-
-
 exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
   try {
     const users = await getEligibleUsersByFlag("turno");
