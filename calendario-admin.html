@@ -7,841 +7,558 @@
 
   <style>
     :root{
-      --bg:#f3f6f4;
+      --bg:#f6f8f7;
       --panel:#ffffff;
-      --panel-soft:#f8fbf9;
+      --panel-2:#fbfcfb;
       --text:#16372f;
-      --muted:#73857e;
-      --line:#e3ebe7;
-      --shadow:0 18px 50px rgba(16,49,39,0.08);
-      --shadow-soft:0 8px 22px rgba(16,49,39,0.05);
+      --muted:#70827b;
+      --line:#e6ece8;
+      --shadow:0 10px 30px rgba(16,49,39,0.06);
 
-      --green-1:#2d7b5f;
-      --green-2:#7ec58f;
+      --green:#76a93a;
+      --green-dark:#5f8e2a;
 
-      --blue-1:#3d7be0;
-      --blue-2:#7fb0ff;
+      --blue:#4e86ea;
+      --orange:#de8b32;
+      --red:#db5454;
 
-      --yellow-1:#f2c94c;
-      --yellow-2:#fff1a8;
+      --event-green:#e9f4de;
+      --event-green-border:#72a43b;
 
-      --orange-1:#d8892f;
-      --orange-2:#f4c184;
+      --event-yellow:#f9efc9;
+      --event-yellow-border:#e0b941;
 
-      --red-1:#d6555f;
-      --red-2:#f5a1aa;
+      --event-red:#f7d6d6;
+      --event-red-border:#d85d5d;
 
-      --purple-1:#9469c9;
-      --purple-2:#d9c1f3;
-
-      --gray-1:#9ba9a2;
-      --gray-2:#dce3df;
-
-      --status-request:#f4cc54;
-      --status-confirmed:#7ab85b;
-      --status-completed:#4d84e7;
-      --status-recall:#d98a31;
-      --status-cancelled:#d85b65;
-      --status-expired:#c53d3d;
-
-      --radius-xl:28px;
-      --radius-lg:22px;
-      --radius-md:16px;
-      --radius-sm:12px;
-
-      --sidebar-w:290px;
-      --detail-w:350px;
-      --header-h:86px;
-      --toolbar-h:86px;
-      --hour-col-w:82px;
-      --day-start:8;
-      --day-end:20;
-      --slot-h:64px;
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
     }
 
     *{ box-sizing:border-box; }
-    html,body{ margin:0; padding:0; height:100%; }
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, #f9fcfb 0%, #f2f6f4 42%, #edf2ef 100%);
-    }
-
-    button, input, select, textarea{
-      font:inherit;
-    }
+    html,body{ margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
 
     .app{
-      height:100vh;
       display:grid;
-      grid-template-columns: var(--sidebar-w) 1fr var(--detail-w);
-      grid-template-rows: var(--header-h) 1fr;
-      gap:14px;
-      padding:14px;
+      grid-template-columns: 290px 1fr 330px;
+      gap:18px;
+      min-height:100vh;
+      padding:18px;
     }
 
-    .header{
-      grid-column:1 / -1;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      background:rgba(255,255,255,0.88);
+    .panel{
+      background:var(--panel);
       border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow-soft);
-      padding:16px 20px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+    }
+
+    .left{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
     }
 
     .brand{
       display:flex;
       align-items:center;
-      gap:14px;
-      min-width:0;
-    }
-
-    .brand-logo{
-      width:56px;
-      height:56px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:#f3f8f5;
-      border:1px solid var(--line);
-      overflow:hidden;
-      flex:0 0 auto;
-    }
-
-    .brand-logo img{
-      width:78%;
-      height:auto;
-      object-fit:contain;
-    }
-
-    .brand-text h1{
-      margin:0;
-      font-size:2rem;
-      line-height:1;
-      letter-spacing:-0.04em;
-    }
-
-    .brand-text p{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:.98rem;
-      font-weight:600;
-    }
-
-    .header-user{
-      display:flex;
-      align-items:center;
       gap:12px;
+      font-weight:800;
+      font-size:24px;
+      line-height:1;
+      margin-bottom:8px;
     }
 
-    .user-chip{
-      height:54px;
-      min-width:54px;
-      border-radius:18px;
-      background:linear-gradient(135deg,#f3f7f5 0%, #eef4f1 100%);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow-soft);
+    .brand-icon{
+      width:40px;
+      height:40px;
+      border-radius:10px;
       display:grid;
       place-items:center;
-      font-size:1.25rem;
-      font-weight:800;
-    }
-
-    .sidebar,
-    .main,
-    .detail{
-      min-height:0;
-      background:rgba(255,255,255,0.9);
+      background:#f0f4f2;
       border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .sidebar{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .sidebar-inner{
-      padding:18px;
-      overflow:auto;
+      font-size:20px;
     }
 
     .search{
       width:100%;
-      min-height:54px;
+      height:54px;
+      border-radius:14px;
+      border:1px solid #dfe5e1;
       padding:0 16px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#fff;
+      font-size:16px;
       outline:none;
-      color:var(--text);
-      box-shadow:var(--shadow-soft);
-      margin-bottom:14px;
+      background:#fff;
     }
 
-    .btn-main{
+    .new-btn{
       width:100%;
-      min-height:56px;
+      height:54px;
       border:none;
-      border-radius:18px;
-      background:linear-gradient(135deg,var(--green-1),var(--green-2));
+      border-radius:14px;
+      background:linear-gradient(180deg,var(--green),var(--green-dark));
       color:#fff;
-      font-size:1rem;
+      font-size:16px;
       font-weight:800;
-      box-shadow:0 14px 30px rgba(51,134,94,0.22);
       cursor:pointer;
-      margin-bottom:18px;
+      box-shadow:0 8px 16px rgba(118,169,58,0.22);
     }
 
-    .filter-group{
+    .mini-calendar{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:var(--panel-2);
+    }
+
+    .mini-cal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+      font-weight:800;
+    }
+
+    .mini-nav{
+      display:flex;
+      gap:8px;
+    }
+
+    .mini-nav button{
+      width:30px;
+      height:30px;
+      border:none;
+      border-radius:10px;
+      background:#fff;
+      border:1px solid var(--line);
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .mini-weekdays,
+    .mini-grid{
       display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:6px;
+      text-align:center;
+    }
+
+    .mini-weekdays div{
+      font-size:11px;
+      color:var(--muted);
+      font-weight:800;
+      padding-bottom:4px;
+    }
+
+    .mini-day{
+      height:34px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      cursor:pointer;
+      border:1px solid transparent;
+    }
+
+    .mini-day.other{
+      opacity:.35;
+    }
+
+    .mini-day.active{
+      background:var(--blue);
+      color:#fff;
+      font-weight:800;
+    }
+
+    .mini-day.today{
+      border-color:var(--blue);
+      font-weight:800;
+    }
+
+    .filters{
+      display:flex;
+      flex-direction:column;
       gap:10px;
-      margin-bottom:18px;
     }
 
     .filter-btn{
-      min-height:50px;
+      height:52px;
+      border-radius:14px;
       border:1px solid var(--line);
       background:#fff;
-      color:var(--text);
-      border-radius:16px;
-      padding:0 14px;
-      text-align:left;
-      font-weight:800;
       cursor:pointer;
+      text-align:left;
+      padding:0 16px;
+      font-size:16px;
+      font-weight:700;
+      color:var(--text);
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      box-shadow:var(--shadow-soft);
+      justify-content:space-between;
     }
 
     .filter-btn.active{
-      outline:2px solid rgba(61,123,224,0.14);
-      border-color:#cfe0ff;
-      background:#f8fbff;
+      background:#eff6ea;
+      border-color:#d5e4c7;
     }
 
-    .count-badge{
-      min-width:30px;
-      height:30px;
-      border-radius:999px;
-      display:grid;
-      place-items:center;
-      font-size:.86rem;
-      font-weight:900;
-      background:#f2f5f3;
-      color:#45645a;
-      padding:0 8px;
-    }
-
-    .status-list{
-      display:grid;
-      gap:10px;
-    }
-
-    .status-btn{
-      min-height:52px;
-      border:none;
-      border-radius:16px;
-      padding:0 14px;
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-      border:1px solid var(--line);
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+    .filter-count{
+      color:var(--muted);
       font-weight:800;
-      color:var(--text);
     }
 
-    .status-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .dot{
-      width:14px;
-      height:14px;
-      border-radius:50%;
-      flex:0 0 auto;
-    }
-
-    .dot.request{ background:var(--status-request); }
-    .dot.confirmed{ background:var(--status-confirmed); }
-    .dot.completed{ background:var(--status-completed); }
-    .dot.recall{ background:var(--status-recall); }
-    .dot.cancelled{ background:var(--status-cancelled); }
-    .dot.expired{ background:var(--status-expired); }
-    .dot.all{ background:#8da59b; }
-
-    .main{
+    .center{
       display:flex;
       flex-direction:column;
-      min-width:0;
+      overflow:hidden;
     }
 
-    .toolbar{
-      min-height:var(--toolbar-h);
-      border-bottom:1px solid var(--line);
+    .topbar{
       padding:16px 18px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      background:rgba(255,255,255,0.82);
-      backdrop-filter: blur(10px);
+      align-items:center;
+      gap:18px;
+      border-bottom:1px solid var(--line);
     }
 
-    .toolbar-left,
-    .toolbar-right{
+    .top-left{
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
     }
 
-    .btn-soft,
-    .view-btn,
-    .date-chip{
-      min-height:48px;
+    .today-btn,
+    .nav-btn,
+    .view-btn{
+      height:44px;
       border:none;
-      border-radius:14px;
       background:#fff;
+      border:1px solid var(--line);
+      border-radius:12px;
       padding:0 16px;
       cursor:pointer;
+      font-size:15px;
       font-weight:800;
       color:var(--text);
-      box-shadow:var(--shadow-soft);
-      border:1px solid var(--line);
     }
 
-    .btn-soft.primary{
-      background:linear-gradient(135deg,var(--blue-1),var(--blue-2));
-      color:#fff;
-      border:none;
+    .nav-btn{
+      width:44px;
+      padding:0;
     }
 
-    .date-title{
-      font-size:2rem;
-      line-height:1;
+    .current-label{
+      font-size:20px;
       font-weight:900;
-      letter-spacing:-0.04em;
-      margin:0 4px;
+      min-width:220px;
     }
 
-    .views{
+    .top-right{
       display:flex;
-      background:#f2f6f4;
-      padding:4px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      box-shadow:var(--shadow-soft);
-    }
-
-    .view-btn{
-      min-width:108px;
-      background:transparent;
-      border:none;
-      box-shadow:none;
+      align-items:center;
+      gap:8px;
     }
 
     .view-btn.active{
-      background:linear-gradient(135deg,var(--blue-1),var(--blue-2));
+      background:var(--blue);
       color:#fff;
+      border-color:transparent;
+      box-shadow:0 8px 18px rgba(78,134,234,0.24);
     }
 
     .calendar-wrap{
+      position:relative;
       flex:1;
-      min-height:0;
       overflow:auto;
-      padding:14px;
-      background:linear-gradient(180deg,#fbfdfc 0%, #f6faf8 100%);
+      background:#fff;
+      border-radius:0 0 var(--radius-xl) var(--radius-xl);
     }
 
     .day-view{
-      position:relative;
-      min-width:980px;
-      border-radius:20px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .calendar-grid{
-      position:relative;
       display:grid;
-      grid-template-columns: var(--hour-col-w) 1fr;
+      grid-template-columns:80px 1fr;
+      min-height:900px;
     }
 
-    .hours-col{
-      background:#fbfcfb;
+    .hours{
       border-right:1px solid var(--line);
-      position:relative;
-      z-index:2;
+      background:#fcfdfc;
     }
 
-    .hour-cell{
-      height:var(--slot-h);
+    .hour{
+      height:64px;
       border-bottom:1px solid #eef2ef;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding-top:8px;
-      color:#5d726a;
-      font-size:.98rem;
-      font-weight:800;
-    }
-
-    .day-col{
-      position:relative;
-      min-height: calc((var(--day-end) - var(--day-start)) * var(--slot-h));
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          #ffffff 0,
-          #ffffff calc(var(--slot-h) - 1px),
-          #edf2ef calc(var(--slot-h) - 1px),
-          #edf2ef var(--slot-h)
-        );
-      cursor:crosshair;
-    }
-
-    .half-line{
-      position:absolute;
-      left:0;
-      right:0;
-      height:1px;
-      background:rgba(221,228,224,0.7);
-      pointer-events:none;
-    }
-
-    .event-card{
-      position:absolute;
-      left:12px;
-      right:12px;
-      border-radius:18px;
-      border:1px solid rgba(0,0,0,0.04);
-      box-shadow:0 10px 28px rgba(16,49,39,0.08);
-      padding:12px 14px;
-      overflow:hidden;
-      cursor:pointer;
-      transition:transform .18s ease, box-shadow .18s ease;
-    }
-
-    .event-card:hover{
-      transform:translateY(-1px);
-      box-shadow:0 16px 34px rgba(16,49,39,0.12);
-    }
-
-    .event-card.selected{
-      outline:2px solid rgba(61,123,224,0.3);
-    }
-
-    .event-request{
-      background:linear-gradient(135deg,#fff7cf 0%, #fff0a8 100%);
-      border-left:6px solid var(--status-request);
-    }
-
-    .event-confirmed{
-      background:linear-gradient(135deg,#eef8e5 0%, #dff0cf 100%);
-      border-left:6px solid var(--status-confirmed);
-    }
-
-    .event-completed{
-      background:linear-gradient(135deg,#e8f1ff 0%, #d4e4ff 100%);
-      border-left:6px solid var(--status-completed);
-    }
-
-    .event-recall{
-      background:linear-gradient(135deg,#fff0de 0%, #ffd3a1 100%);
-      border-left:6px solid var(--status-recall);
-    }
-
-    .event-cancelled{
-      background:linear-gradient(135deg,#ffe6e9 0%, #ffc4cb 100%);
-      border-left:6px solid var(--status-cancelled);
-    }
-
-    .event-expired{
-      background:linear-gradient(135deg,#ffe3e3 0%, #ffb0b0 100%);
-      border-left:6px solid var(--status-expired);
-    }
-
-    .event-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:6px;
-      align-items:flex-start;
-    }
-
-    .event-name{
-      font-size:1.18rem;
-      line-height:1.05;
-      font-weight:900;
-      letter-spacing:-0.03em;
-    }
-
-    .event-time{
-      font-size:.95rem;
-      font-weight:900;
-      color:#3f584f;
-      background:rgba(255,255,255,0.55);
-      border-radius:999px;
-      padding:6px 10px;
-      white-space:nowrap;
-    }
-
-    .event-service{
-      font-size:1rem;
-      font-weight:800;
-      margin-bottom:6px;
-    }
-
-    .event-meta{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      color:#425a51;
-      font-size:.92rem;
+      padding:8px 10px 0 0;
+      text-align:right;
+      font-size:14px;
+      color:#556a63;
       font-weight:700;
     }
 
-    .mini-pill{
-      display:inline-flex;
-      min-height:28px;
-      align-items:center;
-      padding:0 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.55);
-      font-size:.84rem;
-      font-weight:900;
-    }
-
-    .month-view,
-    .week-view{
-      display:none;
-    }
-
-    .week-view.active,
-    .month-view.active,
-    .day-view.active{
-      display:block;
-    }
-
-    .week-grid{
-      display:grid;
-      grid-template-columns: var(--hour-col-w) repeat(7, minmax(160px,1fr));
-      min-width:1320px;
-      border:1px solid var(--line);
-      border-radius:20px;
-      overflow:hidden;
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .week-head{
-      min-height:68px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      border-bottom:1px solid var(--line);
-      border-left:1px solid var(--line);
-      background:#fbfcfb;
-      font-weight:900;
-    }
-
-    .week-head small{
-      font-size:.85rem;
-      color:var(--muted);
-      margin-bottom:3px;
-    }
-
-    .week-hour-head{
-      border-bottom:1px solid var(--line);
-      background:#fbfcfb;
-    }
-
-    .week-col{
+    .day-grid{
       position:relative;
-      min-height: calc((var(--day-end) - var(--day-start)) * var(--slot-h));
-      border-left:1px solid var(--line);
+      min-height:900px;
       background:
         repeating-linear-gradient(
           to bottom,
-          #ffffff 0,
-          #ffffff calc(var(--slot-h) - 1px),
-          #edf2ef calc(var(--slot-h) - 1px),
-          #edf2ef var(--slot-h)
+          #ffffff 0px,
+          #ffffff 63px,
+          #edf2ef 64px
         );
       cursor:crosshair;
+    }
+
+    .event{
+      position:absolute;
+      left:10px;
+      right:10px;
+      border-radius:16px;
+      padding:10px 12px;
+      border-left:5px solid;
+      box-shadow:0 8px 18px rgba(0,0,0,0.05);
+      cursor:pointer;
+      overflow:hidden;
+    }
+
+    .event.green{
+      background:var(--event-green);
+      border-left-color:var(--event-green-border);
+    }
+
+    .event.yellow{
+      background:var(--event-yellow);
+      border-left-color:var(--event-yellow-border);
+    }
+
+    .event.red{
+      background:var(--event-red);
+      border-left-color:var(--event-red-border);
+    }
+
+    .event-title{
+      font-size:15px;
+      font-weight:900;
+      line-height:1.1;
+      margin-bottom:4px;
+      text-transform:uppercase;
+    }
+
+    .event-client{
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .event-time{
+      font-size:13px;
+      color:#40544d;
+      font-weight:700;
+    }
+
+    .month-view{
+      display:none;
+      padding:14px;
     }
 
     .month-grid{
       display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:12px;
-    }
-
-    .month-head{
-      font-size:.92rem;
-      font-weight:900;
-      color:#61766e;
-      text-align:center;
-      padding:10px 0;
+      grid-template-columns:repeat(7,1fr);
+      gap:10px;
     }
 
     .month-cell{
-      min-height:170px;
+      min-height:140px;
       border:1px solid var(--line);
+      border-radius:16px;
       background:#fff;
-      border-radius:20px;
-      box-shadow:var(--shadow-soft);
-      padding:12px;
+      padding:10px;
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:6px;
       cursor:pointer;
     }
 
-    .month-cell.is-today{
-      outline:2px solid rgba(61,123,224,0.16);
-      background:#fbfdff;
+    .month-cell.other{
+      opacity:.45;
+      background:#fafbfa;
     }
 
-    .month-date{
-      font-size:1rem;
-      font-weight:900;
-      color:var(--text);
+    .month-cell-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:800;
+      font-size:14px;
     }
 
-    .month-date.muted{
-      color:#a0ada7;
+    .month-cell.today{
+      outline:2px solid #b9d0ff;
     }
 
-    .month-events{
-      display:grid;
-      gap:8px;
-      align-content:start;
+    .month-event{
+      border-radius:10px;
+      padding:5px 8px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .month-mini{
-      min-height:34px;
-      border-radius:12px;
-      padding:7px 10px;
-      font-size:.82rem;
+    .month-event.green{ background:var(--event-green); color:#305121; }
+    .month-event.yellow{ background:var(--event-yellow); color:#6f5514; }
+    .month-event.red{ background:var(--event-red); color:#7a2727; }
+
+    .right{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .profile-box{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fff;
+      padding:18px;
+    }
+
+    .profile-name{
+      font-size:20px;
       font-weight:900;
       line-height:1.1;
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-      cursor:pointer;
+      margin-bottom:8px;
+      text-transform:lowercase;
     }
 
-    .detail{
-      display:flex;
-      flex-direction:column;
-    }
-
-    .detail-inner{
-      padding:18px;
-      overflow:auto;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-      min-height:0;
-    }
-
-    .detail-empty{
-      height:100%;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:var(--muted);
-      font-size:1rem;
-      padding:24px;
-    }
-
-    .client-card{
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:22px;
-      box-shadow:var(--shadow-soft);
-      padding:18px;
-    }
-
-    .client-name{
-      font-size:2rem;
-      line-height:.95;
-      letter-spacing:-0.04em;
-      font-weight:900;
-      margin:0 0 10px;
-    }
-
-    .client-line{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
-      color:#42584f;
-      font-size:1rem;
+    .profile-phone{
+      font-size:15px;
       font-weight:700;
+      color:#4e615a;
+      margin-bottom:12px;
     }
 
     .status-pill{
       display:inline-flex;
-      min-height:34px;
       align-items:center;
-      padding:0 14px;
+      min-height:36px;
       border-radius:999px;
-      font-size:.92rem;
+      padding:0 14px;
+      font-size:14px;
       font-weight:900;
-      color:#fff;
     }
 
-    .status-request-pill{ background:var(--status-request); color:#5b4300; }
-    .status-confirmed-pill{ background:var(--status-confirmed); }
-    .status-completed-pill{ background:var(--status-completed); }
-    .status-recall-pill{ background:var(--status-recall); }
-    .status-cancelled-pill{ background:var(--status-cancelled); }
-    .status-expired-pill{ background:var(--status-expired); }
+    .status-pill.confirmed{ background:#e8f2dd; color:#557d23; }
+    .status-pill.requested{ background:#f8edc8; color:#8b6a13; }
+    .status-pill.cancelled{ background:#f3d7d7; color:#973f3f; }
 
-    .info-card{
+    .detail-card{
       border:1px solid var(--line);
+      border-radius:20px;
       background:#fff;
-      border-radius:22px;
-      box-shadow:var(--shadow-soft);
       padding:18px;
     }
 
-    .info-card h3{
-      margin:0 0 14px;
-      font-size:1.08rem;
+    .detail-title{
+      font-size:16px;
       font-weight:900;
+      margin-bottom:12px;
     }
 
-    .info-row{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      padding:8px 0;
-      border-bottom:1px solid #eef2ef;
-      font-size:.96rem;
+    .detail-row{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid #edf1ee;
     }
 
-    .info-row:last-child{
+    .detail-row:last-child{
       border-bottom:none;
     }
 
-    .info-row span:first-child{
-      color:var(--muted);
-      font-weight:700;
+    .detail-key{
+      color:#73857d;
+      font-weight:800;
+      font-size:14px;
     }
 
-    .info-row span:last-child{
-      color:var(--text);
-      font-weight:900;
-      text-align:right;
+    .detail-value{
+      font-weight:800;
+      font-size:15px;
+      color:#1c3b34;
     }
 
-    .action-stack{
-      display:grid;
-      gap:12px;
+    .actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
 
     .action-btn{
-      min-height:54px;
+      height:52px;
       border:none;
-      border-radius:16px;
+      border-radius:14px;
       color:#fff;
-      font-size:1rem;
+      font-size:17px;
       font-weight:900;
       cursor:pointer;
-      box-shadow:var(--shadow-soft);
     }
 
-    .action-call{ background:linear-gradient(135deg,var(--green-1),var(--green-2)); }
-    .action-confirm{ background:linear-gradient(135deg,var(--blue-1),var(--blue-2)); }
-    .action-complete{ background:linear-gradient(135deg,#c9a91f,#f1dc6e); color:#3c3200; }
-    .action-recall{ background:linear-gradient(135deg,#c67a22,#eba45a); }
-    .action-cancel{ background:linear-gradient(135deg,#c84e58,#ea7985); }
+    .action-btn.blue{ background:linear-gradient(180deg,#5a8ef0,#3f74dd); }
+    .action-btn.orange{ background:linear-gradient(180deg,#e69b46,#d98128); }
+    .action-btn.red{ background:linear-gradient(180deg,#e16868,#cf4949); }
+
+    .empty-state{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#7b8b85;
+      font-weight:700;
+      padding:30px;
+    }
 
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(13,20,18,0.46);
+      background:rgba(0,0,0,0.35);
       display:none;
       align-items:center;
       justify-content:center;
-      z-index:50;
-      padding:18px;
+      z-index:1000;
+      padding:20px;
     }
 
-    .modal.show{ display:flex; }
+    .modal.show{
+      display:flex;
+    }
 
     .modal-box{
-      width:min(820px, 100%);
-      max-height:92vh;
-      overflow:auto;
+      width:100%;
+      max-width:560px;
       background:#fff;
-      border-radius:28px;
-      box-shadow:0 24px 60px rgba(0,0,0,0.20);
-      border:1px solid #eef2ef;
+      border-radius:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,0.18);
       padding:22px;
     }
 
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-start;
-      margin-bottom:18px;
-    }
-
-    .modal-head h2{
-      margin:0;
-      font-size:2rem;
-      line-height:.95;
-      letter-spacing:-0.04em;
-    }
-
-    .modal-head p{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-size:1rem;
-      font-weight:600;
-    }
-
-    .close-btn{
-      width:48px;
-      height:48px;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-      background:#f3f6f4;
-      font-size:1.2rem;
-      font-weight:900;
-      color:#305248;
+    .modal-box h3{
+      margin:0 0 16px;
+      font-size:28px;
+      line-height:1;
     }
 
     .form-grid{
       display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:14px;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
     }
 
     .field{
@@ -855,69 +572,62 @@
     }
 
     .field label{
-      font-size:.92rem;
-      font-weight:900;
-      color:#34554b;
+      font-size:13px;
+      font-weight:800;
+      color:#556a63;
     }
 
     .field input,
     .field select,
     .field textarea{
-      min-height:52px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px 14px;
+      width:100%;
+      min-height:48px;
+      border-radius:12px;
+      border:1px solid #dfe5e1;
+      padding:10px 12px;
+      font-size:15px;
       outline:none;
       background:#fff;
-      color:var(--text);
-      box-shadow:var(--shadow-soft);
     }
 
     .field textarea{
-      min-height:96px;
+      min-height:90px;
       resize:vertical;
     }
 
     .modal-actions{
       display:flex;
       justify-content:flex-end;
-      gap:12px;
+      gap:10px;
       margin-top:18px;
-      flex-wrap:wrap;
     }
 
-    .btn-cancel,
-    .btn-save{
-      min-height:52px;
+    .ghost-btn{
+      height:46px;
+      padding:0 18px;
       border:none;
-      border-radius:16px;
-      padding:0 20px;
-      font-size:1rem;
+      border-radius:12px;
+      background:#eef3f0;
+      color:#23413a;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .save-btn{
+      height:46px;
+      padding:0 18px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(180deg,var(--green),var(--green-dark));
+      color:#fff;
       font-weight:900;
       cursor:pointer;
     }
 
-    .btn-cancel{
-      background:#eef3f1;
-      color:var(--text);
-    }
-
-    .btn-save{
-      background:linear-gradient(135deg,var(--green-1),var(--green-2));
-      color:#fff;
-    }
-
-    .hint{
-      font-size:.9rem;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .empty-center{
-      padding:40px 20px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:700;
+    @media (max-width: 1280px){
+      .app{
+        grid-template-columns:260px 1fr 300px;
+      }
     }
   </style>
 
@@ -926,199 +636,199 @@
 </head>
 <body>
   <div class="app">
-    <header class="header">
+    <aside class="panel left">
       <div class="brand">
-        <div class="brand-logo">
-          <img src="logo.png" alt="Farmacia Montesano" onerror="this.style.display='none'">
-        </div>
-        <div class="brand-text">
-          <h1>Calendario Prenotazioni</h1>
-          <p>Dashboard banco farmacia · vista completa e gestione live</p>
-        </div>
+        <div class="brand-icon">🗓️</div>
+        <div>Calendario</div>
       </div>
 
-      <div class="header-user">
-        <div class="user-chip">👨🏻‍⚕️</div>
+      <input id="searchInput" class="search" type="text" placeholder="Cerca cliente..." />
+
+      <button class="new-btn" onclick="openNewBookingModal()">+ Nuova Prenotazione</button>
+
+      <div class="mini-calendar">
+        <div class="mini-cal-head">
+          <div id="miniMonthLabel">Mese</div>
+          <div class="mini-nav">
+            <button onclick="changeMiniMonth(-1)">‹</button>
+            <button onclick="changeMiniMonth(1)">›</button>
+          </div>
+        </div>
+
+        <div class="mini-weekdays">
+          <div>L</div><div>M</div><div>M</div><div>G</div><div>V</div><div>S</div><div>D</div>
+        </div>
+        <div id="miniGrid" class="mini-grid"></div>
       </div>
-    </header>
 
-    <aside class="sidebar">
-      <div class="sidebar-inner">
-        <input id="searchInput" class="search" placeholder="Cerca cliente o telefono..." />
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
+          <span>Tutte</span>
+          <span class="filter-count" id="countAll">0</span>
+        </button>
 
-        <button class="btn-main" id="newBookingBtn">+ Nuova Prenotazione</button>
+        <button class="filter-btn" data-filter="recall" onclick="setFilter('recall', this)">
+          <span>Da richiamare</span>
+          <span class="filter-count" id="countRecall">0</span>
+        </button>
 
-        <div class="filter-group">
-          <button class="filter-btn active" data-type-filter="all">
-            <span>Tutte</span>
-            <span class="count-badge" id="countAll">0</span>
-          </button>
-          <button class="filter-btn" data-type-filter="servizio">
-            <span>Solo Servizi</span>
-            <span class="count-badge" id="countServizi">0</span>
-          </button>
-          <button class="filter-btn" data-type-filter="giornata">
-            <span>Solo Giornate</span>
-            <span class="count-badge" id="countGiornate">0</span>
-          </button>
-        </div>
-
-        <div class="status-list">
-          <button class="status-btn" data-status-filter="all">
-            <span class="status-left"><span class="dot all"></span>Tutti gli stati</span>
-            <span class="count-badge" id="statusAll">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="requested">
-            <span class="status-left"><span class="dot request"></span>Richieste</span>
-            <span class="count-badge" id="statusRequested">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="confirmed">
-            <span class="status-left"><span class="dot confirmed"></span>Confermate</span>
-            <span class="count-badge" id="statusConfirmed">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="completed">
-            <span class="status-left"><span class="dot completed"></span>Completate</span>
-            <span class="count-badge" id="statusCompleted">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="recall">
-            <span class="status-left"><span class="dot recall"></span>Da richiamare</span>
-            <span class="count-badge" id="statusRecall">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="cancelled">
-            <span class="status-left"><span class="dot cancelled"></span>Annullate</span>
-            <span class="count-badge" id="statusCancelled">0</span>
-          </button>
-
-          <button class="status-btn" data-status-filter="expired">
-            <span class="status-left"><span class="dot expired"></span>Scadute</span>
-            <span class="count-badge" id="statusExpired">0</span>
-          </button>
-        </div>
+        <button class="filter-btn" data-filter="cancelled" onclick="setFilter('cancelled', this)">
+          <span>Cancellate</span>
+          <span class="filter-count" id="countCancelled">0</span>
+        </button>
       </div>
     </aside>
 
-    <main class="main">
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <button class="btn-soft" id="todayBtn">Oggi</button>
-          <button class="btn-soft" id="prevBtn">‹</button>
-          <h2 class="date-title" id="dateTitle">—</h2>
-          <button class="btn-soft" id="nextBtn">›</button>
+    <main class="panel center">
+      <div class="topbar">
+        <div class="top-left">
+          <button class="today-btn" onclick="goToday()">Oggi</button>
+          <button class="nav-btn" onclick="changeDate(-1)">‹</button>
+          <div class="current-label" id="currentLabel">Data</div>
+          <button class="nav-btn" onclick="changeDate(1)">›</button>
         </div>
 
-        <div class="toolbar-right">
-          <div class="views">
-            <button class="view-btn active" data-view="day">Giorno</button>
-            <button class="view-btn" data-view="week">Settimana</button>
-            <button class="view-btn" data-view="month">Mese</button>
-          </div>
+        <div class="top-right">
+          <button class="view-btn active" id="viewDayBtn" onclick="setView('day')">Giorno</button>
+          <button class="view-btn" id="viewMonthBtn" onclick="setView('month')">Mese</button>
         </div>
       </div>
 
       <div class="calendar-wrap">
-        <div id="dayView" class="day-view active"></div>
-        <div id="weekView" class="week-view"></div>
-        <div id="monthView" class="month-view"></div>
+        <div id="dayView" class="day-view">
+          <div id="hoursCol" class="hours"></div>
+          <div id="dayGrid" class="day-grid"></div>
+        </div>
+
+        <div id="monthView" class="month-view">
+          <div id="monthGrid" class="month-grid"></div>
+        </div>
       </div>
     </main>
 
-    <aside class="detail">
-      <div class="detail-inner" id="detailInner">
-        <div class="detail-empty">
-          Seleziona una prenotazione per vedere il dettaglio completo e le azioni rapide.
+    <aside class="panel right">
+      <div id="detailEmpty" class="empty-state">
+        Seleziona una prenotazione per vedere il dettaglio.
+      </div>
+
+      <div id="detailContent" style="display:none;">
+        <div class="profile-box">
+          <div id="detailName" class="profile-name">—</div>
+          <div id="detailPhone" class="profile-phone">—</div>
+          <div id="detailStatus" class="status-pill confirmed">—</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-title">Dettaglio appuntamento</div>
+
+          <div class="detail-row">
+            <div class="detail-key">Data</div>
+            <div class="detail-value" id="detailDate">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Ora</div>
+            <div class="detail-value" id="detailTime">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Tipo</div>
+            <div class="detail-value" id="detailType">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Titolo</div>
+            <div class="detail-value" id="detailTitle">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Durata</div>
+            <div class="detail-value" id="detailDuration">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Operatore</div>
+            <div class="detail-value" id="detailOperator">—</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-key">Note</div>
+            <div class="detail-value" id="detailNotes">—</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn blue" onclick="openEditSelected()">Modifica</button>
+          <button class="action-btn orange" onclick="openMoveSelected()">Sposta</button>
+          <button class="action-btn red" onclick="cancelSelected()">Cancella</button>
         </div>
       </div>
     </aside>
   </div>
 
-  <div class="modal" id="bookingModal">
+  <div id="bookingModal" class="modal">
     <div class="modal-box">
-      <div class="modal-head">
-        <div>
-          <h2 id="modalTitle">Nuova prenotazione</h2>
-          <p>Puoi creare una prenotazione manualmente oppure completare i dati partendo dall’orario cliccato nel calendario.</p>
-        </div>
-        <button class="close-btn" id="closeModalBtn">✕</button>
-      </div>
+      <h3 id="modalTitle">Nuova prenotazione</h3>
 
       <div class="form-grid">
         <div class="field">
-          <label for="formType">Tipo</label>
-          <select id="formType">
+          <label>Nome</label>
+          <input id="fName" type="text" />
+        </div>
+
+        <div class="field">
+          <label>Cognome</label>
+          <input id="fSurname" type="text" />
+        </div>
+
+        <div class="field">
+          <label>Telefono</label>
+          <input id="fPhone" type="text" />
+        </div>
+
+        <div class="field">
+          <label>Data</label>
+          <input id="fDate" type="date" />
+        </div>
+
+        <div class="field">
+          <label>Ora inizio</label>
+          <input id="fStartTime" type="time" />
+        </div>
+
+        <div class="field">
+          <label>Durata minuti</label>
+          <input id="fDuration" type="number" min="5" step="5" value="30" />
+        </div>
+
+        <div class="field">
+          <label>Tipo</label>
+          <select id="fType">
             <option value="servizio">Servizio</option>
-            <option value="giornata">Giornata Beauty</option>
+            <option value="giornata">Giornata</option>
+            <option value="visita">Visita</option>
           </select>
         </div>
 
         <div class="field">
-          <label for="formSourceId">Servizio / Giornata</label>
-          <select id="formSourceId"></select>
-        </div>
-
-        <div class="field">
-          <label for="formDate">Data</label>
-          <input id="formDate" type="date">
-        </div>
-
-        <div class="field">
-          <label for="formStartTime">Ora inizio</label>
-          <input id="formStartTime" type="time">
-        </div>
-
-        <div class="field">
-          <label for="formDuration">Durata minuti</label>
-          <input id="formDuration" type="number" min="5" step="5" value="30">
-        </div>
-
-        <div class="field">
-          <label for="formStatus">Stato</label>
-          <select id="formStatus">
-            <option value="requested">Richiesta</option>
-            <option value="confirmed">Confermata</option>
-            <option value="completed">Completata</option>
-            <option value="recall">Da richiamare</option>
-            <option value="cancelled">Annullata</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="formClientName">Nome</label>
-          <input id="formClientName" type="text" placeholder="Nome cliente">
-        </div>
-
-        <div class="field">
-          <label for="formClientSurname">Cognome</label>
-          <input id="formClientSurname" type="text" placeholder="Cognome cliente">
-        </div>
-
-        <div class="field">
-          <label for="formClientPhone">Telefono</label>
-          <input id="formClientPhone" type="tel" placeholder="Telefono cliente">
-        </div>
-
-        <div class="field">
-          <label for="formOperator">Operatore</label>
-          <input id="formOperator" type="text" placeholder="Es. Cosimo">
+          <label>Operatore</label>
+          <input id="fOperator" type="text" placeholder="Es. Cosimo" />
         </div>
 
         <div class="field full">
-          <label for="formNotes">Note</label>
-          <textarea id="formNotes" placeholder="Note interne, promemoria, informazioni utili..."></textarea>
+          <label>Titolo</label>
+          <input id="fTitle" type="text" placeholder="Es. Holter cardiaco" />
         </div>
 
         <div class="field full">
-          <div class="hint">Suggerimento: puoi anche cliccare direttamente nel calendario sull’orario desiderato. L’ora verrà già impostata in automatico.</div>
+          <label>Note</label>
+          <textarea id="fNotes"></textarea>
         </div>
       </div>
 
       <div class="modal-actions">
-        <button class="btn-cancel" id="cancelModalBtn">Annulla</button>
-        <button class="btn-save" id="saveBookingBtn">Salva prenotazione</button>
+        <button class="ghost-btn" onclick="closeBookingModal()">Chiudi</button>
+        <button class="save-btn" onclick="saveBooking()">Salva</button>
       </div>
     </div>
   </div>
@@ -1135,127 +845,509 @@
 
     const db = firebase.firestore();
 
-    const DAY_START = 8;
-    const DAY_END = 20;
-    const SLOT_HEIGHT = 64;
-    const HALF_HEIGHT = SLOT_HEIGHT / 2;
+    const HOURS_START = 8;
+    const HOURS_END = 20;
+    const HOUR_HEIGHT = 64;
 
-    let appointments = [];
-    let services = [];
-    let beautyDays = [];
-    let selectedAppointmentId = null;
-
-    let currentView = "day";
     let currentDate = new Date();
+    let currentView = "day";
+    let currentFilter = "all";
+    let allAppointments = [];
+    let selectedAppointment = null;
+    let editingId = null;
 
-    let activeTypeFilter = "all";
-    let activeStatusFilter = "all";
-    let searchTerm = "";
+    let miniMonthDate = new Date();
 
-    const dateTitle = document.getElementById("dateTitle");
-    const dayView = document.getElementById("dayView");
-    const weekView = document.getElementById("weekView");
-    const monthView = document.getElementById("monthView");
-    const detailInner = document.getElementById("detailInner");
-
-    const bookingModal = document.getElementById("bookingModal");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const cancelModalBtn = document.getElementById("cancelModalBtn");
-    const saveBookingBtn = document.getElementById("saveBookingBtn");
-    const newBookingBtn = document.getElementById("newBookingBtn");
-
-    const formType = document.getElementById("formType");
-    const formSourceId = document.getElementById("formSourceId");
-    const formDate = document.getElementById("formDate");
-    const formStartTime = document.getElementById("formStartTime");
-    const formDuration = document.getElementById("formDuration");
-    const formStatus = document.getElementById("formStatus");
-    const formClientName = document.getElementById("formClientName");
-    const formClientSurname = document.getElementById("formClientSurname");
-    const formClientPhone = document.getElementById("formClientPhone");
-    const formOperator = document.getElementById("formOperator");
-    const formNotes = document.getElementById("formNotes");
-    const modalTitle = document.getElementById("modalTitle");
+    const hoursCol = document.getElementById("hoursCol");
+    const dayGrid = document.getElementById("dayGrid");
+    const monthGrid = document.getElementById("monthGrid");
+    const currentLabel = document.getElementById("currentLabel");
     const searchInput = document.getElementById("searchInput");
 
+    const detailEmpty = document.getElementById("detailEmpty");
+    const detailContent = document.getElementById("detailContent");
+
+    const bookingModal = document.getElementById("bookingModal");
+
     function pad(n){
-      return String(n).padStart(2,"0");
+      return String(n).padStart(2, "0");
     }
 
     function formatDateKey(date){
-      const d = new Date(date);
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
     }
 
     function formatLongDate(date){
-      const d = new Date(date);
-      return d.toLocaleDateString("it-IT", {
-        weekday:"long",
-        day:"numeric",
-        month:"long",
-        year:"numeric"
+      return date.toLocaleDateString("it-IT", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
       });
     }
 
-    function formatShortDay(date){
-      const d = new Date(date);
-      return d.toLocaleDateString("it-IT", {
-        weekday:"short",
-        day:"numeric",
-        month:"short"
-      });
+    function timeToMinutes(t){
+      const [h,m] = String(t || "00:00").split(":").map(Number);
+      return h * 60 + m;
     }
 
-    function timeToMinutes(time){
-      if(!time) return 0;
-      const [h,m] = time.split(":").map(Number);
-      return h*60 + m;
-    }
-
-    function minutesToTime(minutes){
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
+    function minutesToTime(min){
+      const h = Math.floor(min / 60);
+      const m = min % 60;
       return `${pad(h)}:${pad(m)}`;
     }
 
-    function addMinutes(time, mins){
-      return minutesToTime(timeToMinutes(time) + mins);
+    function addMinutesToTime(time, minutes){
+      return minutesToTime(timeToMinutes(time) + minutes);
     }
 
-    function getStatusLabel(status){
-      switch(status){
-        case "requested": return "Richiesta";
-        case "confirmed": return "Confermata";
-        case "completed": return "Completata";
-        case "recall": return "Da richiamare";
-        case "cancelled": return "Annullata";
-        case "expired": return "Scaduta";
-        default: return status || "—";
-      }
+    function daysBetween(dateStr){
+      const target = new Date(dateStr + "T00:00:00");
+      const now = new Date();
+      const diff = now - target;
+      return diff / (1000 * 60 * 60 * 24);
     }
 
     function getStatusClass(status){
-      switch(status){
-        case "requested": return "request";
-        case "confirmed": return "confirmed";
-        case "completed": return "completed";
-        case "recall": return "recall";
-        case "cancelled": return "cancelled";
-        case "expired": return "expired";
-        default: return "all";
+      if(status === "cancelled") return "cancelled";
+      if(status === "requested") return "requested";
+      return "confirmed";
+    }
+
+    function getStatusLabel(status){
+      if(status === "cancelled") return "Cancellata";
+      if(status === "requested") return "Richiesta";
+      return "Confermata";
+    }
+
+    function getEventColorClass(app){
+      if(app.status === "cancelled") return "red";
+      if(currentFilter === "recall") return "yellow";
+      if(daysBetween(app.date) >= 30 && app.status !== "cancelled") return "yellow";
+      return "green";
+    }
+
+    function buildHours(){
+      hoursCol.innerHTML = "";
+      for(let h = HOURS_START; h < HOURS_END; h++){
+        const row = document.createElement("div");
+        row.className = "hour";
+        row.textContent = `${pad(h)}:00`;
+        hoursCol.appendChild(row);
+      }
+      dayGrid.style.height = `${(HOURS_END - HOURS_START) * HOUR_HEIGHT}px`;
+    }
+
+    function setView(view){
+      currentView = view;
+
+      document.getElementById("viewDayBtn").classList.toggle("active", view === "day");
+      document.getElementById("viewMonthBtn").classList.toggle("active", view === "month");
+
+      document.getElementById("dayView").style.display = view === "day" ? "grid" : "none";
+      document.getElementById("monthView").style.display = view === "month" ? "block" : "none";
+
+      renderCalendar();
+    }
+
+    function goToday(){
+      currentDate = new Date();
+      miniMonthDate = new Date(currentDate);
+      renderMiniCalendar();
+      renderCalendar();
+    }
+
+    function changeDate(step){
+      if(currentView === "day"){
+        currentDate.setDate(currentDate.getDate() + step);
+      } else {
+        currentDate.setMonth(currentDate.getMonth() + step);
+      }
+      miniMonthDate = new Date(currentDate);
+      renderMiniCalendar();
+      renderCalendar();
+    }
+
+    function setFilter(filter, el){
+      currentFilter = filter;
+      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+      if(el) el.classList.add("active");
+      renderCalendar();
+      updateCounts();
+    }
+
+    function changeMiniMonth(step){
+      miniMonthDate.setMonth(miniMonthDate.getMonth() + step);
+      renderMiniCalendar();
+    }
+
+    function renderMiniCalendar(){
+      const miniGrid = document.getElementById("miniGrid");
+      const label = document.getElementById("miniMonthLabel");
+
+      const year = miniMonthDate.getFullYear();
+      const month = miniMonthDate.getMonth();
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      let startWeekDay = firstDay.getDay();
+      startWeekDay = startWeekDay === 0 ? 6 : startWeekDay - 1;
+
+      label.textContent = firstDay.toLocaleDateString("it-IT", {
+        month: "long",
+        year: "numeric"
+      });
+
+      miniGrid.innerHTML = "";
+
+      const prevMonthLast = new Date(year, month, 0).getDate();
+
+      for(let i = 0; i < startWeekDay; i++){
+        const d = document.createElement("div");
+        d.className = "mini-day other";
+        d.textContent = prevMonthLast - startWeekDay + i + 1;
+        miniGrid.appendChild(d);
+      }
+
+      for(let day = 1; day <= lastDay.getDate(); day++){
+        const d = new Date(year, month, day);
+        const el = document.createElement("div");
+        el.className = "mini-day";
+        el.textContent = day;
+
+        if(formatDateKey(d) === formatDateKey(new Date())){
+          el.classList.add("today");
+        }
+
+        if(formatDateKey(d) === formatDateKey(currentDate)){
+          el.classList.add("active");
+        }
+
+        el.onclick = () => {
+          currentDate = new Date(d);
+          currentView = "day";
+          document.getElementById("viewDayBtn").classList.add("active");
+          document.getElementById("viewMonthBtn").classList.remove("active");
+          document.getElementById("dayView").style.display = "grid";
+          document.getElementById("monthView").style.display = "none";
+          renderMiniCalendar();
+          renderCalendar();
+        };
+
+        miniGrid.appendChild(el);
+      }
+
+      const totalShown = startWeekDay + lastDay.getDate();
+      const remaining = (7 - (totalShown % 7)) % 7;
+
+      for(let i = 1; i <= remaining; i++){
+        const d = document.createElement("div");
+        d.className = "mini-day other";
+        d.textContent = i;
+        miniGrid.appendChild(d);
       }
     }
 
-    function getEventClass(status){
-      switch(status){
-        case "requested": return "event-request";
-        case "confirmed": return "event-confirmed";
-        case "completed": return "event-completed";
-        case "recall": return "event-recall";
-        case "cancelled": return "event-cancelled";
-        case "expired": return "event-expired";
-        default: return "event-confirmed";
+    function getFilteredAppointments(){
+      const query = searchInput.value.trim().toLowerCase();
+
+      return allAppointments.filter(app => {
+        const fullName = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
+        const phone = String(app.clientPhone || "").toLowerCase();
+        const title = String(app.title || "").toLowerCase();
+
+        const matchesSearch = !query || fullName.includes(query) || phone.includes(query) || title.includes(query);
+        if(!matchesSearch) return false;
+
+        if(currentFilter === "cancelled"){
+          return app.status === "cancelled";
+        }
+
+        if(currentFilter === "recall"){
+          return app.status !== "cancelled" && app.date && daysBetween(app.date) >= 30;
+        }
+
+        return true;
+      });
+    }
+
+    function updateCounts(){
+      const query = searchInput.value.trim().toLowerCase();
+
+      const filteredBase = allAppointments.filter(app => {
+        const fullName = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
+        const phone = String(app.clientPhone || "").toLowerCase();
+        const title = String(app.title || "").toLowerCase();
+        return !query || fullName.includes(query) || phone.includes(query) || title.includes(query);
+      });
+
+      document.getElementById("countAll").textContent = filteredBase.length;
+      document.getElementById("countRecall").textContent = filteredBase.filter(app => app.status !== "cancelled" && app.date && daysBetween(app.date) >= 30).length;
+      document.getElementById("countCancelled").textContent = filteredBase.filter(app => app.status === "cancelled").length;
+    }
+
+    function renderCalendar(){
+      currentLabel.textContent = formatLongDate(currentDate);
+      if(currentView === "day"){
+        renderDayView();
+      } else {
+        renderMonthView();
       }
+    }
+
+    function renderDayView(){
+      dayGrid.innerHTML = "";
+
+      const dateKey = formatDateKey(currentDate);
+      const apps = getFilteredAppointments()
+        .filter(app => app.date === dateKey)
+        .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+      dayGrid.onclick = (e) => {
+        if(e.target !== dayGrid) return;
+
+        const rect = dayGrid.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const totalMinutes = Math.floor((y / HOUR_HEIGHT) * 60) + (HOURS_START * 60);
+        const snapped = Math.max(HOURS_START * 60, Math.min((HOURS_END * 60) - 30, Math.round(totalMinutes / 15) * 15));
+        openNewBookingModal(dateKey, minutesToTime(snapped));
+      };
+
+      apps.forEach(app => {
+        const startMin = timeToMinutes(app.startTime);
+        const endMin = timeToMinutes(app.endTime || addMinutesToTime(app.startTime, app.durationMinuti || 30));
+        const top = ((startMin - (HOURS_START * 60)) / 60) * HOUR_HEIGHT;
+        const height = Math.max(42, ((endMin - startMin) / 60) * HOUR_HEIGHT - 4);
+
+        const ev = document.createElement("div");
+        ev.className = `event ${getEventColorClass(app)}`;
+        ev.style.top = `${top + 2}px`;
+        ev.style.height = `${height}px`;
+
+        ev.innerHTML = `
+          <div class="event-client">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
+          <div class="event-title">${escapeHtml(app.title || "Prenotazione")}</div>
+          <div class="event-time">${escapeHtml(app.startTime || "")} - ${escapeHtml(app.endTime || "")}</div>
+        `;
+
+        ev.onclick = (event) => {
+          event.stopPropagation();
+          selectAppointment(app);
+        };
+
+        dayGrid.appendChild(ev);
+      });
+    }
+
+    function renderMonthView(){
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      let startWeekDay = firstDay.getDay();
+      startWeekDay = startWeekDay === 0 ? 6 : startWeekDay - 1;
+
+      const days = [];
+      const prevMonthLast = new Date(year, month, 0).getDate();
+
+      for(let i = 0; i < startWeekDay; i++){
+        days.push({
+          date: new Date(year, month - 1, prevMonthLast - startWeekDay + i + 1),
+          other: true
+        });
+      }
+
+      for(let day = 1; day <= lastDay.getDate(); day++){
+        days.push({
+          date: new Date(year, month, day),
+          other: false
+        });
+      }
+
+      while(days.length % 7 !== 0){
+        const nextDay = days.length - (startWeekDay + lastDay.getDate()) + 1;
+        days.push({
+          date: new Date(year, month + 1, nextDay),
+          other: true
+        });
+      }
+
+      const filtered = getFilteredAppointments();
+      monthGrid.innerHTML = "";
+
+      days.forEach(item => {
+        const key = formatDateKey(item.date);
+        const dayApps = filtered.filter(app => app.date === key).sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+        const cell = document.createElement("div");
+        cell.className = `month-cell ${item.other ? "other" : ""} ${formatDateKey(item.date) === formatDateKey(new Date()) ? "today" : ""}`;
+
+        cell.onclick = () => {
+          currentDate = new Date(item.date);
+          setView("day");
+          renderMiniCalendar();
+        };
+
+        let inner = `
+          <div class="month-cell-header">
+            <span>${item.date.getDate()}</span>
+            <span></span>
+          </div>
+        `;
+
+        dayApps.slice(0,4).forEach(app => {
+          inner += `<div class="month-event ${getEventColorClass(app)}">${escapeHtml(app.startTime || "")} ${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>`;
+        });
+
+        if(dayApps.length > 4){
+          inner += `<div class="month-event" style="background:#f1f4f2;color:#60716b;">+${dayApps.length - 4} altri</div>`;
+        }
+
+        cell.innerHTML = inner;
+        monthGrid.appendChild(cell);
+      });
+    }
+
+    function selectAppointment(app){
+      selectedAppointment = app;
+
+      detailEmpty.style.display = "none";
+      detailContent.style.display = "block";
+
+      document.getElementById("detailName").textContent = `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Cliente";
+      document.getElementById("detailPhone").textContent = app.clientPhone || "—";
+
+      const statusEl = document.getElementById("detailStatus");
+      statusEl.className = `status-pill ${getStatusClass(app.status)}`;
+      statusEl.textContent = getStatusLabel(app.status);
+
+      document.getElementById("detailDate").textContent = app.date || "—";
+      document.getElementById("detailTime").textContent = `${app.startTime || "—"} - ${app.endTime || "—"}`;
+      document.getElementById("detailType").textContent = app.type || "—";
+      document.getElementById("detailTitle").textContent = app.title || "—";
+      document.getElementById("detailDuration").textContent = `${app.durationMinuti || 30} min`;
+      document.getElementById("detailOperator").textContent = app.operatorName || "—";
+      document.getElementById("detailNotes").textContent = app.notes || "—";
+    }
+
+    function openNewBookingModal(date = "", time = ""){
+      editingId = null;
+      document.getElementById("modalTitle").textContent = "Nuova prenotazione";
+
+      document.getElementById("fName").value = "";
+      document.getElementById("fSurname").value = "";
+      document.getElementById("fPhone").value = "";
+      document.getElementById("fDate").value = date || formatDateKey(currentDate);
+      document.getElementById("fStartTime").value = time || "09:00";
+      document.getElementById("fDuration").value = 30;
+      document.getElementById("fType").value = "servizio";
+      document.getElementById("fOperator").value = "";
+      document.getElementById("fTitle").value = "";
+      document.getElementById("fNotes").value = "";
+
+      bookingModal.classList.add("show");
+    }
+
+    function openEditSelected(){
+      if(!selectedAppointment) return;
+
+      editingId = selectedAppointment.id;
+      document.getElementById("modalTitle").textContent = "Modifica prenotazione";
+
+      document.getElementById("fName").value = selectedAppointment.clientName || "";
+      document.getElementById("fSurname").value = selectedAppointment.clientSurname || "";
+      document.getElementById("fPhone").value = selectedAppointment.clientPhone || "";
+      document.getElementById("fDate").value = selectedAppointment.date || "";
+      document.getElementById("fStartTime").value = selectedAppointment.startTime || "09:00";
+      document.getElementById("fDuration").value = selectedAppointment.durationMinuti || 30;
+      document.getElementById("fType").value = selectedAppointment.type || "servizio";
+      document.getElementById("fOperator").value = selectedAppointment.operatorName || "";
+      document.getElementById("fTitle").value = selectedAppointment.title || "";
+      document.getElementById("fNotes").value = selectedAppointment.notes || "";
+
+      bookingModal.classList.add("show");
+    }
+
+    function openMoveSelected(){
+      if(!selectedAppointment) return;
+
+      editingId = selectedAppointment.id;
+      document.getElementById("modalTitle").textContent = "Sposta prenotazione";
+
+      document.getElementById("fName").value = selectedAppointment.clientName || "";
+      document.getElementById("fSurname").value = selectedAppointment.clientSurname || "";
+      document.getElementById("fPhone").value = selectedAppointment.clientPhone || "";
+      document.getElementById("fDate").value = selectedAppointment.date || "";
+      document.getElementById("fStartTime").value = selectedAppointment.startTime || "09:00";
+      document.getElementById("fDuration").value = selectedAppointment.durationMinuti || 30;
+      document.getElementById("fType").value = selectedAppointment.type || "servizio";
+      document.getElementById("fOperator").value = selectedAppointment.operatorName || "";
+      document.getElementById("fTitle").value = selectedAppointment.title || "";
+      document.getElementById("fNotes").value = selectedAppointment.notes || "";
+
+      bookingModal.classList.add("show");
+    }
+
+    function closeBookingModal(){
+      bookingModal.classList.remove("show");
+    }
+
+    async function saveBooking(){
+      const name = document.getElementById("fName").value.trim();
+      const surname = document.getElementById("fSurname").value.trim();
+      const phone = document.getElementById("fPhone").value.trim();
+      const date = document.getElementById("fDate").value;
+      const startTime = document.getElementById("fStartTime").value;
+      const duration = parseInt(document.getElementById("fDuration").value || "30", 10);
+      const type = document.getElementById("fType").value;
+      const operatorName = document.getElementById("fOperator").value.trim();
+      const title = document.getElementById("fTitle").value.trim();
+      const notes = document.getElementById("fNotes").value.trim();
+
+      if(!name || !phone || !date || !startTime || !title){
+        alert("Compila almeno nome, telefono, data, ora e titolo.");
+        return;
+      }
+
+      const endTime = addMinutesToTime(startTime, duration);
+
+      const payload = {
+        clientName: name,
+        clientSurname: surname,
+        clientPhone: phone,
+        date,
+        startTime,
+        endTime,
+        durationMinuti: duration,
+        type,
+        title,
+        operatorName,
+        notes,
+        status: editingId && selectedAppointment ? (selectedAppointment.status || "confirmed") : "confirmed",
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if(editingId){
+        await db.collection("appointments").doc(editingId).update(payload);
+      } else {
+        payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        await db.collection("appointments").add(payload);
+      }
+
+      closeBookingModal();
+    }
+
+    async function cancelSelected(){
+      if(!selectedAppointment || !selectedAppointment.id) return;
+      const ok = confirm("Vuoi davvero cancellare questa prenotazione?");
+      if(!ok) return;
+
+      await db.collection("appointments").doc(selectedAppointment.id).update({
+        status: "cancelled",
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
     }
 
     function escapeHtml(text){
@@ -1267,561 +1359,40 @@
         .replace(/'/g,"&#039;");
     }
 
-    function normalizeAppointments(){
-      const now = new Date();
-      let changed = false;
-
-      appointments = appointments.map(app => {
-        if(
-          app.status !== "completed" &&
-          app.status !== "cancelled" &&
-          app.status !== "expired"
-        ){
-          const appEnd = new Date(`${app.date}T${app.endTime || "00:00"}:00`);
-          if(appEnd < now){
-            changed = true;
-            return { ...app, status:"expired" };
-          }
-        }
-        return app;
-      });
-
-      if(changed){
-        appointments.forEach(app => {
-          if(app.status === "expired"){
-            db.collection("appointments").doc(app.id).set(
-              { status:"expired", updatedAt: firebase.firestore.FieldValue.serverTimestamp() },
-              { merge:true }
-            ).catch(()=>{});
-          }
-        });
-      }
-    }
-
-    function getFilteredAppointments(){
-      return appointments.filter(app => {
-        if(activeTypeFilter !== "all" && app.type !== activeTypeFilter) return false;
-        if(activeStatusFilter !== "all" && app.status !== activeStatusFilter) return false;
-
-        if(searchTerm){
-          const s = searchTerm.toLowerCase();
-          const hay = `${app.clientName || ""} ${app.clientSurname || ""} ${app.clientPhone || ""} ${app.title || ""}`.toLowerCase();
-          if(!hay.includes(s)) return false;
-        }
-
-        return true;
-      });
-    }
-
-    function getAppointmentsByDate(dateKey){
-      return getFilteredAppointments()
-        .filter(app => app.date === dateKey)
-        .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-    }
-
-    function renderCounts(){
-      const all = appointments.length;
-      const servizi = appointments.filter(a => a.type === "servizio").length;
-      const giornate = appointments.filter(a => a.type === "giornata").length;
-
-      document.getElementById("countAll").textContent = all;
-      document.getElementById("countServizi").textContent = servizi;
-      document.getElementById("countGiornate").textContent = giornate;
-
-      document.getElementById("statusAll").textContent = all;
-      document.getElementById("statusRequested").textContent = appointments.filter(a => a.status === "requested").length;
-      document.getElementById("statusConfirmed").textContent = appointments.filter(a => a.status === "confirmed").length;
-      document.getElementById("statusCompleted").textContent = appointments.filter(a => a.status === "completed").length;
-      document.getElementById("statusRecall").textContent = appointments.filter(a => a.status === "recall").length;
-      document.getElementById("statusCancelled").textContent = appointments.filter(a => a.status === "cancelled").length;
-      document.getElementById("statusExpired").textContent = appointments.filter(a => a.status === "expired").length;
-    }
-
-    function renderDateTitle(){
-      if(currentView === "day"){
-        dateTitle.textContent = formatLongDate(currentDate);
-      } else if(currentView === "week"){
-        const start = getStartOfWeek(currentDate);
-        const end = new Date(start);
-        end.setDate(start.getDate() + 6);
-        dateTitle.textContent =
-          `${start.toLocaleDateString("it-IT",{day:"numeric",month:"long"})} – ${end.toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"})}`;
-      } else {
-        dateTitle.textContent = currentDate.toLocaleDateString("it-IT", {
-          month:"long",
-          year:"numeric"
-        });
-      }
-    }
-
-    function renderCurrentView(){
-      renderDateTitle();
-      renderCounts();
-
-      document.querySelectorAll(".view-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.view === currentView);
-      });
-
-      dayView.classList.toggle("active", currentView === "day");
-      weekView.classList.toggle("active", currentView === "week");
-      monthView.classList.toggle("active", currentView === "month");
-
-      if(currentView === "day") renderDayView();
-      if(currentView === "week") renderWeekView();
-      if(currentView === "month") renderMonthView();
-
-      renderDetail();
-    }
-
-    function buildHoursColumn(){
-      let html = `<div class="hours-col">`;
-      for(let h = DAY_START; h < DAY_END; h++){
-        html += `<div class="hour-cell">${pad(h)}:00</div>`;
-      }
-      html += `</div>`;
-      return html;
-    }
-
-    function renderDayView(){
-      const dateKey = formatDateKey(currentDate);
-      const dayAppointments = getAppointmentsByDate(dateKey);
-
-      let html = `
-        <div class="calendar-grid">
-          ${buildHoursColumn()}
-          <div class="day-col" id="dayCol">
-      `;
-
-      for(let h = DAY_START; h < DAY_END; h++){
-        const top = (h - DAY_START) * SLOT_HEIGHT + HALF_HEIGHT;
-        html += `<div class="half-line" style="top:${top}px;"></div>`;
-      }
-
-      html += `</div></div>`;
-      dayView.innerHTML = html;
-
-      const dayCol = document.getElementById("dayCol");
-      dayCol.addEventListener("click", onDayColumnClick);
-
-      dayAppointments.forEach(app => {
-        const startMin = timeToMinutes(app.startTime);
-        const endMin = timeToMinutes(app.endTime || addMinutes(app.startTime, app.durationMinuti || 30));
-        const top = ((startMin - DAY_START * 60) / 60) * SLOT_HEIGHT;
-        const height = Math.max((((endMin - startMin) / 60) * SLOT_HEIGHT) - 8, 50);
-
-        const card = document.createElement("div");
-        card.className = `event-card ${getEventClass(app.status)} ${selectedAppointmentId === app.id ? "selected" : ""}`;
-        card.style.top = `${top + 4}px`;
-        card.style.height = `${height}px`;
-        card.innerHTML = `
-          <div class="event-head">
-            <div class="event-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
-            <div class="event-time">${escapeHtml(app.startTime)} - ${escapeHtml(app.endTime || "")}</div>
-          </div>
-          <div class="event-service">${escapeHtml(app.title || "Prenotazione")}</div>
-          <div class="event-meta">
-            <span>${escapeHtml(app.clientPhone || "—")}</span>
-            <span class="mini-pill">${escapeHtml(getStatusLabel(app.status))}</span>
-            <span class="mini-pill">${escapeHtml(app.operatorName || app.createdByName || "Banco")}</span>
-          </div>
-        `;
-        card.addEventListener("click", (e) => {
-          e.stopPropagation();
-          selectedAppointmentId = app.id;
-          renderCurrentView();
-        });
-        dayCol.appendChild(card);
-      });
-    }
-
-    function onDayColumnClick(event){
-      const rect = event.currentTarget.getBoundingClientRect();
-      const y = event.clientY - rect.top;
-      const totalMinutes = Math.max(0, Math.min((DAY_END - DAY_START) * 60, Math.round(y / (SLOT_HEIGHT / 2)) * 30));
-      const time = minutesToTime(DAY_START * 60 + totalMinutes);
-      openCreateModal(formatDateKey(currentDate), time);
-    }
-
-    function getStartOfWeek(date){
-      const d = new Date(date);
-      const day = d.getDay();
-      const diff = day === 0 ? -6 : 1 - day;
-      d.setDate(d.getDate() + diff);
-      d.setHours(0,0,0,0);
-      return d;
-    }
-
-    function renderWeekView(){
-      const start = getStartOfWeek(currentDate);
-      const days = [];
-
-      for(let i=0; i<7; i++){
-        const d = new Date(start);
-        d.setDate(start.getDate() + i);
-        days.push(d);
-      }
-
-      let html = `<div class="week-grid">`;
-      html += `<div class="week-hour-head"></div>`;
-
-      days.forEach(day => {
-        html += `
-          <div class="week-head">
-            <small>${day.toLocaleDateString("it-IT",{weekday:"long"})}</small>
-            <span>${day.toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>
-          </div>
-        `;
-      });
-
-      html += buildHoursColumn();
-
-      days.forEach(day => {
-        const key = formatDateKey(day);
-        html += `<div class="week-col" data-date="${key}">`;
-
-        for(let h = DAY_START; h < DAY_END; h++){
-          const top = (h - DAY_START) * SLOT_HEIGHT + HALF_HEIGHT;
-          html += `<div class="half-line" style="top:${top}px;"></div>`;
-        }
-
-        html += `</div>`;
-      });
-
-      html += `</div>`;
-      weekView.innerHTML = html;
-
-      weekView.querySelectorAll(".week-col").forEach(col => {
-        col.addEventListener("click", (event) => {
-          const rect = col.getBoundingClientRect();
-          const y = event.clientY - rect.top;
-          const totalMinutes = Math.max(0, Math.min((DAY_END - DAY_START) * 60, Math.round(y / (SLOT_HEIGHT / 2)) * 30));
-          const time = minutesToTime(DAY_START * 60 + totalMinutes);
-          openCreateModal(col.dataset.date, time);
-        });
-
-        const dateKey = col.dataset.date;
-        const items = getAppointmentsByDate(dateKey);
-
-        items.forEach(app => {
-          const startMin = timeToMinutes(app.startTime);
-          const endMin = timeToMinutes(app.endTime || addMinutes(app.startTime, app.durationMinuti || 30));
-          const top = ((startMin - DAY_START * 60) / 60) * SLOT_HEIGHT;
-          const height = Math.max((((endMin - startMin) / 60) * SLOT_HEIGHT) - 8, 44);
-
-          const card = document.createElement("div");
-          card.className = `event-card ${getEventClass(app.status)} ${selectedAppointmentId === app.id ? "selected" : ""}`;
-          card.style.top = `${top + 4}px`;
-          card.style.height = `${height}px`;
-          card.innerHTML = `
-            <div class="event-name" style="font-size:1rem;">${escapeHtml(app.clientName || "")} ${escapeHtml(app.clientSurname || "")}</div>
-            <div class="event-service" style="font-size:.94rem;">${escapeHtml(app.title || "")}</div>
-            <div class="event-meta"><span>${escapeHtml(app.startTime || "")}</span></div>
-          `;
-          card.addEventListener("click", (e) => {
-            e.stopPropagation();
-            selectedAppointmentId = app.id;
-            renderCurrentView();
-          });
-          col.appendChild(card);
-        });
-      });
-    }
-
-    function renderMonthView(){
-      const base = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const firstDay = new Date(base);
-      const firstWeekDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-      firstDay.setDate(firstDay.getDate() - firstWeekDay);
-
-      const weekDays = ["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
-      let html = `<div class="month-grid">`;
-
-      weekDays.forEach(day => {
-        html += `<div class="month-head">${day}</div>`;
-      });
-
-      for(let i=0; i<42; i++){
-        const cellDate = new Date(firstDay);
-        cellDate.setDate(firstDay.getDate() + i);
-
-        const key = formatDateKey(cellDate);
-        const items = getAppointmentsByDate(key);
-        const isCurrentMonth = cellDate.getMonth() === currentDate.getMonth();
-        const isToday = key === formatDateKey(new Date());
-
-        html += `
-          <div class="month-cell ${isToday ? "is-today" : ""}" data-date="${key}">
-            <div class="month-date ${isCurrentMonth ? "" : "muted"}">${cellDate.getDate()}</div>
-            <div class="month-events">
-              ${items.slice(0,4).map(app => `
-                <div class="month-mini ${getEventClass(app.status)}" data-app-id="${app.id}">
-                  ${escapeHtml(app.startTime)} · ${escapeHtml(app.clientName || "")} ${escapeHtml(app.clientSurname || "")}
-                </div>
-              `).join("")}
-              ${items.length > 4 ? `<div class="hint">+${items.length - 4} altri</div>` : ``}
-            </div>
-          </div>
-        `;
-      }
-
-      html += `</div>`;
-      monthView.innerHTML = html;
-
-      monthView.querySelectorAll(".month-cell").forEach(cell => {
-        cell.addEventListener("click", (e) => {
-          const appId = e.target?.dataset?.appId;
-          if(appId){
-            selectedAppointmentId = appId;
-            renderCurrentView();
-            return;
-          }
-          currentDate = new Date(cell.dataset.date + "T12:00:00");
-          currentView = "day";
-          renderCurrentView();
-        });
-      });
-    }
-
-    function getSelectedAppointment(){
-      return appointments.find(a => a.id === selectedAppointmentId) || null;
-    }
-
-    function renderDetail(){
-      const app = getSelectedAppointment();
-
-      if(!app){
-        detailInner.innerHTML = `
-          <div class="detail-empty">
-            Seleziona una prenotazione per vedere il dettaglio completo e le azioni rapide.
-          </div>
-        `;
-        return;
-      }
-
-      const statusClass = getStatusClass(app.status);
-
-      detailInner.innerHTML = `
-        <div class="client-card">
-          <h2 class="client-name">${escapeHtml(app.clientName || "")} ${escapeHtml(app.clientSurname || "")}</h2>
-          <div class="client-line">📞 ${escapeHtml(app.clientPhone || "—")}</div>
-          <div class="status-pill status-${statusClass}-pill">${escapeHtml(getStatusLabel(app.status))}</div>
-        </div>
-
-        <div class="info-card">
-          <h3>Dettaglio appuntamento</h3>
-
-          <div class="info-row"><span>Data</span><span>${escapeHtml(app.date || "—")}</span></div>
-          <div class="info-row"><span>Ora</span><span>${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</span></div>
-          <div class="info-row"><span>Tipo</span><span>${escapeHtml(app.type || "—")}</span></div>
-          <div class="info-row"><span>Titolo</span><span>${escapeHtml(app.title || "—")}</span></div>
-          <div class="info-row"><span>Durata</span><span>${escapeHtml(String(app.durationMinuti || 0))} min</span></div>
-          <div class="info-row"><span>Operatore</span><span>${escapeHtml(app.operatorName || app.createdByName || "—")}</span></div>
-          <div class="info-row"><span>Note</span><span>${escapeHtml(app.notes || "—")}</span></div>
-        </div>
-
-        <div class="action-stack">
-          <button class="action-btn action-call" data-action="call">📞 Chiama</button>
-          <button class="action-btn action-confirm" data-action="confirm">✏️ Conferma</button>
-          <button class="action-btn action-complete" data-action="complete">✔️ Segna completo</button>
-          <button class="action-btn action-recall" data-action="recall">🕘 Da richiamare</button>
-          <button class="action-btn action-cancel" data-action="cancel">🗑️ Annulla</button>
-        </div>
-      `;
-
-      detailInner.querySelector('[data-action="call"]').onclick = () => {
-        if(app.clientPhone) window.open(`tel:${app.clientPhone}`, "_self");
-      };
-      detailInner.querySelector('[data-action="confirm"]').onclick = () => updateAppointmentStatus(app.id, "confirmed");
-      detailInner.querySelector('[data-action="complete"]').onclick = () => updateAppointmentStatus(app.id, "completed");
-      detailInner.querySelector('[data-action="recall"]').onclick = () => updateAppointmentStatus(app.id, "recall");
-      detailInner.querySelector('[data-action="cancel"]').onclick = () => updateAppointmentStatus(app.id, "cancelled");
-    }
-
-    async function updateAppointmentStatus(id, status){
-      await db.collection("appointments").doc(id).set({
-        status,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge:true });
-    }
-
-    function openModal(){
-      bookingModal.classList.add("show");
-    }
-
-    function closeModal(){
-      bookingModal.classList.remove("show");
-    }
-
-    function clearForm(){
-      formType.value = "servizio";
-      fillSourceOptions();
-      formDate.value = formatDateKey(currentDate);
-      formStartTime.value = "09:00";
-      formDuration.value = 30;
-      formStatus.value = "confirmed";
-      formClientName.value = "";
-      formClientSurname.value = "";
-      formClientPhone.value = "";
-      formOperator.value = "";
-      formNotes.value = "";
-    }
-
-    function openCreateModal(dateKey = null, startTime = null){
-      modalTitle.textContent = "Nuova prenotazione";
-      clearForm();
-      if(dateKey) formDate.value = dateKey;
-      if(startTime) formStartTime.value = startTime;
-      openModal();
-    }
-
-    function fillSourceOptions(){
-      const type = formType.value;
-      const list = type === "servizio" ? services : beautyDays;
-
-      formSourceId.innerHTML = list
-        .filter(item => item.attivo === true)
-        .map(item => {
-          const title = item.nome || item.titolo || "Voce";
-          const duration = item.durationMinuti || item.durataMinuti || item.duration || 30;
-          return `<option value="${escapeHtml(item.id)}" data-title="${escapeHtml(title)}" data-duration="${escapeHtml(String(duration))}">${escapeHtml(title)}</option>`;
-        })
-        .join("");
-
-      const selectedOption = formSourceId.selectedOptions[0];
-      if(selectedOption){
-        formDuration.value = selectedOption.dataset.duration || 30;
-      }
-    }
-
-    formType.addEventListener("change", fillSourceOptions);
-    formSourceId.addEventListener("change", () => {
-      const selectedOption = formSourceId.selectedOptions[0];
-      if(selectedOption){
-        formDuration.value = selectedOption.dataset.duration || 30;
-      }
-    });
-
-    async function saveBooking(){
-      const selectedOption = formSourceId.selectedOptions[0];
-      const title = selectedOption ? selectedOption.dataset.title : "";
-      const duration = Number(formDuration.value || 30);
-
-      const payload = {
-        type: formType.value,
-        sourceCollection: formType.value === "servizio" ? "servizi" : "beauty",
-        sourceId: formSourceId.value || null,
-        title,
-        date: formDate.value,
-        startTime: formStartTime.value,
-        endTime: addMinutes(formStartTime.value, duration),
-        durationMinuti: duration,
-        status: formStatus.value,
-        clientName: formClientName.value.trim(),
-        clientSurname: formClientSurname.value.trim(),
-        clientPhone: formClientPhone.value.trim(),
-        operatorName: formOperator.value.trim(),
-        notes: formNotes.value.trim(),
-        createdByType: "pharmacy",
-        createdByName: formOperator.value.trim() || "Banco",
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      if(!payload.clientName || !payload.clientPhone || !payload.date || !payload.startTime){
-        alert("Compila almeno nome, telefono, data e orario.");
-        return;
-      }
-
-      await db.collection("appointments").add(payload);
-      closeModal();
-    }
-
-    function subscribeAppointments(){
-      db.collection("appointments").onSnapshot(snapshot => {
-        appointments = snapshot.docs.map(doc => ({
+    function listenAppointments(){
+      db.collection("appointments").onSnapshot((snap) => {
+        allAppointments = snap.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        normalizeAppointments();
-        renderCurrentView();
+
+        const stillSelected = selectedAppointment
+          ? allAppointments.find(a => a.id === selectedAppointment.id)
+          : null;
+
+        if(stillSelected){
+          selectedAppointment = stillSelected;
+          selectAppointment(stillSelected);
+        } else {
+          selectedAppointment = null;
+          detailEmpty.style.display = "flex";
+          detailContent.style.display = "none";
+        }
+
+        updateCounts();
+        renderCalendar();
       });
     }
-
-    async function loadServicesAndBeauty(){
-      const [servicesSnap, beautySnap] = await Promise.all([
-        db.collection("servizi").get(),
-        db.collection("beauty").get()
-      ]);
-
-      services = servicesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      beautyDays = beautySnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      fillSourceOptions();
-    }
-
-    document.getElementById("todayBtn").addEventListener("click", () => {
-      currentDate = new Date();
-      renderCurrentView();
-    });
-
-    document.getElementById("prevBtn").addEventListener("click", () => {
-      if(currentView === "day") currentDate.setDate(currentDate.getDate() - 1);
-      else if(currentView === "week") currentDate.setDate(currentDate.getDate() - 7);
-      else currentDate.setMonth(currentDate.getMonth() - 1);
-      currentDate = new Date(currentDate);
-      renderCurrentView();
-    });
-
-    document.getElementById("nextBtn").addEventListener("click", () => {
-      if(currentView === "day") currentDate.setDate(currentDate.getDate() + 1);
-      else if(currentView === "week") currentDate.setDate(currentDate.getDate() + 7);
-      else currentDate.setMonth(currentDate.getMonth() + 1);
-      currentDate = new Date(currentDate);
-      renderCurrentView();
-    });
-
-    document.querySelectorAll(".view-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        currentView = btn.dataset.view;
-        renderCurrentView();
-      });
-    });
-
-    document.querySelectorAll("[data-type-filter]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("[data-type-filter]").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeTypeFilter = btn.dataset.typeFilter;
-        renderCurrentView();
-      });
-    });
-
-    document.querySelectorAll("[data-status-filter]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        activeStatusFilter = btn.dataset.statusFilter;
-        renderCurrentView();
-      });
-    });
 
     searchInput.addEventListener("input", () => {
-      searchTerm = searchInput.value.trim();
-      renderCurrentView();
+      updateCounts();
+      renderCalendar();
     });
 
-    newBookingBtn.addEventListener("click", () => openCreateModal());
-    closeModalBtn.addEventListener("click", closeModal);
-    cancelModalBtn.addEventListener("click", closeModal);
-    saveBookingBtn.addEventListener("click", saveBooking);
-
-    bookingModal.addEventListener("click", (e) => {
-      if(e.target === bookingModal) closeModal();
-    });
-
-    (async function init(){
-      await loadServicesAndBeauty();
-      subscribeAppointments();
-      renderCurrentView();
-    })();
+    buildHours();
+    renderMiniCalendar();
+    renderCalendar();
+    listenAppointments();
   </script>
 </body>
 </html>
