@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario Admin | Farmacia Montesano</title>
+
+  <style>
+    :root{
+      --bg:#f3f5f7;
+      --panel:#ffffff;
+      --panel-soft:#f8fafc;
+      --text:#16372f;
+      --muted:#6f817b;
+      --border:rgba(18,55,45,0.08);
+      --shadow:0 16px 40px rgba(16,49,39,0.08);
+
+      --green:#79b84f;
+      --green-dark:#4e8d29;
+
+      --blue:#3f87e8;
+      --blue-dark:#2668bf;
+
+      --yellow:#f2cf5a;
+      --yellow-soft:#fff4c8;
+
+      --red:#e65b63;
+      --red-soft:#ffe2e4;
+
+      --orange:#e99443;
+      --orange-soft:#ffe8cf;
+
+      --purple:#b68be2;
+      --purple-soft:#f1e6ff;
+
+      --ok-soft:#e8f5de;
+      --request-soft:#fff4cc;
+      --recall-soft:#ffe7d2;
+      --expired-soft:#ffe1e4;
+      --beauty-soft:#efe3ff;
+      --done-soft:#e3efff;
+
+      --radius-xl:26px;
+      --radius-lg:20px;
+      --radius-md:14px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; font-family:Inter,Arial,sans-serif; background:var(--bg); color:var(--text); }
+    body{ min-height:100vh; }
+
+    .app{
+      display:grid;
+      grid-template-columns:320px 1fr 360px;
+      gap:16px;
+      padding:16px;
+      min-height:100vh;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .sidebar,
+    .detail{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .panel-pad{
+      padding:18px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      background:#fbfcfd;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .brand-logo{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+      object-fit:contain;
+      background:#fff;
+      border:1px solid var(--border);
+      padding:4px;
+    }
+
+    .user-badge{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:#eef2f6;
+      display:grid;
+      place-items:center;
+      font-size:20px;
+    }
+
+    .search{
+      width:100%;
+      height:56px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      padding:0 16px;
+      font-size:16px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+      margin-bottom:14px;
+    }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:16px;
+      font-weight:800;
+      transition:.18s ease;
+    }
+
+    .btn:hover{ transform:translateY(-1px); }
+
+    .btn-primary{
+      height:56px;
+      width:100%;
+      background:linear-gradient(135deg,var(--green-dark),var(--green));
+      color:#fff;
+      font-size:17px;
+      margin-bottom:18px;
+    }
+
+    .btn-ghost{
+      min-height:46px;
+      background:#fff;
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:0 14px;
+      font-size:15px;
+    }
+
+    .filters{
+      display:grid;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .filter-link{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--border);
+      cursor:pointer;
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .filter-link.active{
+      outline:2px solid #dcebdc;
+      background:#fbfffb;
+    }
+
+    .filter-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .count{
+      font-weight:900;
+      font-size:15px;
+    }
+
+    .count.ok{ color:#4b8b2c; }
+    .count.yellow{ color:#bf8d17; }
+    .count.red{ color:#c83b47; }
+    .count.orange{ color:#d97d25; }
+    .count.gray{ color:#8b9590; }
+
+    .mini-title{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:#8a9a94;
+      font-weight:900;
+      margin:10px 0 12px;
+    }
+
+    .waitlist-box{
+      border-top:1px solid var(--border);
+      padding-top:16px;
+    }
+
+    .waitlist-item{
+      padding:12px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--border);
+      margin-bottom:10px;
+    }
+
+    .waitlist-name{
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:4px;
+    }
+
+    .waitlist-sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    .calendar{
+      display:flex;
+      flex-direction:column;
+      min-height:calc(100vh - 32px);
+    }
+
+    .calendar-toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      background:#fbfcfd;
+      flex-wrap:wrap;
+    }
+
+    .toolbar-left,
+    .toolbar-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:20px;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .today-btn{
+      min-width:88px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .title-date{
+      font-size:24px;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      min-width:180px;
+    }
+
+    .view-switch{
+      display:flex;
+      background:#f4f6f8;
+      padding:4px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      gap:4px;
+    }
+
+    .view-btn{
+      min-width:96px;
+      height:42px;
+      border:none;
+      border-radius:10px;
+      background:transparent;
+      color:#34443f;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .view-btn.active{
+      background:linear-gradient(135deg,var(--blue),#5f9df1);
+      color:#fff;
+      box-shadow:0 8px 18px rgba(63,135,232,.22);
+    }
+
+    .calendar-body{
+      flex:1;
+      overflow:auto;
+      background:#fff;
+    }
+
+    .day-view{
+      display:grid;
+      grid-template-columns:84px 1fr;
+      min-height:100%;
+    }
+
+    .hours-col{
+      border-right:1px solid var(--border);
+      background:#fcfcfd;
+    }
+
+    .hour-cell{
+      height:72px;
+      border-bottom:1px solid #eef1f4;
+      padding:8px 10px;
+      font-size:15px;
+      color:#5f706a;
+      font-weight:700;
+    }
+
+    .slots-col{
+      position:relative;
+      min-height:100%;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #ffffff 0px,
+          #ffffff 71px,
+          #eef1f4 72px
+        );
+    }
+
+    .appointment{
+      position:absolute;
+      left:10px;
+      right:10px;
+      border-radius:16px;
+      padding:12px 14px;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+      border-left:5px solid transparent;
+      cursor:pointer;
+      overflow:hidden;
+    }
+
+    .appointment:hover{
+      transform:translateY(-1px);
+    }
+
+    .appointment.status-requested{ background:var(--request-soft); border-left-color:#e1b02d; }
+    .appointment.status-confirmed{ background:var(--ok-soft); border-left-color:#6baa3b; }
+    .appointment.status-completed{ background:var(--done-soft); border-left-color:#6e96dd; }
+    .appointment.status-recall{ background:var(--recall-soft); border-left-color:#dc8737; }
+    .appointment.status-expired{ background:var(--expired-soft); border-left-color:#d44b59; }
+    .appointment.type-beauty{ background:var(--beauty-soft); border-left-color:#9b63da; }
+
+    .ap-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
+    }
+
+    .ap-name{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .ap-time{
+      font-size:15px;
+      font-weight:800;
+      color:#44544e;
+      background:rgba(255,255,255,.55);
+      padding:4px 10px;
+      border-radius:999px;
+    }
+
+    .ap-service{
+      font-size:16px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .ap-meta{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-size:14px;
+      color:#53655f;
+      font-weight:700;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      padding:0 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .badge.requested{ background:#f4dd88; color:#7b620e; }
+    .badge.confirmed{ background:#9ccf74; color:#fff; }
+    .badge.completed{ background:#8db1ec; color:#fff; }
+    .badge.recall{ background:#eb9c4f; color:#fff; }
+    .badge.expired{ background:#e97b84; color:#fff; }
+    .badge.beauty{ background:#caa6f1; color:#fff; }
+
+    .detail-empty{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+      padding:24px 18px;
+    }
+
+    .detail-card{
+      padding:18px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .detail-name{
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-0.03em;
+      margin-bottom:10px;
+    }
+
+    .detail-phone{
+      font-size:15px;
+      color:#50625c;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .detail-line{
+      font-size:15px;
+      line-height:1.45;
+      margin-bottom:8px;
+      color:#43534f;
+      font-weight:700;
+    }
+
+    .detail-actions{
+      padding:16px 18px;
+      display:grid;
+      gap:10px;
+    }
+
+    .action-btn{
+      height:54px;
+      border:none;
+      border-radius:14px;
+      color:#fff;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .action-green{ background:linear-gradient(135deg,#5e9f33,#7dbb4f); }
+    .action-blue{ background:linear-gradient(135deg,#2e77dc,#4a93ef); }
+    .action-yellow{ background:linear-gradient(135deg,#e6c447,#f1d96c); color:#573e00; }
+    .action-orange{ background:linear-gradient(135deg,#d98431,#ea9a4d); }
+    .action-red{ background:linear-gradient(135deg,#df4f59,#ec6d76); }
+
+    .detail-footer{
+      padding:0 18px 18px;
+      color:#86958f;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .month-view,
+    .week-view{
+      padding:18px;
+    }
+
+    .placeholder{
+      background:#fff;
+      border:1px dashed #d6dde0;
+      border-radius:20px;
+      padding:34px 22px;
+      text-align:center;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.5;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(12,20,18,.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:999;
+    }
+
+    .modal.show{ display:flex; }
+
+    .modal-box{
+      width:100%;
+      max-width:760px;
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 24px 60px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+
+    .modal-head{
+      padding:18px 20px;
+      border-bottom:1px solid var(--border);
+      font-size:24px;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-body{
+      padding:20px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .field.full{
+      grid-column:1/-1;
+    }
+
+    .field label{
+      font-size:14px;
+      font-weight:800;
+      color:#48605a;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      min-height:48px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      padding:0 14px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:110px;
+      padding:12px 14px;
+      resize:vertical;
+    }
+
+    .modal-actions{
+      padding:0 20px 20px;
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    @media (max-width: 1280px){
+      .app{
+        grid-template-columns:280px 1fr 320px;
+      }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel sidebar">
+      <div class="topbar">
+        <div class="brand">
+          <img src="logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+          <span>Calendario Farmacia</span>
+        </div>
+      </div>
+
+      <div class="panel-pad">
+        <input id="searchInput" class="search" type="text" placeholder="Cerca cliente..." oninput="renderCalendar()" />
+        <button class="btn btn-primary" onclick="openCreateModal()">＋ Nuova Prenotazione</button>
+
+        <div class="filters">
+          <div class="filter-link active" data-filter="all" onclick="setFilter('all', this)">
+            <div class="filter-left">📋 <span>Tutte</span></div>
+          </div>
+
+          <div class="filter-link" data-filter="servizio" onclick="setFilter('servizio', this)">
+            <div class="filter-left">🩺 <span>Solo Servizi</span></div>
+          </div>
+
+          <div class="filter-link" data-filter="giornata" onclick="setFilter('giornata', this)">
+            <div class="filter-left">✨ <span>Solo Giornate</span></div>
+          </div>
+
+          <div class="filter-link" data-filter="requested" onclick="setFilter('requested', this)">
+            <div class="filter-left">🟡 <span>Richieste</span></div>
+            <span id="countRequested" class="count yellow">0</span>
+          </div>
+
+          <div class="filter-link" data-filter="confirmed" onclick="setFilter('confirmed', this)">
+            <div class="filter-left">🟢 <span>Confermate</span></div>
+            <span id="countConfirmed" class="count ok">0</span>
+          </div>
+
+          <div class="filter-link" data-filter="completed" onclick="setFilter('completed', this)">
+            <div class="filter-left">🔵 <span>Completate</span></div>
+            <span id="countCompleted" class="count ok">0</span>
+          </div>
+
+          <div class="filter-link" data-filter="recall" onclick="setFilter('recall', this)">
+            <div class="filter-left">🟠 <span>Da Richiamare</span></div>
+            <span id="countRecall" class="count orange">0</span>
+          </div>
+
+          <div class="filter-link" data-filter="expired" onclick="setFilter('expired', this)">
+            <div class="filter-left">🔴 <span>Scadute</span></div>
+            <span id="countExpired" class="count red">0</span>
+          </div>
+
+          <div class="filter-link" data-filter="cancelled" onclick="setFilter('cancelled', this)">
+            <div class="filter-left">⚪ <span>Annullate</span></div>
+            <span id="countCancelled" class="count gray">0</span>
+          </div>
+        </div>
+
+        <div class="waitlist-box">
+          <div class="mini-title">Lista d’attesa</div>
+          <div id="waitlistWrap"></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="panel calendar">
+      <div class="calendar-toolbar">
+        <div class="toolbar-left">
+          <button class="today-btn" onclick="goToday()">Oggi</button>
+          <button class="nav-btn" onclick="moveDate(-1)">‹</button>
+          <div id="titleDate" class="title-date">Oggi</div>
+          <button class="nav-btn" onclick="moveDate(1)">›</button>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="view-switch">
+            <button id="viewDayBtn" class="view-btn active" onclick="setView('day')">Giorno</button>
+            <button id="viewWeekBtn" class="view-btn" onclick="setView('week')">Settimana</button>
+            <button id="viewMonthBtn" class="view-btn" onclick="setView('month')">Mese</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-body">
+        <div id="dayView" class="day-view"></div>
+        <div id="weekView" class="week-view" style="display:none;">
+          <div class="placeholder">Vista settimana premium in arrivo nel prossimo step. Intanto tutti i dati sono già collegati alla stessa collezione Firebase.</div>
+        </div>
+        <div id="monthView" class="month-view" style="display:none;">
+          <div class="placeholder">Vista mese premium in arrivo nel prossimo step. Intanto la dashboard giorno è già operativa e collegata a calendario.html.</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel detail">
+      <div class="topbar">
+        <div class="brand">Dettaglio</div>
+        <div class="user-badge">👨🏻</div>
+      </div>
+
+      <div id="detailContent" class="detail-empty">
+        Seleziona una prenotazione dal calendario per vedere i dettagli completi del cliente, del servizio e le azioni rapide.
+      </div>
+    </aside>
+  </div>
+
+  <div id="createModal" class="modal">
+    <div class="modal-box">
+      <div class="modal-head">Nuova Prenotazione</div>
+
+      <div class="modal-body">
+        <div class="field">
+          <label>Nome</label>
+          <input id="newName" type="text" placeholder="Nome">
+        </div>
+
+        <div class="field">
+          <label>Cognome</label>
+          <input id="newSurname" type="text" placeholder="Cognome">
+        </div>
+
+        <div class="field">
+          <label>Telefono</label>
+          <input id="newPhone" type="text" placeholder="Numero di telefono">
+        </div>
+
+        <div class="field">
+          <label>Tipo</label>
+          <select id="newType">
+            <option value="servizio">Servizio</option>
+            <option value="giornata">Giornata Beauty</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Titolo servizio / giornata</label>
+          <input id="newTitle" type="text" placeholder="Es. Holter Cardiaco">
+        </div>
+
+        <div class="field">
+          <label>Data</label>
+          <input id="newDate" type="date">
+        </div>
+
+        <div class="field">
+          <label>Durata minuti</label>
+          <input id="newDuration" type="number" value="30">
+        </div>
+
+        <div class="field">
+          <label>Ora inizio</label>
+          <input id="newStartTime" type="time">
+        </div>
+
+        <div class="field">
+          <label>Operatore</label>
+          <input id="newOperator" type="text" placeholder="Es. Cosimo">
+        </div>
+
+        <div class="field full">
+          <label>Note</label>
+          <textarea id="newNotes" placeholder="Note interne"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeCreateModal()">Annulla</button>
+        <button class="action-btn action-green" style="width:180px;" onclick="saveNewAppointment()">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let allAppointments = [];
+    let allWaitlist = [];
+    let selectedAppointment = null;
+    let currentFilter = "all";
+    let currentView = "day";
+    let currentDate = new Date();
+
+    function toDateKey(dateObj){
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2,"0");
+      const d = String(dateObj.getDate()).padStart(2,"0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatTitleDate(dateObj){
+      return dateObj.toLocaleDateString("it-IT", {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      });
+    }
+
+    function formatHourLabel(hour){
+      return `${String(hour).padStart(2,"0")}:00`;
+    }
+
+    function timeToMinutes(time){
+      if(!time) return 0;
+      const [h,m] = time.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function minutesToTime(totalMinutes){
+      const h = String(Math.floor(totalMinutes / 60)).padStart(2,"0");
+      const m = String(totalMinutes % 60).padStart(2,"0");
+      return `${h}:${m}`;
+    }
+
+    function escapeHtml(text){
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getStatusForRender(item){
+      if(item.type === "giornata") return "beauty";
+
+      if(item.status === "cancelled") return "expired";
+      if(item.status === "completed") return "completed";
+      if(item.status === "confirmed") return "confirmed";
+      if(item.status === "requested") return "requested";
+      if(item.status === "recall") return "recall";
+
+      const now = new Date();
+      const endDateTime = new Date(`${item.date}T${item.endTime || item.startTime || "00:00"}:00`);
+      if(endDateTime < now && item.status !== "completed"){
+        return "expired";
+      }
+
+      return "requested";
+    }
+
+    function setFilter(filter, el){
+      currentFilter = filter;
+      document.querySelectorAll(".filter-link").forEach(x => x.classList.remove("active"));
+      if(el) el.classList.add("active");
+      renderCalendar();
+    }
+
+    function setView(view){
+      currentView = view;
+      document.getElementById("viewDayBtn").classList.toggle("active", view === "day");
+      document.getElementById("viewWeekBtn").classList.toggle("active", view === "week");
+      document.getElementById("viewMonthBtn").classList.toggle("active", view === "month");
+
+      document.getElementById("dayView").style.display = view === "day" ? "grid" : "none";
+      document.getElementById("weekView").style.display = view === "week" ? "block" : "none";
+      document.getElementById("monthView").style.display = view === "month" ? "block" : "none";
+
+      renderCalendar();
+    }
+
+    function goToday(){
+      currentDate = new Date();
+      renderCalendar();
+    }
+
+    function moveDate(delta){
+      if(currentView === "month"){
+        currentDate.setMonth(currentDate.getMonth() + delta);
+      } else if(currentView === "week"){
+        currentDate.setDate(currentDate.getDate() + (delta * 7));
+      } else {
+        currentDate.setDate(currentDate.getDate() + delta);
+      }
+      renderCalendar();
+    }
+
+    function updateCounts(){
+      const countRequested = allAppointments.filter(x => getStatusForRender(x) === "requested").length;
+      const countConfirmed = allAppointments.filter(x => getStatusForRender(x) === "confirmed").length;
+      const countCompleted = allAppointments.filter(x => getStatusForRender(x) === "completed").length;
+      const countRecall = allAppointments.filter(x => getStatusForRender(x) === "recall").length;
+      const countExpired = allAppointments.filter(x => getStatusForRender(x) === "expired").length;
+      const countCancelled = allAppointments.filter(x => x.status === "cancelled").length;
+
+      document.getElementById("countRequested").textContent = countRequested;
+      document.getElementById("countConfirmed").textContent = countConfirmed;
+      document.getElementById("countCompleted").textContent = countCompleted;
+      document.getElementById("countRecall").textContent = countRecall;
+      document.getElementById("countExpired").textContent = countExpired;
+      document.getElementById("countCancelled").textContent = countCancelled;
+    }
+
+    function renderWaitlist(){
+      const wrap = document.getElementById("waitlistWrap");
+
+      if(!allWaitlist.length){
+        wrap.innerHTML = `<div class="detail-empty" style="padding:0;">Nessun cliente in attesa.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = allWaitlist.slice(0, 6).map(item => `
+        <div class="waitlist-item">
+          <div class="waitlist-name">${escapeHtml(item.clientName || "")} ${escapeHtml(item.clientSurname || "")}</div>
+          <div class="waitlist-sub">
+            ${escapeHtml(item.title || "")}<br>
+            ${escapeHtml(item.date || "")} · ${escapeHtml(item.requestedTime || "")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function matchesFilter(item){
+      const renderStatus = getStatusForRender(item);
+
+      if(currentFilter === "all") return true;
+      if(currentFilter === "servizio") return item.type === "servizio";
+      if(currentFilter === "giornata") return item.type === "giornata";
+      if(currentFilter === "requested") return renderStatus === "requested";
+      if(currentFilter === "confirmed") return renderStatus === "confirmed";
+      if(currentFilter === "completed") return renderStatus === "completed";
+      if(currentFilter === "recall") return renderStatus === "recall";
+      if(currentFilter === "expired") return renderStatus === "expired";
+      if(currentFilter === "cancelled") return item.status === "cancelled";
+
+      return true;
+    }
+
+    function matchesSearch(item){
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      if(!q) return true;
+
+      const text = `
+        ${item.clientName || ""} 
+        ${item.clientSurname || ""} 
+        ${item.clientPhone || ""} 
+        ${item.title || ""} 
+        ${item.description || ""}
+      `.toLowerCase();
+
+      return text.includes(q);
+    }
+
+    function renderDayView(){
+      const dayView = document.getElementById("dayView");
+      const dayKey = toDateKey(currentDate);
+
+      let hoursHtml = `<div class="hours-col">`;
+      for(let h = 8; h <= 20; h++){
+        hoursHtml += `<div class="hour-cell">${formatHourLabel(h)}</div>`;
+      }
+      hoursHtml += `</div>`;
+
+      let slotsHtml = `<div class="slots-col">`;
+
+      const dayAppointments = allAppointments
+        .filter(item => item.date === dayKey)
+        .filter(matchesFilter)
+        .filter(matchesSearch)
+        .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+      dayAppointments.forEach(item => {
+        const start = timeToMinutes(item.startTime || "08:00");
+        const end = timeToMinutes(item.endTime || item.startTime || "08:30");
+        const top = ((start - 480) / 60) * 72;
+        const height = Math.max(((end - start) / 60) * 72 - 8, 56);
+        const renderStatus = getStatusForRender(item);
+
+        slotsHtml += `
+          <div
+            class="appointment ${renderStatus === 'beauty' ? 'type-beauty' : `status-${renderStatus}`}"
+            style="top:${top}px;height:${height}px;"
+            onclick="selectAppointment('${item.id}')"
+          >
+            <div class="ap-top">
+              <div class="ap-name">${escapeHtml(item.clientName || item.title || "Prenotazione")} ${escapeHtml(item.clientSurname || "")}</div>
+              <div class="ap-time">${escapeHtml(item.startTime || "")} - ${escapeHtml(item.endTime || "")}</div>
+            </div>
+            <div class="ap-service">${escapeHtml(item.title || "")}</div>
+            <div class="ap-meta">
+              <span>${escapeHtml(item.clientPhone || "")}</span>
+              ${
+                renderStatus === "beauty"
+                  ? `<span class="badge beauty">Beauty</span>`
+                  : renderStatus === "requested"
+                    ? `<span class="badge requested">Richiesta</span>`
+                    : renderStatus === "confirmed"
+                      ? `<span class="badge confirmed">Confermato</span>`
+                      : renderStatus === "completed"
+                        ? `<span class="badge completed">Fatto</span>`
+                        : renderStatus === "recall"
+                          ? `<span class="badge recall">Da richiamare</span>`
+                          : `<span class="badge expired">Scaduto</span>`
+              }
+              ${
+                item.operatorName
+                  ? `<span>Creato da: ${escapeHtml(item.operatorName)}</span>`
+                  : ``
+              }
+            </div>
+          </div>
+        `;
+      });
+
+      slotsHtml += `</div>`;
+      dayView.innerHTML = hoursHtml + slotsHtml;
+    }
+
+    function renderDetail(){
+      const wrap = document.getElementById("detailContent");
+
+      if(!selectedAppointment){
+        wrap.innerHTML = `
+          <div class="detail-empty">
+            Seleziona una prenotazione dal calendario per vedere i dettagli completi del cliente, del servizio e le azioni rapide.
+          </div>
+        `;
+        return;
+      }
+
+      const item = selectedAppointment;
+      const renderStatus = getStatusForRender(item);
+
+      wrap.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-name">${escapeHtml(item.clientName || "")} ${escapeHtml(item.clientSurname || "")}</div>
+          <div class="detail-phone">📞 ${escapeHtml(item.clientPhone || "—")}</div>
+
+          <div class="detail-line">
+            ${
+              renderStatus === "beauty"
+                ? `<span class="badge beauty">Beauty</span>`
+                : renderStatus === "requested"
+                  ? `<span class="badge requested">Richiesta</span>`
+                  : renderStatus === "confirmed"
+                    ? `<span class="badge confirmed">Confermato</span>`
+                    : renderStatus === "completed"
+                      ? `<span class="badge completed">Completato</span>`
+                      : renderStatus === "recall"
+                        ? `<span class="badge recall">Da richiamare</span>`
+                        : `<span class="badge expired">Scaduto</span>`
+            }
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-line"><strong>Data:</strong> ${escapeHtml(item.date || "—")}</div>
+          <div class="detail-line"><strong>Ora:</strong> ${escapeHtml(item.startTime || "—")} - ${escapeHtml(item.endTime || "—")}</div>
+          <div class="detail-line"><strong>Tipo:</strong> ${escapeHtml(item.type || "—")}</div>
+          <div class="detail-line"><strong>Titolo:</strong> ${escapeHtml(item.title || "—")}</div>
+          <div class="detail-line"><strong>Durata:</strong> ${escapeHtml(String(item.durationMinuti || "—"))} minuti</div>
+          <div class="detail-line"><strong>Operatore:</strong> ${escapeHtml(item.operatorName || "—")}</div>
+          <div class="detail-line"><strong>Note:</strong> ${escapeHtml(item.notes || "—")}</div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="action-btn action-green" onclick="callClient()">📞 Chiama</button>
+          <button class="action-btn action-blue" onclick="markStatus('confirmed')">✏️ Conferma</button>
+          <button class="action-btn action-yellow" onclick="markStatus('completed')">✔️ Segna Completo</button>
+          <button class="action-btn action-orange" onclick="markStatus('recall')">🕘 Da Richiamare</button>
+          <button class="action-btn action-red" onclick="markStatus('cancelled')">🗑️ Annulla</button>
+        </div>
+
+        <div class="detail-footer">
+          <div><strong>ID:</strong> ${escapeHtml(item.id)}</div>
+          <div><strong>Creato da:</strong> ${escapeHtml(item.createdByName || item.operatorName || "—")}</div>
+        </div>
+      `;
+    }
+
+    function renderCalendar(){
+      document.getElementById("titleDate").textContent = formatTitleDate(currentDate);
+      updateCounts();
+      renderWaitlist();
+
+      if(currentView === "day"){
+        renderDayView();
+      }
+
+      renderDetail();
+    }
+
+    function selectAppointment(id){
+      selectedAppointment = allAppointments.find(x => x.id === id) || null;
+      renderDetail();
+    }
+
+    async function markStatus(status){
+      if(!selectedAppointment) return;
+
+      await db.collection("appointments").doc(selectedAppointment.id).update({
+        status,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    function callClient(){
+      if(!selectedAppointment || !selectedAppointment.clientPhone) return;
+      window.location.href = `tel:${selectedAppointment.clientPhone}`;
+    }
+
+    function openCreateModal(){
+      document.getElementById("createModal").classList.add("show");
+      document.getElementById("newDate").value = toDateKey(currentDate);
+    }
+
+    function closeCreateModal(){
+      document.getElementById("createModal").classList.remove("show");
+    }
+
+    async function saveNewAppointment(){
+      const name = document.getElementById("newName").value.trim();
+      const surname = document.getElementById("newSurname").value.trim();
+      const phone = document.getElementById("newPhone").value.trim();
+      const type = document.getElementById("newType").value;
+      const title = document.getElementById("newTitle").value.trim();
+      const date = document.getElementById("newDate").value;
+      const startTime = document.getElementById("newStartTime").value;
+      const duration = Number(document.getElementById("newDuration").value || 30);
+      const operatorName = document.getElementById("newOperator").value.trim();
+      const notes = document.getElementById("newNotes").value.trim();
+
+      if(!name || !surname || !phone || !title || !date || !startTime){
+        alert("Compila i campi principali.");
+        return;
+      }
+
+      const endMinutes = timeToMinutes(startTime) + duration;
+      const endTime = minutesToTime(endMinutes);
+
+      await db.collection("appointments").add({
+        type,
+        sourceCollection: type === "giornata" ? "beauty" : "servizi",
+        sourceId: null,
+        title,
+        description: "",
+        date,
+        startTime,
+        endTime,
+        durationMinuti: duration,
+        status: "confirmed",
+        clientName: name,
+        clientSurname: surname,
+        clientPhone: phone,
+        clientBirthDate: "",
+        clientSex: "",
+        userId: null,
+        isRegisteredUser: false,
+        createdByType: "operator",
+        createdByUid: null,
+        createdByName: operatorName || "Banco",
+        operatorName: operatorName || "Banco",
+        pharmacyViewColor: "green",
+        needsRecall: false,
+        notes,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      closeCreateModal();
+    }
+
+    db.collection("appointments").onSnapshot(snapshot => {
+      allAppointments = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      if(selectedAppointment){
+        selectedAppointment = allAppointments.find(x => x.id === selectedAppointment.id) || null;
+      }
+      renderCalendar();
+    });
+
+    db.collection("appointment_waitlist").onSnapshot(snapshot => {
+      allWaitlist = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      .filter(x => x.status === "active");
+      renderWaitlist();
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>
