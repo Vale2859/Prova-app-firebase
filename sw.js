@@ -1,4 +1,4 @@
-const CACHE_NAME = "farmacia-montesano-v8";
+const CACHE_NAME = "farmacia-montesano-v9";
 
 const STATIC_ASSETS = [
   "./",
@@ -66,29 +66,38 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-
 // 🔔 NOTIFICHE PUSH
 self.addEventListener("push", (event) => {
   if (!event.data) return;
 
-  const data = event.data.json();
+  let data = {};
+  try {
+    data = event.data.json();
+  } catch (err) {
+    data = {
+      title: "Notifica",
+      body: event.data.text()
+    };
+  }
 
   const title = data.title || "Farmacia Montesano";
 
   const options = {
     body: data.body || "",
-    icon: "./icon-192.png",
-    badge: "./icon-192.png",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
     data: {
-      url: data.url || "./"
-    }
+      url: data.url || "https://farmaciamontesano.web.app"
+    },
+    vibrate: [200, 100, 200],
+    requireInteraction: false,
+    renotify: false
   };
 
   event.waitUntil(
     self.registration.showNotification(title, options)
   );
 });
-
 
 // 👉 CLICK NOTIFICA
 self.addEventListener("notificationclick", (event) => {
@@ -97,7 +106,7 @@ self.addEventListener("notificationclick", (event) => {
   const url = event.notification.data.url;
 
   event.waitUntil(
-    clients.matchAll({ type: "window" }).then((clientList) => {
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
         if (client.url === url && "focus" in client) {
           return client.focus();
@@ -107,6 +116,7 @@ self.addEventListener("notificationclick", (event) => {
     })
   );
 });
+
 importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js");
 
@@ -121,8 +131,18 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-  self.registration.showNotification(payload.notification.title, {
-    body: payload.notification.body,
-    icon: "/icon-192.png"
+  const notification = payload.notification || {};
+  const data = payload.data || {};
+
+  self.registration.showNotification(notification.title || "Notifica", {
+    body: notification.body || "",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    data: {
+      url: data.url || "https://farmaciamontesano.web.app"
+    },
+    vibrate: [200, 100, 200],
+    requireInteraction: false,
+    renotify: false
   });
 });
