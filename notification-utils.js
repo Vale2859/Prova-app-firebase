@@ -20,26 +20,31 @@ function makeSubscriptionId(endpoint) {
 
 export async function askNotificationPermission() {
   if (!("Notification" in window)) {
+    alert("Notifiche non supportate");
     throw new Error("Notifiche non supportate");
   }
 
   if (!("serviceWorker" in navigator)) {
+    alert("Service Worker non supportato");
     throw new Error("Service Worker non supportato");
   }
 
   const user = auth.currentUser;
   if (!user) {
+    alert("Utente non autenticato");
     throw new Error("Utente non autenticato");
   }
 
   const permission = await Notification.requestPermission();
+  alert("Permesso: " + permission);
+
   if (permission !== "granted") {
     throw new Error("Permesso notifiche non concesso");
   }
 
   const registration = await navigator.serviceWorker.ready;
+  alert("Service worker pronto");
 
-  // Scriviamo subito un test nel documento utente
   await setDoc(
     doc(firestore, "users", user.uid),
     {
@@ -52,6 +57,8 @@ export async function askNotificationPermission() {
     { merge: true }
   );
 
+  alert("pushDebug salvato");
+
   let subscription = await registration.pushManager.getSubscription();
 
   if (!subscription) {
@@ -62,6 +69,7 @@ export async function askNotificationPermission() {
   }
 
   if (!subscription) {
+    alert("Subscription non creata");
     throw new Error("Subscription non creata");
   }
 
@@ -79,7 +87,8 @@ export async function askNotificationPermission() {
     { merge: true }
   );
 
-  // Scriviamo conferma finale
+  alert("push_subscriptions salvato ✅");
+
   await setDoc(
     doc(firestore, "users", user.uid),
     {
