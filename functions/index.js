@@ -1731,7 +1731,7 @@ exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
     await sendPushToMany(users, {
       title: "Farmacia Montesano di turno",
       body: "Test turno: la notifica funziona 🔔",
-      url: `${app.baseUrl}/turni.html`,
+      url: `${app.baseUrl}/turno.html`,
       tag: "test-turno"
     });
 
