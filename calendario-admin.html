@@ -24,13 +24,13 @@
       --orange-dark:#ca7d27;
       --red:#da5b5b;
       --red-dark:#c64646;
+      --gold:#d9b447;
+      --gold-dark:#b78e19;
 
       --event-green:#e9f4de;
       --event-green-border:#74a53c;
-
       --event-yellow:#f9efc8;
       --event-yellow-border:#dfb83e;
-
       --event-red:#f5d7d7;
       --event-red-border:#d45b5b;
 
@@ -40,7 +40,6 @@
       --radius-sm:12px;
 
       --sidebar-w:310px;
-      --detail-w:355px;
       --topbar-h:78px;
       --hour-col-w:84px;
       --slot-h:64px;
@@ -67,7 +66,7 @@
 
     .app{
       display:grid;
-      grid-template-columns: var(--sidebar-w) 1fr var(--detail-w);
+      grid-template-columns: var(--sidebar-w) 1fr;
       gap:18px;
       min-height:100vh;
       padding:18px;
@@ -120,10 +119,6 @@
       width:78%;
       height:auto;
       object-fit:contain;
-    }
-
-    .brand-text{
-      min-width:0;
     }
 
     .brand-text h1{
@@ -681,138 +676,279 @@
       padding:4px 2px 0;
     }
 
-    /* RIGHT */
-    .right{
-      min-height:0;
-      display:flex;
-      flex-direction:column;
+    /* RECALL VIEW */
+    .recall-view{
+      display:none;
     }
 
-    .right-inner{
-      padding:18px;
-      overflow:auto;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      min-height:0;
+    .recall-view.active{
+      display:block;
     }
 
-    .empty-state{
-      height:100%;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:#7a8b85;
+    .recall-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:16px;
+      flex-wrap:wrap;
+    }
+
+    .recall-title{
+      margin:0;
+      font-size:2rem;
+      line-height:.95;
+      letter-spacing:-0.04em;
+    }
+
+    .recall-sub{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:14px;
       font-weight:700;
-      padding:24px;
     }
 
-    .profile-box,
-    .detail-card{
-      border:1px solid var(--line);
+    .recall-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .recall-card{
+      background:#fff8ec;
+      border:1px solid #f0dfbb;
       border-radius:20px;
-      background:#fff;
       padding:18px;
       box-shadow:var(--shadow-soft);
     }
 
-    .profile-name{
-      font-size:1.35rem;
-      font-weight:900;
-      line-height:1;
-      margin-bottom:8px;
-      text-transform:lowercase;
-    }
-
-    .profile-phone{
-      font-size:15px;
-      color:#4e615a;
-      font-weight:800;
+    .recall-top{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:flex-start;
       margin-bottom:12px;
     }
 
-    .status-pill{
+    .recall-name{
+      margin:0;
+      font-size:1.3rem;
+      line-height:1;
+      font-weight:900;
+      text-transform:lowercase;
+    }
+
+    .recall-phone{
+      margin:8px 0 0;
+      color:#6d5c2b;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .recall-badge{
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
       display:inline-flex;
       align-items:center;
-      min-height:34px;
-      border-radius:999px;
-      padding:0 14px;
+      background:#f4db96;
+      color:#6e5308;
       font-size:13px;
       font-weight:900;
+      white-space:nowrap;
     }
 
-    .status-pill.confirmed{
-      background:#e8f2dd;
-      color:#557d23;
+    .recall-info{
+      display:grid;
+      gap:8px;
+      margin-bottom:14px;
     }
 
-    .status-pill.requested{
-      background:#f8edc8;
-      color:#87680d;
+    .recall-row{
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:10px;
+      font-size:14px;
     }
 
-    .status-pill.cancelled{
-      background:#f3d7d7;
-      color:#963f3f;
+    .recall-key{
+      color:#816d36;
+      font-weight:900;
     }
 
-    .detail-title{
+    .recall-value{
+      color:#3b3320;
+      font-weight:800;
+    }
+
+    .recall-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .recall-btn{
+      min-height:42px;
+      border:none;
+      border-radius:12px;
+      padding:0 14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .recall-btn.done{
+      background:linear-gradient(180deg,var(--green),var(--green-dark));
+      color:#fff;
+    }
+
+    .recall-btn.book{
+      background:linear-gradient(180deg,var(--blue),var(--blue-dark));
+      color:#fff;
+    }
+
+    .recall-btn.hide{
+      background:#efe7cf;
+      color:#5e522a;
+    }
+
+    /* POPUP DETAIL */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(9,15,13,0.42);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1100;
+      padding:24px;
+    }
+
+    .overlay.show{
+      display:flex;
+    }
+
+    .detail-popup{
+      width:100%;
+      max-width:720px;
+      background:#fff;
+      border-radius:28px;
+      box-shadow:0 26px 60px rgba(0,0,0,0.2);
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+
+    .detail-hero{
+      padding:22px 22px 18px;
+      background:linear-gradient(180deg,#f9fcfa,#f2f7f4);
+      border-bottom:1px solid var(--line);
+    }
+
+    .detail-hero-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+    }
+
+    .detail-popup-name{
+      margin:0;
+      font-size:2rem;
+      line-height:.92;
+      font-weight:900;
+      text-transform:lowercase;
+    }
+
+    .detail-popup-phone{
+      margin:10px 0 0;
+      font-size:15px;
+      font-weight:800;
+      color:#526760;
+    }
+
+    .popup-status{
+      margin-top:14px;
+    }
+
+    .popup-body{
+      padding:20px 22px 22px;
+    }
+
+    .popup-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .popup-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:16px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .popup-card h4{
+      margin:0 0 12px;
       font-size:15px;
       font-weight:900;
-      margin-bottom:10px;
     }
 
-    .detail-row{
+    .popup-line{
       display:grid;
-      grid-template-columns:100px 1fr;
-      gap:12px;
-      padding:10px 0;
-      border-bottom:1px solid #edf1ee;
+      grid-template-columns:110px 1fr;
+      gap:10px;
+      padding:8px 0;
+      border-bottom:1px solid #eef2ef;
+      font-size:14px;
     }
 
-    .detail-row:last-child{
+    .popup-line:last-child{
       border-bottom:none;
     }
 
-    .detail-key{
-      font-size:13px;
-      color:#75867f;
+    .popup-line .k{
+      color:#74857e;
       font-weight:900;
     }
 
-    .detail-value{
-      font-size:14px;
-      color:#1c3b34;
+    .popup-line .v{
+      color:#1f3d36;
       font-weight:800;
       word-break:break-word;
     }
 
-    .actions{
-      display:grid;
+    .popup-actions{
+      display:flex;
       gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
     }
 
-    .action-btn{
-      min-height:52px;
+    .popup-btn{
+      min-height:48px;
       border:none;
       border-radius:14px;
-      color:#fff;
-      font-size:16px;
+      padding:0 18px;
+      font-size:15px;
       font-weight:900;
       cursor:pointer;
-      box-shadow:var(--shadow-soft);
     }
 
-    .action-btn.blue{
+    .popup-btn.gray{
+      background:#eef3f0;
+      color:#24433b;
+    }
+
+    .popup-btn.blue{
       background:linear-gradient(180deg,var(--blue),var(--blue-dark));
+      color:#fff;
     }
 
-    .action-btn.orange{
-      background:linear-gradient(180deg,var(--orange),var(--orange-dark));
-    }
-
-    .action-btn.red{
+    .popup-btn.red{
       background:linear-gradient(180deg,var(--red),var(--red-dark));
+      color:#fff;
     }
 
     /* MODAL */
@@ -958,7 +1094,6 @@
 </head>
 <body>
   <div class="app">
-    <!-- LEFT -->
     <aside class="panel left">
       <div class="left-inner">
         <div class="brand">
@@ -972,7 +1107,6 @@
         </div>
 
         <input id="searchInput" class="search" type="text" placeholder="Cerca cliente, telefono o servizio..." />
-
         <button class="new-btn" id="newBtn">+ Nuova Prenotazione</button>
 
         <div class="mini-calendar">
@@ -1009,23 +1143,13 @@
 
         <div class="legend">
           <h3>Legenda rapida</h3>
-          <div class="legend-row">
-            <span class="legend-dot dot-green"></span>
-            <span>Attive / confermate</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-dot dot-yellow"></span>
-            <span>Da richiamare</span>
-          </div>
-          <div class="legend-row">
-            <span class="legend-dot dot-red"></span>
-            <span>Cancellate</span>
-          </div>
+          <div class="legend-row"><span class="legend-dot dot-green"></span><span>Attive / confermate</span></div>
+          <div class="legend-row"><span class="legend-dot dot-yellow"></span><span>Da richiamare</span></div>
+          <div class="legend-row"><span class="legend-dot dot-red"></span><span>Cancellate</span></div>
         </div>
       </div>
     </aside>
 
-    <!-- CENTER -->
     <main class="panel center">
       <div class="topbar">
         <div class="top-left">
@@ -1057,26 +1181,26 @@
           </div>
           <div id="monthGrid" class="month-grid"></div>
         </div>
-      </div>
-    </main>
 
-    <!-- RIGHT -->
-    <aside class="panel right">
-      <div class="right-inner" id="detailInner">
-        <div class="empty-state">
-          Seleziona una prenotazione per vedere il dettaglio completo.
+        <div id="recallView" class="recall-view">
+          <div class="recall-head">
+            <div>
+              <h2 class="recall-title">Clienti da richiamare</h2>
+              <p class="recall-sub">Qui trovi i clienti con ultimo appuntamento passato da almeno 30 giorni, non ancora gestiti.</p>
+            </div>
+          </div>
+          <div id="recallGrid" class="recall-grid"></div>
         </div>
       </div>
-    </aside>
+    </main>
   </div>
 
-  <!-- MODAL -->
   <div id="bookingModal" class="modal">
     <div class="modal-box">
       <div class="modal-head">
         <div>
           <h3 id="modalTitle">Nuova prenotazione</h3>
-          <p>Puoi creare, modificare o spostare una prenotazione direttamente da qui.</p>
+          <p>Puoi creare, modificare o riprenotare un appuntamento da qui.</p>
         </div>
         <button class="close-btn" id="closeModalBtn">✕</button>
       </div>
@@ -1138,12 +1262,57 @@
       </div>
 
       <div class="hint">
-        Cliccando direttamente sul calendario, data e orario verranno già impostati in automatico.
+        Cliccando direttamente sul calendario, data e orario verranno già impostati automaticamente.
       </div>
 
       <div class="modal-actions">
         <button class="ghost-btn" id="cancelModalBtn">Chiudi</button>
         <button class="save-btn" id="saveBookingBtn">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="detailOverlay" class="overlay">
+    <div class="detail-popup">
+      <div class="detail-hero">
+        <div class="detail-hero-top">
+          <div>
+            <h3 id="popupName" class="detail-popup-name">Cliente</h3>
+            <div id="popupPhone" class="detail-popup-phone">Telefono</div>
+            <div class="popup-status">
+              <span id="popupStatus" class="status-pill confirmed">Confermata</span>
+            </div>
+          </div>
+          <button class="close-btn" id="closeDetailBtn">✕</button>
+        </div>
+      </div>
+
+      <div class="popup-body">
+        <div class="popup-grid">
+          <div class="popup-card">
+            <h4>Dettaglio appuntamento</h4>
+
+            <div class="popup-line"><div class="k">Data</div><div id="popupDate" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Ora</div><div id="popupTime" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Tipo</div><div id="popupType" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Titolo</div><div id="popupTitle" class="v">—</div></div>
+          </div>
+
+          <div class="popup-card">
+            <h4>Gestione interna</h4>
+
+            <div class="popup-line"><div class="k">Durata</div><div id="popupDuration" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Operatore</div><div id="popupOperator" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Note</div><div id="popupNotes" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Richiamo</div><div id="popupRecall" class="v">—</div></div>
+          </div>
+        </div>
+
+        <div class="popup-actions">
+          <button class="popup-btn gray" id="popupCloseBtn">Chiudi</button>
+          <button class="popup-btn blue" id="popupEditBtn">Modifica</button>
+          <button class="popup-btn red" id="popupDeleteBtn">Cancella</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1178,15 +1347,18 @@
     const currentLabel = document.getElementById("currentLabel");
     const miniMonthLabel = document.getElementById("miniMonthLabel");
     const miniGrid = document.getElementById("miniGrid");
-    const detailInner = document.getElementById("detailInner");
 
     const dayView = document.getElementById("dayView");
     const weekView = document.getElementById("weekView");
     const monthView = document.getElementById("monthView");
     const monthGrid = document.getElementById("monthGrid");
+    const recallView = document.getElementById("recallView");
+    const recallGrid = document.getElementById("recallGrid");
 
     const bookingModal = document.getElementById("bookingModal");
     const modalTitle = document.getElementById("modalTitle");
+
+    const detailOverlay = document.getElementById("detailOverlay");
 
     const fName = document.getElementById("fName");
     const fSurname = document.getElementById("fSurname");
@@ -1215,15 +1387,6 @@
         day:"numeric",
         month:"long",
         year:"numeric"
-      });
-    }
-
-    function formatShortDay(date){
-      const d = new Date(date);
-      return d.toLocaleDateString("it-IT", {
-        weekday:"short",
-        day:"numeric",
-        month:"short"
       });
     }
 
@@ -1278,6 +1441,10 @@
         .replace(/'/g,"&#039;");
     }
 
+    function isRecallDone(app){
+      return app.recallStatus === "done" || app.recallDone === true;
+    }
+
     function getFilteredAppointments(){
       const q = searchInput.value.trim().toLowerCase();
 
@@ -1290,7 +1457,9 @@
         if(!matchSearch) return false;
 
         if(currentFilter === "cancelled") return app.status === "cancelled";
-        if(currentFilter === "recall") return app.status !== "cancelled" && daysFromToday(app.date) >= 30;
+        if(currentFilter === "recall"){
+          return app.status !== "cancelled" && daysFromToday(app.date) >= 30 && !isRecallDone(app);
+        }
         return true;
       });
     }
@@ -1306,7 +1475,7 @@
       });
 
       document.getElementById("countAll").textContent = base.length;
-      document.getElementById("countRecall").textContent = base.filter(app => app.status !== "cancelled" && daysFromToday(app.date) >= 30).length;
+      document.getElementById("countRecall").textContent = base.filter(app => app.status !== "cancelled" && daysFromToday(app.date) >= 30 && !isRecallDone(app)).length;
       document.getElementById("countCancelled").textContent = base.filter(app => app.status === "cancelled").length;
     }
 
@@ -1327,12 +1496,12 @@
 
       miniGrid.innerHTML = "";
 
-      const prevLast = new Date(year, month, 0).getDate();
+      const prevMonthLast = new Date(year, month, 0).getDate();
 
       for(let i=0; i<firstWeekDay; i++){
         const d = document.createElement("div");
         d.className = "mini-day other";
-        d.textContent = prevLast - firstWeekDay + i + 1;
+        d.textContent = prevMonthLast - firstWeekDay + i + 1;
         miniGrid.appendChild(d);
       }
 
@@ -1353,6 +1522,8 @@
         el.onclick = () => {
           currentDate = new Date(date);
           currentView = "day";
+          currentFilter = "all";
+          syncFilterButtons();
           syncViewButtons();
           renderMiniCalendar();
           renderCalendar();
@@ -1372,25 +1543,52 @@
       }
     }
 
+    function syncFilterButtons(){
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.filter === currentFilter);
+      });
+    }
+
     function syncViewButtons(){
       document.querySelectorAll("[data-view]").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.view === currentView);
       });
 
-      dayView.classList.toggle("active", currentView === "day");
-      weekView.classList.toggle("active", currentView === "week");
-      monthView.classList.toggle("active", currentView === "month");
+      dayView.classList.remove("active");
+      weekView.classList.remove("active");
+      monthView.classList.remove("active");
+      recallView.classList.remove("active");
+
+      if(currentFilter === "recall"){
+        recallView.classList.add("active");
+        return;
+      }
+
+      if(currentView === "day") dayView.classList.add("active");
+      if(currentView === "week") weekView.classList.add("active");
+      if(currentView === "month") monthView.classList.add("active");
     }
 
     function renderCalendar(){
+      if(currentFilter === "recall"){
+        currentLabel.textContent = "Da richiamare";
+        syncViewButtons();
+        renderRecallView();
+        updateCounts();
+        return;
+      }
+
       currentLabel.textContent =
         currentView === "month"
           ? new Date(currentDate).toLocaleDateString("it-IT", { month:"long", year:"numeric" })
           : formatLongDate(currentDate);
 
+      syncViewButtons();
+
       if(currentView === "day") renderDayView();
       if(currentView === "week") renderWeekView();
       if(currentView === "month") renderMonthView();
+
       updateCounts();
     }
 
@@ -1400,7 +1598,7 @@
         .filter(app => app.date === dateKey)
         .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
-      let html = `
+      dayView.innerHTML = `
         <div class="hours-col">
           ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="hour-cell">${pad(DAY_START + i)}:00</div>`).join("")}
         </div>
@@ -1408,8 +1606,6 @@
           ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="half-line" style="top:${(i * SLOT_HEIGHT) + (SLOT_HEIGHT / 2)}px;"></div>`).join("")}
         </div>
       `;
-
-      dayView.innerHTML = html;
 
       const grid = document.getElementById("dayGridInner");
 
@@ -1440,9 +1636,8 @@
         `;
         card.onclick = (event) => {
           event.stopPropagation();
-          selectAppointment(app);
+          openDetailPopup(app);
         };
-
         grid.appendChild(card);
       });
     }
@@ -1520,7 +1715,7 @@
           `;
           card.onclick = (event) => {
             event.stopPropagation();
-            selectAppointment(app);
+            openDetailPopup(app);
           };
           col.appendChild(card);
         });
@@ -1592,11 +1787,13 @@
           const appId = e.target?.dataset?.appId;
           if(appId){
             const app = appointments.find(a => a.id === appId);
-            if(app) selectAppointment(app);
+            if(app) openDetailPopup(app);
             return;
           }
           currentDate = new Date(cellData.date);
           currentView = "day";
+          currentFilter = "all";
+          syncFilterButtons();
           syncViewButtons();
           renderMiniCalendar();
           renderCalendar();
@@ -1606,73 +1803,81 @@
       });
     }
 
-    function renderDetailEmpty(){
-      detailInner.innerHTML = `
-        <div class="empty-state">
-          Seleziona una prenotazione per vedere il dettaglio completo.
+    function renderRecallView(){
+      const items = getFilteredAppointments()
+        .sort((a,b) => daysFromToday(b.date) - daysFromToday(a.date));
+
+      if(!items.length){
+        recallGrid.innerHTML = `
+          <div style="grid-column:1/-1;background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px;text-align:center;color:var(--muted);font-weight:800;box-shadow:var(--shadow-soft);">
+            Nessun cliente da richiamare al momento.
+          </div>
+        `;
+        return;
+      }
+
+      recallGrid.innerHTML = items.map(app => `
+        <div class="recall-card">
+          <div class="recall-top">
+            <div>
+              <h3 class="recall-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</h3>
+              <div class="recall-phone">${escapeHtml(app.clientPhone || "—")}</div>
+            </div>
+            <div class="recall-badge">${daysFromToday(app.date)} giorni</div>
+          </div>
+
+          <div class="recall-info">
+            <div class="recall-row">
+              <div class="recall-key">Ultimo servizio</div>
+              <div class="recall-value">${escapeHtml(app.title || "—")}</div>
+            </div>
+            <div class="recall-row">
+              <div class="recall-key">Ultima data</div>
+              <div class="recall-value">${escapeHtml(app.date || "—")}</div>
+            </div>
+            <div class="recall-row">
+              <div class="recall-key">Tipo</div>
+              <div class="recall-value">${escapeHtml(app.type || "—")}</div>
+            </div>
+            <div class="recall-row">
+              <div class="recall-key">Operatore</div>
+              <div class="recall-value">${escapeHtml(app.operatorName || "—")}</div>
+            </div>
+          </div>
+
+          <div class="recall-actions">
+            <button class="recall-btn done" onclick="markRecallDone('${app.id}')">Segna gestito</button>
+            <button class="recall-btn book" onclick="rebookFromRecall('${app.id}')">Prenota</button>
+            <button class="recall-btn hide" onclick="markRecallDone('${app.id}')">Nascondi</button>
+          </div>
         </div>
-      `;
+      `).join("");
     }
 
-    function selectAppointment(app){
+    function openDetailPopup(app){
       selectedAppointment = app;
 
-      detailInner.innerHTML = `
-        <div class="profile-box">
-          <div class="profile-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
-          <div class="profile-phone">${escapeHtml(app.clientPhone || "—")}</div>
-          <div class="status-pill ${getStatusClass(app.status)}">${escapeHtml(getStatusLabel(app.status))}</div>
-        </div>
+      document.getElementById("popupName").textContent = `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Cliente";
+      document.getElementById("popupPhone").textContent = app.clientPhone || "—";
 
-        <div class="detail-card">
-          <div class="detail-title">Dettaglio appuntamento</div>
+      const statusEl = document.getElementById("popupStatus");
+      statusEl.className = `status-pill ${getStatusClass(app.status)}`;
+      statusEl.textContent = getStatusLabel(app.status);
 
-          <div class="detail-row">
-            <div class="detail-key">Data</div>
-            <div class="detail-value">${escapeHtml(app.date || "—")}</div>
-          </div>
+      document.getElementById("popupDate").textContent = app.date || "—";
+      document.getElementById("popupTime").textContent = `${app.startTime || "—"} - ${app.endTime || "—"}`;
+      document.getElementById("popupType").textContent = app.type || "—";
+      document.getElementById("popupTitle").textContent = app.title || "—";
+      document.getElementById("popupDuration").textContent = `${app.durationMinuti || 30} min`;
+      document.getElementById("popupOperator").textContent = app.operatorName || "—";
+      document.getElementById("popupNotes").textContent = app.notes || "—";
+      document.getElementById("popupRecall").textContent = daysFromToday(app.date) >= 30 ? `${daysFromToday(app.date)} giorni fa` : "Non ancora";
 
-          <div class="detail-row">
-            <div class="detail-key">Ora</div>
-            <div class="detail-value">${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</div>
-          </div>
+      detailOverlay.classList.add("show");
+    }
 
-          <div class="detail-row">
-            <div class="detail-key">Tipo</div>
-            <div class="detail-value">${escapeHtml(app.type || "—")}</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Titolo</div>
-            <div class="detail-value">${escapeHtml(app.title || "—")}</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Durata</div>
-            <div class="detail-value">${escapeHtml(String(app.durationMinuti || 30))} min</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Operatore</div>
-            <div class="detail-value">${escapeHtml(app.operatorName || "—")}</div>
-          </div>
-
-          <div class="detail-row">
-            <div class="detail-key">Note</div>
-            <div class="detail-value">${escapeHtml(app.notes || "—")}</div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="action-btn blue" id="editSelectedBtn">Modifica</button>
-          <button class="action-btn orange" id="moveSelectedBtn">Sposta</button>
-          <button class="action-btn red" id="cancelSelectedBtn">Cancella</button>
-        </div>
-      `;
-
-      document.getElementById("editSelectedBtn").onclick = openEditSelected;
-      document.getElementById("moveSelectedBtn").onclick = openMoveSelected;
-      document.getElementById("cancelSelectedBtn").onclick = cancelSelected;
+    function closeDetailPopup(){
+      detailOverlay.classList.remove("show");
     }
 
     function openModal(){
@@ -1723,26 +1928,7 @@
       fTitle.value = selectedAppointment.title || "";
       fNotes.value = selectedAppointment.notes || "";
 
-      openModal();
-    }
-
-    function openMoveSelected(){
-      if(!selectedAppointment) return;
-      modalMode = "move";
-      editingAppointmentId = selectedAppointment.id;
-      modalTitle.textContent = "Sposta prenotazione";
-
-      fName.value = selectedAppointment.clientName || "";
-      fSurname.value = selectedAppointment.clientSurname || "";
-      fPhone.value = selectedAppointment.clientPhone || "";
-      fOperator.value = selectedAppointment.operatorName || "";
-      fDate.value = selectedAppointment.date || formatDateKey(currentDate);
-      fStartTime.value = selectedAppointment.startTime || "09:00";
-      fDuration.value = String(selectedAppointment.durationMinuti || 30);
-      fType.value = selectedAppointment.type || "servizio";
-      fTitle.value = selectedAppointment.title || "";
-      fNotes.value = selectedAppointment.notes || "";
-
+      closeDetailPopup();
       openModal();
     }
 
@@ -1789,15 +1975,22 @@
 
       if(editingAppointmentId){
         const currentStatus = selectedAppointment?.status || "confirmed";
+        const recallDone = selectedAppointment?.recallDone || false;
+        const recallStatus = selectedAppointment?.recallStatus || "pending";
+
         await db.collection("appointments").doc(editingAppointmentId).update({
           ...payload,
           status: currentStatus,
+          recallDone,
+          recallStatus,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       } else {
         await db.collection("appointments").add({
           ...payload,
           status: "confirmed",
+          recallDone: false,
+          recallStatus: "pending",
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -1815,9 +2008,48 @@
         status: "cancelled",
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      closeDetailPopup();
+    }
+
+    async function markRecallDone(id){
+      await db.collection("appointments").doc(id).update({
+        recallDone: true,
+        recallStatus: "done",
+        recallDoneAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    function rebookFromRecall(id){
+      const app = appointments.find(a => a.id === id);
+      if(!app) return;
+
+      modalMode = "new";
+      editingAppointmentId = null;
+      modalTitle.textContent = "Nuova prenotazione da richiamo";
+
+      fName.value = app.clientName || "";
+      fSurname.value = app.clientSurname || "";
+      fPhone.value = app.clientPhone || "";
+      fOperator.value = app.operatorName || "";
+      fDate.value = formatDateKey(new Date());
+      fStartTime.value = "09:00";
+      fDuration.value = String(app.durationMinuti || 30);
+      fType.value = app.type || "servizio";
+      fTitle.value = app.title || "";
+      fNotes.value = app.notes || "";
+
+      openModal();
     }
 
     function shiftCurrentDate(step){
+      if(currentFilter === "recall"){
+        miniMonthDate.setMonth(miniMonthDate.getMonth() + step);
+        renderMiniCalendar();
+        return;
+      }
+
       if(currentView === "day"){
         currentDate.setDate(currentDate.getDate() + step);
       } else if(currentView === "week"){
@@ -1834,20 +2066,25 @@
     function goToday(){
       currentDate = new Date();
       miniMonthDate = new Date(currentDate);
-      renderMiniCalendar();
+      if(currentFilter !== "recall"){
+        renderMiniCalendar();
+      } else {
+        renderMiniCalendar();
+      }
       renderCalendar();
     }
 
     function setFilter(filter){
       currentFilter = filter;
-      document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.filter === filter);
-      });
+      syncFilterButtons();
+      syncViewButtons();
       renderCalendar();
     }
 
     function setView(view){
       currentView = view;
+      currentFilter = "all";
+      syncFilterButtons();
       syncViewButtons();
       renderCalendar();
     }
@@ -1881,6 +2118,15 @@
       if(e.target === bookingModal) closeModal();
     });
 
+    document.getElementById("closeDetailBtn").addEventListener("click", closeDetailPopup);
+    document.getElementById("popupCloseBtn").addEventListener("click", closeDetailPopup);
+    document.getElementById("popupEditBtn").addEventListener("click", openEditSelected);
+    document.getElementById("popupDeleteBtn").addEventListener("click", cancelSelected);
+
+    detailOverlay.addEventListener("click", (e) => {
+      if(e.target === detailOverlay) closeDetailPopup();
+    });
+
     searchInput.addEventListener("input", () => {
       renderCalendar();
     });
@@ -1895,10 +2141,12 @@
         const updated = appointments.find(a => a.id === selectedAppointment.id);
         if(updated){
           selectedAppointment = updated;
-          selectAppointment(updated);
+          if(detailOverlay.classList.contains("show")){
+            openDetailPopup(updated);
+          }
         } else {
           selectedAppointment = null;
-          renderDetailEmpty();
+          closeDetailPopup();
         }
       }
 
@@ -1906,9 +2154,9 @@
     });
 
     renderMiniCalendar();
+    syncFilterButtons();
     syncViewButtons();
     renderCalendar();
-    renderDetailEmpty();
   </script>
 </body>
 </html>
