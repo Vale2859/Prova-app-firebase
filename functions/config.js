@@ -1,7 +1,7 @@
 module.exports = {
   vapid: {
-    publicKey: "INCOLLA_QUI_LA_TUA_PUBLIC_KEY",
-    privateKey: "INCOLLA_QUI_LA_TUA_PRIVATE_KEY"
+    publicKey: "BKsw7JV8wDXVyHhV_Tst8qwThhXsHpXasv2gDViKPUUtbRpBsCcp_wIWsbe0VQl7Ha9WE64hbfZCfvOKqtp5_yk",
+    privateKey: "kBO7VfXDVjgXxubyeD4LLXzhnsVsDtOKpkwvpmvpRFA"
   },
   app: {
     baseUrl: "https://vale2859.github.io/Prova-app-firebase"
