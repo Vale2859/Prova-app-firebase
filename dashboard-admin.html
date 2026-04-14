@@ -7,22 +7,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="manifest-admin.json" />
   <meta name="theme-color" content="#0f8f55" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-touch-fullscreen" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Montesano Admin" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <style>
     :root{
       --bg:#eff4f1;--panel:#ffffffd9;--panel-strong:#ffffff;--line:#dfe9e3;--text:#14352e;--muted:#6f817b;
       --green:#0f8f55;--green-dark:#0b6d42;--soft:#eef8f3;--shadow:0 22px 48px rgba(16,49,39,.10);--radius:26px;
-      --safe-top:max(16px, env(safe-area-inset-top));--safe-bottom:max(18px, env(safe-area-inset-bottom));
+      --safe-top:max(16px, env(safe-area-inset-top));--safe-bottom:max(18px, env(safe-area-inset-bottom));--safe-left:max(12px, env(safe-area-inset-left));--safe-right:max(12px, env(safe-area-inset-right));
     }
     *{box-sizing:border-box} html,body{margin:0;padding:0} body{font-family:"Inter",system-ui,sans-serif;background:linear-gradient(180deg,#f6faf8 0%,var(--bg) 100%);color:var(--text);}
-    .app{max-width:1480px;margin:0 auto;padding:calc(var(--safe-top) + 12px) 16px calc(var(--safe-bottom) + 16px);} 
-    .shell{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start}
+    .app{width:min(1480px,100%);margin:0 auto;padding:calc(var(--safe-top) + 12px) calc(var(--safe-right) + 16px) calc(var(--safe-bottom) + 16px) calc(var(--safe-left) + 16px);} 
+    .shell{display:grid;grid-template-columns:300px minmax(0,1fr);gap:18px;align-items:start;width:100%}
     .sidebar,.panel,.hero,.stat,.workspace{background:var(--panel);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .sidebar{padding:18px;position:sticky;top:20px}
     .logo{width:180px;max-width:100%;display:block;margin-bottom:14px}
@@ -47,7 +48,7 @@
     .mobile-chips{display:none;gap:10px;overflow:auto;padding-bottom:2px}
     .mobile-chips button{white-space:nowrap;border:none;border-radius:999px;padding:10px 14px;background:#fff;border:1px solid var(--line);font-weight:800;color:var(--text)}
     .mobile-chips button.active{background:var(--green);border-color:var(--green);color:#fff}
-    .workspace{padding:18px}
+    .workspace{padding:18px;overflow:hidden}
     .workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
     .workspace-title{margin:0;font-size:28px;letter-spacing:-.04em}
     .workspace-sub{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.45;max-width:720px}
@@ -61,11 +62,11 @@
     .feature-copy{position:relative;z-index:1}
     .feature-copy b{display:block;font-size:24px;letter-spacing:-.04em;margin-bottom:6px}
     .feature-copy span{display:block;font-size:14px;line-height:1.4;max-width:420px;color:rgba(255,255,255,.92)}
-    .iframe-wrap{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;min-height:720px}
+    .iframe-wrap{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;min-height:720px;width:100%}
     iframe{width:100%;height:720px;border:none;background:#fff}
     @media (max-width:1200px){.quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media (max-width:1024px){.shell{grid-template-columns:1fr}.sidebar{position:static}.nav{display:none}.mobile-chips{display:flex}.feature-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:640px){.app{padding:calc(var(--safe-top) + 10px) 12px calc(var(--safe-bottom) + 14px)}.hero{padding:18px}.hero p{font-size:15px}.quick-grid{grid-template-columns:1fr 1fr;gap:12px}.stat{padding:14px}.stat strong{font-size:28px}.workspace{padding:14px}.workspace-title{font-size:24px}.feature-grid{grid-template-columns:1fr}.feature{min-height:180px}.iframe-wrap{min-height:660px}iframe{height:660px}}
+    @media (max-width:640px){.app{padding:calc(var(--safe-top) + 8px) calc(var(--safe-right) + 10px) calc(var(--safe-bottom) + 12px) calc(var(--safe-left) + 10px)}.sidebar,.hero,.workspace,.stat{border-radius:22px}.hero{padding:18px;text-align:center}.hero-kicker{justify-content:center}.hero p{font-size:15px;margin:0 auto}.topbar{justify-content:center}.quick-grid{grid-template-columns:1fr 1fr;gap:12px}.stat{padding:14px;text-align:center}.stat strong{font-size:28px}.workspace{padding:14px}.workspace-head{justify-content:center;text-align:center}.workspace-sub{margin-left:auto;margin-right:auto}.workspace-actions{width:100%;justify-content:center}.btn{flex:1 1 180px}.feature-grid{grid-template-columns:1fr}.feature{min-height:180px}.iframe-wrap{min-height:620px}iframe{height:620px}}
   </style>
 </head>
 <body>
@@ -209,6 +210,10 @@
     renderFeatures();
     openSection(activeKey);
     refreshStats();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(console.error));
+    }
   </script>
 </body>
 </html>
