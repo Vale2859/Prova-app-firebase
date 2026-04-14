@@ -247,3 +247,22 @@ exports.notifyFortunaReady = functions.pubsub
 
     return null;
   });
+exports.testPush = functions.https.onRequest(async (req, res) => {
+  try {
+    const users = await db.collection("users").get();
+
+    for (const doc of users.docs) {
+      await sendPushToUser(doc.id, {
+        title: "🚀 TEST NOTIFICA",
+        body: "Funziona davvero! 🔔",
+        url: app.baseUrl,
+        tag: "test-notifica"
+      });
+    }
+
+    res.send("Notifica inviata");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Errore");
+  }
+});
