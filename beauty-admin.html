@@ -114,7 +114,10 @@
     }
 
     .admin-primary-btn,
-    .admin-secondary-btn {
+    .admin-secondary-btn,
+    .admin-small-btn,
+    .admin-small-btn-danger,
+    .image-action-btn {
       min-height: 52px;
       padding: 0 18px;
       border: none;
@@ -130,7 +133,8 @@
       box-shadow: 0 12px 24px rgba(73,165,120,0.22);
     }
 
-    .admin-secondary-btn {
+    .admin-secondary-btn,
+    .image-action-btn {
       background: #eef4f1;
       color: #16372f;
     }
@@ -329,26 +333,86 @@
       color: #6e7b76;
     }
 
-    .admin-small-btn,
-    .admin-small-btn-danger {
-      min-height: 42px;
-      padding: 0 16px;
-      border-radius: 14px;
+    .admin-small-btn {
       border: 1px solid rgba(18,55,45,0.08);
       background: #f4f6f5;
       color: #16372f;
       font-size: 15px;
       font-weight: 700;
-      cursor: pointer;
     }
 
-    .admin-small-btn-danger { color: #c95b67; }
+    .admin-small-btn-danger {
+      border: 1px solid rgba(18,55,45,0.08);
+      background: #f4f6f5;
+      color: #c95b67;
+      font-size: 15px;
+      font-weight: 700;
+    }
 
     .admin-empty {
       padding: 28px 18px;
       text-align: center;
       color: var(--admin-muted);
       font-size: 16px;
+    }
+
+    .image-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .image-hidden-input {
+      display: none;
+    }
+
+    .image-search-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.62);
+      display: none;
+      align-items: flex-end;
+      z-index: 9999;
+    }
+
+    .image-search-sheet {
+      width: 100%;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      padding: 16px;
+      max-height: 75vh;
+      overflow: auto;
+    }
+
+    .image-search-sheet h3 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      color: #10352e;
+    }
+
+    .image-search-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+    }
+
+    .image-search-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 14px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      background: #eef4f1;
+    }
+
+    .image-search-grid img:hover {
+      border-color: #86c58b;
+    }
+
+    .image-search-close {
+      width: 100%;
+      margin-top: 12px;
     }
 
     @media (max-width: 640px) {
@@ -360,6 +424,7 @@
       .admin-form-grid { grid-template-columns: 1fr; }
       .admin-item { flex-direction: column; }
       .admin-item-image { width: 100%; height: 190px; }
+      .image-search-grid { grid-template-columns: repeat(2,1fr); }
     }
   </style>
 
@@ -426,8 +491,16 @@
         </div>
 
         <div class="admin-field full">
-          <label for="beautyImage">Immagine</label>
-          <button onclick="cercaImmagineDaTitolo('offerTitolo', 'offerPreview')">Cerca online</button>
+          <label>Immagine</label>
+
+          <div class="image-actions">
+            <button class="image-action-btn" type="button" onclick="cercaImmagineDaTitolo('beautyTitolo','beautyPreview')">Cerca online</button>
+            <button class="image-action-btn" type="button" onclick="document.getElementById('beautyImage').click()">Carica da telefono</button>
+            <button class="image-action-btn" type="button" onclick="document.getElementById('beautyCamera').click()">Scatta foto</button>
+          </div>
+
+          <input id="beautyImage" class="image-hidden-input" type="file" accept="image/*" />
+          <input id="beautyCamera" class="image-hidden-input" type="file" accept="image/*" capture="environment" />
         </div>
 
         <div class="admin-field full">
@@ -448,6 +521,14 @@
 
   </div>
 
+  <div id="imageModal" class="image-search-modal">
+    <div class="image-search-sheet">
+      <h3>Scegli immagine</h3>
+      <div id="imageGrid" class="image-search-grid"></div>
+      <button class="admin-secondary-btn image-search-close" type="button" onclick="closeImageModal()">Chiudi</button>
+    </div>
+  </div>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
@@ -463,14 +544,19 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
+    const GOOGLE_API_KEY = "AIzaSyAqBkT2_3sqhZhFvA4tWf3kRxrbz4_U9Rs";
+    const GOOGLE_CX = "229b81fd6309a47c9";
+
     let editingId = null;
     let existingImageUrl = "";
+    let selectedRemoteImageUrl = "";
 
     const formCard = document.getElementById("beautyFormCard");
     const formTitle = document.getElementById("formTitle");
     const beautyList = document.getElementById("beautyList");
     const preview = document.getElementById("beautyPreview");
     const fileInput = document.getElementById("beautyImage");
+    const cameraInput = document.getElementById("beautyCamera");
 
     const fieldTitolo = document.getElementById("beautyTitolo");
     const fieldData = document.getElementById("beautyData");
@@ -478,20 +564,89 @@
     const fieldDescrizione = document.getElementById("beautyDescrizione");
     const fieldAttivo = document.getElementById("beautyAttivo");
 
-    fileInput.addEventListener("change", function(){
-      const file = this.files[0];
-      if(!file) return;
+    function bindPreviewInput(inputEl){
+      inputEl.addEventListener("change", function(){
+        const file = this.files[0];
+        if(!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function(e){
-        preview.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
+        selectedRemoteImageUrl = "";
+
+        const reader = new FileReader();
+        reader.onload = function(e){
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    bindPreviewInput(fileInput);
+    bindPreviewInput(cameraInput);
+
+    function openImageModal(){
+      document.getElementById("imageModal").style.display = "flex";
+    }
+
+    function closeImageModal(){
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    async function cercaImmagineDaTitolo(inputId, previewId){
+      const input = document.getElementById(inputId);
+      const previewEl = document.getElementById(previewId);
+
+      if(!input){
+        alert("Campo titolo non trovato.");
+        return;
+      }
+
+      const titolo = input.value.trim();
+
+      if(!titolo){
+        alert("Inserisci un titolo prima.");
+        return;
+      }
+
+      const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
+
+      try{
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const grid = document.getElementById("imageGrid");
+        grid.innerHTML = "";
+
+        if(!data.items || !data.items.length){
+          alert("Nessuna immagine trovata.");
+          return;
+        }
+
+        data.items.slice(0, 9).forEach((img) => {
+          const el = document.createElement("img");
+          el.src = img.link;
+          el.alt = titolo;
+
+          el.onclick = () => {
+            previewEl.src = img.link;
+            selectedRemoteImageUrl = img.link;
+            fileInput.value = "";
+            cameraInput.value = "";
+            closeImageModal();
+          };
+
+          grid.appendChild(el);
+        });
+
+        openImageModal();
+      } catch(err){
+        console.error(err);
+        alert("Errore durante la ricerca immagini.");
+      }
+    }
 
     function openCreateForm(){
       editingId = null;
       existingImageUrl = "";
+      selectedRemoteImageUrl = "";
       formTitle.textContent = "Nuovo evento beauty";
       clearForm();
       formCard.classList.add("show");
@@ -503,6 +658,7 @@
       clearForm();
       editingId = null;
       existingImageUrl = "";
+      selectedRemoteImageUrl = "";
     }
 
     function clearForm(){
@@ -512,6 +668,7 @@
       fieldDescrizione.value = "";
       fieldAttivo.checked = true;
       fileInput.value = "";
+      cameraInput.value = "";
       preview.src = "";
     }
 
@@ -523,16 +680,22 @@
       fieldAttivo.checked = data.attivo === true;
       preview.src = data.immagine || data.imageUrl || "";
       existingImageUrl = data.immagine || data.imageUrl || "";
+      selectedRemoteImageUrl = existingImageUrl || "";
+      fileInput.value = "";
+      cameraInput.value = "";
     }
 
     async function uploadImageIfNeeded(){
-      const file = fileInput.files[0];
-      if(!file) return existingImageUrl || "";
+      const file = fileInput.files[0] || cameraInput.files[0];
+      if(file){
+        const safeName = Date.now() + "-" + file.name.replace(/\s+/g, "-");
+        const ref = storage.ref("beauty/" + safeName);
+        await ref.put(file);
+        return await ref.getDownloadURL();
+      }
 
-      const safeName = Date.now() + "-" + file.name.replace(/\s+/g, "-");
-      const ref = storage.ref("beauty/" + safeName);
-      await ref.put(file);
-      return await ref.getDownloadURL();
+      if(selectedRemoteImageUrl) return selectedRemoteImageUrl;
+      return existingImageUrl || "";
     }
 
     async function saveBeauty(){
@@ -578,7 +741,6 @@
     function deleteBeauty(id){
       const ok = confirm("Vuoi eliminare questo evento beauty?");
       if(!ok) return;
-
       db.collection("beauty").doc(id).delete();
     }
 
@@ -653,50 +815,8 @@
     window.deleteBeauty = deleteBeauty;
     window.editBeauty = editBeauty;
     window.reloadBeauty = reloadBeauty;
+    window.cercaImmagineDaTitolo = cercaImmagineDaTitolo;
+    window.closeImageModal = closeImageModal;
   </script>
-
-<script>
-const GOOGLE_API_KEY = "AIzaSyAqBkT2_3sqhZhFvA4tWf3kRxrbz4_U9Rs";
-const GOOGLE_CX = "229b81fd6309a47c9";
-
-function openImageModal(){document.getElementById("imageModal").style.display="flex";}
-function closeImageModal(){document.getElementById("imageModal").style.display="none";}
-
-async function cercaImmagineDaTitolo(inputId, previewId){
-  const titolo = document.getElementById(inputId).value;
-  if(!titolo){alert("Inserisci un titolo");return;}
-
-  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  const grid = document.getElementById("imageGrid");
-  grid.innerHTML="";
-
-  (data.items||[]).slice(0,9).forEach(img=>{
-    const el=document.createElement("img");
-    el.src=img.link;
-    el.style.width="100%";
-    el.style.borderRadius="10px";
-    el.onclick=()=>{
-      document.getElementById(previewId).src=img.link;
-      closeImageModal();
-    };
-    grid.appendChild(el);
-  });
-
-  openImageModal();
-}
-</script>
-
-<div id="imageModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;z-index:9999;">
-<div style="width:100%;background:#fff;border-radius:20px 20px 0 0;padding:14px;max-height:70vh;overflow:auto;">
-<h3>Scegli immagine</h3>
-<div id="imageGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
-<button onclick="closeImageModal()" style="width:100%;margin-top:10px;padding:12px;">Chiudi</button>
-</div>
-</div>
-
 </body>
 </html>
