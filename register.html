@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Registrati | Farmacia Montesano</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -148,6 +149,11 @@
       box-shadow:0 18px 34px rgba(26,139,108,0.18);
     }
 
+    .action-btn:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+    }
+
     .bottom-link{
       margin-top:14px;
       text-align:center;
@@ -168,6 +174,7 @@
       font-size:.95rem;
       font-weight:800;
       display:none;
+      line-height:1.4;
     }
 
     .status.ok{
@@ -181,7 +188,7 @@
       background:#fff1f1;
       color:var(--danger);
     }
-  
+
     .check-card{
       margin:14px 0 16px;
       padding:14px;
@@ -207,6 +214,7 @@
     }
 
     .check-row label{
+      margin:0;
       font-size:.94rem;
       line-height:1.45;
       color:var(--text-soft);
@@ -218,6 +226,13 @@
       font-weight:900;
     }
 
+    .consent-note{
+      margin-top:10px;
+      font-size:.82rem;
+      line-height:1.45;
+      color:#70827b;
+      font-weight:700;
+    }
   </style>
 
   <link rel="stylesheet" href="mobile-only.css" />
@@ -240,43 +255,50 @@
     <section class="panel">
       <div class="field">
         <label for="nome">Nome</label>
-        <input id="nome" type="text" placeholder="Nome" />
+        <input id="nome" type="text" placeholder="Nome" autocomplete="given-name" />
       </div>
 
       <div class="field">
         <label for="cognome">Cognome</label>
-        <input id="cognome" type="text" placeholder="Cognome" />
+        <input id="cognome" type="text" placeholder="Cognome" autocomplete="family-name" />
       </div>
 
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" type="email" placeholder="nome@email.it" />
+        <input id="email" type="email" placeholder="nome@email.it" autocomplete="email" />
       </div>
 
       <div class="field">
         <label for="telefono">Telefono</label>
-        <input id="telefono" type="text" placeholder="Telefono" />
+        <input id="telefono" type="text" placeholder="Es. 3938866104" autocomplete="tel" />
       </div>
 
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Password" />
+        <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
       </div>
 
-      
       <div class="check-card">
         <div class="check-row">
           <input id="privacyConsent" type="checkbox" />
           <label for="privacyConsent">
-            Dichiaro di aver letto e accettato la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> e il trattamento dei dati per servizi, fidelity, premi e funzioni dell’app.
+            Dichiaro di aver letto e accettato la
+            <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+            e i
+            <a href="termini.html" target="_blank" rel="noopener">Termini di Servizio</a>.
           </label>
         </div>
 
         <div class="check-row">
           <input id="notifConsent" type="checkbox" />
           <label for="notifConsent">
-            Accetto l’attivazione iniziale delle notifiche per prenotazioni, turni, appoggi, giornate beauty e fortuna. Potrò modificarle dopo nel profilo.
+            Accetto l’attivazione iniziale delle notifiche dell’app relative a prenotazioni, promemoria, offerte,
+            turni, appoggi, giornate beauty, fortuna e servizi. Successivamente potrò modificarle nel profilo.
           </label>
+        </div>
+
+        <div class="consent-note">
+          Per completare la registrazione è necessario accettare privacy, termini e attivazione iniziale delle notifiche.
         </div>
       </div>
 
@@ -327,6 +349,16 @@
       statusBox.className = `status ${type}`;
     }
 
+    function normalizePhone(phone) {
+      return String(phone || "")
+        .replace(/\s+/g, "")
+        .replace(/-/g, "")
+        .replace(/\(/g, "")
+        .replace(/\)/g, "")
+        .replace(/^\+39/, "39")
+        .trim();
+    }
+
     function makeClientCode(uid) {
       return "FM" + uid.slice(0, 8).toUpperCase();
     }
@@ -343,7 +375,7 @@
       const nome = nomeEl.value.trim();
       const cognome = cognomeEl.value.trim();
       const email = emailEl.value.trim();
-      const telefono = telefonoEl.value.trim();
+      const telefono = normalizePhone(telefonoEl.value.trim());
       const password = passwordEl.value;
 
       if (!nome || !cognome || !email || !telefono || !password) {
@@ -352,7 +384,7 @@
       }
 
       if (!privacyConsentEl.checked) {
-        showStatus("Devi accettare la Privacy Policy.", "error");
+        showStatus("Devi accettare la Privacy Policy e i Termini di Servizio.", "error");
         return;
       }
 
@@ -373,6 +405,15 @@
 
         await updateProfile(user, { displayName: fullName });
 
+        const notificationSettings = {
+          prenotazioni: true,
+          turno: true,
+          appoggio: true,
+          giornate: true,
+          fortuna: true,
+          offerte: true
+        };
+
         await setDoc(doc(firestore, "users", user.uid), {
           nome,
           cognome,
@@ -391,40 +432,33 @@
           spesaAnnua: "0,00 €",
           privacyAccepted: true,
           privacyAcceptedAt: new Date().toISOString(),
-          notificationSettings: {
-            prenotazioni: true,
-            turno: true,
-            appoggio: true,
-            giornate: true,
-            fortuna: true
-          },
+          notificationConsentAccepted: true,
+          notificationConsentAcceptedAt: new Date().toISOString(),
+          notificationSettings,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }, { merge: true });
 
         await syncUserProfileFromFirestore(user);
-        await saveNotificationSettings({
-          prenotazioni: true,
-          turno: true,
-          appoggio: true,
-          giornate: true,
-          fortuna: true
-        });
+
+        await saveNotificationSettings(notificationSettings);
 
         try {
           await askNotificationPermission();
         } catch (notifyError) {
           console.error(notifyError);
-          showStatus("Account creato, ma devi consentire le notifiche del dispositivo per entrare nell’app. Attivale e riprova.", "error");
+          showStatus("Account creato, ma devi consentire le notifiche del dispositivo per usare al meglio l’app. Puoi attivarle e riprovare.", "error");
           registerBtn.disabled = false;
           registerFlowActive = false;
           return;
         }
 
+        showStatus("Registrazione completata con successo.", "ok");
         window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);
         let message = "Registrazione non riuscita. Controlla i dati inseriti.";
+
         if (error?.code === "auth/email-already-in-use") {
           message = "Questa email è già registrata.";
         } else if (error?.code === "auth/invalid-email") {
@@ -438,6 +472,7 @@
         } else if (error?.code === "auth/operation-not-allowed") {
           message = "Metodo email/password non attivo su Firebase Authentication.";
         }
+
         showStatus(message, "error");
       } finally {
         registerBtn.disabled = false;
