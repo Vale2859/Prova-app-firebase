@@ -1,4 +1,4 @@
-const CACHE_NAME = "farmacia-montesano-v10";
+const CACHE_NAME = "farmacia-montesano-v11";
 
 const STATIC_ASSETS = [
   "./",
