@@ -529,304 +529,295 @@
     </div>
   </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-      authDomain: "farmaciamontesano.firebaseapp.com",
-      projectId: "farmaciamontesano",
-      storageBucket: "farmaciamontesano.firebasestorage.app",
-      messagingSenderId: "881461241551",
-      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+ <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+    authDomain: "farmaciamontesano.firebaseapp.com",
+    projectId: "farmaciamontesano",
+    storageBucket: "farmaciamontesano.firebasestorage.app",
+    messagingSenderId: "881461241551",
+    appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  const GOOGLE_API_KEY = "AIzaSyAqBkT2_3sqhZhFvA4tWf3kRxrbz4_U9Rs";
+  const GOOGLE_CX = "229b81fd6309a47c9";
+
+  let editingId = null;
+  let existingImageUrl = "";
+  let selectedRemoteImageUrl = "";
+
+  const formCard = document.getElementById("beautyFormCard");
+  const formTitle = document.getElementById("formTitle");
+  const beautyList = document.getElementById("beautyList");
+  const preview = document.getElementById("beautyPreview");
+  const fileInput = document.getElementById("beautyImage");
+  const cameraInput = document.getElementById("beautyCamera");
+
+  const fieldTitolo = document.getElementById("beautyTitolo");
+  const fieldData = document.getElementById("beautyData");
+  const fieldOrdine = document.getElementById("beautyOrdine");
+  const fieldDescrizione = document.getElementById("beautyDescrizione");
+  const fieldAttivo = document.getElementById("beautyAttivo");
+
+  function bindPreviewInput(inputEl){
+    inputEl.addEventListener("change", function(){
+      const file = this.files[0];
+      if(!file) return;
+
+      selectedRemoteImageUrl = "";
+
+      const reader = new FileReader();
+      reader.onload = function(e){
+        preview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  bindPreviewInput(fileInput);
+  bindPreviewInput(cameraInput);
+
+  function openImageModal(){
+    document.getElementById("imageModal").style.display = "flex";
+  }
+
+  function closeImageModal(){
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+  async function cercaImmagineDaTitolo(inputId, previewId){
+    const input = document.getElementById(inputId);
+    const previewEl = document.getElementById(previewId);
+
+    if(!input){
+      alert("Campo titolo non trovato.");
+      return;
+    }
+
+    const titolo = input.value.trim();
+
+    if(!titolo){
+      alert("Inserisci un titolo prima.");
+      return;
+    }
+
+    const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
+
+    try{
+      const res = await fetch(url);
+      const data = await res.json();
+
+      console.log("Titolo cercato:", titolo);
+      console.log("Risposta Google:", data);
+
+      const grid = document.getElementById("imageGrid");
+      grid.innerHTML = "";
+
+      if (data.error) {
+        alert("Errore Google: " + (data.error.message || "richiesta non valida"));
+        return;
+      }
+
+      if(!data.items || !data.items.length){
+        alert("Nessuna immagine trovata per questo titolo.");
+        return;
+      }
+
+      data.items.slice(0, 9).forEach((img) => {
+        const el = document.createElement("img");
+        el.src = img.link;
+        el.alt = titolo;
+
+        el.onclick = () => {
+          previewEl.src = img.link;
+          selectedRemoteImageUrl = img.link;
+          fileInput.value = "";
+          cameraInput.value = "";
+          closeImageModal();
+        };
+
+        grid.appendChild(el);
+      });
+
+      openImageModal();
+    } catch(err){
+      console.error("Errore durante la ricerca immagini:", err);
+      alert("Errore durante la ricerca immagini.");
+    }
+  }
+
+  function openCreateForm(){
+    editingId = null;
+    existingImageUrl = "";
+    selectedRemoteImageUrl = "";
+    formTitle.textContent = "Nuovo evento beauty";
+    clearForm();
+    formCard.classList.add("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function closeForm(){
+    formCard.classList.remove("show");
+    clearForm();
+    editingId = null;
+    existingImageUrl = "";
+    selectedRemoteImageUrl = "";
+  }
+
+  function clearForm(){
+    fieldTitolo.value = "";
+    fieldData.value = "";
+    fieldOrdine.value = "";
+    fieldDescrizione.value = "";
+    fieldAttivo.checked = true;
+    fileInput.value = "";
+    cameraInput.value = "";
+    preview.src = "";
+  }
+
+  function fillForm(data){
+    fieldTitolo.value = data.titolo || data.nome || "";
+    fieldData.value = data.data || "";
+    fieldOrdine.value = data.ordine ?? "";
+    fieldDescrizione.value = data.descrizione || "";
+    fieldAttivo.checked = data.attivo === true;
+    preview.src = data.immagine || data.imageUrl || "";
+    existingImageUrl = data.immagine || data.imageUrl || "";
+    selectedRemoteImageUrl = existingImageUrl || "";
+    fileInput.value = "";
+    cameraInput.value = "";
+  }
+
+  async function uploadImageIfNeeded(){
+    const file = fileInput.files[0] || cameraInput.files[0];
+    if(file){
+      const safeName = Date.now() + "-" + file.name.replace(/\s+/g, "-");
+      const ref = storage.ref("beauty/" + safeName);
+      await ref.put(file);
+      return await ref.getDownloadURL();
+    }
+
+    if(selectedRemoteImageUrl) return selectedRemoteImageUrl;
+    return existingImageUrl || "";
+  }
+
+  async function saveBeauty(){
+    const titolo = fieldTitolo.value.trim();
+    const data = fieldData.value || "";
+    const ordine = fieldOrdine.value ? parseInt(fieldOrdine.value, 10) : 999;
+    const descrizione = fieldDescrizione.value.trim();
+    const attivo = fieldAttivo.checked;
+
+    if(!titolo){
+      alert("Inserisci il titolo dell'evento.");
+      return;
+    }
+
+    const immagine = await uploadImageIfNeeded();
+
+    const payload = {
+      titolo,
+      nome: titolo,
+      data,
+      ordine,
+      descrizione,
+      attivo,
+      immagine,
+      imageUrl: immagine
     };
 
-    firebase.initializeApp(firebaseConfig);
-
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    const GOOGLE_API_KEY = "AIzaSyAqBkT2_3sqhZhFvA4tWf3kRxrbz4_U9Rs";
-    const GOOGLE_CX = "229b81fd6309a47c9";
-
-    let editingId = null;
-    let existingImageUrl = "";
-    let selectedRemoteImageUrl = "";
-
-    const formCard = document.getElementById("beautyFormCard");
-    const formTitle = document.getElementById("formTitle");
-    const beautyList = document.getElementById("beautyList");
-    const preview = document.getElementById("beautyPreview");
-    const fileInput = document.getElementById("beautyImage");
-    const cameraInput = document.getElementById("beautyCamera");
-
-    const fieldTitolo = document.getElementById("beautyTitolo");
-    const fieldData = document.getElementById("beautyData");
-    const fieldOrdine = document.getElementById("beautyOrdine");
-    const fieldDescrizione = document.getElementById("beautyDescrizione");
-    const fieldAttivo = document.getElementById("beautyAttivo");
-
-    function bindPreviewInput(inputEl){
-      inputEl.addEventListener("change", function(){
-        const file = this.files[0];
-        if(!file) return;
-
-        selectedRemoteImageUrl = "";
-
-        const reader = new FileReader();
-        reader.onload = function(e){
-          preview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
+    if(editingId){
+      await db.collection("beauty").doc(editingId).update(payload);
+    } else {
+      await db.collection("beauty").add(payload);
     }
 
-    bindPreviewInput(fileInput);
-    bindPreviewInput(cameraInput);
-
-    function openImageModal(){
-      document.getElementById("imageModal").style.display = "flex";
-    }
-
-    function closeImageModal(){
-      document.getElementById("imageModal").style.display = "none";
-    }
-
-<script>
-async function cercaImmagineDaTitolo(inputId, previewId){
-  const input = document.getElementById(inputId);
-  const previewEl = document.getElementById(previewId);
-
-  if(!input){
-    alert("Campo titolo non trovato.");
-    return;
+    closeForm();
   }
 
-  const titolo = input.value.trim();
-
-  if(!titolo){
-    alert("Inserisci un titolo prima.");
-    return;
-  }
-
-  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
-
-  try{
-    const res = await fetch(url);
-    const data = await res.json();
-
-    console.log("Titolo cercato:", titolo);
-    console.log("Risposta Google:", data);
-
-    const grid = document.getElementById("imageGrid");
-    grid.innerHTML = "";
-
-    if (data.error) {
-      alert("Errore Google: " + (data.error.message || "richiesta non valida"));
-      return;
-    }
-
-    if(!data.items || !data.items.length){
-      alert("Nessuna immagine trovata per questo titolo.");
-      return;
-    }
-
-    data.items.slice(0, 9).forEach((img) => {
-      const el = document.createElement("img");
-      el.src = img.link;
-      el.alt = titolo;
-
-      el.onclick = () => {
-        previewEl.src = img.link;
-        selectedRemoteImageUrl = img.link;
-        fileInput.value = "";
-        cameraInput.value = "";
-        closeImageModal();
-      };
-
-      grid.appendChild(el);
+  function toggleVisibility(id, currentState){
+    db.collection("beauty").doc(id).update({
+      attivo: !currentState
     });
-
-    openImageModal();
-  } catch(err){
-    console.error("Errore durante la ricerca immagini:", err);
-    alert("Errore durante la ricerca immagini.");
   }
-}
-</script>
-  
-    function openCreateForm(){
-      editingId = null;
-      existingImageUrl = "";
-      selectedRemoteImageUrl = "";
-      formTitle.textContent = "Nuovo evento beauty";
-      clearForm();
+
+  function deleteBeauty(id){
+    const ok = confirm("Vuoi eliminare questo evento beauty?");
+    if(!ok) return;
+    db.collection("beauty").doc(id).delete();
+  }
+
+  function editBeauty(id){
+    db.collection("beauty").doc(id).get().then((doc) => {
+      if(!doc.exists) return;
+
+      editingId = id;
+      formTitle.textContent = "Modifica evento beauty";
+      fillForm(doc.data());
       formCard.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  function renderBeauty(snapshot){
+    if(snapshot.empty){
+      beautyList.innerHTML = `<div class="admin-empty">Non ci sono eventi beauty salvati.</div>`;
+      return;
     }
 
-    function closeForm(){
-      formCard.classList.remove("show");
-      clearForm();
-      editingId = null;
-      existingImageUrl = "";
-      selectedRemoteImageUrl = "";
-    }
+    const docs = [];
+    snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+    docs.sort((a, b) => (a.ordine ?? 999) - (b.ordine ?? 999));
 
-    function clearForm(){
-      fieldTitolo.value = "";
-      fieldData.value = "";
-      fieldOrdine.value = "";
-      fieldDescrizione.value = "";
-      fieldAttivo.checked = true;
-      fileInput.value = "";
-      cameraInput.value = "";
-      preview.src = "";
-    }
+    let html = "";
 
-    function fillForm(data){
-      fieldTitolo.value = data.titolo || data.nome || "";
-      fieldData.value = data.data || "";
-      fieldOrdine.value = data.ordine ?? "";
-      fieldDescrizione.value = data.descrizione || "";
-      fieldAttivo.checked = data.attivo === true;
-      preview.src = data.immagine || data.imageUrl || "";
-      existingImageUrl = data.immagine || data.imageUrl || "";
-      selectedRemoteImageUrl = existingImageUrl || "";
-      fileInput.value = "";
-      cameraInput.value = "";
-    }
+    docs.forEach((d) => {
+      const isActive = d.attivo === true;
 
-    async function uploadImageIfNeeded(){
-      const file = fileInput.files[0] || cameraInput.files[0];
-      if(file){
-        const safeName = Date.now() + "-" + file.name.replace(/\s+/g, "-");
-        const ref = storage.ref("beauty/" + safeName);
-        await ref.put(file);
-        return await ref.getDownloadURL();
-      }
-
-      if(selectedRemoteImageUrl) return selectedRemoteImageUrl;
-      return existingImageUrl || "";
-    }
-
-    async function saveBeauty(){
-      const titolo = fieldTitolo.value.trim();
-      const data = fieldData.value || "";
-      const ordine = fieldOrdine.value ? parseInt(fieldOrdine.value, 10) : 999;
-      const descrizione = fieldDescrizione.value.trim();
-      const attivo = fieldAttivo.checked;
-
-      if(!titolo){
-        alert("Inserisci il titolo dell'evento.");
-        return;
-      }
-
-      const immagine = await uploadImageIfNeeded();
-
-      const payload = {
-        titolo,
-        nome: titolo,
-        data,
-        ordine,
-        descrizione,
-        attivo,
-        immagine,
-        imageUrl: immagine
-      };
-
-      if(editingId){
-        await db.collection("beauty").doc(editingId).update(payload);
-      } else {
-        await db.collection("beauty").add(payload);
-      }
-
-      closeForm();
-    }
-
-    function toggleVisibility(id, currentState){
-      db.collection("beauty").doc(id).update({
-        attivo: !currentState
-      });
-    }
-
-    function deleteBeauty(id){
-      const ok = confirm("Vuoi eliminare questo evento beauty?");
-      if(!ok) return;
-      db.collection("beauty").doc(id).delete();
-    }
-
-    function editBeauty(id){
-      db.collection("beauty").doc(id).get().then((doc) => {
-        if(!doc.exists) return;
-
-        editingId = id;
-        formTitle.textContent = "Modifica evento beauty";
-        fillForm(doc.data());
-        formCard.classList.add("show");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    }
-
-    function renderBeauty(snapshot){
-      if(snapshot.empty){
-        beautyList.innerHTML = `<div class="admin-empty">Non ci sono eventi beauty salvati.</div>`;
-        return;
-      }
-
-      const docs = [];
-      snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-      docs.sort((a, b) => (a.ordine ?? 999) - (b.ordine ?? 999));
-
-      let html = "";
-
-      docs.forEach((d) => {
-        const isActive = d.attivo === true;
-
-        html += `
-          <article class="admin-item">
-            <img src="${d.immagine || d.imageUrl || ''}" alt="${d.titolo || d.nome || 'Evento beauty'}" class="admin-item-image" />
-
-            <div class="admin-item-body">
-              <h2 class="admin-item-title">${d.titolo || d.nome || ""}</h2>
-
-              <div class="admin-chip-row">
-                <span class="admin-chip">${isActive ? "Visibile" : "Nascosto"}</span>
-                ${d.data ? `<span class="admin-chip">${d.data}</span>` : ``}
-                <span class="admin-chip">Ordine ${d.ordine ?? 999}</span>
-              </div>
-
-              <p class="admin-item-sub">${d.descrizione || ""}</p>
-
-              <div class="admin-item-footer">
-                <button class="admin-toggle-pill ${isActive ? 'active' : 'hidden'}" type="button" onclick="toggleVisibility('${d.id}', ${isActive})">
-                  ${isActive ? "Visibile" : "Nascosto"}
-                </button>
-
-                <button class="admin-small-btn" type="button" onclick="editBeauty('${d.id}')">Modifica</button>
-                <button class="admin-small-btn-danger" type="button" onclick="deleteBeauty('${d.id}')">Elimina</button>
-              </div>
+      html += `
+        <article class="admin-item">
+          <img src="${d.immagine || d.imageUrl || ''}" alt="${d.titolo || d.nome || 'Evento beauty'}" class="admin-item-image" />
+          <div class="admin-item-body">
+            <h2 class="admin-item-title">${d.titolo || d.nome || ""}</h2>
+            <div class="admin-chip-row">
+              <span class="admin-chip">${isActive ? "Visibile" : "Nascosto"}</span>
+              ${d.data ? `<span class="admin-chip">${d.data}</span>` : ``}
+              <span class="admin-chip">Ordine ${d.ordine ?? 999}</span>
             </div>
-          </article>
-        `;
-      });
+            <p class="admin-item-sub">${d.descrizione || ""}</p>
+            <div class="admin-item-footer">
+              <button class="admin-toggle-pill ${isActive ? 'active' : 'hidden'}" type="button" onclick="toggleVisibility('${d.id}', ${isActive})">
+                ${isActive ? "Visibile" : "Nascosto"}
+              </button>
+              <button class="admin-small-btn" type="button" onclick="editBeauty('${d.id}')">Modifica</button>
+              <button class="admin-small-btn-danger" type="button" onclick="deleteBeauty('${d.id}')">Elimina</button>
+            </div>
+          </div>
+        </article>
+      `;
+    });
 
-      beautyList.innerHTML = html;
-    }
+    beautyList.innerHTML = html;
+  }
 
-    function reloadBeauty(){
-      db.collection("beauty").get().then(renderBeauty);
-    }
+  function reloadBeauty(){
+    db.collection("beauty").get().then(renderBeauty);
+  }
 
-    db.collection("beauty").onSnapshot(renderBeauty);
+  db.collection("beauty").onSnapshot(renderBeauty);
 
-    window.openCreateForm = openCreateForm;
-    window.closeForm = closeForm;
-    window.saveBeauty = saveBeauty;
-    window.toggleVisibility = toggleVisibility;
-    window.deleteBeauty = deleteBeauty;
-    window.editBeauty = editBeauty;
-    window.reloadBeauty = reloadBeauty;
-    window.cercaImmagineDaTitolo = cercaImmagineDaTitolo;
-    window.closeImageModal = closeImageModal;
-  </script>
-</body>
-</html>
+  window.openCreateForm = openCreateForm;
+  window.closeForm = closeForm;
+  window.saveBeauty = saveBeauty;
+  window.toggleVisibility = toggleVisibility;
+  window.deleteBeauty = deleteBeauty;
+  window.editBeauty = editBeauty;
+  window.reloadBeauty = reloadBeauty;
+  window.cercaImmagineDaTitolo = cercaImmagineDaTitolo;
+  window.closeImageModal = closeImageModal;
+</script>
