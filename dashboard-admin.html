@@ -1,184 +1,510 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Farmacia Montesano</title>
+  <meta name="description" content="Farmacia Montesano: servizi, prevenzione, promozioni e assistenza." />
 
-<title>Admin | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mobile.css" media="screen and (max-width:640px)" />
 
-<style>
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
 
-body{
-  background:linear-gradient(180deg,#f8faf9,#eef3f1);
-  font-family:Inter,sans-serif;
-}
-
-.admin-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px;
-}
-
-.admin-title{
-  font-size:22px;
-  font-weight:900;
-}
-
-.admin-badge{
-  background:#1b6c56;
-  color:#fff;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-}
-
-.admin-scroll{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-}
-
-.admin-page{
-  min-width:100%;
-  padding:12px;
-  scroll-snap-align:start;
-}
-
-.admin-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.admin-card{
-  height:150px;
-  border-radius:22px;
-  overflow:hidden;
-  position:relative;
-  display:flex;
-  align-items:flex-end;
-  padding:14px;
-  font-size:18px;
-  font-weight:900;
-  color:#fff;
-  box-shadow:0 12px 30px rgba(0,0,0,0.1);
-}
-
-.admin-card img{
-  position:absolute;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  top:0;
-  left:0;
-  opacity:.35;
-}
-
-.admin-card span{
-  position:relative;
-  z-index:2;
-}
-
-.c1{background:#1b6c56;}
-.c2{background:#c94d3f;}
-.c3{background:#8c67c3;}
-.c4{background:#5aa7c9;}
-
-</style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script>document.documentElement.classList.add(window.matchMedia('(display-mode: standalone)').matches ? 'is-standalone' : 'is-browser');</script>
+  <style>
+    html.auth-checking, html.auth-checking body { visibility:hidden; opacity:0; }
+    html.auth-ready, html.auth-ready body { visibility:visible; opacity:1; transition:opacity .18s ease; }
+    .auth-loading-screen{position:fixed;inset:0;background:linear-gradient(180deg,#f8faf9 0%, #eef3f1 100%);display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;color:#1b6c56;font-weight:900;font-size:1.15rem;}
+  </style>
+  <script>document.documentElement.classList.add('auth-checking');</script>
 </head>
 
-<body>
+<body class="season-primavera">
+  <div id="authLoadingScreen" class="auth-loading-screen">Caricamento account...</div>
+  <div class="home-page-bg"></div>
 
-<div class="admin-top">
-  <div class="admin-title">Pannello Farmacia</div>
-  <div class="admin-badge">ADMIN</div>
-</div>
+  <header class="home-site-header">
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img onerror="this.src='images/farmacia2.jpg'" src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
 
-<div class="admin-scroll">
+      <nav class="-nav">
+        <a class="active" href="index.html">Home</a>
+        <a href="chi-siamo.html">Chi siamo</a>
+        <a href="servizi.html">Servizi</a>
+        <a href="promo.html">Promo</a>
+        <a href="giornate.html">Beauty</a>
+        <a href="turno.html">Turni</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
 
-<!-- PAGINA 1 -->
-<div class="admin-page">
-  <div class="admin-grid">
-
-    <div class="admin-card c1" onclick="go('admin-servizi.html')">
-      <img src="images/servizi.jpg">
-      <span>Servizi</span>
+      <div class="home-nav-actions">
+        <button class="home-search-btn" type="button" aria-label="Cerca">⌕</button>
+        <a href="calendario.html" class="home-cta-btn">Prenota ora <span>➜</span></a>
+      </div>
     </div>
+  </header>
 
-    <div class="admin-card c2" onclick="go('admin-promo.html')">
-      <img src="images/promo.jpg">
-      <span>Promo</span>
-    </div>
+  <main class="home-main home-shell">
 
-    <div class="admin-card c3" onclick="go('admin-beauty.html')">
-      <img src="images/beauty.jpg">
-      <span>Beauty</span>
-    </div>
+    <section class="home-top-banner">
+      <div class="home-top-banner-accent" aria-hidden="true"></div>
 
-    <div class="admin-card c4" onclick="go('admin-turni.html')">
-      <img src="images/turno.jpg">
-      <span>Turni</span>
-    </div>
+      <div class="home-top-banner-inner">
+        <div class="home-top-banner-head">
+          <div class="home-top-banner-icon" aria-hidden="true">i</div>
+          <div class="home-top-banner-label">Messaggi della farmacia</div>
+        </div>
 
+        <div class="home-top-banner-divider" aria-hidden="true"></div>
+
+        <div class="home-top-banner-track">
+          <div class="home-top-banner-text" id="desktopBannerText">
+            SIAMO APERTI • Lun/Ven 8:30–20:00
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-layout-grid">
+      <div class="home-left-column">
+        <div class="home-slider-only">
+          <img onerror="this.src='images/farmacia2.jpg'" class="home-shape-slide active" src="farmacia2.jpg" onerror="this.src='images/farmacia2.jpg'" alt="Farmacia Montesano" />
+          <img onerror="this.src='images/farmacia2.jpg'" class="home-shape-slide" src="farmacia3.jpg" onerror="this.src='images/farmacia2.jpg'" alt="Interno farmacia" />
+          <img onerror="this.src='images/farmacia2.jpg'" class="home-shape-slide" src="farmacia4.jpg" onerror="this.src='images/farmacia2.jpg'" alt="Reparto farmacia" />
+          <div class="home-slider-glow"></div>
+        </div>
+
+        <section class="home-cards-left" aria-label="Collegamenti rapidi">
+          <a href="servizi.html" class="home-image-card" aria-label="Servizi">
+            <img onerror="this.src='images/farmacia2.jpg'" src="images/servizi.jpg" onerror="this.onerror=null;this.src='farmacia2.jpg'" onerror="this.src='images/farmacia2.jpg'" alt="Servizi" />
+          </a>
+
+          <a href="promo.html" class="home-image-card" aria-label="Promo del mese">
+            <img onerror="this.src='images/farmacia2.jpg'" src="images/promo.jpg" onerror="this.onerror=null;this.src='farmacia2.jpg'" onerror="this.src='images/farmacia2.jpg'" alt="Promo del mese" />
+          </a>
+
+          <a href="giornate.html" class="home-image-card" aria-label="Giornate beauty">
+            <img onerror="this.src='images/farmacia2.jpg'" src="images/beauty.jpg" onerror="this.onerror=null;this.src='farmacia2.jpg'" onerror="this.src='images/farmacia2.jpg'" alt="Giornate beauty" />
+          </a>
+
+          <a href="turno.html" class="home-image-card" aria-label="Farmacia di turno">
+            <img onerror="this.src='images/farmacia2.jpg'" src="images/turno.jpg" onerror="this.onerror=null;this.src='farmacia2.jpg'" onerror="this.src='images/farmacia2.jpg'" alt="Farmacia di turno" />
+          </a>
+        </section>
+      </div>
+
+      <aside class="home-right-column" aria-label="Assistente Mia">
+        <div class="home-mia-wrap" id="miaAssistantWrap">
+          <div class="home-mia-light"></div>
+
+          <button class="home-mia-trigger" id="miaTrigger" type="button" aria-label="Apri chat con Mia">
+            <img onerror="this.src='images/farmacia2.jpg'" src="images/mia.png" alt="Mia assistente farmacia" class="home-mia-portrait" />
+          </button>
+
+          <button class="mia-cta-mini" id="miaMiniCta" type="button" aria-label="Parla con Mia">
+            💬 Parla con MIA
+          </button>
+
+          <button class="home-mia-bubble" id="miaBubble" type="button" aria-label="Apri chat con Mia">
+            <span class="home-mia-bubble-label">Mia</span>
+            <span class="home-mia-bubble-text" id="miaBubbleTyping"></span>
+          </button>
+
+          <div class="home-mia-chat-panel" id="miaChatPanel" aria-hidden="true">
+            <div class="home-mia-chat-head">
+              <div class="home-mia-chat-head-left">
+                <div class="home-mia-chat-avatar">M</div>
+                <div class="home-mia-chat-head-texts">
+                  <strong>Mia</strong>
+                  <span>Assistente Farmacia Montesano</span>
+                </div>
+              </div>
+
+              <button class="home-mia-chat-close" id="miaChatClose" type="button" aria-label="Chiudi chat">×</button>
+            </div>
+
+            <div class="home-mia-chat-body">
+              <div class="home-mia-chat-message is-mia">
+                Ciao, benvenuto in Farmacia Montesano 👋
+                Sono Mia, dimmi pure come posso aiutarti.
+              </div>
+
+              <div class="home-mia-chat-actions">
+                <a href="https://wa.me/393927737079" target="_blank" rel="noopener" class="home-mia-chat-action">
+                  💬 Scrivici su WhatsApp
+                </a>
+
+                <a href="calendario.html" class="home-mia-chat-action">
+  📅 Prenota un servizio
+</a>
+
+                <a href="servizi.html" class="home-mia-chat-action">
+                  🧴 Scopri i servizi
+                </a>
+
+                <a href="turno.html" class="home-mia-chat-action">
+                  🕒 Farmacia di turno
+                </a>
+              </div>
+
+              <div class="home-mia-chat-note">
+                Presto potrai chattare direttamente con Mia in tempo reale.
+              </div>
+            </div>
+          </div>
+
+          <div class="home-opening-box" id="homeOpeningBox">
+            <div class="home-opening-head">
+              <span class="home-opening-status-dot" id="homeOpeningDot"></span>
+              <span class="home-opening-title" id="homeOpeningTitle">Siamo aperti</span>
+            </div>
+
+           <div class="home-opening-line">
+  <span class="home-opening-day">Lun - Ven</span>
+
+  <div class="home-opening-time">
+    <div class="orario">8:30 - 13:00</div>
+    <div class="orario">16:00 - 20:00</div>
   </div>
 </div>
 
-<!-- PAGINA 2 -->
-<div class="admin-page">
-  <div class="admin-grid">
+              <div class="home-opening-line">
+                <span class="home-opening-day">Sabato</span>
+                <span class="home-opening-time">8:30 - 13:00</span>
+              </div>
 
-    <div class="admin-card c1" onclick="go('admin-fidelity.html')">
-      <span>Fidelity</span>
-    </div>
+              <div class="home-opening-line home-opening-line-closed">
+                <span class="home-opening-day">Domenica</span>
+                <span class="home-opening-time">Chiuso</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
 
-    <div class="admin-card c2" onclick="go('admin-fortuna.html')">
-      <span>Fortuna</span>
-    </div>
+    <section class="home-lab-section" aria-label="Laboratorio galenico">
+      <div class="home-lab-grid">
+       <div class="home-lab-people">
+  <div class="home-lab-people-bg"></div>
 
-    <div class="admin-card c3" onclick="go('admin-premi.html')">
-      <span>Premi</span>
-    </div>
+  <img onerror="this.src='images/farmacia2.jpg'"
+    src="images/preparatore1.jpg" onerror="this.src='images/farmacia2.jpg'"
+    alt="Preparatrice del laboratorio della Farmacia Montesano"
+    class="home-lab-person home-lab-person-left"
+  />
 
-    <div class="admin-card c4" onclick="go('admin-clienti.html')">
-      <span>Clienti</span>
-    </div>
+  <img onerror="this.src='images/farmacia2.jpg'"
+    src="images/preparatore2.jpg" onerror="this.src='images/farmacia2.jpg'"
+    alt="Preparatore del laboratorio della Farmacia Montesano"
+    class="home-lab-person home-lab-person-right"
+  />
+         <div class="team-nomi">
+  <div class="team-persona left">
+    <div class="nome">Dott.ssa Patrizia Rizzelli</div>
+    <div class="ruolo">Preparatore galenico</div>
+  </div>
 
+  <div class="team-persona right">
+    <div class="nome">Dott. Cosimo Fazzino</div>
+    <div class="ruolo">Preparatore galenico</div>
   </div>
 </div>
+       </div>
+        
+        <div class="home-lab-content">
+          <span class="home-lab-kicker">Laboratorio della farmacia</span>
 
-<!-- PAGINA 3 -->
-<div class="admin-page">
-  <div class="admin-grid">
+          <h2 class="home-lab-title">
+            Preparazioni galeniche su misura, con attenzione e competenza.
+          </h2>
 
-    <div class="admin-card c1" onclick="go('calendario-admin.html')">
-      <span>Prenotazioni</span>
+          <p class="home-lab-text home-lab-text-lead">
+            Nel nostro laboratorio realizziamo preparazioni personalizzate pensate sulle reali esigenze del paziente.
+          </p>
+
+          <p class="home-lab-text">
+            Lavoriamo con precisione, cura e professionalità, seguendo le indicazioni del medico e offrendo un supporto affidabile anche nei casi che richiedono soluzioni specifiche.
+          </p>
+
+         <div class="home-lab-list">
+  <div class="home-lab-feature">
+    <div class="home-lab-feature-icon">🧪</div>
+    <div class="home-lab-feature-text">
+      <strong>Preparazioni personalizzate</strong>
+      <span>Formulazioni studiate su misura per esigenze specifiche.</span>
     </div>
+  </div>
 
-    <div class="admin-card c2" onclick="go('admin-impostazioni.html')">
-      <span>Impostazioni</span>
+  <div class="home-lab-feature">
+    <div class="home-lab-feature-icon">🧴</div>
+    <div class="home-lab-feature-text">
+      <strong>Creme e formulazioni dedicate</strong>
+      <span>Soluzioni galeniche preparate con attenzione e precisione.</span>
     </div>
+  </div>
 
-    <div class="admin-card c3" onclick="go('admin-statistiche.html')">
-      <span>Statistiche</span>
+  <div class="home-lab-feature">
+    <div class="home-lab-feature-icon">👨‍⚕️</div>
+    <div class="home-lab-feature-text">
+      <strong>Supporto professionale</strong>
+      <span>Ascolto, consulenza e assistenza diretta in farmacia.</span>
     </div>
-
-    <div class="admin-card c4">
-      <span>+</span>
-    </div>
-
   </div>
 </div>
+          
+          <a href="https://wa.me/393927737079" target="_blank" rel="noopener" class="home-lab-cta">
+            Chiedi informazioni sul laboratorio
+          </a>
+        </div>
+      </div>
+    </section>
 
-</div>
+  </main>
+
+  <script src="site-config.js"></script>
+  <script src="services-data.js"></script>
+  <script src="promo-data.js"></script>
+  <script src="giornate-data.js"></script>
+  <script src="season-background.js"></script>
+
+  <script>
+    const desktopSlides = document.querySelectorAll(".home-shape-slide");
+    let desktopCurrentSlide = 0;
+
+    function showDesktopSlide(index) {
+      desktopSlides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+      });
+    }
+
+    if (desktopSlides.length > 1) {
+      setInterval(() => {
+        desktopCurrentSlide = (desktopCurrentSlide + 1) % desktopSlides.length;
+        showDesktopSlide(desktopCurrentSlide);
+      }, 5800);
+    }
+
+    (function updateBannerRotation() {
+      const banner = document.getElementById("desktopBannerText");
+      if (!banner) return;
+
+      const defaultMessages = [
+        "SIAMO APERTI • DAL LUNEDÌ AL VENERDÌ 8:30–13:00 / 16:00–20:00",
+        "CONTATTACI SU WHATSAPP PER INFORMAZIONI E PRENOTAZIONI",
+        "SERVIZI E CONSULENZA OGNI GIORNO PER LA TUA SALUTE",
+        "PROMO E NOVITÀ DISPONIBILI IN FARMACIA"
+      ];
+
+      const activePromo = (window.PromoData || []).filter(p => p.attiva);
+      const activeEvent = (window.GiornateData || []).filter(g => g.attiva);
+
+      const messages = [];
+
+      if (activePromo.length) {
+        messages.push(`${activePromo[0].titolo.toUpperCase()} • DISPONIBILE IN FARMACIA`);
+      }
+
+      if (activeEvent.length) {
+        messages.push(`${activeEvent[0].titolo.toUpperCase()} • PRENOTA IN FARMACIA O SU WHATSAPP`);
+      }
+
+      messages.push(...defaultMessages);
+
+      let current = 0;
+      banner.textContent = messages[current];
+
+      setInterval(() => {
+        current = (current + 1) % messages.length;
+        banner.classList.add("is-changing");
+
+        setTimeout(() => {
+          banner.textContent = messages[current];
+          banner.classList.remove("is-changing");
+        }, 260);
+      }, 4200);
+    })();
+
+    (function updateOpeningStatus() {
+      const dot = document.getElementById("homeOpeningDot");
+      const title = document.getElementById("homeOpeningTitle");
+      if (!dot || !title) return;
+
+      const now = new Date();
+      const day = now.getDay();
+      const minutes = now.getHours() * 60 + now.getMinutes();
+
+      let isOpen = false;
+
+      if (day >= 1 && day <= 5) {
+        const morningOpen = 8 * 60 + 30;
+        const morningClose = 13 * 60;
+        const afternoonOpen = 16 * 60;
+        const afternoonClose = 20 * 60;
+
+        if (
+          (minutes >= morningOpen && minutes < morningClose) ||
+          (minutes >= afternoonOpen && minutes < afternoonClose)
+        ) {
+          isOpen = true;
+        }
+      } else if (day === 6) {
+        const saturdayOpen = 8 * 60 + 30;
+        const saturdayClose = 13 * 60;
+
+        if (minutes >= saturdayOpen && minutes < saturdayClose) {
+          isOpen = true;
+        }
+      }
+
+      dot.classList.remove("is-open", "is-closed");
+
+      if (isOpen) {
+        dot.classList.add("is-open");
+        title.textContent = "Siamo aperti";
+      } else {
+        dot.classList.add("is-closed");
+        title.textContent = "Siamo chiusi";
+      }
+    })();
+
+    (function setupMiaAssistant() {
+      const wrap = document.getElementById("miaAssistantWrap");
+      const trigger = document.getElementById("miaTrigger");
+      const bubble = document.getElementById("miaBubble");
+      const miniCta = document.getElementById("miaMiniCta");
+      const bubbleTyping = document.getElementById("miaBubbleTyping");
+      const panel = document.getElementById("miaChatPanel");
+      const closeBtn = document.getElementById("miaChatClose");
+
+      if (!wrap || !trigger || !bubble || !bubbleTyping || !panel || !closeBtn) return;
+
+      const introText = "Ciao, benvenuto. Dimmi pure come posso aiutarti.";
+      let typingIndex = 0;
+      let typingTimer = null;
+
+      function resetTyping() {
+        clearInterval(typingTimer);
+        bubbleTyping.textContent = "";
+        typingIndex = 0;
+      }
+
+      function typeBubbleText() {
+        resetTyping();
+
+        typingTimer = setInterval(() => {
+          bubbleTyping.textContent = introText.slice(0, typingIndex + 1);
+          typingIndex++;
+
+          if (typingIndex >= introText.length) {
+            clearInterval(typingTimer);
+          }
+        }, 42);
+      }
+
+      function showBubble() {
+        wrap.classList.remove("is-chat-open");
+        panel.setAttribute("aria-hidden", "true");
+        wrap.classList.add("is-bubble-visible");
+        bubbleTyping.textContent = "";
+
+        setTimeout(() => {
+          typeBubbleText();
+        }, 260);
+      }
+
+      function openChat() {
+        clearInterval(typingTimer);
+        wrap.classList.remove("is-bubble-visible");
+        wrap.classList.add("is-chat-open");
+        panel.setAttribute("aria-hidden", "false");
+      }
+
+      function closeChat() {
+        wrap.classList.remove("is-chat-open");
+        panel.setAttribute("aria-hidden", "true");
+
+        setTimeout(() => {
+          showBubble();
+        }, 260);
+      }
+
+      setTimeout(() => {
+        showBubble();
+      }, 900);
+
+      setTimeout(() => {
+        wrap.classList.remove("is-bubble-visible");
+      }, 6000);
+
+      trigger.addEventListener("click", openChat);
+      bubble.addEventListener("click", openChat);
+      if (miniCta) miniCta.addEventListener("click", openChat);
+      closeBtn.addEventListener("click", closeChat);
+    })();
+
+    (function setupMiaExitHint() {
+      let exitShown = false;
+      const wrap = document.getElementById("miaAssistantWrap");
+      const bubbleTyping = document.getElementById("miaBubbleTyping");
+
+      if (!wrap || !bubbleTyping) return;
+
+      document.addEventListener("mouseout", (event) => {
+        if (exitShown) return;
+        if (event.clientY > 12) return;
+
+        exitShown = true;
+        wrap.classList.remove("is-chat-open");
+        wrap.classList.add("is-bubble-visible");
+        bubbleTyping.textContent = "Hai bisogno di altro? Sono qui per aiutarti.";
+      });
+    })();
+  </script>
+
+  
+<script type="module">
+  import { auth, onAuthStateChanged, syncUserProfileFromFirestore } from "./firebase.js";
+  const loader = document.getElementById("authLoadingScreen");
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      const redirect = encodeURIComponent("index.html");
+      window.location.replace(`login.html?redirect=${redirect}`);
+      return;
+    }
+    try { await syncUserProfileFromFirestore(user); } catch (e) { console.error(e); }
+    document.documentElement.classList.remove("auth-checking");
+    document.documentElement.classList.add("auth-ready");
+    if (loader) loader.remove();
+  });
+</script>
+
+  <script src="mobile-preview.js"></script>
+
+<script src="app-fixes.js"></script>
 
 <script>
-function go(page){
-  window.location.href = page;
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
 }
 </script>
 
