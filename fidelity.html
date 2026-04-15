@@ -449,7 +449,19 @@
         text-align:left;
       }
     }
+  
+    .hero-barcode-wrap{
+      margin:0 0 14px;
+      background:rgba(255,255,255,0.55);
+      border:1px solid rgba(140,105,18,0.10);
+      border-radius:22px;
+      padding:10px 12px;
+    }
+    .hero-barcode-svg{width:100%;height:68px;display:block;}
+    .hero-barcode-code{margin:6px 0 0;font-size:12px;font-weight:900;color:#7a6827;text-align:center;letter-spacing:.08em;}
+
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
   <div class="shell">
@@ -479,7 +491,10 @@
         </div>
 
         <h2 class="hero-name" id="heroUserName">Cliente</h2>
-        <p class="hero-card-number" id="heroCardNumber">Tessera: non assegnata</p>
+        <div class="hero-barcode-wrap">
+          <svg id="heroBarcodeSvg" class="hero-barcode-svg"></svg>
+          <p class="hero-barcode-code" id="heroBarcodeText">-</p>
+        </div>
         <p class="hero-card-number hidden" id="heroGroupInfo">Gruppo attivo • 0 tessere associate</p>
         <div id="groupActions" class="group-inline-actions hidden">
           <button class="btn btn-primary" id="openGroupBtn" type="button">Vedi gruppo</button>
@@ -583,6 +598,24 @@
       query,
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    function renderBarcode(svgId, code) {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      try {
+        JsBarcode(svg, String(code || '').trim(), {
+          format: "CODE128",
+          lineColor: "#5f4a12",
+          background: "#fffaf0",
+          width: 2,
+          height: 58,
+          margin: 4,
+          displayValue: false
+        });
+      } catch (e) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+      }
+    }
 
     const guestBox = document.getElementById("guestBox");
     const fidelityContent = document.getElementById("fidelityContent");
@@ -762,7 +795,8 @@
       const isInGroup = !!groupData;
       const points = isInGroup ? Number(groupData.totalPoints || 0) : Number(profile?.punti || 0);
       heroUserName.textContent = fullName;
-      heroCardNumber.textContent = `Tessera: ${cardNumber}`;
+      document.getElementById("heroBarcodeText").textContent = cardNumber;
+      renderBarcode("heroBarcodeSvg", cardNumber);
       heroPoints.textContent = points;
       summaryCard.textContent = cardNumber;
       if (isInGroup) {

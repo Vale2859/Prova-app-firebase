@@ -225,7 +225,9 @@
   <script type="module">
     import {
       auth,
-      signInWithEmailAndPassword
+      signInWithEmailAndPassword,
+      syncUserProfileFromFirestore,
+      onAuthStateChanged
     } from "./firebase.js";
 
     const emailEl = document.getElementById("email");
@@ -243,6 +245,12 @@
       statusBox.className = `status ${type}`;
     }
 
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.replace(getRedirectTarget());
+      }
+    });
+
     loginBtn.addEventListener("click", async () => {
       const email = emailEl.value.trim();
       const password = passwordEl.value;
@@ -256,7 +264,8 @@
       showStatus("Accesso in corso...", "ok");
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        await syncUserProfileFromFirestore(cred.user);
         window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);

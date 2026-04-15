@@ -181,6 +181,43 @@
       background:#fff1f1;
       color:var(--danger);
     }
+  
+    .check-card{
+      margin:14px 0 16px;
+      padding:14px;
+      border:1px solid #dbe7e2;
+      border-radius:20px;
+      background:#f8fbf9;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .check-row:last-child{ margin-bottom:0; }
+
+    .check-row input{
+      margin-top:4px;
+      width:18px;
+      height:18px;
+      flex:0 0 18px;
+    }
+
+    .check-row label{
+      font-size:.94rem;
+      line-height:1.45;
+      color:var(--text-soft);
+      font-weight:700;
+    }
+
+    .check-row label a{
+      color:var(--green);
+      font-weight:900;
+    }
+
   </style>
 
   <link rel="stylesheet" href="mobile-only.css" />
@@ -226,6 +263,23 @@
         <input id="password" type="password" placeholder="Password" />
       </div>
 
+      
+      <div class="check-card">
+        <div class="check-row">
+          <input id="privacyConsent" type="checkbox" />
+          <label for="privacyConsent">
+            Dichiaro di aver letto e accettato la <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> e il trattamento dei dati per servizi, fidelity, premi e funzioni dell’app.
+          </label>
+        </div>
+
+        <div class="check-row">
+          <input id="notifConsent" type="checkbox" />
+          <label for="notifConsent">
+            Accetto l’attivazione iniziale delle notifiche per prenotazioni, turni, appoggi, giornate beauty e fortuna. Potrò modificarle dopo nel profilo.
+          </label>
+        </div>
+      </div>
+
       <button class="action-btn" id="registerBtn">Registrati</button>
 
       <div id="statusBox" class="status"></div>
@@ -243,14 +297,23 @@
       createUserWithEmailAndPassword,
       updateProfile,
       doc,
-      setDoc
+      setDoc,
+      syncUserProfileFromFirestore,
+      onAuthStateChanged
     } from "./firebase.js";
+
+    import {
+      askNotificationPermission,
+      saveNotificationSettings
+    } from "./notification-utils.js";
 
     const nomeEl = document.getElementById("nome");
     const cognomeEl = document.getElementById("cognome");
     const emailEl = document.getElementById("email");
     const telefonoEl = document.getElementById("telefono");
     const passwordEl = document.getElementById("password");
+    const privacyConsentEl = document.getElementById("privacyConsent");
+    const notifConsentEl = document.getElementById("notifConsent");
     const registerBtn = document.getElementById("registerBtn");
     const statusBox = document.getElementById("statusBox");
 
@@ -268,6 +331,14 @@
       return "FM" + uid.slice(0, 8).toUpperCase();
     }
 
+    let registerFlowActive = false;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && !registerFlowActive) {
+        window.location.replace(getRedirectTarget());
+      }
+    });
+
     registerBtn.addEventListener("click", async () => {
       const nome = nomeEl.value.trim();
       const cognome = cognomeEl.value.trim();
@@ -275,12 +346,23 @@
       const telefono = telefonoEl.value.trim();
       const password = passwordEl.value;
 
-      if (!nome || !cognome || !email || !password) {
-        showStatus("Compila almeno nome, cognome, email e password.", "error");
+      if (!nome || !cognome || !email || !telefono || !password) {
+        showStatus("Compila nome, cognome, email, telefono e password.", "error");
+        return;
+      }
+
+      if (!privacyConsentEl.checked) {
+        showStatus("Devi accettare la Privacy Policy.", "error");
+        return;
+      }
+
+      if (!notifConsentEl.checked) {
+        showStatus("Devi accettare l’attivazione iniziale delle notifiche.", "error");
         return;
       }
 
       registerBtn.disabled = true;
+      registerFlowActive = true;
       showStatus("Registrazione in corso...", "ok");
 
       try {
@@ -307,8 +389,37 @@
           passaggiAnnuali: 0,
           spesaAnnuaNumero: 0,
           spesaAnnua: "0,00 €",
-          createdAt: new Date().toISOString()
+          privacyAccepted: true,
+          privacyAcceptedAt: new Date().toISOString(),
+          notificationSettings: {
+            prenotazioni: true,
+            turno: true,
+            appoggio: true,
+            giornate: true,
+            fortuna: true
+          },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+        await syncUserProfileFromFirestore(user);
+        await saveNotificationSettings({
+          prenotazioni: true,
+          turno: true,
+          appoggio: true,
+          giornate: true,
+          fortuna: true
         });
+
+        try {
+          await askNotificationPermission();
+        } catch (notifyError) {
+          console.error(notifyError);
+          showStatus("Account creato, ma devi consentire le notifiche del dispositivo per entrare nell’app. Attivale e riprova.", "error");
+          registerBtn.disabled = false;
+          registerFlowActive = false;
+          return;
+        }
 
         window.location.replace(getRedirectTarget());
       } catch (error) {

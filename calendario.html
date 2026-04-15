@@ -897,7 +897,9 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { auth, onAuthStateChanged, syncUserProfileFromFirestore } from "./firebase.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
       authDomain: "farmaciamontesano.firebaseapp.com",
@@ -946,6 +948,23 @@
     const WORK_START_HOUR = 9;
     const WORK_END_HOUR = 19;
     const SLOT_STEP_MINUTES = 15;
+
+    let authReadyResolved = false;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        const redirect = encodeURIComponent("calendario.html");
+        window.location.replace(`login.html?redirect=${redirect}`);
+        return;
+      }
+      try {
+        await syncUserProfileFromFirestore(user);
+        await renderMyBookingsPreview();
+      } catch (error) {
+        console.error(error);
+      }
+      authReadyResolved = true;
+    });
 
     function showSection(name){
       Object.values(sections).forEach(section => section.classList.remove("active"));
@@ -1339,12 +1358,11 @@
 
     function continueBooking(){
       const profile = getStoredUserProfile();
-
       if(!profile){
-        alert("Devi accedere prima di prenotare.");
+        const redirect = encodeURIComponent("calendario.html");
+        window.location.href = `login.html?redirect=${redirect}`;
         return;
       }
-
       openQuickConfirmModal();
     }
 

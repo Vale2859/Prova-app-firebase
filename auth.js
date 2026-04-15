@@ -1,8 +1,8 @@
 (function () {
-  const isLogged = localStorage.getItem("farmaciaLoggedIn");
+  const isLogged = localStorage.getItem("farmaciaLoggedIn") === "true";
   const user = localStorage.getItem("farmaciaCurrentUser");
-
-  if (isLogged !== "true" || !user) {
-    window.location.href = "login.html";
+  if (!isLogged || !user) {
+    const redirect = encodeURIComponent(location.pathname.split('/').pop() || 'index.html');
+    window.location.href = `login.html?redirect=${redirect}`;
   }
 })();
