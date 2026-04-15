@@ -81,7 +81,6 @@
       min-height:0;
     }
 
-    /* LEFT */
     .left{
       display:flex;
       flex-direction:column;
@@ -317,7 +316,6 @@
     .dot-yellow{ background:#deb845; }
     .dot-red{ background:#d85b5b; }
 
-    /* CENTER */
     .center{
       display:flex;
       flex-direction:column;
@@ -391,7 +389,6 @@
       padding:14px;
     }
 
-    /* DAY VIEW */
     .day-view{
       display:none;
       min-width:940px;
@@ -447,8 +444,6 @@
 
     .event-card{
       position:absolute;
-      left:10px;
-      right:10px;
       border-radius:16px;
       padding:10px 12px;
       border-left:5px solid;
@@ -504,7 +499,6 @@
       color:#4b6158;
     }
 
-    /* WEEK VIEW */
     .week-view{
       display:none;
       min-width:1280px;
@@ -575,7 +569,6 @@
       cursor:crosshair;
     }
 
-    /* MONTH VIEW */
     .month-view{
       display:none;
     }
@@ -676,7 +669,6 @@
       padding:4px 2px 0;
     }
 
-    /* RECALL VIEW */
     .recall-view{
       display:none;
     }
@@ -710,109 +702,92 @@
 
     .recall-grid{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
+      gap:16px;
     }
 
-    .recall-card{
-      background:#fff8ec;
-      border:1px solid #f0dfbb;
-      border-radius:20px;
+    .recall-group-card{
+      background:#fff;
+      border:1px solid #e3ebe6;
+      border-radius:24px;
       padding:18px;
       box-shadow:var(--shadow-soft);
     }
 
-    .recall-top{
+    .recall-group-head{
       display:flex;
       justify-content:space-between;
-      gap:14px;
       align-items:flex-start;
-      margin-bottom:12px;
-    }
-
-    .recall-name{
-      margin:0;
-      font-size:1.3rem;
-      line-height:1;
-      font-weight:900;
-      text-transform:lowercase;
-    }
-
-    .recall-phone{
-      margin:8px 0 0;
-      color:#6d5c2b;
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .recall-badge{
-      min-height:34px;
-      padding:0 12px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      background:#f4db96;
-      color:#6e5308;
-      font-size:13px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-
-    .recall-info{
-      display:grid;
-      gap:8px;
+      gap:12px;
       margin-bottom:14px;
     }
 
-    .recall-row{
-      display:grid;
-      grid-template-columns:120px 1fr;
-      gap:10px;
-      font-size:14px;
-    }
-
-    .recall-key{
-      color:#816d36;
+    .recall-group-title{
+      margin:0 0 4px;
+      font-size:24px;
+      line-height:1;
       font-weight:900;
+      color:#143a33;
     }
 
-    .recall-value{
-      color:#3b3320;
+    .recall-group-count{
+      margin:0;
+      font-size:13px;
       font-weight:800;
+      color:#74857e;
     }
 
-    .recall-actions{
+    .recall-mini-list{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .recall-mini-card{
+      border:1px solid #e5ece8;
+      background:linear-gradient(180deg,#fbfdfc 0%, #f4f8f6 100%);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .recall-mini-name{
+      font-size:15px;
+      font-weight:900;
+      color:#16372f;
+      margin-bottom:4px;
+      text-transform:lowercase;
+    }
+
+    .recall-mini-meta{
+      font-size:13px;
+      color:#6f817b;
+      font-weight:700;
+      margin-bottom:10px;
+      line-height:1.4;
+    }
+
+    .recall-mini-actions{
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
     }
 
-    .recall-btn{
-      min-height:42px;
+    .mini-btn{
+      min-height:36px;
+      padding:0 12px;
       border:none;
-      border-radius:12px;
-      padding:0 14px;
-      font-size:14px;
+      border-radius:10px;
+      background:#eef3f1;
+      color:#173a33;
+      font-size:12px;
       font-weight:900;
       cursor:pointer;
     }
 
-    .recall-btn.done{
-      background:linear-gradient(180deg,var(--green),var(--green-dark));
+    .mini-btn.success{
+      background:linear-gradient(135deg,#1b6c56,#84c691);
       color:#fff;
     }
 
-    .recall-btn.book{
-      background:linear-gradient(180deg,var(--blue),var(--blue-dark));
-      color:#fff;
-    }
-
-    .recall-btn.hide{
-      background:#efe7cf;
-      color:#5e522a;
-    }
-
-    /* POPUP DETAIL */
     .overlay{
       position:fixed;
       inset:0;
@@ -830,7 +805,7 @@
 
     .detail-popup{
       width:100%;
-      max-width:720px;
+      max-width:760px;
       background:#fff;
       border-radius:28px;
       box-shadow:0 26px 60px rgba(0,0,0,0.2);
@@ -839,8 +814,10 @@
     }
 
     .detail-hero{
-      padding:22px 22px 18px;
-      background:linear-gradient(180deg,#f9fcfa,#f2f7f4);
+      padding:24px 24px 18px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), rgba(243,247,245,0.94)),
+        linear-gradient(135deg,#f7fbf9 0%, #eef5f1 100%);
       border-bottom:1px solid var(--line);
     }
 
@@ -851,23 +828,104 @@
       gap:14px;
     }
 
-    .detail-popup-name{
-      margin:0;
-      font-size:2rem;
-      line-height:.92;
+    .premium-detail-main{
+      flex:1;
+    }
+
+    .premium-type-badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:0 14px;
+      border-radius:999px;
+      background:#e7f3eb;
+      color:#2b6a53;
+      font-size:13px;
       font-weight:900;
+      margin-bottom:14px;
+    }
+
+    .premium-popup-name{
+      margin:0 0 8px;
+      font-size:38px;
+      line-height:.92;
+      letter-spacing:-.05em;
+      font-weight:900;
+      color:#12362f;
       text-transform:lowercase;
     }
 
-    .detail-popup-phone{
-      margin:10px 0 0;
-      font-size:15px;
+    .premium-popup-phone{
+      font-size:20px;
+      line-height:1.1;
       font-weight:800;
-      color:#526760;
+      color:#4f665e;
+      margin-bottom:16px;
     }
 
-    .popup-status{
-      margin-top:14px;
+    .premium-main-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .premium-main-card{
+      border:1px solid #dfe8e3;
+      background:rgba(255,255,255,0.88);
+      border-radius:18px;
+      padding:14px 15px;
+      box-shadow:0 10px 24px rgba(16,49,39,0.05);
+    }
+
+    .premium-main-label{
+      font-size:12px;
+      font-weight:900;
+      color:#6f827b;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin-bottom:6px;
+    }
+
+    .premium-main-value{
+      font-size:24px;
+      line-height:1.02;
+      font-weight:900;
+      color:#143a33;
+      text-transform:uppercase;
+      word-break:break-word;
+    }
+
+    .premium-status-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:0 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .status-pill.confirmed{
+      background:#e7f3eb;
+      color:#25684f;
+    }
+
+    .status-pill.requested{
+      background:#fff1d7;
+      color:#9a6712;
+    }
+
+    .status-pill.cancelled{
+      background:#f8dfdf;
+      color:#a33a3a;
     }
 
     .popup-body{
@@ -951,7 +1009,6 @@
       color:#fff;
     }
 
-    /* MODAL */
     .modal{
       position:fixed;
       inset:0;
@@ -969,7 +1026,7 @@
 
     .modal-box{
       width:100%;
-      max-width:620px;
+      max-width:760px;
       background:#fff;
       border-radius:24px;
       box-shadow:0 26px 60px rgba(0,0,0,0.18);
@@ -1009,6 +1066,7 @@
       font-size:18px;
       font-weight:900;
       cursor:pointer;
+      flex:0 0 auto;
     }
 
     .form-grid{
@@ -1086,6 +1144,109 @@
       font-size:12px;
       font-weight:800;
       color:#75867f;
+    }
+
+    .customer-results{
+      display:grid;
+      gap:8px;
+      max-height:220px;
+      overflow:auto;
+      padding:4px 0;
+    }
+
+    .customer-result-btn{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      text-align:left;
+      cursor:pointer;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .customer-result-btn:hover{
+      background:#f7fbf9;
+    }
+
+    .customer-result-name{
+      font-size:15px;
+      font-weight:900;
+      color:#173c35;
+      margin-bottom:4px;
+      text-transform:lowercase;
+    }
+
+    .customer-result-meta{
+      font-size:13px;
+      color:#6d8078;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .selected-customer-card{
+      border:1px solid #dce7e1;
+      background:linear-gradient(180deg,#f8fcfa 0%, #f1f7f4 100%);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .selected-customer-title{
+      font-size:16px;
+      font-weight:900;
+      color:#173c35;
+      margin-bottom:4px;
+      text-transform:lowercase;
+    }
+
+    .selected-customer-sub{
+      font-size:13px;
+      color:#6d8078;
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .selected-customer-clear{
+      margin-top:10px;
+      min-height:38px;
+      border:none;
+      border-radius:12px;
+      padding:0 12px;
+      background:#eef3f0;
+      color:#23413a;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    @media (max-width: 980px){
+      .app{
+        grid-template-columns:1fr;
+      }
+
+      .recall-mini-list{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .form-grid,
+      .popup-grid,
+      .premium-main-grid{
+        grid-template-columns:1fr;
+      }
+
+      .premium-popup-name{
+        font-size:30px;
+      }
+
+      .premium-popup-phone{
+        font-size:18px;
+      }
+
+      .premium-main-value{
+        font-size:20px;
+      }
     }
   </style>
 
@@ -1202,10 +1363,25 @@
           <h3 id="modalTitle">Nuova prenotazione</h3>
           <p>Puoi creare, modificare o riprenotare un appuntamento da qui.</p>
         </div>
-        <button class="close-btn" id="closeModalBtn">✕</button>
+        <button class="close-btn" id="closeModalBtn" type="button">✕</button>
       </div>
 
       <div class="form-grid">
+        <div class="field full">
+          <label for="customerSearch">Rubrica clienti</label>
+          <input id="customerSearch" type="text" placeholder="Cerca nome, cognome o telefono..." autocomplete="off" />
+        </div>
+
+        <div class="field full" id="customerResultsWrap" style="display:none;">
+          <label>Clienti trovati</label>
+          <div id="customerResults" class="customer-results"></div>
+        </div>
+
+        <div class="field full" id="selectedCustomerWrap" style="display:none;">
+          <label>Cliente selezionato</label>
+          <div id="selectedCustomerCard" class="selected-customer-card"></div>
+        </div>
+
         <div class="field">
           <label for="fName">Nome</label>
           <input id="fName" type="text" />
@@ -1266,8 +1442,8 @@
       </div>
 
       <div class="modal-actions">
-        <button class="ghost-btn" id="cancelModalBtn">Chiudi</button>
-        <button class="save-btn" id="saveBookingBtn">Salva</button>
+        <button class="ghost-btn" id="cancelModalBtn" type="button">Chiudi</button>
+        <button class="save-btn" id="saveBookingBtn" type="button">Salva</button>
       </div>
     </div>
   </div>
@@ -1276,14 +1452,29 @@
     <div class="detail-popup">
       <div class="detail-hero">
         <div class="detail-hero-top">
-          <div>
-            <h3 id="popupName" class="detail-popup-name">Cliente</h3>
-            <div id="popupPhone" class="detail-popup-phone">Telefono</div>
-            <div class="popup-status">
+          <div class="premium-detail-main">
+            <div id="popupTypeBadge" class="premium-type-badge">Servizio</div>
+            <h3 id="popupName" class="premium-popup-name">Cliente</h3>
+            <div id="popupPhone" class="premium-popup-phone">Telefono</div>
+
+            <div class="premium-main-grid">
+              <div class="premium-main-card">
+                <div class="premium-main-label">Titolo prenotazione</div>
+                <div id="popupTitleBig" class="premium-main-value">—</div>
+              </div>
+
+              <div class="premium-main-card">
+                <div class="premium-main-label">Operatore</div>
+                <div id="popupOperatorBig" class="premium-main-value">—</div>
+              </div>
+            </div>
+
+            <div class="premium-status-row">
               <span id="popupStatus" class="status-pill confirmed">Confermata</span>
             </div>
           </div>
-          <button class="close-btn" id="closeDetailBtn">✕</button>
+
+          <button class="close-btn" id="closeDetailBtn" type="button">✕</button>
         </div>
       </div>
 
@@ -1295,23 +1486,23 @@
             <div class="popup-line"><div class="k">Data</div><div id="popupDate" class="v">—</div></div>
             <div class="popup-line"><div class="k">Ora</div><div id="popupTime" class="v">—</div></div>
             <div class="popup-line"><div class="k">Tipo</div><div id="popupType" class="v">—</div></div>
-            <div class="popup-line"><div class="k">Titolo</div><div id="popupTitle" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Durata</div><div id="popupDuration" class="v">—</div></div>
           </div>
 
           <div class="popup-card">
-            <h4>Gestione interna</h4>
+            <h4>Informazioni interne</h4>
 
-            <div class="popup-line"><div class="k">Durata</div><div id="popupDuration" class="v">—</div></div>
             <div class="popup-line"><div class="k">Operatore</div><div id="popupOperator" class="v">—</div></div>
-            <div class="popup-line"><div class="k">Note</div><div id="popupNotes" class="v">—</div></div>
             <div class="popup-line"><div class="k">Richiamo</div><div id="popupRecall" class="v">—</div></div>
+            <div class="popup-line"><div class="k">Note</div><div id="popupNotes" class="v">—</div></div>
+            <div class="popup-line"><div class="k">ID cliente</div><div id="popupUserId" class="v">—</div></div>
           </div>
         </div>
 
         <div class="popup-actions">
-          <button class="popup-btn gray" id="popupCloseBtn">Chiudi</button>
-          <button class="popup-btn blue" id="popupEditBtn">Modifica</button>
-          <button class="popup-btn red" id="popupDeleteBtn">Cancella</button>
+          <button class="popup-btn gray" id="popupCloseBtn" type="button">Chiudi</button>
+          <button class="popup-btn blue" id="popupEditBtn" type="button">Modifica</button>
+          <button class="popup-btn red" id="popupDeleteBtn" type="button">Cancella</button>
         </div>
       </div>
     </div>
@@ -1332,6 +1523,30 @@
     const DAY_START = 8;
     const DAY_END = 20;
     const SLOT_HEIGHT = 64;
+    const MAX_APPOINTMENTS_SAME_START = 3;
+
+    const RECALL_CATEGORIES = {
+      tricologia: {
+        label: "Tricologia",
+        keywords: ["trico", "tricologia", "capelli", "caduta capelli", "cuoio capelluto"]
+      },
+      ecg: {
+        label: "ECG",
+        keywords: ["ecg", "elettrocardiogramma", "cardiogramma"]
+      },
+      holter: {
+        label: "Holter",
+        keywords: ["holter", "holter cardiaco", "holter pressorio"]
+      },
+      autoanalisi: {
+        label: "Autoanalisi",
+        keywords: ["autoanalisi", "analisi", "glicemia", "colesterolo"]
+      },
+      beauty: {
+        label: "Beauty",
+        keywords: ["beauty", "giornata beauty", "caudalie", "uriage", "trucco", "pelle"]
+      }
+    };
 
     let currentDate = new Date();
     let currentView = "day";
@@ -1339,9 +1554,11 @@
     let miniMonthDate = new Date();
 
     let appointments = [];
+    let registeredCustomers = [];
     let selectedAppointment = null;
     let editingAppointmentId = null;
     let modalMode = "new";
+    let selectedCustomer = null;
 
     const searchInput = document.getElementById("searchInput");
     const currentLabel = document.getElementById("currentLabel");
@@ -1370,6 +1587,12 @@
     const fType = document.getElementById("fType");
     const fTitle = document.getElementById("fTitle");
     const fNotes = document.getElementById("fNotes");
+
+    const customerSearchInput = document.getElementById("customerSearch");
+    const customerResultsWrap = document.getElementById("customerResultsWrap");
+    const customerResultsEl = document.getElementById("customerResults");
+    const selectedCustomerWrap = document.getElementById("selectedCustomerWrap");
+    const selectedCustomerCard = document.getElementById("selectedCustomerCard");
 
     function pad(n){
       return String(n).padStart(2, "0");
@@ -1428,7 +1651,7 @@
 
     function getEventColor(app){
       if(app.status === "cancelled") return "red";
-      if(daysFromToday(app.date) >= 30) return "yellow";
+      if(daysFromToday(app.date) >= 30 && !app.recallManaged) return "yellow";
       return "green";
     }
 
@@ -1441,8 +1664,70 @@
         .replace(/'/g,"&#039;");
     }
 
+    function escapeHtmlAttr(text){
+      return String(text || "")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+    }
+
+    function normalizeText(value) {
+      return String(value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
     function isRecallDone(app){
-      return app.recallStatus === "done" || app.recallDone === true;
+      return app.recallStatus === "done" || app.recallDone === true || app.recallManaged === true;
+    }
+
+    function detectRecallCategory(title) {
+      const normalized = normalizeText(title);
+
+      for (const key in RECALL_CATEGORIES) {
+        const category = RECALL_CATEGORIES[key];
+        const matched = category.keywords.some(keyword =>
+          normalized.includes(normalizeText(keyword))
+        );
+        if (matched) return key;
+      }
+
+      return "altro";
+    }
+
+    function getRecallCategoryLabel(key, title) {
+      if (RECALL_CATEGORIES[key]) return RECALL_CATEGORIES[key].label;
+      const cleanTitle = String(title || "").trim();
+      return cleanTitle || "Altri servizi";
+    }
+
+    function groupRecallAppointments(items) {
+      const grouped = {};
+
+      items.forEach(app => {
+        const categoryKey = detectRecallCategory(app.title);
+        const groupKey = categoryKey === "altro"
+          ? `altro:${normalizeText(app.title || "altri servizi")}`
+          : categoryKey;
+
+        if (!grouped[groupKey]) {
+          grouped[groupKey] = {
+            key: groupKey,
+            label: categoryKey === "altro"
+              ? getRecallCategoryLabel("altro", app.title)
+              : getRecallCategoryLabel(categoryKey),
+            items: []
+          };
+        }
+
+        grouped[groupKey].items.push(app);
+      });
+
+      return Object.values(grouped).sort((a, b) => b.items.length - a.items.length);
     }
 
     function getFilteredAppointments(){
@@ -1592,11 +1877,41 @@
       updateCounts();
     }
 
+    function getSameStartLayout(items) {
+      const groups = {};
+      items.forEach(app => {
+        const key = `${app.date}|${app.startTime}`;
+        if(!groups[key]) groups[key] = [];
+        groups[key].push(app);
+      });
+
+      const layout = {};
+      Object.values(groups).forEach(group => {
+        group.forEach((app, index) => {
+          layout[app.id] = { index, count: group.length };
+        });
+      });
+
+      return layout;
+    }
+
+    function getCardPositionStyle(layoutInfo) {
+      const count = Math.max(layoutInfo?.count || 1, 1);
+      const index = Math.max(layoutInfo?.index || 0, 0);
+      const gap = 8;
+      const totalGap = (count - 1) * gap;
+      const widthExpr = `calc((100% - 20px - ${totalGap}px) / ${count})`;
+      const leftExpr = `calc(10px + ${index} * (${widthExpr} + ${gap}px))`;
+      return { leftExpr, widthExpr };
+    }
+
     function renderDayView(){
       const dateKey = formatDateKey(currentDate);
       const items = getFilteredAppointments()
         .filter(app => app.date === dateKey)
         .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+      const sameLayout = getSameStartLayout(items);
 
       dayView.innerHTML = `
         <div class="hours-col">
@@ -1626,9 +1941,15 @@
         const height = Math.max((((end - start) / 60) * SLOT_HEIGHT) - 6, 46);
 
         const card = document.createElement("div");
+        const layoutInfo = sameLayout[app.id];
+        const pos = getCardPositionStyle(layoutInfo);
+
         card.className = `event-card event-${getEventColor(app)} ${selectedAppointment?.id === app.id ? "selected" : ""}`;
         card.style.top = `${top + 3}px`;
         card.style.height = `${height}px`;
+        card.style.left = pos.leftExpr;
+        card.style.width = pos.widthExpr;
+
         card.innerHTML = `
           <div class="event-client">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
           <div class="event-title">${escapeHtml(app.title || "Prenotazione")}</div>
@@ -1698,6 +2019,8 @@
           .filter(app => app.date === key)
           .sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
+        const sameLayout = getSameStartLayout(items);
+
         items.forEach(app => {
           const start = timeToMinutes(app.startTime);
           const end = timeToMinutes(app.endTime || addMinutes(app.startTime, Number(app.durationMinuti || 30)));
@@ -1705,9 +2028,14 @@
           const height = Math.max((((end - start) / 60) * SLOT_HEIGHT) - 6, 44);
 
           const card = document.createElement("div");
+          const layoutInfo = sameLayout[app.id];
+          const pos = getCardPositionStyle(layoutInfo);
+
           card.className = `event-card event-${getEventColor(app)} ${selectedAppointment?.id === app.id ? "selected" : ""}`;
           card.style.top = `${top + 3}px`;
           card.style.height = `${height}px`;
+          card.style.left = pos.leftExpr;
+          card.style.width = pos.widthExpr;
           card.innerHTML = `
             <div class="event-client">${escapeHtml(app.clientName || "")}</div>
             <div class="event-title">${escapeHtml(app.title || "")}</div>
@@ -1809,71 +2137,81 @@
 
       if(!items.length){
         recallGrid.innerHTML = `
-          <div style="grid-column:1/-1;background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px;text-align:center;color:var(--muted);font-weight:800;box-shadow:var(--shadow-soft);">
+          <div style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px;text-align:center;color:var(--muted);font-weight:800;box-shadow:var(--shadow-soft);">
             Nessun cliente da richiamare al momento.
           </div>
         `;
         return;
       }
 
-      recallGrid.innerHTML = items.map(app => `
-        <div class="recall-card">
-          <div class="recall-top">
+      const groups = groupRecallAppointments(items);
+
+      recallGrid.innerHTML = groups.map(group => `
+        <section class="recall-group-card">
+          <div class="recall-group-head">
             <div>
-              <h3 class="recall-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</h3>
-              <div class="recall-phone">${escapeHtml(app.clientPhone || "—")}</div>
-            </div>
-            <div class="recall-badge">${daysFromToday(app.date)} giorni</div>
-          </div>
-
-          <div class="recall-info">
-            <div class="recall-row">
-              <div class="recall-key">Ultimo servizio</div>
-              <div class="recall-value">${escapeHtml(app.title || "—")}</div>
-            </div>
-            <div class="recall-row">
-              <div class="recall-key">Ultima data</div>
-              <div class="recall-value">${escapeHtml(app.date || "—")}</div>
-            </div>
-            <div class="recall-row">
-              <div class="recall-key">Tipo</div>
-              <div class="recall-value">${escapeHtml(app.type || "—")}</div>
-            </div>
-            <div class="recall-row">
-              <div class="recall-key">Operatore</div>
-              <div class="recall-value">${escapeHtml(app.operatorName || "—")}</div>
+              <h3 class="recall-group-title">${escapeHtml(group.label)}</h3>
+              <p class="recall-group-count">${group.items.length} clienti da richiamare</p>
             </div>
           </div>
 
-          <div class="recall-actions">
-            <button class="recall-btn done" onclick="markRecallDone('${app.id}')">Segna gestito</button>
-            <button class="recall-btn book" onclick="rebookFromRecall('${app.id}')">Prenota</button>
-            <button class="recall-btn hide" onclick="markRecallDone('${app.id}')">Nascondi</button>
+          <div class="recall-mini-list">
+            ${group.items.map(app => `
+              <article class="recall-mini-card">
+                <div class="recall-mini-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
+                <div class="recall-mini-meta">
+                  ${escapeHtml(app.clientPhone || "—")}<br>
+                  ${escapeHtml(app.date || "—")} • ${daysFromToday(app.date)} giorni
+                </div>
+                <div class="recall-mini-actions">
+                  <button type="button" class="mini-btn" onclick="openDetailPopupById('${escapeHtmlAttr(app.id)}')">Apri</button>
+                  <button type="button" class="mini-btn success" onclick="markRecallManaged('${escapeHtmlAttr(app.id)}')">Segna gestito</button>
+                  <button type="button" class="mini-btn" onclick="rebookFromRecall('${escapeHtmlAttr(app.id)}')">Prenota</button>
+                </div>
+              </article>
+            `).join("")}
           </div>
-        </div>
+        </section>
       `).join("");
     }
 
     function openDetailPopup(app){
       selectedAppointment = app;
 
-      document.getElementById("popupName").textContent = `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Cliente";
+      const fullName = `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Cliente";
+      const typeLabel =
+        app.type === "giornata" ? "Giornata Beauty" :
+        app.type === "visita" ? "Visita" :
+        "Servizio";
+
+      document.getElementById("popupName").textContent = fullName;
       document.getElementById("popupPhone").textContent = app.clientPhone || "—";
 
       const statusEl = document.getElementById("popupStatus");
       statusEl.className = `status-pill ${getStatusClass(app.status)}`;
       statusEl.textContent = getStatusLabel(app.status);
 
+      document.getElementById("popupTypeBadge").textContent = typeLabel;
+      document.getElementById("popupTitleBig").textContent = app.title || "—";
+      document.getElementById("popupOperatorBig").textContent = app.operatorName || "—";
+
       document.getElementById("popupDate").textContent = app.date || "—";
       document.getElementById("popupTime").textContent = `${app.startTime || "—"} - ${app.endTime || "—"}`;
       document.getElementById("popupType").textContent = app.type || "—";
-      document.getElementById("popupTitle").textContent = app.title || "—";
       document.getElementById("popupDuration").textContent = `${app.durationMinuti || 30} min`;
+
       document.getElementById("popupOperator").textContent = app.operatorName || "—";
+      document.getElementById("popupRecall").textContent =
+        daysFromToday(app.date) >= 30 ? `${daysFromToday(app.date)} giorni fa` : "Non ancora";
       document.getElementById("popupNotes").textContent = app.notes || "—";
-      document.getElementById("popupRecall").textContent = daysFromToday(app.date) >= 30 ? `${daysFromToday(app.date)} giorni fa` : "Non ancora";
+      document.getElementById("popupUserId").textContent = app.userId || "—";
 
       detailOverlay.classList.add("show");
+    }
+
+    function openDetailPopupById(id){
+      const app = appointments.find(a => a.id === id);
+      if(app) openDetailPopup(app);
     }
 
     function closeDetailPopup(){
@@ -1888,6 +2226,15 @@
       bookingModal.classList.remove("show");
     }
 
+    function clearSelectedCustomer(){
+      selectedCustomer = null;
+      customerSearchInput.value = "";
+      customerResultsWrap.style.display = "none";
+      customerResultsEl.innerHTML = "";
+      selectedCustomerWrap.style.display = "none";
+      selectedCustomerCard.innerHTML = "";
+    }
+
     function clearForm(){
       fName.value = "";
       fSurname.value = "";
@@ -1899,6 +2246,86 @@
       fType.value = "servizio";
       fTitle.value = "";
       fNotes.value = "";
+      clearSelectedCustomer();
+    }
+
+    async function loadRegisteredCustomers(){
+      const snapshot = await db.collection("users").get();
+
+      registeredCustomers = snapshot.docs.map(doc => {
+        const data = doc.data() || {};
+        return {
+          docId: doc.id,
+          uid: data.uid || doc.id,
+          nome: data.nome || data.name || "",
+          cognome: data.cognome || data.surname || "",
+          telefono: data.telefono || data.phone || "",
+          email: data.email || ""
+        };
+      });
+    }
+
+    function renderCustomerResults(query = ""){
+      const q = String(query || "").trim().toLowerCase();
+
+      if(!q){
+        customerResultsWrap.style.display = "none";
+        customerResultsEl.innerHTML = "";
+        return;
+      }
+
+      const results = registeredCustomers.filter(c => {
+        const fullName = `${c.nome} ${c.cognome}`.toLowerCase();
+        const phone = String(c.telefono || "").toLowerCase();
+        const email = String(c.email || "").toLowerCase();
+        return fullName.includes(q) || phone.includes(q) || email.includes(q);
+      }).slice(0, 12);
+
+      if(!results.length){
+        customerResultsWrap.style.display = "";
+        customerResultsEl.innerHTML = `
+          <div style="padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:13px;font-weight:700;">
+            Nessun cliente trovato.
+          </div>
+        `;
+        return;
+      }
+
+      customerResultsWrap.style.display = "";
+      customerResultsEl.innerHTML = results.map(c => `
+        <button class="customer-result-btn" type="button" onclick="selectRegisteredCustomer('${escapeHtmlAttr(c.uid)}')">
+          <div class="customer-result-name">${escapeHtml(c.nome)} ${escapeHtml(c.cognome)}</div>
+          <div class="customer-result-meta">
+            ${escapeHtml(c.telefono || "Nessun telefono")}${c.email ? " • " + escapeHtml(c.email) : ""}
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function selectRegisteredCustomer(uid){
+      const customer = registeredCustomers.find(c => String(c.uid) === String(uid));
+      if(!customer) return;
+
+      selectedCustomer = customer;
+
+      fName.value = customer.nome || "";
+      fSurname.value = customer.cognome || "";
+      fPhone.value = customer.telefono || "";
+
+      customerSearchInput.value = `${customer.nome} ${customer.cognome}`;
+      customerResultsWrap.style.display = "none";
+      customerResultsEl.innerHTML = "";
+
+      selectedCustomerWrap.style.display = "";
+      selectedCustomerCard.innerHTML = `
+        <div class="selected-customer-title">${escapeHtml(customer.nome)} ${escapeHtml(customer.cognome)}</div>
+        <div class="selected-customer-sub">
+          ${escapeHtml(customer.telefono || "Nessun telefono")}${customer.email ? " • " + escapeHtml(customer.email) : ""}
+        </div>
+        <button type="button" class="selected-customer-clear" onclick="clearSelectedCustomer()">
+          Rimuovi selezione
+        </button>
+      `;
     }
 
     function openNewBookingModal(dateKey = "", time = ""){
@@ -1916,6 +2343,7 @@
       modalMode = "edit";
       editingAppointmentId = selectedAppointment.id;
       modalTitle.textContent = "Modifica prenotazione";
+      clearForm();
 
       fName.value = selectedAppointment.clientName || "";
       fSurname.value = selectedAppointment.clientSurname || "";
@@ -1928,15 +2356,34 @@
       fTitle.value = selectedAppointment.title || "";
       fNotes.value = selectedAppointment.notes || "";
 
+      if (selectedAppointment.userId) {
+        const found = registeredCustomers.find(c => String(c.uid) === String(selectedAppointment.userId));
+        if (found) {
+          selectRegisteredCustomer(found.uid);
+        }
+      }
+
       closeDetailPopup();
       openModal();
     }
 
-    function hasOverlap(targetDate, targetStart, targetEnd, ignoreId = null){
+    function hasConflict(targetDate, targetStart, targetEnd, ignoreId = null){
+      const sameStartApps = appointments.filter(app => {
+        if(ignoreId && app.id === ignoreId) return false;
+        if(app.status === "cancelled") return false;
+        if(app.date !== targetDate) return false;
+        return app.startTime === targetStart;
+      });
+
+      if(sameStartApps.length >= MAX_APPOINTMENTS_SAME_START) {
+        return true;
+      }
+
       return appointments.some(app => {
         if(ignoreId && app.id === ignoreId) return false;
         if(app.status === "cancelled") return false;
         if(app.date !== targetDate) return false;
+        if(app.startTime === targetStart) return false;
 
         const aStart = timeToMinutes(app.startTime);
         const aEnd = timeToMinutes(app.endTime || addMinutes(app.startTime, Number(app.durationMinuti || 30)));
@@ -1958,7 +2405,11 @@
         durationMinuti: Number(fDuration.value || 30),
         type: fType.value,
         title: fTitle.value.trim(),
-        notes: fNotes.value.trim()
+        notes: fNotes.value.trim(),
+        userId: selectedCustomer?.uid || selectedAppointment?.userId || null,
+        isRegisteredUser: !!(selectedCustomer?.uid || selectedAppointment?.userId),
+        clientSource: selectedCustomer ? "registered_user" : "manual",
+        clientEmail: selectedCustomer?.email || selectedAppointment?.clientEmail || ""
       };
 
       if(!payload.clientName || !payload.clientPhone || !payload.date || !payload.startTime || !payload.title){
@@ -1968,8 +2419,8 @@
 
       payload.endTime = addMinutes(payload.startTime, payload.durationMinuti);
 
-      if(hasOverlap(payload.date, payload.startTime, payload.endTime, editingAppointmentId)){
-        alert("C'è già una prenotazione che si sovrappone a questo orario.");
+      if(hasConflict(payload.date, payload.startTime, payload.endTime, editingAppointmentId)){
+        alert(`Hai già raggiunto il massimo di ${MAX_APPOINTMENTS_SAME_START} appuntamenti su questo orario oppure c'è un conflitto con un altro slot.`);
         return;
       }
 
@@ -1977,12 +2428,14 @@
         const currentStatus = selectedAppointment?.status || "confirmed";
         const recallDone = selectedAppointment?.recallDone || false;
         const recallStatus = selectedAppointment?.recallStatus || "pending";
+        const recallManaged = selectedAppointment?.recallManaged || false;
 
         await db.collection("appointments").doc(editingAppointmentId).update({
           ...payload,
           status: currentStatus,
           recallDone,
           recallStatus,
+          recallManaged,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       } else {
@@ -1991,6 +2444,7 @@
           status: "confirmed",
           recallDone: false,
           recallStatus: "pending",
+          recallManaged: false,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -2012,8 +2466,9 @@
       closeDetailPopup();
     }
 
-    async function markRecallDone(id){
-      await db.collection("appointments").doc(id).update({
+    async function markRecallManaged(appointmentId){
+      await db.collection("appointments").doc(appointmentId).update({
+        recallManaged: true,
         recallDone: true,
         recallStatus: "done",
         recallDoneAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2028,6 +2483,7 @@
       modalMode = "new";
       editingAppointmentId = null;
       modalTitle.textContent = "Nuova prenotazione da richiamo";
+      clearForm();
 
       fName.value = app.clientName || "";
       fSurname.value = app.clientSurname || "";
@@ -2039,6 +2495,13 @@
       fType.value = app.type || "servizio";
       fTitle.value = app.title || "";
       fNotes.value = app.notes || "";
+
+      if (app.userId) {
+        const found = registeredCustomers.find(c => String(c.uid) === String(app.userId));
+        if (found) {
+          selectRegisteredCustomer(found.uid);
+        }
+      }
 
       openModal();
     }
@@ -2066,11 +2529,7 @@
     function goToday(){
       currentDate = new Date();
       miniMonthDate = new Date(currentDate);
-      if(currentFilter !== "recall"){
-        renderMiniCalendar();
-      } else {
-        renderMiniCalendar();
-      }
+      renderMiniCalendar();
       renderCalendar();
     }
 
@@ -2093,10 +2552,12 @@
     document.getElementById("todayBtn").addEventListener("click", goToday);
     document.getElementById("prevBtn").addEventListener("click", () => shiftCurrentDate(-1));
     document.getElementById("nextBtn").addEventListener("click", () => shiftCurrentDate(1));
+
     document.getElementById("miniPrevBtn").addEventListener("click", () => {
       miniMonthDate.setMonth(miniMonthDate.getMonth() - 1);
       renderMiniCalendar();
     });
+
     document.getElementById("miniNextBtn").addEventListener("click", () => {
       miniMonthDate.setMonth(miniMonthDate.getMonth() + 1);
       renderMiniCalendar();
@@ -2131,6 +2592,10 @@
       renderCalendar();
     });
 
+    customerSearchInput.addEventListener("input", (e) => {
+      renderCustomerResults(e.target.value);
+    });
+
     db.collection("appointments").onSnapshot(snapshot => {
       appointments = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -2152,6 +2617,26 @@
 
       renderCalendar();
     });
+
+    db.collection("users").onSnapshot(snapshot => {
+      registeredCustomers = snapshot.docs.map(doc => {
+        const data = doc.data() || {};
+        return {
+          docId: doc.id,
+          uid: data.uid || doc.id,
+          nome: data.nome || data.name || "",
+          cognome: data.cognome || data.surname || "",
+          telefono: data.telefono || data.phone || "",
+          email: data.email || ""
+        };
+      });
+    });
+
+    window.selectRegisteredCustomer = selectRegisteredCustomer;
+    window.clearSelectedCustomer = clearSelectedCustomer;
+    window.openDetailPopupById = openDetailPopupById;
+    window.markRecallManaged = markRecallManaged;
+    window.rebookFromRecall = rebookFromRecall;
 
     renderMiniCalendar();
     syncFilterButtons();
