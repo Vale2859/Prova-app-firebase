@@ -6,6 +6,8 @@ const { vapid } = require("./config");
 admin.initializeApp();
 const db = admin.firestore();
 
+const BASE_URL = "https://farmaciamontesano.web.app";
+
 webpush.setVapidDetails(
   "mailto:noreply@farmaciamontesano.it",
   vapid.publicKey,
@@ -17,6 +19,41 @@ function safeDate(value) {
   if (value.toDate) return value.toDate();
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function normalizeDateKey(date) {
+  const d = safeDate(date) || new Date(date);
+  if (!d || Number.isNaN(d.getTime())) return "";
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function formatDateDisplay(dateKey) {
+  if (!dateKey) return "";
+  const d = new Date(`${dateKey}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return dateKey;
+
+  return d.toLocaleDateString("it-IT", {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  });
+}
+
+function getAppointmentUrl(data = {}) {
+  const type = String(data.type || "").toLowerCase();
+
+  if (type === "giornata") {
+    return `${BASE_URL}/calendario.html`;
+  }
+
+  if (type === "visita") {
+    return `${BASE_URL}/calendario.html`;
+  }
+
+  return `${BASE_URL}/calendario.html`;
 }
 
 async function getUserSubscriptions(uid) {
@@ -45,6 +82,8 @@ async function getEligibleUsersByFlag(flagName) {
 }
 
 async function sendPushToUser(uid, payload) {
+  if (!uid) return;
+
   const subscriptions = await getUserSubscriptions(uid);
   if (!subscriptions.length) return;
 
@@ -83,6 +122,32 @@ async function sendPushToMany(userDocs, payload) {
   }
 }
 
+async function sendAppointmentConfirmationIfPossible(docId, data) {
+  const uid = data.userId || null;
+  if (!uid) return;
+  if (data.status === "cancelled") return;
+  if (data.confirmationNotificationSentAt) return;
+
+  const title = data.title || "Prenotazione";
+  const dateText = formatDateDisplay(data.date || "");
+  const timeText = data.startTime || "";
+
+  await sendPushToUser(uid, {
+    title: "Prenotazione confermata ✅",
+    body: `${title} prenotato per ${dateText}${timeText ? ` alle ${timeText}` : ""}.`,
+    url: getAppointmentUrl(data),
+    tag: `appointment-confirmed-${docId}`
+  });
+
+  await db.collection("appointments").doc(docId).set(
+    {
+      confirmationNotificationSentAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    },
+    { merge: true }
+  );
+}
+
 /**
  * 1) GIORNATE BEAUTY: quando viene pubblicata una nuova giornata
  */
@@ -102,7 +167,7 @@ exports.onGiornataCreated = functions.firestore
     await sendPushToMany(users, {
       title,
       body,
-      url: "https://farmaciamontesano.web.app/giornate.html",
+      url: `${BASE_URL}/giornate.html`,
       tag: `giornata-created-${snap.id}`
     });
 
@@ -118,10 +183,7 @@ exports.notifyGiornateOggi = functions.pubsub
   .timeZone("Europe/Rome")
   .onRun(async () => {
     const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    const todayKey = `${yyyy}-${mm}-${dd}`;
+    const todayKey = normalizeDateKey(today);
 
     const giornateSnap = await db.collection("beauty").get();
     const users = await getEligibleUsersByFlag("giornate");
@@ -138,7 +200,7 @@ exports.notifyGiornateOggi = functions.pubsub
         body: data.titolo
           ? `${data.titolo} è prevista per oggi. Tocca per vedere tutte le informazioni.`
           : "Oggi c'è una giornata beauty in farmacia. Tocca per i dettagli.",
-        url: "https://farmaciamontesano.web.app/giornate.html",
+        url: `${BASE_URL}/giornate.html`,
         tag: `giornata-today-${doc.id}-${todayKey}`
       });
     }
@@ -157,15 +219,11 @@ exports.notifyTurniEAppoggi = functions.pubsub
   .onRun(async () => {
     const now = new Date();
 
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    const todayKey = `${yyyy}-${mm}-${dd}`;
-
+    const todayKey = normalizeDateKey(now);
     const hour = now.getHours();
     if (hour !== 8) return null;
 
-    const response = await fetch("https://farmaciamontesano.web.app/turno.html");
+    const response = await fetch(`${BASE_URL}/turno.html`);
     const html = await response.text();
 
     const match = html.match(/const turni = (\{[\s\S]*?\});/);
@@ -205,7 +263,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
       await sendPushToMany(users, {
         title: "Farmacia Montesano di turno oggi 🏥",
         body: "Oggi siamo la farmacia di turno. Tocca per posizione, contatti e dettagli.",
-        url: "https://farmaciamontesano.web.app/turno.html",
+        url: `${BASE_URL}/turno.html`,
         tag: `turno-${todayKey}`
       });
 
@@ -218,7 +276,7 @@ exports.notifyTurniEAppoggi = functions.pubsub
       await sendPushToMany(users, {
         title: "Farmacia Montesano di appoggio oggi 📍",
         body: "Oggi siamo farmacia di appoggio. Tocca per tutte le informazioni utili.",
-        url: "https://farmaciamontesano.web.app/turno.html",
+        url: `${BASE_URL}/turno.html`,
         tag: `appoggio-${todayKey}`
       });
 
@@ -269,7 +327,7 @@ exports.notifyFortunaReady = functions.pubsub
       await sendPushToUser(doc.id, {
         title: "La tua fortuna è pronta 🍀",
         body: "Hai un nuovo tentativo disponibile. Tocca ora e prova la ruota.",
-        url: "https://farmaciamontesano.web.app/fortuna.html",
+        url: `${BASE_URL}/fortuna.html`,
         tag: `fortuna-ready-${doc.id}`
       });
 
@@ -279,6 +337,95 @@ exports.notifyFortunaReady = functions.pubsub
             ...state,
             readyNotifiedAt: admin.firestore.FieldValue.serverTimestamp()
           }
+        },
+        { merge: true }
+      );
+    }
+
+    return null;
+  });
+
+/**
+ * 5) PRENOTAZIONE: conferma subito quando nasce una prenotazione
+ * Invia solo se c'è userId collegato
+ */
+exports.onAppointmentCreated = functions.firestore
+  .document("appointments/{appointmentId}")
+  .onCreate(async (snap) => {
+    const data = snap.data() || {};
+    await sendAppointmentConfirmationIfPossible(snap.id, data);
+    return null;
+  });
+
+/**
+ * 6) PRENOTAZIONE: fallback se una prenotazione viene aggiornata
+ * e riceve userId dopo la creazione
+ */
+exports.onAppointmentUpdated = functions.firestore
+  .document("appointments/{appointmentId}")
+  .onUpdate(async (change) => {
+    const before = change.before.data() || {};
+    const after = change.after.data() || {};
+
+    const beforeUid = before.userId || null;
+    const afterUid = after.userId || null;
+
+    const gainedUserId = !beforeUid && !!afterUid;
+    const stillNeedsConfirmation = !after.confirmationNotificationSentAt;
+
+    if (gainedUserId && stillNeedsConfirmation && after.status !== "cancelled") {
+      await sendAppointmentConfirmationIfPossible(change.after.id, after);
+    }
+
+    return null;
+  });
+
+/**
+ * 7) PRENOTAZIONI: promemoria stesso giorno alle 8:30
+ * Controlla ogni 30 minuti.
+ * Invia solo una volta per appuntamento.
+ */
+exports.notifyTodayAppointmentsReminder = functions.pubsub
+  .schedule("every 30 minutes")
+  .timeZone("Europe/Rome")
+  .onRun(async () => {
+    const now = new Date();
+    const todayKey = normalizeDateKey(now);
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+
+    if (!(hour === 8 && minute < 30)) {
+      return null;
+    }
+
+    const snap = await db
+      .collection("appointments")
+      .where("date", "==", todayKey)
+      .where("status", "in", ["confirmed", "requested"])
+      .get();
+
+    for (const doc of snap.docs) {
+      const data = doc.data() || {};
+      const uid = data.userId || null;
+
+      if (!uid) continue;
+      if (data.reminderSameDaySentDate === todayKey) continue;
+
+      const title = data.title || "Prenotazione";
+      const timeText = data.startTime || "";
+
+      await sendPushToUser(uid, {
+        title: "Promemoria appuntamento 📅",
+        body: `Ti aspettiamo oggi${timeText ? ` alle ${timeText}` : ""} per ${title}.`,
+        url: getAppointmentUrl(data),
+        tag: `appointment-reminder-${doc.id}-${todayKey}`
+      });
+
+      await db.collection("appointments").doc(doc.id).set(
+        {
+          reminderSameDaySentDate: todayKey,
+          reminderSameDaySentAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
         },
         { merge: true }
       );
@@ -298,7 +445,7 @@ exports.testPush = functions.https.onRequest(async (req, res) => {
       await sendPushToUser(doc.id, {
         title: "Test notifica premium ✨",
         body: "Le notifiche della Farmacia Montesano funzionano correttamente.",
-        url: "https://farmaciamontesano.web.app",
+        url: BASE_URL,
         tag: "test-notifica"
       });
     }
@@ -320,11 +467,38 @@ exports.testTurnoPush = functions.https.onRequest(async (req, res) => {
     await sendPushToMany(users, {
       title: "Farmacia Montesano di turno oggi 🏥",
       body: "Questa è una prova della nuova notifica premium del turno.",
-      url: "https://farmaciamontesano.web.app/turno.html",
+      url: `${BASE_URL}/turno.html`,
       tag: "test-turno"
     });
 
     res.send("Notifica turno inviata");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Errore");
+  }
+});
+
+/**
+ * TEST NOTIFICA PRENOTAZIONE
+ * Usa: /testAppointmentPush?uid=USER_ID
+ */
+exports.testAppointmentPush = functions.https.onRequest(async (req, res) => {
+  try {
+    const uid = String(req.query.uid || "").trim();
+
+    if (!uid) {
+      res.status(400).send("Manca uid");
+      return;
+    }
+
+    await sendPushToUser(uid, {
+      title: "Prenotazione confermata ✅",
+      body: "Questa è una prova della notifica prenotazione cliente.",
+      url: `${BASE_URL}/calendario.html`,
+      tag: `test-appointment-${uid}`
+    });
+
+    res.send("Notifica prenotazione inviata");
   } catch (err) {
     console.error(err);
     res.status(500).send("Errore");
