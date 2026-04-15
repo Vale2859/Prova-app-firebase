@@ -740,31 +740,56 @@
       <p class="brand-sub">Prenota servizi e giornate</p>
     </div>
 
-    <section id="homeSection" class="section active">
-      <p class="compact-intro">Scegli cosa vuoi prenotare in modo semplice e veloce.</p>
+   <section id="homeSection" class="section active">
+  <div class="home-stack">
 
-      <div class="home-grid">
-        <article class="choice-card" onclick="openServicesSection()">
-          <img class="choice-image" src="images/fidelity.jpg" alt="Servizi farmacia" onerror="this.src='logo.png'" />
-          <div class="choice-body">
-            <div class="choice-pill service">Servizi</div>
-            <h2 class="choice-title">Servizi</h2>
-            <p class="choice-text">ECG, holter, analisi, consulenze e altri servizi della farmacia.</p>
-            <button class="choice-btn service" type="button">Vai ai servizi</button>
-          </div>
-        </article>
-
-        <article class="choice-card" onclick="openBeautySection()">
-          <img class="choice-image" src="images/profilo.jpg" alt="Giornate beauty" onerror="this.src='logo.png'" />
-          <div class="choice-body">
-            <div class="choice-pill beauty">Giornate Beauty</div>
-            <h2 class="choice-title">Beauty</h2>
-            <p class="choice-text">Eventi, consulenze e giornate speciali prenotabili in farmacia.</p>
-            <button class="choice-btn beauty" type="button">Vai alle giornate</button>
-          </div>
-        </article>
+    <article class="my-booking-card">
+      <div class="my-booking-top">
+        <span class="my-booking-badge">Le mie prenotazioni</span>
       </div>
-    </section>
+
+      <h2 class="my-booking-title">I tuoi appuntamenti</h2>
+      <p class="my-booking-text">
+        Controlla rapidamente la tua prossima prenotazione o apri la tua area completa.
+      </p>
+
+      <div class="my-booking-preview" id="myBookingPreview">
+        <div class="my-booking-empty">
+          Nessuna prenotazione trovata al momento.
+        </div>
+      </div>
+
+      <div class="my-booking-actions">
+        <button class="primary-btn my-bookings" type="button" onclick="openMyBookingsPage()">
+          Apri le mie prenotazioni
+        </button>
+      </div>
+    </article>
+
+    <div class="home-grid">
+      <article class="choice-card" onclick="openServicesSection()">
+        <img class="choice-image" src="images/fidelity.jpg" alt="Servizi farmacia" onerror="this.src='logo.png'" />
+        <div class="choice-body">
+          <div class="choice-pill service">Servizi</div>
+          <h2 class="choice-title">Servizi</h2>
+          <p class="choice-text">ECG, holter, analisi, consulenze e altri servizi della farmacia.</p>
+          <button class="choice-btn service" type="button">Vai ai servizi</button>
+        </div>
+      </article>
+
+      <article class="choice-card" onclick="openBeautySection()">
+        <img class="choice-image" src="images/profilo.jpg" alt="Giornate beauty" onerror="this.src='logo.png'" />
+        <div class="choice-body">
+          <div class="choice-pill beauty">Giornate Beauty</div>
+          <h2 class="choice-title">Beauty</h2>
+          <p class="choice-text">Eventi, consulenze e giornate speciali prenotabili in farmacia.</p>
+          <button class="choice-btn beauty" type="button">Vai alle giornate</button>
+        </div>
+      </article>
+    </div>
+
+  </div>
+</section>
 
     <section id="servicesSection" class="section">
       <div class="section-head">
