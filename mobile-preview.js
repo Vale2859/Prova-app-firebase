@@ -16,7 +16,7 @@
     promoLink: "promo.html",
     beautyLink: "giornate.html",
     turnoLink: "turno.html",
-    prenotaLink: "giornate.html",
+    prenotaLink: "calendario.html",
     miaLink: "assistente.html",
 
     loginLink: "login.html",
