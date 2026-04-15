@@ -481,7 +481,7 @@
 
         <div class="admin-field full">
           <label for="serviceImage">Immagine</label>
-          <input id="serviceImage" type="file" accept="image/*" />
+          <button onclick="cercaImmagineDaTitolo('offerTitolo', 'offerPreview')">Cerca online</button>
         </div>
 
         <div class="admin-field full">
@@ -747,5 +747,49 @@
     window.editService = editService;
     window.reloadServices = reloadServices;
   </script>
+
+<script>
+const GOOGLE_API_KEY = "INSERISCI_API_KEY_QUI";
+const GOOGLE_CX = "INSERISCI_CX_QUI";
+
+function openImageModal(){document.getElementById("imageModal").style.display="flex";}
+function closeImageModal(){document.getElementById("imageModal").style.display="none";}
+
+async function cercaImmagineDaTitolo(inputId, previewId){
+  const titolo = document.getElementById(inputId).value;
+  if(!titolo){alert("Inserisci un titolo");return;}
+
+  const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const grid = document.getElementById("imageGrid");
+  grid.innerHTML="";
+
+  (data.items||[]).slice(0,9).forEach(img=>{
+    const el=document.createElement("img");
+    el.src=img.link;
+    el.style.width="100%";
+    el.style.borderRadius="10px";
+    el.onclick=()=>{
+      document.getElementById(previewId).src=img.link;
+      closeImageModal();
+    };
+    grid.appendChild(el);
+  });
+
+  openImageModal();
+}
+</script>
+
+<div id="imageModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;z-index:9999;">
+<div style="width:100%;background:#fff;border-radius:20px 20px 0 0;padding:14px;max-height:70vh;overflow:auto;">
+<h3>Scegli immagine</h3>
+<div id="imageGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+<button onclick="closeImageModal()" style="width:100%;margin-top:10px;padding:12px;">Chiudi</button>
+</div>
+</div>
+
 </body>
 </html>
