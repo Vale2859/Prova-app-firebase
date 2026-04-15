@@ -140,33 +140,3 @@ self.addEventListener("notificationclick", (event) => {
     })
   );
 });
-
-importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js");
-
-firebase.initializeApp({
-  apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-  authDomain: "farmaciamontesano.firebaseapp.com",
-  projectId: "farmaciamontesano",
-  messagingSenderId: "881461241551",
-  appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
-});
-
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage(function(payload) {
-  const notification = payload.notification || {};
-  const data = payload.data || {};
-
-  self.registration.showNotification(notification.title || "Notifica", {
-    body: notification.body || "",
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-    data: {
-      url: data.url || "https://farmaciamontesano.web.app"
-    },
-    vibrate: [200, 100, 200],
-    requireInteraction: false,
-    renotify: false
-  });
-});
