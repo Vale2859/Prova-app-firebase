@@ -2,356 +2,101 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Benvenuto | Farmacia Montesano</title>
 
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0f8f55" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Montesano" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- BLOCCA LA PAGINA FINCHÉ NON CONTROLLA LOGIN -->
+  <script>
+    document.documentElement.classList.add("auth-checking");
+  </script>
 
   <style>
-    :root{
-      --bg:#f3f7f5;
-      --bg-2:#eef4f1;
-      --card:rgba(255,255,255,0.86);
-      --card-strong:rgba(255,255,255,0.95);
-      --text:#16372f;
-      --muted:#6f827b;
-      --green-1:#1a6c56;
-      --green-2:#83c690;
-      --green-3:#e6f3eb;
-      --border:rgba(18,55,45,0.08);
-      --shadow:0 18px 44px rgba(16,49,39,0.08);
-      --radius-xl:32px;
-      --radius-lg:24px;
-      --radius-md:18px;
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+      background: linear-gradient(180deg,#f8faf9 0%, #eef3f1 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    *{ box-sizing:border-box; }
-
-    html,body{
-      margin:0;
-      padding:0;
-      min-height:100%;
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 14px 34px rgba(16,49,39,0.1);
+      width: 90%;
+      max-width: 360px;
     }
 
-    body{
-      font-family:"Inter",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.95), rgba(243,247,245,0.96)),
-        linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
-      overflow-x:hidden;
+    h1 {
+      margin-bottom: 20px;
+      color: #1b6c56;
+      font-size: 26px;
     }
 
-    .bg-orb{
-      position:fixed;
-      border-radius:50%;
-      filter:blur(70px);
-      opacity:.20;
-      pointer-events:none;
-      z-index:0;
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .bg-orb.orb-1{
-      width:260px;
-      height:260px;
-      top:-40px;
-      left:-70px;
-      background:#99d8bf;
+    .login {
+      background: linear-gradient(135deg,#1b6c56,#84c691);
+      color: white;
     }
 
-    .bg-orb.orb-2{
-      width:240px;
-      height:240px;
-      right:-60px;
-      top:150px;
-      background:#b9d8ff;
+    .register {
+      background: #eef3f1;
+      color: #16372f;
     }
 
-    .bg-orb.orb-3{
-      width:220px;
-      height:220px;
-      left:10%;
-      bottom:-40px;
-      background:#cfead8;
+    .loading {
+      font-size: 14px;
+      color: #666;
+      margin-top: 16px;
+      display: none;
     }
 
-    .wrap{
-      position:relative;
-      z-index:1;
-      width:100%;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
+    .loading.show {
+      display: block;
     }
 
-    .card{
-      width:100%;
-      max-width:460px;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      overflow:hidden;
+    html.auth-checking,
+    html.auth-checking body {
+      visibility: hidden;
+      opacity: 0;
     }
 
-    .card-top{
-      padding:24px 22px 12px;
-      text-align:center;
-    }
-
-    .logo-box{
-      width:120px;
-      height:120px;
-      margin:0 auto 14px;
-      border-radius:28px;
-      background:var(--card-strong);
-      border:1px solid var(--border);
-      box-shadow:0 12px 30px rgba(16,49,39,0.08);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-    }
-
-    .logo-box img{
-      width:100%;
-      height:auto;
-      object-fit:contain;
-      display:block;
-    }
-
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:30px;
-      padding:0 12px;
-      border-radius:999px;
-      background:var(--green-3);
-      color:var(--green-1);
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.03em;
-      margin-bottom:12px;
-    }
-
-    .title{
-      margin:0 0 10px;
-      font-size:34px;
-      line-height:.96;
-      letter-spacing:-.05em;
-      color:#10352e;
-      font-weight:900;
-    }
-
-    .text{
-      margin:0 auto;
-      max-width:340px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.5;
-      font-weight:600;
-    }
-
-    .hero-image-wrap{
-      padding:14px 22px 0;
-    }
-
-    .hero-image{
-      width:100%;
-      height:180px;
-      object-fit:cover;
-      border-radius:24px;
-      display:block;
-      box-shadow:0 12px 24px rgba(16,49,39,0.08);
-      background:#e8efeb;
-    }
-
-    .benefits{
-      display:grid;
-      gap:10px;
-      padding:16px 22px 10px;
-    }
-
-    .benefit{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      background:rgba(255,255,255,0.74);
-      border:1px solid rgba(18,55,45,0.06);
-      border-radius:18px;
-      padding:12px 13px;
-    }
-
-    .benefit-icon{
-      width:34px;
-      height:34px;
-      border-radius:12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:var(--green-3);
-      flex:0 0 auto;
-      font-size:17px;
-    }
-
-    .benefit-text strong{
-      display:block;
-      font-size:14px;
-      line-height:1.2;
-      font-weight:900;
-      color:#173c35;
-      margin-bottom:3px;
-    }
-
-    .benefit-text span{
-      display:block;
-      font-size:13px;
-      line-height:1.35;
-      color:var(--muted);
-      font-weight:600;
-    }
-
-    .actions{
-      display:grid;
-      gap:10px;
-      padding:14px 22px 22px;
-    }
-
-    .btn{
-      min-height:54px;
-      border:none;
-      border-radius:18px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      font-size:16px;
-      font-weight:900;
-      cursor:pointer;
-      transition:transform .15s ease, opacity .15s ease;
-    }
-
-    .btn:hover{
-      transform:translateY(-1px);
-    }
-
-    .btn-primary{
-      color:#fff;
-      background:linear-gradient(135deg,var(--green-1),var(--green-2));
-      box-shadow:0 12px 22px rgba(61,142,103,0.22);
-    }
-
-    .btn-secondary{
-      color:#183a33;
-      background:#eff4f2;
-      border:1px solid rgba(18,55,45,0.06);
-    }
-
-    .bottom-note{
-      text-align:center;
-      padding:0 20px 20px;
-      color:#7a8a84;
-      font-size:12px;
-      line-height:1.45;
-      font-weight:600;
-    }
-
-    .loading{
-      display:none;
-      text-align:center;
-      padding:14px 22px 0;
-      color:var(--muted);
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .loading.show{
-      display:block;
+    html.auth-ready,
+    html.auth-ready body {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.2s ease;
     }
   </style>
 
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
+
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-orb orb-3"></div>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="card-top">
-        <div class="logo-box">
-          <img src="logo.png" alt="Farmacia Montesano" onerror="this.src='icon-192.png'" />
-        </div>
+  <div class="card">
+    <h1>Benvenuto 👋</h1>
 
-        <div class="kicker">Benvenuto</div>
+    <button class="login" onclick="goLogin()">Accedi</button>
+    <button class="register" onclick="goRegister()">Registrati</button>
 
-        <h1 class="title">Accedi alla tua farmacia</h1>
-
-        <p class="text">
-          Per continuare è necessario accedere o registrarsi. In questo modo potrai prenotare,
-          usare la fidelity, i premi, la fortuna e gestire il tuo profilo in modo completo.
-        </p>
-      </div>
-
-      <div class="hero-image-wrap">
-        <img class="hero-image" src="farmacia2.jpg" alt="Farmacia Montesano" onerror="this.src='logo.png'" />
-      </div>
-
-      <div class="benefits">
-        <div class="benefit">
-          <div class="benefit-icon">📅</div>
-          <div class="benefit-text">
-            <strong>Prenotazioni sempre collegate a te</strong>
-            <span>I tuoi appuntamenti saranno salvati in modo ordinato e facile da ritrovare.</span>
-          </div>
-        </div>
-
-        <div class="benefit">
-          <div class="benefit-icon">🎁</div>
-          <div class="benefit-text">
-            <strong>Fidelity, premi e vantaggi</strong>
-            <span>Accedi alle aree riservate con i tuoi dati e segui i tuoi benefici.</span>
-          </div>
-        </div>
-
-        <div class="benefit">
-          <div class="benefit-icon">🔔</div>
-          <div class="benefit-text">
-            <strong>Notifiche e promemoria personalizzati</strong>
-            <span>Ricevi aggiornamenti e conferme direttamente sul tuo profilo cliente.</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="loadingText" class="loading show">Controllo accesso in corso...</div>
-
-      <div class="actions">
-        <a href="login.html" class="btn btn-primary">Accedi</a>
-        <a href="register.html" class="btn btn-secondary">Registrati</a>
-      </div>
-
-      <div class="bottom-note">
-        Se hai già un account, ti porteremo direttamente alla home.
-      </div>
-    </div>
+    <div id="loadingText" class="loading show">Controllo accesso...</div>
   </div>
 
   <script>
@@ -364,7 +109,9 @@
       appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     const auth = firebase.auth();
     const loadingText = document.getElementById("loadingText");
@@ -375,8 +122,22 @@
         return;
       }
 
-      loadingText.classList.remove("show");
+      document.documentElement.classList.remove("auth-checking");
+      document.documentElement.classList.add("auth-ready");
+
+      if (loadingText) {
+        loadingText.classList.remove("show");
+      }
     });
+
+    function goLogin(){
+      window.location.href = "login.html";
+    }
+
+    function goRegister(){
+      window.location.href = "register.html";
+    }
   </script>
+
 </body>
 </html>
