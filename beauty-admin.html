@@ -590,66 +590,25 @@
     document.getElementById("imageModal").style.display = "none";
   }
 
-  async function cercaImmagineDaTitolo(inputId, previewId){
-    const input = document.getElementById(inputId);
-    const previewEl = document.getElementById(previewId);
+  function cercaImmagineDaTitolo(inputId, previewId){
+  const input = document.getElementById(inputId);
+  const previewEl = document.getElementById(previewId);
 
-    if(!input){
-      alert("Campo titolo non trovato.");
-      return;
-    }
+  const titolo = input.value.trim();
 
-    const titolo = input.value.trim();
-
-    if(!titolo){
-      alert("Inserisci un titolo prima.");
-      return;
-    }
-
-    const url = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image&q=${encodeURIComponent(titolo)}`;
-
-    try{
-      const res = await fetch(url);
-      const data = await res.json();
-
-      console.log("Titolo cercato:", titolo);
-      console.log("Risposta Google:", data);
-
-      const grid = document.getElementById("imageGrid");
-      grid.innerHTML = "";
-
-      if (data.error) {
-        alert("Errore Google: " + (data.error.message || "richiesta non valida"));
-        return;
-      }
-
-      if(!data.items || !data.items.length){
-        alert("Nessuna immagine trovata per questo titolo.");
-        return;
-      }
-
-      data.items.slice(0, 9).forEach((img) => {
-        const el = document.createElement("img");
-        el.src = img.link;
-        el.alt = titolo;
-
-        el.onclick = () => {
-          previewEl.src = img.link;
-          selectedRemoteImageUrl = img.link;
-          fileInput.value = "";
-          cameraInput.value = "";
-          closeImageModal();
-        };
-
-        grid.appendChild(el);
-      });
-
-      openImageModal();
-    } catch(err){
-      console.error("Errore durante la ricerca immagini:", err);
-      alert("Errore durante la ricerca immagini.");
-    }
+  if(!titolo){
+    alert("Inserisci un titolo prima.");
+    return;
   }
+
+  const imgUrl = `https://source.unsplash.com/600x600/?${encodeURIComponent(titolo)},cosmetics,beauty`;
+
+  previewEl.src = imgUrl;
+  selectedRemoteImageUrl = imgUrl;
+
+  fileInput.value = "";
+  cameraInput.value = "";
+}
 
   function openCreateForm(){
     editingId = null;
