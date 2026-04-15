@@ -128,6 +128,10 @@ async function sendAppointmentConfirmationIfPossible(docId, data) {
   if (data.status === "cancelled") return;
   if (data.confirmationNotificationSentAt) return;
 
+  const userSnap = await db.collection("users").doc(uid).get();
+  const userData = userSnap.exists ? (userSnap.data() || {}) : {};
+  if (userData.notificationSettings && userData.notificationSettings.prenotazioni === false) return;
+
   const title = data.title || "Prenotazione";
   const dateText = formatDateDisplay(data.date || "");
   const timeText = data.startTime || "";
@@ -410,6 +414,10 @@ exports.notifyTodayAppointmentsReminder = functions.pubsub
 
       if (!uid) continue;
       if (data.reminderSameDaySentDate === todayKey) continue;
+
+      const userSnap = await db.collection("users").doc(uid).get();
+      const userData = userSnap.exists ? (userSnap.data() || {}) : {};
+      if (userData.notificationSettings && userData.notificationSettings.prenotazioni === false) continue;
 
       const title = data.title || "Prenotazione";
       const timeText = data.startTime || "";
