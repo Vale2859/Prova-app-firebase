@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Farmacia Montesano",
   "short_name": "Montesano",
-  "start_url": "./index.html?source=pwa",
+  "start_url": "benvenuto.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
