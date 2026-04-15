@@ -1535,15 +1535,19 @@
     }
 
     async function initPage(){
-      try{
-        await Promise.all([loadServices(), loadBeauty()]);
-      } catch(err){
-        console.error(err);
-        featuredServiceWrap.innerHTML = "";
-        servicesGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Errore nel caricamento dei servizi.</div>`;
-        beautyListEl.innerHTML = `<div class="empty">Errore nel caricamento delle giornate beauty.</div>`;
-      }
-    }
+  try{
+    await Promise.all([
+      loadServices(),
+      loadBeauty(),
+      renderMyBookingsPreview()
+    ]);
+  } catch(err){
+    console.error(err);
+    featuredServiceWrap.innerHTML = "";
+    servicesGridEl.innerHTML = `<div class="empty" style="grid-column:1/-1;">Errore nel caricamento dei servizi.</div>`;
+    beautyListEl.innerHTML = `<div class="empty">Errore nel caricamento delle giornate beauty.</div>`;
+  }
+}
 
     window.openServicesSection = openServicesSection;
     window.openBeautySection = openBeautySection;
@@ -1557,7 +1561,95 @@
     window.continueBooking = continueBooking;
     window.submitGuestBooking = submitGuestBooking;
     window.closeGuestModal = closeGuestModal;
+    function openMyBookingsPage(){
+  window.location.href = "mie-prenotazioni.html";
+}
 
+async function renderMyBookingsPreview(){
+  const previewEl = document.getElementById("myBookingPreview");
+  if(!previewEl) return;
+
+  const profile = getStoredUserProfile();
+
+  if(!profile){
+    previewEl.innerHTML = `
+      <div class="my-booking-empty">
+        Accedi o registrati per vedere qui le tue prenotazioni.
+      </div>
+    `;
+    return;
+  }
+
+  const userPhone = (profile.telefono || profile.phone || "").trim();
+  const userId = profile.uid || profile.userId || null;
+
+  if(!userPhone && !userId){
+    previewEl.innerHTML = `
+      <div class="my-booking-empty">
+        Non abbiamo trovato dati sufficienti per recuperare le tue prenotazioni.
+      </div>
+    `;
+    return;
+  }
+
+  let bookings = [];
+
+  try{
+    if(userId){
+      const snapByUser = await db.collection("appointments")
+        .where("userId", "==", userId)
+        .where("status", "in", ["requested","confirmed"])
+        .get();
+
+      bookings = snapByUser.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    if(!bookings.length && userPhone){
+      const snapByPhone = await db.collection("appointments")
+        .where("clientPhone", "==", userPhone)
+        .where("status", "in", ["requested","confirmed"])
+        .get();
+
+      bookings = snapByPhone.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    if(!bookings.length){
+      previewEl.innerHTML = `
+        <div class="my-booking-empty">
+          Nessuna prenotazione attiva trovata al momento.
+        </div>
+      `;
+      return;
+    }
+
+    bookings.sort((a,b) => {
+      const aKey = `${a.date || ""} ${a.startTime || ""}`;
+      const bKey = `${b.date || ""} ${b.startTime || ""}`;
+      return aKey.localeCompare(bKey);
+    });
+
+    const nextBooking = bookings[0];
+
+    previewEl.innerHTML = `
+      <div class="my-booking-row">
+        <div class="my-booking-service">${escapeHtml(nextBooking.title || "Prenotazione")}</div>
+        <div class="my-booking-meta">
+          ${escapeHtml(formatDisplayDate(nextBooking.date))} • ${escapeHtml(nextBooking.startTime || "--:--")}
+        </div>
+        <div class="my-booking-meta">
+          Stato: ${escapeHtml(nextBooking.status === "confirmed" ? "Confermata" : "In attesa")}
+        </div>
+      </div>
+    `;
+  } catch(err){
+    console.error(err);
+    previewEl.innerHTML = `
+      <div class="my-booking-empty">
+        Errore nel caricamento delle prenotazioni.
+      </div>
+    `;
+  }
+}
     initPage();
   </script>
 </body>
