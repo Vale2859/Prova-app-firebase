@@ -1,64 +1,258 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Titolare</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Titolare | Farmacia Montesano</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+    :root{
+      --bg:#f3f5f4;
+      --card:#ffffff;
+      --text:#16372f;
+      --muted:#7a8b85;
+      --line:#e5ece8;
+      --shadow:0 10px 30px rgba(16,49,39,.08);
+      --radius-xl:34px;
+      --radius-lg:28px;
+      --radius-md:22px;
     }
 
-    .header {
-      background: white;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      background:var(--bg);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      color:var(--text);
     }
 
-    .logo {
-      max-width: 250px;
+    .page{
+      max-width:860px;
+      margin:0 auto;
+      padding:18px 16px 40px;
     }
 
-    .spacer {
-      height: 120px;
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius-xl);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 12px;
+    .logo-card{
+      padding:22px 20px;
+      margin-bottom:14px;
     }
 
-    .card {
-      height: 140px;
-      border-radius: 20px;
-      background: #e0e0e0;
+    .logo{
+      width:100%;
+      max-width:330px;
+      display:block;
+    }
+
+    .status-card{
+      min-height:84px;
+      margin-bottom:14px;
+      padding:18px 22px;
+    }
+
+    .status-placeholder{
+      width:100%;
+      height:100%;
+      min-height:48px;
+      border-radius:18px;
+      background:linear-gradient(90deg,#f6f8f7 0%, #eef3f1 100%);
+    }
+
+    .hero-card{
+      min-height:330px;
+      margin-bottom:14px;
+      overflow:hidden;
+      position:relative;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.96)),
+        url('hero-farmacia.jpg') center/cover no-repeat;
+    }
+
+    .hero-inner{
+      width:100%;
+      height:100%;
+      min-height:330px;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .hero-placeholder{
+      width:100%;
+      height:100%;
+      min-height:250px;
+      border-radius:24px;
+      background:linear-gradient(180deg,#f7f9f8 0%, #eef3f1 100%);
+      border:1px solid #edf2ef;
+    }
+
+    .actions-empty{
+      margin-bottom:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
+    .empty-pill{
+      min-height:86px;
+      border-radius:28px;
+      background:#ffffff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .feature-card{
+      position:relative;
+      overflow:hidden;
+      min-height:245px;
+      border-radius:30px;
+      background:#dfe7e3;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .feature-card img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .feature-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.10) 0%, rgba(255,255,255,.06) 100%);
+    }
+
+    .feature-empty{
+      position:absolute;
+      inset:auto 16px 16px 16px;
+      height:78px;
+      border-radius:20px;
+      background:rgba(255,255,255,.18);
+      backdrop-filter:blur(5px);
+      border:1px solid rgba(255,255,255,.25);
+      z-index:2;
+    }
+
+    .feature-card,
+    .empty-pill{
+      pointer-events:none;
+      user-select:none;
+    }
+
+    @media (max-width:640px){
+      .page{
+        padding:14px 14px 30px;
+      }
+
+      .logo{
+        max-width:300px;
+      }
+
+      .hero-card{
+        min-height:280px;
+      }
+
+      .hero-inner{
+        min-height:280px;
+      }
+
+      .hero-placeholder{
+        min-height:210px;
+      }
+
+      .actions-empty{
+        gap:10px;
+      }
+
+      .empty-pill{
+        min-height:74px;
+        border-radius:24px;
+      }
+
+      .grid{
+        gap:14px;
+      }
+
+      .feature-card{
+        min-height:220px;
+        border-radius:28px;
+      }
+
+      .feature-empty{
+        height:68px;
+        inset:auto 14px 14px 14px;
+      }
     }
   </style>
 </head>
-
 <body>
+  <main class="page">
 
-  <!-- HEADER -->
-  <div class="header">
-    <img src="logo.png" class="logo">
-  </div>
+    <!-- LOGO -->
+    <section class="card logo-card">
+      <img src="logo.png" alt="Farmacia Montesano" class="logo" />
+    </section>
 
-  <!-- SPAZIO VUOTO -->
-  <div class="spacer"></div>
+    <!-- FASCIA STATO VUOTA -->
+    <section class="card status-card">
+      <div class="status-placeholder"></div>
+    </section>
 
-  <!-- CARD VUOTE -->
-  <div class="grid">
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-  </div>
+    <!-- RIQUADRO GRANDE CENTRALE VUOTO -->
+    <section class="card hero-card">
+      <div class="hero-inner">
+        <div class="hero-placeholder"></div>
+      </div>
+    </section>
 
+    <!-- SPAZIO DEI 3 TASTI LASCIATO VUOTO -->
+    <section class="actions-empty">
+      <div class="empty-pill"></div>
+      <div class="empty-pill"></div>
+      <div class="empty-pill"></div>
+    </section>
+
+    <!-- CARD SOTTO: STESSA IMPOSTAZIONE, SENZA LINK E SENZA CONTENUTO -->
+    <section class="grid">
+      <div class="feature-card">
+        <img src="servizi.jpg" alt="">
+        <div class="feature-empty"></div>
+      </div>
+
+      <div class="feature-card">
+        <img src="promo.jpg" alt="">
+        <div class="feature-empty"></div>
+      </div>
+
+      <div class="feature-card">
+        <img src="beauty.jpg" alt="">
+        <div class="feature-empty"></div>
+      </div>
+
+      <div class="feature-card">
+        <img src="turni.jpg" alt="">
+        <div class="feature-empty"></div>
+      </div>
+    </section>
+
+  </main>
 </body>
 </html>
