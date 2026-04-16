@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richieste</title>
+
+<style>
+body{
+margin:0;
+font-family:-apple-system;
+background:#eef3f0;
+color:#16352f;
+}
+
+.app{
+max-width:430px;
+margin:auto;
+padding:14px;
+}
+
+/* HEADER */
+.header{
+font-size:24px;
+font-weight:900;
+margin-bottom:6px;
+}
+
+.sub{
+font-size:14px;
+opacity:.6;
+margin-bottom:12px;
+}
+
+/* STATS */
+.stats{
+display:flex;
+gap:8px;
+margin-bottom:12px;
+}
+
+.stat{
+flex:1;
+background:#fff;
+padding:10px;
+border-radius:12px;
+text-align:center;
+font-weight:900;
+}
+
+/* FILTRI */
+.filters{
+display:flex;
+gap:8px;
+margin-bottom:12px;
+}
+
+.filter{
+flex:1;
+padding:10px;
+border-radius:20px;
+background:#fff;
+text-align:center;
+font-weight:800;
+cursor:pointer;
+}
+
+.filter.active{
+background:#3e8b61;
+color:white;
+}
+
+/* CARD */
+.card{
+background:white;
+border-radius:20px;
+padding:14px;
+margin-bottom:10px;
+box-shadow:0 6px 15px rgba(0,0,0,.05);
+transition:.2s;
+}
+
+.card:hover{
+transform:scale(.99);
+}
+
+.name{
+font-size:17px;
+font-weight:900;
+}
+
+.type{
+font-size:12px;
+opacity:.6;
+margin-bottom:6px;
+}
+
+.details{
+font-size:15px;
+margin-bottom:10px;
+}
+
+.actions{
+display:flex;
+gap:8px;
+}
+
+.btn{
+flex:1;
+padding:10px;
+border:none;
+border-radius:12px;
+font-weight:900;
+cursor:pointer;
+}
+
+.approve{
+background:#3e8b61;
+color:white;
+}
+
+.reject{
+background:#ff5c5c;
+color:white;
+}
+
+/* EMPTY */
+.empty{
+text-align:center;
+padding:30px;
+opacity:.6;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+border-radius:20px 20px 0 0;
+padding:16px;
+display:none;
+}
+
+textarea{
+width:100%;
+min-height:80px;
+border-radius:12px;
+border:1px solid #ddd;
+padding:10px;
+margin-top:10px;
+}
+
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+authDomain:"farmaciamontesano.firebaseapp.com",
+projectId:"farmaciamontesano"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+</script>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">Richieste</div>
+<div class="sub">Gestisci velocemente tutto</div>
+
+<div class="stats">
+<div class="stat" id="tot">0</div>
+<div class="stat" id="ok">0</div>
+<div class="stat" id="no">0</div>
+</div>
+
+<div class="filters">
+<div class="filter active" onclick="setFilter(event,'tutte')">Tutte</div>
+<div class="filter" onclick="setFilter(event,'permesso')">Permessi</div>
+<div class="filter" onclick="setFilter(event,'consumabile')">Consumabili</div>
+</div>
+
+<div id="list"></div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<b>Motivo rifiuto</b>
+<textarea id="motivo"></textarea>
+<button class="btn reject" onclick="confirmReject()">Conferma</button>
+</div>
+
+<script>
+
+let currentFilter="tutte";
+let rejectId=null;
+
+function setFilter(e,f){
+currentFilter=f;
+document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));
+e.target.classList.add('active');
+load();
+}
+
+function approve(id){
+db.collection("employee_requests").doc(id).update({
+status:"approvata"
+});
+}
+
+function openReject(id){
+rejectId=id;
+document.getElementById("modal").style.display="block";
+}
+
+function confirmReject(){
+let motivo=document.getElementById("motivo").value;
+
+db.collection("employee_requests").doc(rejectId).update({
+status:"rifiutata",
+motivo:motivo
+});
+
+document.getElementById("modal").style.display="none";
+}
+
+function getDetails(d){
+
+if(d.type==="consumabile"){
+return (d.items||[]).map(x=>x.name+" x"+x.qty).join(", ");
+}
+
+if(d.requestKind==="ferie"){
+return "Dal "+d.fromDate+" al "+d.toDate;
+}
+
+if(d.requestKind==="ore"){
+return d.day+" "+d.fromHour+"-"+d.toHour;
+}
+
+return "Richiesta";
+}
+
+function load(){
+
+db.collection("employee_requests").onSnapshot(snapshot=>{
+
+let html="";
+let tot=0, ok=0, no=0;
+
+snapshot.docs.forEach(doc=>{
+const d=doc.data();
+
+if(d.status==="in_attesa") tot++;
+if(d.status==="approvata") ok++;
+if(d.status==="rifiutata") no++;
+
+if(d.status!=="in_attesa") return;
+
+if(currentFilter==="permesso" && d.type!=="ferie_permesso") return;
+if(currentFilter==="consumabile" && d.type!=="consumabile") return;
+
+html+=`
+<div class="card">
+
+<div class="name">${d.employeeName}</div>
+<div class="type">${d.type}</div>
+
+<div class="details">${getDetails(d)}</div>
+
+<div class="actions">
+<button class="btn approve" onclick="approve('${doc.id}')">Approva</button>
+<button class="btn reject" onclick="openReject('${doc.id}')">Rifiuta</button>
+</div>
+
+</div>
+`;
+});
+
+document.getElementById("tot").innerText=tot;
+document.getElementById("ok").innerText=ok;
+document.getElementById("no").innerText=no;
+
+document.getElementById("list").innerHTML=
+html || "<div class='empty'>Nessuna richiesta 👍</div>";
+
+});
+}
+
+load();
+
+</script>
+
+</body>
+</html>
