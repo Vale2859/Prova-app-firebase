@@ -1,16 +1,457 @@
 <!DOCTYPE html>
-<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Richiesta consumabili</title>
-<style>
-:root{--bg:#eef3f0;--card:#fff;--card-soft:#f5f8f6;--line:#dfe7e3;--text:#1f3c35;--muted:#6f837c;--green:#3e8b61;--green-2:#66b187;--shadow:0 10px 25px rgba(0,0,0,.06)}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:linear-gradient(180deg,#f4f7f5,#e9efec);color:var(--text)}
-.app{max-width:430px;margin:auto;padding:14px}.section{background:#fff;border-radius:22px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--line)}.section-title{font-size:22px;font-weight:900;margin-bottom:8px}.section-sub{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:14px}.row{display:grid;gap:12px;margin-bottom:12px}textarea,input[type=number]{width:100%;min-height:54px;border-radius:16px;border:1px solid var(--line);background:var(--card-soft);padding:0 14px;font-size:16px;color:var(--text);outline:none}textarea{padding:14px;min-height:100px;resize:vertical}.btn{width:100%;min-height:54px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;font-size:16px;font-weight:900;cursor:pointer}.notice{padding:12px 14px;border-radius:16px;background:#eff7f2;color:#275b46;font-size:14px;font-weight:700;border:1px solid #d8ece1}.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:900;margin-bottom:12px}.checklist{display:grid;gap:10px;margin-bottom:12px}.check-item{background:var(--card-soft);border:1px solid var(--line);border-radius:18px;padding:12px;display:grid;grid-template-columns:22px 1fr 80px;gap:10px;align-items:center}.check-item input[type=checkbox]{width:20px;height:20px}.check-item input[type=number]{min-height:46px}.check-label{font-size:15px;font-weight:900;color:var(--text)}
-</style>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig={apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",authDomain:"farmaciamontesano.firebaseapp.com",projectId:"farmaciamontesano",storageBucket:"farmaciamontesano.firebasestorage.app",messagingSenderId:"881461241551",appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"}; if(!firebase.apps.length) firebase.initializeApp(firebaseConfig); const db=firebase.firestore(); const EMPLOYEE_STORAGE_KEY='fm_employee_session_v1'; function getSession(){try{return JSON.parse(localStorage.getItem(EMPLOYEE_STORAGE_KEY)||'null')}catch(e){return null}} function requireSession(){const s=getSession(); if(!s){window.location.href='dipendenti-login.html'; throw new Error('no session')} return s} function nowMeta(){const d=new Date(); return {createdAt:d.toISOString(),createdDate:d.toISOString().slice(0,10),createdTime:d.toTimeString().slice(0,5)}} async function createOwnerNotification(data){try{await db.collection('owner_notifications').add({read:false,...nowMeta(),...data})}catch(e){console.error(e)}}
-</script>
-</head><body><div class="app"><a class="back" href="dipendenti.html">← Torna alla home</a><div class="section"><div class="section-title">Richiesta consumabili</div><div class="section-sub">Seleziona con i flag quello che ti serve. Il sistema salva chi lo chiede, in quale giorno e a quale ora.</div><div class="checklist" id="consumabiliList"></div><div class="row"><textarea id="consumabiliNotes" placeholder="Note aggiuntive (facoltativo)"></textarea><button class="btn" id="sendConsumabiliBtn">Invia richiesta</button></div><div class="notice" id="consumabiliMessage">Seleziona almeno un consumabile.</div></div></div>
-<script>
-(async function(){ const session=requireSession(); const items=['Guanti','Mascherine','Carta lettino','Rotolo etichette','Sacchetti','Penne','Carta stampante','Disinfettante']; const box=document.getElementById('consumabiliList'), msg=document.getElementById('consumabiliMessage'); box.innerHTML=items.map((name,idx)=>`<label class="check-item"><input type="checkbox" id="c_${idx}"><div class="check-label">${name}</div><input type="number" min="1" value="1" id="q_${idx}"></label>`).join(''); document.getElementById('sendConsumabiliBtn').addEventListener('click', async ()=>{ const selected=[]; items.forEach((name,idx)=>{ const checked=document.getElementById(`c_${idx}`).checked; const qty=parseInt(document.getElementById(`q_${idx}`).value||'1',10); if(checked) selected.push({name, qty: qty>0?qty:1}); }); if(!selected.length){ msg.textContent='Seleziona almeno un consumabile.'; return; } const payload={type:'consumabile',employeeId:session.id,employeeName:session.name,status:'in_attesa',items:selected,notes:document.getElementById('consumabiliNotes').value.trim(),ownerReason:'',...nowMeta()}; const ref=await db.collection('employee_requests').add(payload); await createOwnerNotification({title:'Nuova richiesta consumabili',message:`${session.name} ha richiesto ${selected.length} consumabili`,employeeId:session.id,employeeName:session.name,requestId:ref.id,type:'consumabile'}); msg.textContent='Richiesta consumabili inviata.'; document.getElementById('consumabiliNotes').value=''; items.forEach((name,idx)=>{ document.getElementById(`c_${idx}`).checked=false; document.getElementById(`q_${idx}`).value=1; }); }); })();
-</script></body></html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Consumabili</title>
+
+  <style>
+    :root{
+      --bg:#eef3f0;
+      --card:#ffffff;
+      --line:#dde5e0;
+      --text:#1f3c35;
+      --muted:#6f837c;
+      --green:#3e8b61;
+      --green2:#66b187;
+      --shadow:0 10px 25px rgba(0,0,0,.06);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    body{
+      background:linear-gradient(180deg,#f4f7f5,#e9efec);
+      color:var(--text);
+    }
+
+    .app{
+      max-width:430px;
+      margin:auto;
+      padding:14px 14px 90px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#1f5a40,#3e8b61,#66b187);
+      color:#fff;
+      border-radius:26px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+      color:#fff;
+      font-size:16px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .hero-title{
+      font-size:28px;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-.04em;
+      margin-bottom:8px;
+    }
+
+    .hero-sub{
+      font-size:14px;
+      line-height:1.25;
+      opacity:.95;
+      font-weight:700;
+    }
+
+    .summary{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .summary-card{
+      min-height:74px;
+      border-radius:18px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.15);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .summary-card strong{
+      font-size:24px;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .summary-card span{
+      font-size:12px;
+      line-height:1.1;
+      font-weight:800;
+      opacity:.95;
+    }
+
+    .list{
+      display:grid;
+      gap:10px;
+    }
+
+    .item{
+      background:#fff;
+      border-radius:22px;
+      padding:14px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      transition:.15s ease;
+    }
+
+    .item.active{
+      border-color:#bfe2cc;
+      box-shadow:0 12px 24px rgba(62,139,97,.10);
+      background:linear-gradient(180deg,#ffffff,#f5fbf7);
+    }
+
+    .left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+      flex:1;
+    }
+
+    .check{
+      width:26px;
+      height:26px;
+      accent-color: var(--green);
+      flex:0 0 auto;
+    }
+
+    .label{
+      font-size:18px;
+      line-height:1.1;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .sub{
+      font-size:12px;
+      line-height:1.15;
+      color:var(--muted);
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .qty{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+
+    .qty button{
+      width:34px;
+      height:34px;
+      border:none;
+      border-radius:12px;
+      background:#e9efec;
+      color:var(--text);
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .qty span{
+      min-width:22px;
+      text-align:center;
+      font-size:17px;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .hint{
+      margin-top:14px;
+      background:#fff;
+      border-radius:20px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      padding:14px;
+      font-size:14px;
+      line-height:1.3;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%) translateY(120px);
+      background:#17211d;
+      color:#fff;
+      min-height:46px;
+      padding:0 16px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:900;
+      box-shadow:0 18px 40px rgba(0,0,0,.22);
+      z-index:9999;
+      transition:transform .25s ease;
+    }
+
+    .toast.show{
+      transform:translateX(-50%) translateY(0);
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <a class="back" href="dipendenti.html">← Torna</a>
+      <div class="hero-title">Consumabili</div>
+      <div class="hero-sub">
+        Metti solo il flag. La richiesta parte subito e resta visibile finché il titolare non la segna come presa in carico.
+      </div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <strong id="selectedCount">0</strong>
+          <span>Prodotti richiesti</span>
+        </div>
+
+        <div class="summary-card">
+          <strong id="employeeNameBox">—</strong>
+          <span>Operatore attivo</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="list" id="listBox"></section>
+
+    <div class="hint">
+      Non serve inviare. Basta mettere il flag. Se togli il flag prima che il titolare la prenda in carico, la richiesta viene tolta dalla lista attiva.
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox">Operazione completata</div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const EMPLOYEE_STORAGE_KEY = "fm_employee_session_v1";
+
+    function getSession(){
+      try {
+        return JSON.parse(localStorage.getItem(EMPLOYEE_STORAGE_KEY) || "null");
+      } catch(e) {
+        return null;
+      }
+    }
+
+    function requireSession(){
+      const s = getSession();
+      if(!s || !s.id){
+        window.location.href = "dipendenti-login.html";
+        throw new Error("Sessione mancante");
+      }
+      return s;
+    }
+
+    function nowMeta(){
+      const d = new Date();
+      return {
+        createdAt: d.toISOString(),
+        createdDate: d.toISOString().slice(0,10),
+        createdTime: d.toTimeString().slice(0,5)
+      };
+    }
+
+    function showToast(message){
+      const box = document.getElementById("toastBox");
+      box.textContent = message;
+      box.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => box.classList.remove("show"), 1500);
+    }
+
+    const session = requireSession();
+
+    const PRODUCTS = [
+      "Guanti",
+      "Mascherine",
+      "Carta lettino",
+      "Rotolo etichette",
+      "Sacchetti",
+      "Penne",
+      "Carta stampante",
+      "Disinfettante",
+      "Rotolo POS",
+      "Buste farmacia"
+    ];
+
+    const listBox = document.getElementById("listBox");
+    const selectedCount = document.getElementById("selectedCount");
+    const employeeNameBox = document.getElementById("employeeNameBox");
+
+    employeeNameBox.textContent = session.name || "—";
+
+    let activeRequestsMap = {};
+    let quantityState = {};
+    let busy = false;
+
+    PRODUCTS.forEach(name => {
+      quantityState[name] = 1;
+    });
+
+    function render(){
+      const activeCount = Object.keys(activeRequestsMap).length;
+      selectedCount.textContent = activeCount;
+
+      listBox.innerHTML = PRODUCTS.map(name => {
+        const req = activeRequestsMap[name];
+        const active = !!req;
+        const qty = req ? Number(req.qty || 1) : Number(quantityState[name] || 1);
+
+        return `
+          <div class="item ${active ? "active" : ""}">
+            <div class="left">
+              <input
+                class="check"
+                type="checkbox"
+                ${active ? "checked" : ""}
+                onchange="toggleProduct('${name.replaceAll("'", "\\'")}')"
+              >
+              <div>
+                <div class="label">${name}</div>
+                <div class="sub">
+                  ${active ? "Richiesto e visibile al titolare" : "Non richiesto"}
+                </div>
+              </div>
+            </div>
+
+            <div class="qty">
+              <button type="button" onclick="changeQty('${name.replaceAll("'", "\\'")}', -1)">−</button>
+              <span id="qty_${cssSafe(name)}">${qty}</span>
+              <button type="button" onclick="changeQty('${name.replaceAll("'", "\\'")}', 1)">+</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function cssSafe(value){
+      return String(value).replace(/[^a-zA-Z0-9_-]/g, "_");
+    }
+
+    async function toggleProduct(name){
+      if (busy) return;
+
+      const existing = activeRequestsMap[name];
+
+      if (!existing) {
+        try {
+          busy = true;
+          const qty = Number(quantityState[name] || 1);
+
+          await db.collection("employee_requests").add({
+            type: "consumabile",
+            employeeId: session.id,
+            employeeName: session.name,
+            itemName: name,
+            qty: qty,
+            status: "in_attesa",
+            seenByOwner: false,
+            completed: false,
+            completedAt: "",
+            completedBy: "",
+            ...nowMeta()
+          });
+
+          showToast("Richiesta salvata");
+        } finally {
+          busy = false;
+        }
+      } else {
+        try {
+          busy = true;
+          await db.collection("employee_requests").doc(existing.id).delete();
+          showToast("Richiesta tolta");
+        } finally {
+          busy = false;
+        }
+      }
+    }
+
+    async function changeQty(name, delta){
+      const currentActive = activeRequestsMap[name];
+
+      if (currentActive) {
+        const nextQty = Math.max(1, Number(currentActive.qty || 1) + delta);
+        await db.collection("employee_requests").doc(currentActive.id).update({
+          qty: nextQty
+        });
+        return;
+      }
+
+      quantityState[name] = Math.max(1, Number(quantityState[name] || 1) + delta);
+      const span = document.getElementById("qty_" + cssSafe(name));
+      if (span) span.textContent = quantityState[name];
+    }
+
+    function listenRequests(){
+      db.collection("employee_requests").onSnapshot(snapshot => {
+        const rows = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(r =>
+            r.type === "consumabile" &&
+            r.employeeId === session.id &&
+            r.status === "in_attesa" &&
+            r.completed !== true
+          );
+
+        activeRequestsMap = {};
+        rows.forEach(r => {
+          activeRequestsMap[r.itemName] = r;
+        });
+
+        render();
+      });
+    }
+
+    listenRequests();
+
+    window.toggleProduct = toggleProduct;
+    window.changeQty = changeQty;
+  </script>
+</body>
+</html>
