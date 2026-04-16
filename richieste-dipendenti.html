@@ -1,282 +1,925 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Richieste dipendenti</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Richieste dipendenti</title>
 
-<style>
-body{
-margin:0;
-font-family:-apple-system;
-background:#eef3f0;
-color:#1f3c35;
-}
+  <style>
+    :root{
+      --bg:#eef3f0;
+      --card:#ffffff;
+      --card-soft:#f6f8f7;
+      --line:#dfe7e3;
+      --text:#1f3c35;
+      --muted:#6f837c;
+      --green:#3e8b61;
+      --green-2:#66b187;
+      --green-dark:#1d5a40;
+      --red:#ff5c5c;
+      --red-soft:#ffe6e3;
+      --blue:#3d73d1;
+      --blue-soft:#e8f0ff;
+      --yellow:#d6a43a;
+      --yellow-soft:#fff3dd;
+      --purple:#7d67d7;
+      --purple-soft:#efe9ff;
+      --shadow:0 10px 28px rgba(0,0,0,.06);
+    }
 
-.app{
-max-width:430px;
-margin:auto;
-padding:14px;
-}
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-/* HEADER */
-.header{
-font-size:26px;
-font-weight:900;
-}
+    body{
+      background:linear-gradient(180deg,#f4f7f5,#e9efec);
+      color:var(--text);
+    }
 
-.sub{
-font-size:14px;
-opacity:.6;
-margin-bottom:14px;
-}
+    .app{
+      max-width:430px;
+      margin:auto;
+      padding:14px;
+    }
 
-/* CARD */
-.card{
-background:white;
-border-radius:22px;
-padding:16px;
-margin-bottom:12px;
-box-shadow:0 8px 20px rgba(0,0,0,.06);
-border-left:6px solid;
-}
+    .hero{
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 36%),
+        linear-gradient(135deg,var(--green-dark),var(--green),var(--green-2));
+      color:#fff;
+      border-radius:28px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
 
-/* TIPI */
-.permesso{ border-color:#3d73d1; }
-.assenza{ border-color:#d6a43a; }
-.ferie{ border-color:#7d67d7; }
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
 
-.name{
-font-size:18px;
-font-weight:900;
-margin-bottom:4px;
-}
+    .back{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+      color:#fff;
+      font-size:16px;
+      font-weight:900;
+      opacity:.96;
+    }
 
-.type{
-font-size:12px;
-opacity:.6;
-margin-bottom:10px;
-text-transform:capitalize;
-}
+    .hero-kicker{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      font-weight:900;
+      opacity:.85;
+      margin-bottom:8px;
+    }
 
-/* FOCUS */
-.big{
-font-size:30px;
-font-weight:900;
-margin-bottom:4px;
-}
+    .hero-title{
+      font-size:30px;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-.05em;
+      margin-bottom:8px;
+    }
 
-.small{
-font-size:14px;
-opacity:.6;
-margin-bottom:12px;
-}
+    .hero-sub{
+      font-size:14px;
+      line-height:1.25;
+      font-weight:700;
+      opacity:.95;
+      margin-bottom:14px;
+    }
 
-/* BOTTONI */
-.actions{
-display:flex;
-gap:8px;
-}
+    .hero-stats{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+    }
 
-.btn{
-flex:1;
-padding:12px;
-border:none;
-border-radius:14px;
-font-weight:900;
-cursor:pointer;
-}
+    .hero-stat{
+      min-height:84px;
+      border-radius:18px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(10px);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
 
-.approve{
-background:#3e8b61;
-color:white;
-}
+    .hero-stat strong{
+      font-size:28px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
 
-.reject{
-background:#ff5c5c;
-color:white;
-}
+    .hero-stat span{
+      font-size:12px;
+      line-height:1.1;
+      font-weight:800;
+      opacity:.95;
+    }
 
-/* EMPTY */
-.empty{
-text-align:center;
-padding:30px;
-opacity:.6;
-}
+    .filters{
+      display:flex;
+      gap:8px;
+      margin-bottom:14px;
+    }
 
-/* MODAL */
-.modal{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-border-radius:20px 20px 0 0;
-padding:16px;
-display:none;
-box-shadow:0 -10px 30px rgba(0,0,0,.1);
-}
+    .filter{
+      flex:1;
+      min-height:50px;
+      border:none;
+      border-radius:18px;
+      background:#fff;
+      color:var(--text);
+      font-size:15px;
+      font-weight:900;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:.18s ease;
+    }
 
-textarea{
-width:100%;
-min-height:90px;
-border-radius:12px;
-border:1px solid #ddd;
-padding:10px;
-margin-top:10px;
-margin-bottom:10px;
-}
+    .filter.active{
+      background:linear-gradient(135deg,var(--green),var(--green-2));
+      color:#fff;
+      border-color:transparent;
+      transform:translateY(-1px);
+    }
 
-/* TOAST */
-.toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:black;
-color:white;
-padding:10px 16px;
-border-radius:12px;
-display:none;
-font-size:14px;
-}
-</style>
+    .list{
+      display:grid;
+      gap:14px;
+    }
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    .request-shell{
+      position:relative;
+      overflow:hidden;
+      border-radius:28px;
+    }
 
-<script>
-const firebaseConfig={
-apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-authDomain:"farmaciamontesano.firebaseapp.com",
-projectId:"farmaciamontesano",
-storageBucket:"farmaciamontesano.firebasestorage.app",
-messagingSenderId:"881461241551",
-appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"
-};
+    .swipe-actions{
+      position:absolute;
+      inset:0;
+      display:flex;
+      justify-content:space-between;
+      align-items:stretch;
+      z-index:0;
+      overflow:hidden;
+      border-radius:28px;
+    }
 
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-</script>
+    .swipe-side{
+      width:34%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      font-weight:900;
+      color:#fff;
+      user-select:none;
+    }
+
+    .swipe-side.approve{
+      background:linear-gradient(135deg,var(--green),var(--green-2));
+    }
+
+    .swipe-side.reject{
+      background:linear-gradient(135deg,#ff6a66,var(--red));
+    }
+
+    .request-card{
+      position:relative;
+      z-index:1;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:28px;
+      padding:16px;
+      touch-action:pan-y;
+      transition:transform .22s ease, opacity .22s ease, box-shadow .22s ease;
+      will-change:transform;
+    }
+
+    .request-card.dismiss{
+      opacity:0;
+      transform:scale(.96);
+    }
+
+    .request-card::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:7px;
+      border-radius:28px 0 0 28px;
+      background:#d2ddd8;
+    }
+
+    .request-card.permesso::before{ background:var(--blue); }
+    .request-card.assenza::before{ background:var(--yellow); }
+    .request-card.ferie::before{ background:var(--purple); }
+
+    .card-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .name{
+      font-size:18px;
+      line-height:1.05;
+      font-weight:900;
+      color:var(--text);
+      margin-bottom:6px;
+    }
+
+    .meta{
+      font-size:13px;
+      line-height:1.15;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .type-pill{
+      flex:0 0 auto;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .type-pill.permesso{
+      background:var(--blue-soft);
+      color:#315fa1;
+    }
+
+    .type-pill.assenza{
+      background:var(--yellow-soft);
+      color:#986500;
+    }
+
+    .type-pill.ferie{
+      background:var(--purple-soft);
+      color:#694fc7;
+    }
+
+    .focus{
+      border-radius:22px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .focus.permesso{
+      background:linear-gradient(135deg,#eef4ff,#e4edff);
+    }
+
+    .focus.assenza{
+      background:linear-gradient(135deg,#fff8ea,#fff1d8);
+    }
+
+    .focus.ferie{
+      background:linear-gradient(135deg,#f4efff,#ece4ff);
+    }
+
+    .focus-kicker{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--muted);
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .focus-main{
+      font-size:34px;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-.05em;
+      color:var(--text);
+      margin-bottom:6px;
+      word-break:break-word;
+    }
+
+    .focus-sub{
+      font-size:15px;
+      line-height:1.2;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .focus-helper{
+      font-size:13px;
+      line-height:1.15;
+      color:var(--muted);
+      font-weight:700;
+      opacity:.9;
+    }
+
+    .card-foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .time{
+      font-size:13px;
+      line-height:1.2;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .pending-pill{
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      background:#fff1d9;
+      color:#9a6908;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      flex:1;
+      min-height:50px;
+      border:none;
+      border-radius:18px;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:active{
+      transform:scale(.985);
+    }
+
+    .btn.approve{
+      background:linear-gradient(135deg,var(--green),var(--green-2));
+      color:#fff;
+    }
+
+    .btn.reject{
+      background:linear-gradient(135deg,#ff6a66,var(--red));
+      color:#fff;
+    }
+
+    .empty{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.35;
+      font-weight:700;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%) translateY(120px);
+      background:#17211d;
+      color:#fff;
+      min-height:46px;
+      padding:0 16px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:900;
+      box-shadow:0 18px 40px rgba(0,0,0,.22);
+      z-index:10002;
+      transition:transform .25s ease;
+    }
+
+    .toast.show{
+      transform:translateX(-50%) translateY(0);
+    }
+
+    .sheet-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(12,18,16,.34);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:10001;
+      padding:12px;
+    }
+
+    .sheet-backdrop.show{
+      display:flex;
+    }
+
+    .sheet{
+      width:min(100%,430px);
+      background:#fff;
+      border-radius:26px 26px 18px 18px;
+      box-shadow:0 28px 70px rgba(0,0,0,.24);
+      padding:16px;
+    }
+
+    .sheet-title{
+      font-size:20px;
+      font-weight:900;
+      color:var(--text);
+      margin-bottom:8px;
+    }
+
+    .sheet-sub{
+      font-size:14px;
+      line-height:1.25;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:110px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:var(--card-soft);
+      padding:14px;
+      font-size:16px;
+      color:var(--text);
+      outline:none;
+      resize:vertical;
+      margin-bottom:12px;
+    }
+
+    .sheet-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .sheet-btn{
+      flex:1;
+      min-height:48px;
+      border:none;
+      border-radius:16px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .sheet-btn.cancel{
+      background:#eef3ef;
+      color:var(--text);
+    }
+
+    .sheet-btn.confirm{
+      background:linear-gradient(135deg,#ff6a66,var(--red));
+      color:#fff;
+    }
+
+    @media (max-width:390px){
+      .hero-title{ font-size:27px; }
+      .hero-stat strong{ font-size:24px; }
+      .focus-main{ font-size:29px; }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
-
 <body>
+  <div class="app">
+    <section class="hero">
+      <div class="toolbar">
+        <a class="back" href="titolare.html">← Torna</a>
+      </div>
 
-<div class="app">
+      <div class="hero-kicker">Centro approvazioni</div>
+      <div class="hero-title">Richieste dipendenti</div>
+      <div class="hero-sub" id="heroSub">
+        Sto caricando permessi, assenze e ferie in attesa.
+      </div>
 
-<div class="header">Richieste</div>
-<div class="sub">Permessi, assenze e ferie</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong id="statTot">0</strong>
+          <span>In attesa</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="statPermessi">0</strong>
+          <span>Permessi ore</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="statAssenze">0</strong>
+          <span>Assenze / ferie</span>
+        </div>
+      </div>
+    </section>
 
-<div id="list"></div>
+    <div class="filters">
+      <button class="filter active" data-filter="tutte">Tutte</button>
+      <button class="filter" data-filter="permesso">Permessi</button>
+      <button class="filter" data-filter="assenza-ferie">Assenze / Ferie</button>
+    </div>
 
-</div>
+    <section class="list" id="listBox">
+      <div class="empty">Sto caricando le richieste…</div>
+    </section>
+  </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-<b>Motivo rifiuto</b>
-<textarea id="motivo"></textarea>
-<button class="btn reject" onclick="confirmReject()">Conferma rifiuto</button>
-</div>
+  <div class="sheet-backdrop" id="rejectSheetBackdrop">
+    <div class="sheet">
+      <div class="sheet-title">Motivo rifiuto</div>
+      <div class="sheet-sub">
+        Scrivi il motivo del rifiuto. Il dipendente lo vedrà subito nella sua pagina.
+      </div>
 
-<div class="toast" id="toast">Fatto</div>
+      <textarea id="rejectReason" placeholder="Scrivi qui il motivo del rifiuto..."></textarea>
 
-<script>
+      <div class="sheet-actions">
+        <button class="sheet-btn cancel" id="cancelRejectBtn" type="button">Annulla</button>
+        <button class="sheet-btn confirm" id="confirmRejectBtn" type="button">Conferma</button>
+      </div>
+    </div>
+  </div>
 
-let rejectId=null;
+  <div class="toast" id="toastBox">Operazione completata</div>
 
-function showToast(msg){
-const t=document.getElementById("toast");
-t.innerText=msg;
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1500);
-}
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
 
-function getType(d){
-if(d.requestKind==="ore") return "permesso";
-if(d.requestKind==="giornata") return "assenza";
-if(d.requestKind==="ferie") return "ferie";
-}
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-function getMain(d){
-if(d.requestKind==="ore"){
-return {big:`${d.fromHour} - ${d.toHour}`,small:d.day};
-}
-if(d.requestKind==="giornata"){
-return {big:d.day,small:"Assenza giornata"};
-}
-if(d.requestKind==="ferie"){
-return {big:`${d.fromDate} → ${d.toDate}`,small:"Ferie"};
-}
-return {big:"",small:""};
-}
+    let currentFilter = "tutte";
+    let rejectId = null;
+    let unsubscribeRequests = null;
 
-function approve(id){
-db.collection("employee_requests").doc(id).update({
-status:"approvata"
-});
-showToast("Approvata");
-}
+    const listBox = document.getElementById("listBox");
+    const heroSub = document.getElementById("heroSub");
+    const rejectSheetBackdrop = document.getElementById("rejectSheetBackdrop");
+    const rejectReason = document.getElementById("rejectReason");
+    const toastBox = document.getElementById("toastBox");
 
-function openReject(id){
-rejectId=id;
-document.getElementById("modal").style.display="block";
-}
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
 
-function confirmReject(){
-let motivo=document.getElementById("motivo").value;
+    function showToast(message){
+      toastBox.textContent = message;
+      toastBox.classList.add("show");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => {
+        toastBox.classList.remove("show");
+      }, 1800);
+    }
 
-db.collection("employee_requests").doc(rejectId).update({
-status:"negata",
-ownerReason:motivo
-});
+    function formatDateIT(dateStr){
+      if(!dateStr) return "—";
+      const parts = String(dateStr).split("-");
+      if(parts.length !== 3) return dateStr;
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
 
-document.getElementById("modal").style.display="none";
-showToast("Rifiutata");
-}
+    function daysBetween(fromDate, toDate){
+      if(!fromDate || !toDate) return "";
+      const start = new Date(fromDate);
+      const end = new Date(toDate);
+      const diff = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      if (diff <= 0) return "";
+      return `${diff} ${diff === 1 ? "giorno" : "giorni"}`;
+    }
 
-function load(){
+    function getVisualType(d){
+      if (d.requestKind === "ore") return "permesso";
+      if (d.requestKind === "giornata") return "assenza";
+      if (d.requestKind === "ferie") return "ferie";
+      return "assenza";
+    }
 
-db.collection("employee_requests")
-.onSnapshot(snapshot=>{
+    function getTypeLabel(d){
+      if (d.requestKind === "ore") return "Permesso";
+      if (d.requestKind === "giornata") return "Assenza";
+      if (d.requestKind === "ferie") return "Ferie";
+      return "Richiesta";
+    }
 
-let html="";
+    function getTypeMeta(d){
+      if (d.requestKind === "ore") return "Permesso a ore";
+      if (d.requestKind === "giornata") return "Assenza giornata";
+      if (d.requestKind === "ferie") return "Ferie";
+      return "Richiesta";
+    }
 
-snapshot.docs.forEach(doc=>{
-let d=doc.data();
+    function getFocusData(d){
+      const type = getVisualType(d);
 
-if(d.type!=="ferie_permesso") return;
-if(d.status!=="in_attesa") return;
+      if (type === "permesso") {
+        return {
+          css: "permesso",
+          kicker: "Orario assenza",
+          main: `${d.fromHour || "—"} - ${d.toHour || "—"}`,
+          sub: formatDateIT(d.day),
+          helper: "Assenza a ore"
+        };
+      }
 
-let type=getType(d);
-let main=getMain(d);
+      if (type === "assenza") {
+        return {
+          css: "assenza",
+          kicker: "Giorno assenza",
+          main: formatDateIT(d.day),
+          sub: "Assenza giornata",
+          helper: "Assente per tutto il giorno"
+        };
+      }
 
-html+=`
-<div class="card ${type}">
+      return {
+        css: "ferie",
+        kicker: "Periodo ferie",
+        main: `${formatDateIT(d.fromDate)} → ${formatDateIT(d.toDate)}`,
+        sub: "Ferie",
+        helper: daysBetween(d.fromDate, d.toDate)
+      };
+    }
 
-<div class="name">${d.employeeName}</div>
-<div class="type">${type}</div>
+    function matchesFilter(d){
+      const type = getVisualType(d);
+      if (currentFilter === "tutte") return true;
+      if (currentFilter === "permesso") return type === "permesso";
+      if (currentFilter === "assenza-ferie") return type === "assenza" || type === "ferie";
+      return true;
+    }
 
-<div class="big">${main.big}</div>
-<div class="small">${main.small}</div>
+    async function approveRequest(id, cardEl){
+      try {
+        if (cardEl) cardEl.classList.add("dismiss");
+        await db.collection("employee_requests").doc(id).update({
+          status: "approvata",
+          ownerReason: ""
+        });
+        showToast("Richiesta approvata");
+      } catch (e) {
+        console.error("Errore approvazione:", e);
+        if (cardEl) cardEl.classList.remove("dismiss");
+        alert("Errore durante l'approvazione.");
+      }
+    }
 
-<div class="actions">
-<button class="btn approve" onclick="approve('${doc.id}')">Approva</button>
-<button class="btn reject" onclick="openReject('${doc.id}')">Rifiuta</button>
-</div>
+    function openRejectSheet(id){
+      rejectId = id;
+      rejectReason.value = "";
+      rejectSheetBackdrop.classList.add("show");
+      setTimeout(() => rejectReason.focus(), 80);
+    }
 
-</div>
-`;
-});
+    function closeRejectSheet(){
+      rejectId = null;
+      rejectReason.value = "";
+      rejectSheetBackdrop.classList.remove("show");
+    }
 
-document.getElementById("list").innerHTML=
-html || "<div class='empty'>Nessuna richiesta 👍</div>";
+    async function confirmReject(){
+      const reason = rejectReason.value.trim();
+      if (!rejectId) return;
+      if (!reason) {
+        alert("Scrivi un motivo per il rifiuto.");
+        return;
+      }
 
-});
-}
+      try {
+        await db.collection("employee_requests").doc(rejectId).update({
+          status: "negata",
+          ownerReason: reason
+        });
+        closeRejectSheet();
+        showToast("Richiesta rifiutata");
+      } catch (e) {
+        console.error("Errore rifiuto:", e);
+        alert("Errore durante il rifiuto.");
+      }
+    }
 
-load();
+    function attachSwipe(card, reqId){
+      let startX = 0;
+      let currentX = 0;
+      let dragging = false;
 
-</script>
+      const maxSwipe = 120;
+      const threshold = 82;
 
+      function setTranslate(x){
+        const clamped = Math.max(-maxSwipe, Math.min(maxSwipe, x));
+        card.style.transform = `translateX(${clamped}px)`;
+      }
+
+      card.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        dragging = true;
+        card.style.transition = "none";
+      }, { passive: true });
+
+      card.addEventListener("touchmove", (e) => {
+        if (!dragging) return;
+        currentX = e.touches[0].clientX - startX;
+        setTranslate(currentX);
+      }, { passive: true });
+
+      card.addEventListener("touchend", () => {
+        if (!dragging) return;
+        dragging = false;
+        card.style.transition = "transform .22s ease";
+
+        if (currentX > threshold) {
+          setTranslate(140);
+          setTimeout(() => approveRequest(reqId, card), 120);
+        } else if (currentX < -threshold) {
+          setTranslate(-140);
+          setTimeout(() => openRejectSheet(reqId), 120);
+          setTimeout(() => {
+            card.style.transform = "translateX(0)";
+          }, 180);
+        } else {
+          card.style.transform = "translateX(0)";
+        }
+
+        currentX = 0;
+      });
+    }
+
+    function renderList(requests){
+      if (!requests.length) {
+        listBox.innerHTML = `
+          <div class="empty">
+            Nessuna richiesta in attesa per questo filtro 👍
+          </div>
+        `;
+        return;
+      }
+
+      listBox.innerHTML = requests.map(r => {
+        const visualType = getVisualType(r);
+        const focus = getFocusData(r);
+
+        return `
+          <div class="request-shell">
+            <div class="swipe-actions">
+              <div class="swipe-side approve">Approva</div>
+              <div class="swipe-side reject">Rifiuta</div>
+            </div>
+
+            <article class="request-card ${visualType}" data-id="${escapeHtml(r.id)}">
+              <div class="card-head">
+                <div>
+                  <div class="name">${escapeHtml(r.employeeName || "Dipendente")}</div>
+                  <div class="meta">${escapeHtml(getTypeMeta(r))}</div>
+                </div>
+                <div class="type-pill ${visualType}">
+                  ${escapeHtml(getTypeLabel(r))}
+                </div>
+              </div>
+
+              <div class="focus ${focus.css}">
+                <div class="focus-kicker">${escapeHtml(focus.kicker)}</div>
+                <div class="focus-main">${escapeHtml(focus.main)}</div>
+                <div class="focus-sub">${escapeHtml(focus.sub)}</div>
+                <div class="focus-helper">${escapeHtml(focus.helper)}</div>
+              </div>
+
+              <div class="card-foot">
+                <div class="time">
+                  Inviata il ${escapeHtml(formatDateIT(r.createdDate))} alle ${escapeHtml(r.createdTime || "—")}
+                </div>
+                <div class="pending-pill">In attesa</div>
+              </div>
+
+              <div class="actions">
+                <button class="btn approve" data-approve="${escapeHtml(r.id)}">Approva</button>
+                <button class="btn reject" data-reject="${escapeHtml(r.id)}">Rifiuta</button>
+              </div>
+            </article>
+          </div>
+        `;
+      }).join("");
+
+      listBox.querySelectorAll("[data-approve]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.approve;
+          const card = btn.closest(".request-card");
+          approveRequest(id, card);
+        });
+      });
+
+      listBox.querySelectorAll("[data-reject]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          openRejectSheet(btn.dataset.reject);
+        });
+      });
+
+      listBox.querySelectorAll(".request-card").forEach(card => {
+        attachSwipe(card, card.dataset.id);
+      });
+    }
+
+    function updateTopStats(allPending){
+      const permessi = allPending.filter(r => r.requestKind === "ore").length;
+      const assenze = allPending.filter(r => r.requestKind === "giornata" || r.requestKind === "ferie").length;
+
+      document.getElementById("statTot").textContent = allPending.length;
+      document.getElementById("statPermessi").textContent = permessi;
+      document.getElementById("statAssenze").textContent = assenze;
+
+      if (!allPending.length) {
+        heroSub.textContent = "Non ci sono richieste da approvare al momento.";
+      } else if (permessi > 0 && assenze > 0) {
+        heroSub.textContent = `Hai ${allPending.length} richieste: ${permessi} permessi a ore e ${assenze} assenze/ferie.`;
+      } else if (permessi > 0) {
+        heroSub.textContent = `Hai ${permessi} permessi a ore da controllare.`;
+      } else {
+        heroSub.textContent = `Hai ${assenze} assenze o ferie da controllare.`;
+      }
+    }
+
+    function listenRequests(){
+      if (unsubscribeRequests) unsubscribeRequests();
+
+      unsubscribeRequests = db.collection("employee_requests").onSnapshot(snapshot => {
+        const allPending = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter(d => d.type === "ferie_permesso" && d.status === "in_attesa")
+          .sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+        updateTopStats(allPending);
+        renderList(allPending.filter(matchesFilter));
+      }, error => {
+        console.error("Errore caricamento richieste:", error);
+        listBox.innerHTML = `<div class="empty">Errore durante il caricamento delle richieste.</div>`;
+      });
+    }
+
+    document.querySelectorAll(".filter").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        listenRequests();
+      });
+    });
+
+    document.getElementById("cancelRejectBtn").addEventListener("click", closeRejectSheet);
+    document.getElementById("confirmRejectBtn").addEventListener("click", confirmReject);
+
+    rejectSheetBackdrop.addEventListener("click", (e) => {
+      if (e.target === rejectSheetBackdrop) closeRejectSheet();
+    });
+
+    listenRequests();
+  </script>
 </body>
 </html>
