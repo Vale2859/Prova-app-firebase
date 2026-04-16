@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login dipendenti</title>
+
 <style>
 :root{--bg:#eef3f0;--card:#fff;--card-soft:#f5f8f6;--line:#dfe7e3;--text:#1f3c35;--muted:#6f837c;--green:#3e8b61;--green-2:#66b187;--red:#ff6b5f;--shadow:0 10px 25px rgba(0,0,0,.06)}
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;-webkit-tap-highlight-color:transparent}
@@ -17,59 +18,146 @@ body{background:linear-gradient(180deg,#f4f7f5,#e9efec);color:var(--text)}
 .btn{width:100%;min-height:54px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;font-size:16px;font-weight:900;cursor:pointer}.btn.secondary{background:#edf3ef;color:var(--text)}
 .notice{padding:12px 14px;border-radius:16px;background:#eff7f2;color:#275b46;font-size:14px;font-weight:700;border:1px solid #d8ece1}
 </style>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
-const firebaseConfig={apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",authDomain:"farmaciamontesano.firebaseapp.com",projectId:"farmaciamontesano",storageBucket:"farmaciamontesano.firebasestorage.app",messagingSenderId:"881461241551",appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"};
+const firebaseConfig={
+  apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+  authDomain:"farmaciamontesano.firebaseapp.com",
+  projectId:"farmaciamontesano",
+  storageBucket:"farmaciamontesano.firebasestorage.app",
+  messagingSenderId:"881461241551",
+  appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"
+};
+
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
+
 const EMPLOYEE_STORAGE_KEY="fm_employee_session_v1";
-const FALLBACK_EMPLOYEES={cosimo:{id:"cosimo",name:"Dott. Cosimo",pin:"1111",role:"dipendente",active:true},daniela:{id:"daniela",name:"Dott.ssa Daniela",pin:"2222",role:"dipendente",active:true},patrizia:{id:"patrizia",name:"Dott.ssa Patrizia",pin:"3333",role:"dipendente",active:true},annamaria:{id:"annamaria",name:"Sig. Annamaria",pin:"4444",role:"dipendente",active:true},annalisa:{id:"annalisa",name:"Dott.ssa Annalisa",pin:"5555",role:"dipendente",active:true}};
-function saveSession(employee){localStorage.setItem(EMPLOYEE_STORAGE_KEY,JSON.stringify(employee));}
-function getSession(){try{return JSON.parse(localStorage.getItem(EMPLOYEE_STORAGE_KEY)||"null");}catch(e){return null;}}
-function clearSession(){localStorage.removeItem(EMPLOYEE_STORAGE_KEY);}
-async function getEmployeesMap(){try{const snap=await db.collection("employees").get();if(snap.empty) return FALLBACK_EMPLOYEES; const map={}; snap.forEach(doc=>map[doc.id]={id:doc.id,...doc.data()}); return map;}catch(e){return FALLBACK_EMPLOYEES;}}
+
+const FALLBACK_EMPLOYEES={
+  cosimo:{id:"cosimo",name:"Dott. Cosimo",pin:"1111",role:"dipendente",active:true},
+  daniela:{id:"daniela",name:"Dott.ssa Daniela",pin:"2222",role:"dipendente",active:true},
+  patrizia:{id:"patrizia",name:"Dott.ssa Patrizia",pin:"3333",role:"dipendente",active:true},
+  annamaria:{id:"annamaria",name:"Sig. Annamaria",pin:"4444",role:"dipendente",active:true},
+  annalisa:{id:"annalisa",name:"Dott.ssa Annalisa",pin:"5555",role:"dipendente",active:true}
+};
+
+function saveSession(employee){
+  localStorage.setItem(EMPLOYEE_STORAGE_KEY,JSON.stringify(employee));
+}
+
+function getSession(){
+  try{return JSON.parse(localStorage.getItem(EMPLOYEE_STORAGE_KEY)||"null");}
+  catch(e){return null;}
+}
+
+function clearSession(){
+  localStorage.removeItem(EMPLOYEE_STORAGE_KEY);
+  localStorage.removeItem("user"); // 🔥 PULISCE ANCHE QUESTO
+}
+
+async function getEmployeesMap(){
+  try{
+    const snap=await db.collection("employees").get();
+    if(snap.empty) return FALLBACK_EMPLOYEES;
+    const map={};
+    snap.forEach(doc=>map[doc.id]={id:doc.id,...doc.data()});
+    return map;
+  }catch(e){
+    return FALLBACK_EMPLOYEES;
+  }
+}
 </script>
 </head>
+
 <body>
+
 <div class="app">
   <img src="logo.png" class="logo" onerror="this.style.display='none'">
+
   <div class="top-box">
     <div class="kicker">Area dipendenti</div>
     <div class="top-title">Accesso con PIN</div>
     <div class="top-sub">Scegli il tuo nome, inserisci il PIN una sola volta e da quel dispositivo entrerai automaticamente.</div>
   </div>
+
   <div class="section">
     <div class="section-title">Chi sei?</div>
     <div class="section-sub">PIN temporanei iniziali: Cosimo 1111, Daniela 2222, Patrizia 3333, Annamaria 4444, Annalisa 5555.</div>
+
     <div class="row">
       <select id="employeeSelect"></select>
       <input id="pinInput" inputmode="numeric" maxlength="6" placeholder="Inserisci PIN">
       <button class="btn" id="loginBtn">Entra</button>
       <button class="btn secondary" id="resetBtn" type="button">Cancella dispositivo</button>
     </div>
+
     <div class="notice" id="messageBox">Se questo dispositivo è già associato, entrerai automaticamente.</div>
   </div>
 </div>
+
 <script>
 (async function(){
+
   const session=getSession();
-  if(session && session.id){ window.location.href='dipendenti.html'; return; }
+  if(session && session.id){
+    window.location.href='dipendenti.html';
+    return;
+  }
+
   const employeesMap=await getEmployeesMap();
   const select=document.getElementById('employeeSelect');
-  select.innerHTML=Object.values(employeesMap).filter(x=>x.active!==false).map(x=>`<option value="${x.id}">${x.name}</option>`).join('');
+
+  select.innerHTML=Object.values(employeesMap)
+    .filter(x=>x.active!==false)
+    .map(x=>`<option value="${x.id}">${x.name}</option>`)
+    .join('');
+
   const msg=document.getElementById('messageBox');
+
   document.getElementById('loginBtn').addEventListener('click',()=>{
+
     const employee=employeesMap[select.value];
     const pin=document.getElementById('pinInput').value.trim();
-    if(!employee || !pin){ msg.textContent='Seleziona il nome e inserisci il PIN.'; return; }
-    if(String(employee.pin||'')!==pin){ msg.textContent='PIN non corretto.'; return; }
-    saveSession({id:employee.id,name:employee.name,role:employee.role||'dipendente'});
+
+    if(!employee || !pin){
+      msg.textContent='Seleziona il nome e inserisci il PIN.';
+      return;
+    }
+
+    if(String(employee.pin||'')!==pin){
+      msg.textContent='PIN non corretto.';
+      return;
+    }
+
+    // ✅ SALVA SESSIONE
+    saveSession({
+      id:employee.id,
+      name:employee.name,
+      role:employee.role||'dipendente'
+    });
+
+    // 🔥 QUESTA È LA RIGA FONDAMENTALE
+    localStorage.setItem("user", employee.id);
+
     msg.textContent='Accesso riuscito. Ti porto nella home…';
-    setTimeout(()=>window.location.href='dipendenti.html',350);
+
+    setTimeout(()=>{
+      window.location.href='dipendenti.html';
+    },350);
+
   });
-  document.getElementById('resetBtn').addEventListener('click',()=>{ clearSession(); msg.textContent='Dispositivo scollegato.';});
+
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    clearSession();
+    msg.textContent='Dispositivo scollegato.';
+  });
+
 })();
 </script>
+
 </body>
 </html>
