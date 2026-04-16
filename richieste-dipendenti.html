@@ -1,756 +1,282 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Permessi / Assenze / Ferie</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richieste dipendenti</title>
 
-  <style>
-    :root{
-      --bg:#eef3f0;
-      --card:#ffffff;
-      --card-soft:#f6f8f7;
-      --line:#dfe7e3;
-      --text:#1f3c35;
-      --muted:#6f837c;
-      --green:#3e8b61;
-      --green-2:#66b187;
-      --green-dark:#1f5a41;
-      --red:#ff5c5c;
-      --red-soft:#ffe4e1;
-      --blue:#3d73d1;
-      --blue-soft:#e8f0ff;
-      --yellow:#d6a43a;
-      --yellow-soft:#fff2d9;
-      --purple:#7f68d9;
-      --purple-soft:#efe9ff;
-      --shadow:0 10px 25px rgba(0,0,0,.06);
-    }
+<style>
+body{
+margin:0;
+font-family:-apple-system;
+background:#eef3f0;
+color:#1f3c35;
+}
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;
-      -webkit-tap-highlight-color:transparent;
-    }
+.app{
+max-width:430px;
+margin:auto;
+padding:14px;
+}
 
-    body{
-      background:linear-gradient(180deg,#f4f7f5,#e9efec);
-      color:var(--text);
-    }
+/* HEADER */
+.header{
+font-size:26px;
+font-weight:900;
+}
 
-    .app{
-      max-width:430px;
-      margin:auto;
-      padding:14px;
-    }
+.sub{
+font-size:14px;
+opacity:.6;
+margin-bottom:14px;
+}
 
-    .top{
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 35%),
-        linear-gradient(135deg,var(--green-dark),var(--green),var(--green-2));
-      color:#fff;
-      border-radius:26px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      margin-bottom:14px;
-    }
+/* CARD */
+.card{
+background:white;
+border-radius:22px;
+padding:16px;
+margin-bottom:12px;
+box-shadow:0 8px 20px rgba(0,0,0,.06);
+border-left:6px solid;
+}
 
-    .top-kicker{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      font-weight:900;
-      opacity:.86;
-      margin-bottom:8px;
-    }
+/* TIPI */
+.permesso{ border-color:#3d73d1; }
+.assenza{ border-color:#d6a43a; }
+.ferie{ border-color:#7d67d7; }
 
-    .top-title{
-      font-size:28px;
-      line-height:.95;
-      font-weight:900;
-      letter-spacing:-.04em;
-      margin-bottom:8px;
-    }
+.name{
+font-size:18px;
+font-weight:900;
+margin-bottom:4px;
+}
 
-    .top-sub{
-      font-size:14px;
-      line-height:1.25;
-      font-weight:700;
-      opacity:.95;
-      margin-bottom:14px;
-    }
+.type{
+font-size:12px;
+opacity:.6;
+margin-bottom:10px;
+text-transform:capitalize;
+}
 
-    .top-stats{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
+/* FOCUS */
+.big{
+font-size:30px;
+font-weight:900;
+margin-bottom:4px;
+}
 
-    .top-stat{
-      min-height:78px;
-      border-radius:18px;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.14);
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
+.small{
+font-size:14px;
+opacity:.6;
+margin-bottom:12px;
+}
 
-    .top-stat strong{
-      font-size:28px;
-      line-height:1;
-      font-weight:900;
-      color:#fff;
-      letter-spacing:-.04em;
-    }
+/* BOTTONI */
+.actions{
+display:flex;
+gap:8px;
+}
 
-    .top-stat span{
-      font-size:12px;
-      line-height:1.1;
-      font-weight:800;
-      color:#eff9f3;
-      opacity:.95;
-    }
+.btn{
+flex:1;
+padding:12px;
+border:none;
+border-radius:14px;
+font-weight:900;
+cursor:pointer;
+}
 
-    .toolbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-    }
+.approve{
+background:#3e8b61;
+color:white;
+}
 
-    .back{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      text-decoration:none;
-      color:var(--text);
-      font-weight:900;
-      font-size:17px;
-    }
+.reject{
+background:#ff5c5c;
+color:white;
+}
 
-    .refresh{
-      border:none;
-      background:#fff;
-      color:var(--text);
-      min-height:42px;
-      padding:0 14px;
-      border-radius:14px;
-      font-size:14px;
-      font-weight:900;
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-      cursor:pointer;
-    }
+/* EMPTY */
+.empty{
+text-align:center;
+padding:30px;
+opacity:.6;
+}
 
-    .filters{
-      display:flex;
-      gap:8px;
-      margin-bottom:14px;
-    }
+/* MODAL */
+.modal{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+border-radius:20px 20px 0 0;
+padding:16px;
+display:none;
+box-shadow:0 -10px 30px rgba(0,0,0,.1);
+}
 
-    .filter{
-      flex:1;
-      min-height:50px;
-      border:none;
-      border-radius:18px;
-      background:#fff;
-      color:var(--text);
-      font-size:15px;
-      font-weight:900;
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-      cursor:pointer;
-    }
+textarea{
+width:100%;
+min-height:90px;
+border-radius:12px;
+border:1px solid #ddd;
+padding:10px;
+margin-top:10px;
+margin-bottom:10px;
+}
 
-    .filter.active{
-      background:linear-gradient(135deg,var(--green),var(--green-2));
-      color:#fff;
-      border-color:transparent;
-    }
+/* TOAST */
+.toast{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:black;
+color:white;
+padding:10px 16px;
+border-radius:12px;
+display:none;
+font-size:14px;
+}
+</style>
 
-    .list{
-      display:grid;
-      gap:12px;
-    }
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    .req{
-      background:#fff;
-      border-radius:24px;
-      padding:16px;
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-      overflow:hidden;
-      position:relative;
-    }
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+authDomain:"farmaciamontesano.firebaseapp.com",
+projectId:"farmaciamontesano",
+storageBucket:"farmaciamontesano.firebasestorage.app",
+messagingSenderId:"881461241551",
+appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"
+};
 
-    .req::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:0;
-      bottom:0;
-      width:6px;
-      border-radius:24px 0 0 24px;
-      background:#ccd7d2;
-    }
-
-    .req.permesso::before{ background:var(--blue); }
-    .req.assenza::before{ background:var(--yellow); }
-    .req.ferie::before{ background:var(--purple); }
-
-    .req-head{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-    }
-
-    .req-name{
-      font-size:18px;
-      line-height:1.05;
-      font-weight:900;
-      color:var(--text);
-      margin-bottom:4px;
-    }
-
-    .req-meta{
-      font-size:13px;
-      line-height:1.15;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .req-tag{
-      flex:0 0 auto;
-      min-height:32px;
-      padding:0 12px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:12px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-
-    .req-tag.permesso{
-      background:var(--blue-soft);
-      color:#315fa1;
-    }
-
-    .req-tag.assenza{
-      background:var(--yellow-soft);
-      color:#986500;
-    }
-
-    .req-tag.ferie{
-      background:var(--purple-soft);
-      color:#694fc7;
-    }
-
-    .focus-box{
-      border-radius:20px;
-      padding:14px;
-      margin-bottom:12px;
-    }
-
-    .focus-box.permesso{
-      background:linear-gradient(135deg,#edf4ff,#e4eeff);
-    }
-
-    .focus-box.assenza{
-      background:linear-gradient(135deg,#fff8ea,#fff1d6);
-    }
-
-    .focus-box.ferie{
-      background:linear-gradient(135deg,#f4efff,#ece5ff);
-    }
-
-    .focus-kicker{
-      font-size:11px;
-      line-height:1;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      font-weight:900;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
-
-    .focus-main{
-      font-size:34px;
-      line-height:.95;
-      font-weight:900;
-      letter-spacing:-.05em;
-      color:var(--text);
-      margin-bottom:6px;
-    }
-
-    .focus-sub{
-      font-size:14px;
-      line-height:1.2;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    .req-footer{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:12px;
-    }
-
-    .req-time{
-      font-size:13px;
-      line-height:1.2;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .status-pill{
-      min-height:30px;
-      padding:0 12px;
-      border-radius:999px;
-      background:#fff1d9;
-      color:#9a6908;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:12px;
-      font-weight:900;
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-    }
-
-    .btn{
-      flex:1;
-      min-height:48px;
-      border:none;
-      border-radius:16px;
-      font-size:16px;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    .approve{
-      background:linear-gradient(135deg,var(--green),var(--green-2));
-      color:#fff;
-    }
-
-    .reject{
-      background:var(--red);
-      color:#fff;
-    }
-
-    .empty{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:22px;
-      text-align:center;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.3;
-      font-weight:700;
-    }
-
-    .sheet-backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(13,18,16,.32);
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      z-index:9999;
-      padding:12px;
-    }
-
-    .sheet-backdrop.show{
-      display:flex;
-    }
-
-    .sheet{
-      width:min(100%,430px);
-      background:#fff;
-      border-radius:24px 24px 18px 18px;
-      box-shadow:0 24px 60px rgba(0,0,0,.22);
-      padding:16px;
-    }
-
-    .sheet-title{
-      font-size:20px;
-      font-weight:900;
-      color:var(--text);
-      margin-bottom:8px;
-    }
-
-    .sheet-sub{
-      font-size:14px;
-      line-height:1.25;
-      color:var(--muted);
-      font-weight:700;
-      margin-bottom:12px;
-    }
-
-    .sheet textarea{
-      width:100%;
-      min-height:110px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:var(--card-soft);
-      padding:14px;
-      font-size:16px;
-      color:var(--text);
-      outline:none;
-      resize:vertical;
-      margin-bottom:12px;
-    }
-
-    .sheet-actions{
-      display:flex;
-      gap:10px;
-    }
-
-    .sheet-btn{
-      flex:1;
-      min-height:48px;
-      border:none;
-      border-radius:16px;
-      font-size:15px;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    .sheet-btn.cancel{
-      background:#eef3ef;
-      color:var(--text);
-    }
-
-    .sheet-btn.confirm{
-      background:var(--red);
-      color:#fff;
-    }
-
-    @media (max-width:390px){
-      .top-title{ font-size:25px; }
-      .top-stat strong{ font-size:24px; }
-      .focus-main{ font-size:30px; }
-    }
-  </style>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+</script>
 </head>
+
 <body>
-  <div class="app">
-    <div class="toolbar">
-      <a class="back" href="titolare.html">← Torna</a>
-      <button class="refresh" id="refreshBtn" type="button">Aggiorna</button>
-    </div>
 
-    <section class="top">
-      <div class="top-kicker">Gestione richieste dipendenti</div>
-      <div class="top-title">Permessi, assenze e ferie</div>
-      <div class="top-sub" id="topSub">
-        Sto caricando le richieste in attesa.
-      </div>
+<div class="app">
 
-      <div class="top-stats">
-        <div class="top-stat">
-          <strong id="statTot">0</strong>
-          <span>In attesa</span>
-        </div>
+<div class="header">Richieste</div>
+<div class="sub">Permessi, assenze e ferie</div>
 
-        <div class="top-stat">
-          <strong id="statPermessi">0</strong>
-          <span>Permessi a ore</span>
-        </div>
+<div id="list"></div>
 
-        <div class="top-stat">
-          <strong id="statAssFerie">0</strong>
-          <span>Assenze / ferie</span>
-        </div>
-      </div>
-    </section>
+</div>
 
-    <div class="filters">
-      <button class="filter active" data-filter="tutte">Tutte</button>
-      <button class="filter" data-filter="permesso">Permessi</button>
-      <button class="filter" data-filter="assenza-ferie">Assenze / Ferie</button>
-    </div>
+<!-- MODAL -->
+<div class="modal" id="modal">
+<b>Motivo rifiuto</b>
+<textarea id="motivo"></textarea>
+<button class="btn reject" onclick="confirmReject()">Conferma rifiuto</button>
+</div>
 
-    <section class="list" id="listBox">
-      <div class="empty">Sto caricando le richieste…</div>
-    </section>
-  </div>
+<div class="toast" id="toast">Fatto</div>
 
-  <div class="sheet-backdrop" id="rejectSheetBackdrop">
-    <div class="sheet">
-      <div class="sheet-title">Motivo rifiuto</div>
-      <div class="sheet-sub">
-        Scrivi il motivo così il dipendente lo vedrà subito nella sua sezione “In lavorazione”.
-      </div>
+<script>
 
-      <textarea id="rejectReason" placeholder="Scrivi qui il motivo del rifiuto..."></textarea>
+let rejectId=null;
 
-      <div class="sheet-actions">
-        <button class="sheet-btn cancel" id="cancelRejectBtn" type="button">Annulla</button>
-        <button class="sheet-btn confirm" id="confirmRejectBtn" type="button">Conferma rifiuto</button>
-      </div>
-    </div>
-  </div>
+function showToast(msg){
+const t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+}
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
-      authDomain: "farmaciamontesano.firebaseapp.com",
-      projectId: "farmaciamontesano",
-      storageBucket: "farmaciamontesano.firebasestorage.app",
-      messagingSenderId: "881461241551",
-      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
-    };
+function getType(d){
+if(d.requestKind==="ore") return "permesso";
+if(d.requestKind==="giornata") return "assenza";
+if(d.requestKind==="ferie") return "ferie";
+}
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+function getMain(d){
+if(d.requestKind==="ore"){
+return {big:`${d.fromHour} - ${d.toHour}`,small:d.day};
+}
+if(d.requestKind==="giornata"){
+return {big:d.day,small:"Assenza giornata"};
+}
+if(d.requestKind==="ferie"){
+return {big:`${d.fromDate} → ${d.toDate}`,small:"Ferie"};
+}
+return {big:"",small:""};
+}
 
-    let currentFilter = "tutte";
-    let rejectId = null;
-    let unsubscribeRequests = null;
+function approve(id){
+db.collection("employee_requests").doc(id).update({
+status:"approvata"
+});
+showToast("Approvata");
+}
 
-    const listBox = document.getElementById("listBox");
-    const topSub = document.getElementById("topSub");
-    const rejectSheetBackdrop = document.getElementById("rejectSheetBackdrop");
-    const rejectReason = document.getElementById("rejectReason");
+function openReject(id){
+rejectId=id;
+document.getElementById("modal").style.display="block";
+}
 
-    function escapeHtml(value){
-      return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
+function confirmReject(){
+let motivo=document.getElementById("motivo").value;
 
-    function getRequestVisualType(d){
-      if (d.requestKind === "ore") return "permesso";
-      if (d.requestKind === "giornata") return "assenza";
-      if (d.requestKind === "ferie") return "ferie";
-      return "assenza";
-    }
+db.collection("employee_requests").doc(rejectId).update({
+status:"negata",
+ownerReason:motivo
+});
 
-    function getRequestLabel(d){
-      if (d.requestKind === "ore") return "Permesso";
-      if (d.requestKind === "giornata") return "Assenza";
-      if (d.requestKind === "ferie") return "Ferie";
-      return "Richiesta";
-    }
+document.getElementById("modal").style.display="none";
+showToast("Rifiutata");
+}
 
-    function getRequestMeta(d){
-      if (d.requestKind === "ore") return "Permesso a ore";
-      if (d.requestKind === "giornata") return "Assenza giornata";
-      if (d.requestKind === "ferie") return "Ferie";
-      return "Richiesta";
-    }
+function load(){
 
-    function getFocusHtml(d){
-      const type = getRequestVisualType(d);
+db.collection("employee_requests")
+.onSnapshot(snapshot=>{
 
-      if (type === "permesso") {
-        return {
-          css: "permesso",
-          kicker: "Orario assenza",
-          main: `${d.fromHour || "—"} - ${d.toHour || "—"}`,
-          sub: `${d.day || "—"}`
-        };
-      }
+let html="";
 
-      if (type === "assenza") {
-        return {
-          css: "assenza",
-          kicker: "Giorno assenza",
-          main: `${d.day || "—"}`,
-          sub: `Assente per l'intera giornata`
-        };
-      }
+snapshot.docs.forEach(doc=>{
+let d=doc.data();
 
-      return {
-        css: "ferie",
-        kicker: "Periodo ferie",
-        main: `${d.fromDate || "—"} → ${d.toDate || "—"}`,
-        sub: `Non disponibile nei giorni indicati`
-      };
-    }
+if(d.type!=="ferie_permesso") return;
+if(d.status!=="in_attesa") return;
 
-    function matchesFilter(d){
-      const type = getRequestVisualType(d);
+let type=getType(d);
+let main=getMain(d);
 
-      if (currentFilter === "tutte") return true;
-      if (currentFilter === "permesso") return type === "permesso";
-      if (currentFilter === "assenza-ferie") return type === "assenza" || type === "ferie";
-      return true;
-    }
+html+=`
+<div class="card ${type}">
 
-    async function approveRequest(id){
-      try {
-        await db.collection("employee_requests").doc(id).update({
-          status: "approvata",
-          ownerReason: ""
-        });
-      } catch (e) {
-        console.error("Errore approvazione:", e);
-        alert("Errore durante l'approvazione.");
-      }
-    }
+<div class="name">${d.employeeName}</div>
+<div class="type">${type}</div>
 
-    function openRejectSheet(id){
-      rejectId = id;
-      rejectReason.value = "";
-      rejectSheetBackdrop.classList.add("show");
-      setTimeout(() => rejectReason.focus(), 80);
-    }
+<div class="big">${main.big}</div>
+<div class="small">${main.small}</div>
 
-    function closeRejectSheet(){
-      rejectId = null;
-      rejectReason.value = "";
-      rejectSheetBackdrop.classList.remove("show");
-    }
+<div class="actions">
+<button class="btn approve" onclick="approve('${doc.id}')">Approva</button>
+<button class="btn reject" onclick="openReject('${doc.id}')">Rifiuta</button>
+</div>
 
-    async function confirmReject(){
-      const reason = rejectReason.value.trim();
+</div>
+`;
+});
 
-      if (!rejectId) return;
-      if (!reason) {
-        alert("Scrivi un motivo per il rifiuto.");
-        return;
-      }
+document.getElementById("list").innerHTML=
+html || "<div class='empty'>Nessuna richiesta 👍</div>";
 
-      try {
-        await db.collection("employee_requests").doc(rejectId).update({
-          status: "negata",
-          ownerReason: reason
-        });
-        closeRejectSheet();
-      } catch (e) {
-        console.error("Errore rifiuto:", e);
-        alert("Errore durante il rifiuto.");
-      }
-    }
+});
+}
 
-    function renderList(requests){
-      if (!requests.length) {
-        listBox.innerHTML = `
-          <div class="empty">
-            Nessuna richiesta in attesa per questo filtro 👍
-          </div>
-        `;
-        return;
-      }
+load();
 
-      listBox.innerHTML = requests.map(r => {
-        const visualType = getRequestVisualType(r);
-        const focus = getFocusHtml(r);
+</script>
 
-        return `
-          <article class="req ${visualType}">
-            <div class="req-head">
-              <div>
-                <div class="req-name">${escapeHtml(r.employeeName || "Dipendente")}</div>
-                <div class="req-meta">${escapeHtml(getRequestMeta(r))}</div>
-              </div>
-              <div class="req-tag ${visualType}">
-                ${escapeHtml(getRequestLabel(r))}
-              </div>
-            </div>
-
-            <div class="focus-box ${focus.css}">
-              <div class="focus-kicker">${escapeHtml(focus.kicker)}</div>
-              <div class="focus-main">${escapeHtml(focus.main)}</div>
-              <div class="focus-sub">${escapeHtml(focus.sub)}</div>
-            </div>
-
-            <div class="req-footer">
-              <div class="req-time">
-                Inviata il ${escapeHtml(r.createdDate || "—")} alle ${escapeHtml(r.createdTime || "—")}
-              </div>
-              <div class="status-pill">In attesa</div>
-            </div>
-
-            <div class="actions">
-              <button class="btn approve" onclick="approveRequest('${r.id}')">Approva</button>
-              <button class="btn reject" onclick="openRejectSheet('${r.id}')">Rifiuta</button>
-            </div>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function updateTopStats(allPending){
-      const permessiOre = allPending.filter(r => r.requestKind === "ore").length;
-      const assenzeFerie = allPending.filter(r => r.requestKind === "giornata" || r.requestKind === "ferie").length;
-
-      document.getElementById("statTot").textContent = allPending.length;
-      document.getElementById("statPermessi").textContent = permessiOre;
-      document.getElementById("statAssFerie").textContent = assenzeFerie;
-
-      if (!allPending.length) {
-        topSub.textContent = "Non ci sono richieste in attesa al momento.";
-      } else if (permessiOre > 0 && assenzeFerie > 0) {
-        topSub.textContent = `Hai ${allPending.length} richieste in attesa: ${permessiOre} permessi e ${assenzeFerie} assenze/ferie.`;
-      } else if (permessiOre > 0) {
-        topSub.textContent = `Hai ${permessiOre} permessi a ore da controllare.`;
-      } else {
-        topSub.textContent = `Hai ${assenzeFerie} assenze/ferie da controllare.`;
-      }
-    }
-
-    function listenRequests(){
-      if (unsubscribeRequests) unsubscribeRequests();
-
-      unsubscribeRequests = db.collection("employee_requests").onSnapshot(snapshot => {
-        const allPending = snapshot.docs
-          .map(doc => ({ id: doc.id, ...doc.data() }))
-          .filter(d => d.type === "ferie_permesso" && d.status === "in_attesa")
-          .sort((a,b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
-
-        updateTopStats(allPending);
-        renderList(allPending.filter(matchesFilter));
-      }, error => {
-        console.error("Errore caricamento richieste:", error);
-        listBox.innerHTML = `<div class="empty">Errore durante il caricamento delle richieste.</div>`;
-      });
-    }
-
-    document.querySelectorAll(".filter").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
-        btn.classList.add("active");
-        currentFilter = btn.dataset.filter;
-        listenRequests();
-      });
-    });
-
-    document.getElementById("refreshBtn").addEventListener("click", () => {
-      listenRequests();
-    });
-
-    document.getElementById("cancelRejectBtn").addEventListener("click", closeRejectSheet);
-    document.getElementById("confirmRejectBtn").addEventListener("click", confirmReject);
-
-    rejectSheetBackdrop.addEventListener("click", (e) => {
-      if (e.target === rejectSheetBackdrop) closeRejectSheet();
-    });
-
-    listenRequests();
-  </script>
 </body>
 </html>
