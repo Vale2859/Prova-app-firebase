@@ -8,232 +8,234 @@
   <style>
     :root{
       --bg:#eef1ef;
-      --card:#f8faf9;
-      --card-2:#f3f6f4;
-      --line:#e3e9e5;
-      --shadow:0 10px 24px rgba(20,55,47,.08);
-      --radius-xl:34px;
-      --radius-lg:28px;
-      --radius-md:24px;
-      --radius-sm:20px;
-      --safe-top:max(12px, env(safe-area-inset-top));
-      --safe-bottom:max(14px, env(safe-area-inset-bottom));
-      --safe-left:max(12px, env(safe-area-inset-left));
-      --safe-right:max(12px, env(safe-area-inset-right));
+      --panel:#f7f9f8;
+      --panel-2:#f2f5f3;
+      --line:#dfe7e2;
+      --shadow:0 8px 20px rgba(18,48,40,.06);
+      --text:#17352f;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ margin:0; padding:0; }
-    body{
-      background:linear-gradient(180deg,#f3f5f4 0%, #ecefed 100%);
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-      color:#17352f;
+      color:var(--text);
+      overflow:hidden;
+      height:100%;
     }
 
-    .page{
+    body{
+      min-height:100vh;
+    }
+
+    .app{
       width:min(100%, 430px);
       margin:0 auto;
       min-height:100vh;
-      padding:
-        calc(var(--safe-top) + 10px)
-        calc(var(--safe-right) + 10px)
-        calc(var(--safe-bottom) + 18px)
-        calc(var(--safe-left) + 10px);
+      padding:10px 10px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
     }
 
-    .topbar{
+    .logo-wrap{
       display:flex;
       align-items:center;
       justify-content:flex-start;
-      margin-bottom:12px;
-      padding:0 4px;
+      padding:2px 2px 0;
+      flex:0 0 auto;
     }
 
-    .logo-mini{
-      width:100%;
-      max-width:180px;
+    .logo{
+      width:150px;
+      max-width:48vw;
+      height:auto;
       display:block;
     }
 
-    .calendar-hero,
-    .info-strip,
-    .mini-card{
-      background:rgba(255,255,255,.72);
-      backdrop-filter:blur(10px);
+    .calendar-box{
+      position:relative;
+      flex:0 0 210px;
+      background:var(--panel);
       border:1px solid var(--line);
+      border-radius:12px;
       box-shadow:var(--shadow);
+      padding:10px;
+      overflow:hidden;
     }
 
-    .calendar-hero{
-      border-radius:var(--radius-xl);
-      min-height:190px;
-      padding:14px;
-      margin-bottom:12px;
-      display:flex;
-      align-items:stretch;
+    .calendar-top-line{
+      height:12px;
+      border-radius:8px;
+      background:linear-gradient(90deg,#eef2f0 0%, #e6ebe8 100%);
+      margin-bottom:10px;
     }
 
-    .calendar-placeholder{
-      flex:1;
-      border-radius:28px;
+    .calendar-main{
+      height:166px;
+      border-radius:10px;
       background:
-        linear-gradient(180deg, rgba(236,241,238,.82), rgba(227,234,229,.94)),
+        linear-gradient(180deg, rgba(241,245,243,.88), rgba(231,237,233,.96)),
         url("hero-farmacia.jpg") center/cover no-repeat;
-      border:1px solid #e7ede9;
+      border:1px solid #e6ece8;
       position:relative;
       overflow:hidden;
     }
 
-    .calendar-placeholder::before{
+    .calendar-main::after{
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(135deg, rgba(255,255,255,.45), rgba(255,255,255,.08));
+      background:linear-gradient(135deg, rgba(255,255,255,.30), rgba(255,255,255,.06));
     }
 
-    .calendar-header-line{
-      position:absolute;
-      top:18px;
-      left:18px;
-      right:18px;
-      height:16px;
-      border-radius:999px;
-      background:rgba(255,255,255,.55);
-      z-index:1;
-    }
-
-    .calendar-big-zone{
-      position:absolute;
-      left:18px;
-      right:18px;
-      top:50px;
-      bottom:18px;
-      border-radius:22px;
-      background:rgba(255,255,255,.30);
-      border:1px solid rgba(255,255,255,.22);
-      z-index:1;
-    }
-
-    .info-strip{
-      min-height:62px;
-      border-radius:var(--radius-lg);
-      margin-bottom:14px;
-      padding:10px 14px;
-      display:flex;
-      align-items:center;
-    }
-
-    .info-strip-inner{
-      width:100%;
-      height:40px;
-      border-radius:16px;
-      background:linear-gradient(90deg,#eef2f0 0%, #e8edeb 100%);
-      border:1px solid #edf1ef;
-    }
-
-    .grid{
+    .cards-grid{
+      flex:1 1 auto;
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr;
+      gap:8px;
+      min-height:0;
     }
 
-    .mini-card{
-      min-height:188px;
-      border-radius:30px;
+    .card{
       position:relative;
+      background:var(--panel-2);
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:var(--shadow);
       overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(240,245,243,.92), rgba(231,237,234,.98)),
-        url("card-placeholder.jpg") center/cover no-repeat;
+      min-height:0;
     }
 
-    .mini-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
-    }
-
-    .mini-card-image{
+    .card img{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
       object-fit:cover;
-      opacity:.22;
+      opacity:.16;
     }
 
-    .mini-card-footer{
+    .card::after{
+      content:"";
       position:absolute;
-      left:14px;
-      right:14px;
-      bottom:14px;
-      height:64px;
-      border-radius:22px;
-      background:rgba(255,255,255,.22);
-      backdrop-filter:blur(4px);
+      left:10px;
+      right:10px;
+      bottom:10px;
+      height:42px;
+      border-radius:12px;
+      background:rgba(255,255,255,.24);
       border:1px solid rgba(255,255,255,.22);
+      backdrop-filter:blur(3px);
     }
 
-    .mini-card,
-    .calendar-hero,
-    .info-strip{
-      pointer-events:none;
-      user-select:none;
+    .hint{
+      position:absolute;
+      top:10px;
+      right:12px;
+      font-size:11px;
+      color:#6d7f79;
+      font-weight:700;
+      letter-spacing:.02em;
+      z-index:2;
+      opacity:.8;
     }
 
     @media (max-width:390px){
-      .logo-mini{ max-width:165px; }
-      .calendar-hero{ min-height:176px; }
-      .mini-card{ min-height:176px; }
-      .mini-card-footer{ height:58px; }
+      .app{
+        padding:8px 8px 12px;
+        gap:8px;
+      }
+
+      .logo{
+        width:138px;
+      }
+
+      .calendar-box{
+        flex-basis:190px;
+        padding:8px;
+      }
+
+      .calendar-main{
+        height:150px;
+      }
+
+      .card::after{
+        left:8px;
+        right:8px;
+        bottom:8px;
+        height:38px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
+  <main class="app" id="swipeArea">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="Farmacia Montesano" class="logo" />
+    </div>
 
-    <!-- LOGO PICCOLO A SINISTRA -->
-    <header class="topbar">
-      <img src="logo.png" alt="Farmacia Montesano" class="logo-mini" />
-    </header>
-
-    <!-- RIQUADRO GRANDE SOPRA PER CALENDARIO -->
-    <section class="calendar-hero">
-      <div class="calendar-placeholder">
-        <div class="calendar-header-line"></div>
-        <div class="calendar-big-zone"></div>
-      </div>
+    <section class="calendar-box">
+      <div class="hint">Scorri a sinistra →</div>
+      <div class="calendar-top-line"></div>
+      <div class="calendar-main"></div>
     </section>
 
-    <!-- RIQUADRO PICCOLO BASSO E LUNGO -->
-    <section class="info-strip">
-      <div class="info-strip-inner"></div>
-    </section>
-
-    <!-- 4 CARD IMPORTANTI -->
-    <section class="grid">
-      <div class="mini-card">
-        <img src="servizi.jpg" alt="" class="mini-card-image">
-        <div class="mini-card-footer"></div>
+    <section class="cards-grid">
+      <div class="card">
+        <img src="servizi.jpg" alt="">
       </div>
 
-      <div class="mini-card">
-        <img src="promo.jpg" alt="" class="mini-card-image">
-        <div class="mini-card-footer"></div>
+      <div class="card">
+        <img src="promo.jpg" alt="">
       </div>
 
-      <div class="mini-card">
-        <img src="beauty.jpg" alt="" class="mini-card-image">
-        <div class="mini-card-footer"></div>
+      <div class="card">
+        <img src="beauty.jpg" alt="">
       </div>
 
-      <div class="mini-card">
-        <img src="turni.jpg" alt="" class="mini-card-image">
-        <div class="mini-card-footer"></div>
+      <div class="card">
+        <img src="turni.jpg" alt="">
       </div>
     </section>
-
   </main>
+
+  <script>
+    (function () {
+      let startX = 0;
+      let startY = 0;
+      let isTouching = false;
+
+      document.addEventListener("touchstart", function (e) {
+        if (!e.touches || !e.touches.length) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isTouching = true;
+      }, { passive: true });
+
+      document.addEventListener("touchend", function (e) {
+        if (!isTouching || !e.changedTouches || !e.changedTouches.length) return;
+
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+
+        const diffX = startX - endX;
+        const diffY = Math.abs(startY - endY);
+
+        if (diffX > 80 && diffY < 40) {
+          window.location.href = "gestione.html";
+        }
+
+        isTouching = false;
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
