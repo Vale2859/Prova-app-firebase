@@ -7,249 +7,230 @@
 
   <style>
     :root{
-      --bg:#f3f5f4;
-      --card:#ffffff;
-      --text:#16372f;
-      --muted:#7a8b85;
-      --line:#e5ece8;
-      --shadow:0 10px 30px rgba(16,49,39,.08);
+      --bg:#eef1ef;
+      --card:#f8faf9;
+      --card-2:#f3f6f4;
+      --line:#e3e9e5;
+      --shadow:0 10px 24px rgba(20,55,47,.08);
       --radius-xl:34px;
       --radius-lg:28px;
-      --radius-md:22px;
+      --radius-md:24px;
+      --radius-sm:20px;
+      --safe-top:max(12px, env(safe-area-inset-top));
+      --safe-bottom:max(14px, env(safe-area-inset-bottom));
+      --safe-left:max(12px, env(safe-area-inset-left));
+      --safe-right:max(12px, env(safe-area-inset-right));
     }
 
     *{ box-sizing:border-box; }
     html,body{ margin:0; padding:0; }
     body{
-      background:var(--bg);
+      background:linear-gradient(180deg,#f3f5f4 0%, #ecefed 100%);
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-      color:var(--text);
+      color:#17352f;
     }
 
     .page{
-      max-width:860px;
+      width:min(100%, 430px);
       margin:0 auto;
-      padding:18px 16px 40px;
+      min-height:100vh;
+      padding:
+        calc(var(--safe-top) + 10px)
+        calc(var(--safe-right) + 10px)
+        calc(var(--safe-bottom) + 18px)
+        calc(var(--safe-left) + 10px);
     }
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-      border-radius:var(--radius-xl);
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      margin-bottom:12px;
+      padding:0 4px;
     }
 
-    .logo-card{
-      padding:22px 20px;
-      margin-bottom:14px;
-    }
-
-    .logo{
+    .logo-mini{
       width:100%;
-      max-width:330px;
+      max-width:180px;
       display:block;
     }
 
-    .status-card{
-      min-height:84px;
-      margin-bottom:14px;
-      padding:18px 22px;
-    }
-
-    .status-placeholder{
-      width:100%;
-      height:100%;
-      min-height:48px;
-      border-radius:18px;
-      background:linear-gradient(90deg,#f6f8f7 0%, #eef3f1 100%);
-    }
-
-    .hero-card{
-      min-height:330px;
-      margin-bottom:14px;
-      overflow:hidden;
-      position:relative;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.96)),
-        url('hero-farmacia.jpg') center/cover no-repeat;
-    }
-
-    .hero-inner{
-      width:100%;
-      height:100%;
-      min-height:330px;
-      padding:20px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .hero-placeholder{
-      width:100%;
-      height:100%;
-      min-height:250px;
-      border-radius:24px;
-      background:linear-gradient(180deg,#f7f9f8 0%, #eef3f1 100%);
-      border:1px solid #edf2ef;
-    }
-
-    .actions-empty{
-      margin-bottom:18px;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-
-    .empty-pill{
-      min-height:86px;
-      border-radius:28px;
-      background:#ffffff;
+    .calendar-hero,
+    .info-strip,
+    .mini-card{
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(10px);
       border:1px solid var(--line);
       box-shadow:var(--shadow);
+    }
+
+    .calendar-hero{
+      border-radius:var(--radius-xl);
+      min-height:190px;
+      padding:14px;
+      margin-bottom:12px;
+      display:flex;
+      align-items:stretch;
+    }
+
+    .calendar-placeholder{
+      flex:1;
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(236,241,238,.82), rgba(227,234,229,.94)),
+        url("hero-farmacia.jpg") center/cover no-repeat;
+      border:1px solid #e7ede9;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .calendar-placeholder::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,.45), rgba(255,255,255,.08));
+    }
+
+    .calendar-header-line{
+      position:absolute;
+      top:18px;
+      left:18px;
+      right:18px;
+      height:16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.55);
+      z-index:1;
+    }
+
+    .calendar-big-zone{
+      position:absolute;
+      left:18px;
+      right:18px;
+      top:50px;
+      bottom:18px;
+      border-radius:22px;
+      background:rgba(255,255,255,.30);
+      border:1px solid rgba(255,255,255,.22);
+      z-index:1;
+    }
+
+    .info-strip{
+      min-height:62px;
+      border-radius:var(--radius-lg);
+      margin-bottom:14px;
+      padding:10px 14px;
+      display:flex;
+      align-items:center;
+    }
+
+    .info-strip-inner{
+      width:100%;
+      height:40px;
+      border-radius:16px;
+      background:linear-gradient(90deg,#eef2f0 0%, #e8edeb 100%);
+      border:1px solid #edf1ef;
     }
 
     .grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
+      gap:12px;
     }
 
-    .feature-card{
+    .mini-card{
+      min-height:188px;
+      border-radius:30px;
       position:relative;
       overflow:hidden;
-      min-height:245px;
-      border-radius:30px;
-      background:#dfe7e3;
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(240,245,243,.92), rgba(231,237,234,.98)),
+        url("card-placeholder.jpg") center/cover no-repeat;
     }
 
-    .feature-card img{
+    .mini-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+    }
+
+    .mini-card-image{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
       object-fit:cover;
-      display:block;
+      opacity:.22;
     }
 
-    .feature-card::after{
-      content:"";
+    .mini-card-footer{
       position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,rgba(255,255,255,.10) 0%, rgba(255,255,255,.06) 100%);
+      left:14px;
+      right:14px;
+      bottom:14px;
+      height:64px;
+      border-radius:22px;
+      background:rgba(255,255,255,.22);
+      backdrop-filter:blur(4px);
+      border:1px solid rgba(255,255,255,.22);
     }
 
-    .feature-empty{
-      position:absolute;
-      inset:auto 16px 16px 16px;
-      height:78px;
-      border-radius:20px;
-      background:rgba(255,255,255,.18);
-      backdrop-filter:blur(5px);
-      border:1px solid rgba(255,255,255,.25);
-      z-index:2;
-    }
-
-    .feature-card,
-    .empty-pill{
+    .mini-card,
+    .calendar-hero,
+    .info-strip{
       pointer-events:none;
       user-select:none;
     }
 
-    @media (max-width:640px){
-      .page{
-        padding:14px 14px 30px;
-      }
-
-      .logo{
-        max-width:300px;
-      }
-
-      .hero-card{
-        min-height:280px;
-      }
-
-      .hero-inner{
-        min-height:280px;
-      }
-
-      .hero-placeholder{
-        min-height:210px;
-      }
-
-      .actions-empty{
-        gap:10px;
-      }
-
-      .empty-pill{
-        min-height:74px;
-        border-radius:24px;
-      }
-
-      .grid{
-        gap:14px;
-      }
-
-      .feature-card{
-        min-height:220px;
-        border-radius:28px;
-      }
-
-      .feature-empty{
-        height:68px;
-        inset:auto 14px 14px 14px;
-      }
+    @media (max-width:390px){
+      .logo-mini{ max-width:165px; }
+      .calendar-hero{ min-height:176px; }
+      .mini-card{ min-height:176px; }
+      .mini-card-footer{ height:58px; }
     }
   </style>
 </head>
 <body>
   <main class="page">
 
-    <!-- LOGO -->
-    <section class="card logo-card">
-      <img src="logo.png" alt="Farmacia Montesano" class="logo" />
-    </section>
+    <!-- LOGO PICCOLO A SINISTRA -->
+    <header class="topbar">
+      <img src="logo.png" alt="Farmacia Montesano" class="logo-mini" />
+    </header>
 
-    <!-- FASCIA STATO VUOTA -->
-    <section class="card status-card">
-      <div class="status-placeholder"></div>
-    </section>
-
-    <!-- RIQUADRO GRANDE CENTRALE VUOTO -->
-    <section class="card hero-card">
-      <div class="hero-inner">
-        <div class="hero-placeholder"></div>
+    <!-- RIQUADRO GRANDE SOPRA PER CALENDARIO -->
+    <section class="calendar-hero">
+      <div class="calendar-placeholder">
+        <div class="calendar-header-line"></div>
+        <div class="calendar-big-zone"></div>
       </div>
     </section>
 
-    <!-- SPAZIO DEI 3 TASTI LASCIATO VUOTO -->
-    <section class="actions-empty">
-      <div class="empty-pill"></div>
-      <div class="empty-pill"></div>
-      <div class="empty-pill"></div>
+    <!-- RIQUADRO PICCOLO BASSO E LUNGO -->
+    <section class="info-strip">
+      <div class="info-strip-inner"></div>
     </section>
 
-    <!-- CARD SOTTO: STESSA IMPOSTAZIONE, SENZA LINK E SENZA CONTENUTO -->
+    <!-- 4 CARD IMPORTANTI -->
     <section class="grid">
-      <div class="feature-card">
-        <img src="servizi.jpg" alt="">
-        <div class="feature-empty"></div>
+      <div class="mini-card">
+        <img src="servizi.jpg" alt="" class="mini-card-image">
+        <div class="mini-card-footer"></div>
       </div>
 
-      <div class="feature-card">
-        <img src="promo.jpg" alt="">
-        <div class="feature-empty"></div>
+      <div class="mini-card">
+        <img src="promo.jpg" alt="" class="mini-card-image">
+        <div class="mini-card-footer"></div>
       </div>
 
-      <div class="feature-card">
-        <img src="beauty.jpg" alt="">
-        <div class="feature-empty"></div>
+      <div class="mini-card">
+        <img src="beauty.jpg" alt="" class="mini-card-image">
+        <div class="mini-card-footer"></div>
       </div>
 
-      <div class="feature-card">
-        <img src="turni.jpg" alt="">
-        <div class="feature-empty"></div>
+      <div class="mini-card">
+        <img src="turni.jpg" alt="" class="mini-card-image">
+        <div class="mini-card-footer"></div>
       </div>
     </section>
 
