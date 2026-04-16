@@ -1,59 +1,63 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Titolare | Farmacia Montesano</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Titolare</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="mobile.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    .header {
+      background: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      max-width: 250px;
+    }
+
+    .spacer {
+      height: 120px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .card {
+      height: 140px;
+      border-radius: 20px;
+      background: #e0e0e0;
+    }
+  </style>
 </head>
 
 <body>
 
   <!-- HEADER -->
-  <header class="header">
-    <img src="logo.png" alt="Farmacia Montesano" class="logo" />
-  </header>
+  <div class="header">
+    <img src="logo.png" class="logo">
+  </div>
 
-  <!-- SPAZIO VUOTO (prima c’era slider + info) -->
-  <div style="height: 120px;"></div>
+  <!-- SPAZIO VUOTO -->
+  <div class="spacer"></div>
 
-  <!-- CARD PRINCIPALI -->
-  <div class="container">
-
-    <div class="card-grid">
-
-      <div class="card">
-        <div class="card-overlay">
-          <h2></h2>
-          <p></p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-overlay">
-          <h2></h2>
-          <p></p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-overlay">
-          <h2></h2>
-          <p></p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-overlay">
-          <h2></h2>
-          <p></p>
-        </div>
-      </div>
-
-    </div>
-
+  <!-- CARD VUOTE -->
+  <div class="grid">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
   </div>
 
 </body>
