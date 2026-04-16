@@ -6,173 +6,94 @@
 <title>Obiettivi LDF</title>
 
 <style>
+:root{
+  --bg:#eef3f0;
+  --card:#fff;
+  --line:#dde5e0;
+  --text:#1f3c35;
+  --muted:#6f837c;
+  --green:#3e8b61;
+  --green2:#66b187;
+  --red:#ff6b5f;
+  --shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
 body{
   margin:0;
-  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
-  background:#eef3f0;
-  color:#16352f;
+  font-family:-apple-system, sans-serif;
+  background:linear-gradient(180deg,#f4f7f5,#e9efec);
 }
 
-/* HEADER */
-.header{
+.app{
+  max-width:430px;
+  margin:auto;
+  padding:14px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#1f5a40,#3e8b61,#66b187);
+  color:#fff;
+  border-radius:26px;
   padding:18px;
-  font-weight:800;
+  margin-bottom:14px;
 }
 
-/* CONTENUTO */
-.container{
-  padding:18px;
+.hero h1{
+  font-size:26px;
+  margin:0;
 }
 
-/* CARD PRINCIPALE */
-.main-card{
-  background:linear-gradient(135deg,#2f7a57,#6bc28f);
-  color:white;
-  border-radius:22px;
-  padding:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.nome{
+.hero p{
   font-size:14px;
-  opacity:.8;
-  font-weight:700;
-}
-
-.big{
-  font-size:52px;
-  font-weight:900;
-  margin-top:6px;
-}
-
-.percent{
-  font-size:20px;
   opacity:.9;
 }
 
-.status{
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
-  background:rgba(255,255,255,.2);
-  font-weight:800;
-  display:inline-block;
-}
-
-/* GRID */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:18px;
+  gap:10px;
 }
 
 .card{
   background:#fff;
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 6px 15px rgba(0,0,0,.05);
+  border-radius:18px;
+  padding:14px;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
 }
 
-.value{
-  font-size:24px;
+.big{
+  font-size:28px;
   font-weight:900;
 }
 
 .label{
   font-size:13px;
-  opacity:.6;
+  color:var(--muted);
   font-weight:700;
 }
 
-/* BOX INTELLIGENTE */
-.smart{
-  margin-top:16px;
-  background:#e6f4ec;
-  border-radius:16px;
-  padding:14px;
-  font-weight:700;
+.full{
+  grid-column:1 / -1;
 }
 
-/* GRUPPO */
-.group{
-  margin-top:16px;
-  background:#fff;
-  border-radius:20px;
-  padding:18px;
+.highlight{
+  background:linear-gradient(135deg,#f5fff9,#e8f7ee);
+  border:1px solid #cce9da;
 }
 
-.progress{
-  height:10px;
-  background:#ddd;
-  border-radius:10px;
-  margin-top:10px;
-  overflow:hidden;
-}
-
-.bar{
-  height:100%;
-  background:linear-gradient(90deg,#3e8b61,#6bc28f);
+.red{
+  background:linear-gradient(135deg,#fff3f2,#ffe6e3);
+  border:1px solid #ffd0cc;
 }
 </style>
-</head>
 
-<body>
-
-<div class="header" onclick="history.back()">← Torna</div>
-
-<div class="container">
-
-  <div class="main-card">
-    <div class="nome" id="nome">...</div>
-    <div class="big" id="pezzi">0</div>
-    <div class="percent" id="percentuale">0%</div>
-    <div class="status" id="stato">Caricamento...</div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="value" id="min">0</div>
-      <div class="label">Obiettivo minimo</div>
-    </div>
-
-    <div class="card">
-      <div class="value" id="max">0</div>
-      <div class="label">Obiettivo massimo</div>
-    </div>
-
-    <div class="card">
-      <div class="value" id="media">0</div>
-      <div class="label">Media attuale</div>
-    </div>
-
-    <div class="card">
-      <div class="value" id="ritmo">0</div>
-      <div class="label">Ritmo necessario</div>
-    </div>
-  </div>
-
-  <div class="smart" id="smartBox">
-    ...
-  </div>
-
-  <div class="group">
-    <b>Obiettivo di gruppo</b>
-    <div id="gruppoTxt"></div>
-    <div class="progress">
-      <div class="bar" id="gruppoBar"></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+  apiKey: "AIzaSyB7p...",
   authDomain: "farmaciamontesano.firebaseapp.com",
   projectId: "farmaciamontesano"
 };
@@ -180,71 +101,107 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* 👇 PRENDE UTENTE DAL LOGIN */
-const user = localStorage.getItem("user");
+const session = JSON.parse(localStorage.getItem("fm_employee_session_v1"));
 
-if(!user){
-  alert("Devi fare il login");
-  window.location.href = "login.html";
+if(!session){
+  alert("Devi fare login");
+  location.href = "dipendenti-login.html";
+}
+</script>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="hero">
+  <h1 id="name">Caricamento...</h1>
+  <p>Obiettivi mensili</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+  <div class="big" id="done">0</div>
+  <div class="label">Fatto</div>
+</div>
+
+<div class="card">
+  <div class="big" id="media">0</div>
+  <div class="label">Media giornaliera</div>
+</div>
+
+<div class="card highlight">
+  <div class="big" id="mancamin">0</div>
+  <div class="label">Manca al minimo</div>
+</div>
+
+<div class="card highlight">
+  <div class="big" id="mancamax">0</div>
+  <div class="label">Manca al massimo</div>
+</div>
+
+<div class="card red">
+  <div class="big" id="ritmo">0</div>
+  <div class="label">Ritmo necessario</div>
+</div>
+
+<div class="card full">
+  <div class="big" id="previsione">0</div>
+  <div class="label">Previsione fine mese</div>
+</div>
+
+<div class="card full">
+  <div class="big" id="gruppo">0</div>
+  <div class="label">Gruppo</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function calcola(d){
+
+  const media = (d.done / d.giorniPassati).toFixed(1);
+
+  const mancaMin = Math.max(0, d.min - d.done);
+  const mancaMax = Math.max(0, d.max - d.done);
+
+  const giorniRestanti = d.giorniTotali - d.giorniPassati;
+
+  const ritmo = giorniRestanti > 0
+    ? (mancaMin / giorniRestanti).toFixed(1)
+    : 0;
+
+  const previsione = (media * d.giorniTotali).toFixed(0);
+
+  return {media,mancaMin,mancaMax,ritmo,previsione};
 }
 
-/* 🔥 LETTURA DATI */
-db.collection("ldf_obiettivi").doc(user).onSnapshot(doc => {
+db.collection("ldf_data")
+.where("employeeId","==",session.id)
+.onSnapshot(snap=>{
 
-  if(!doc.exists){
-    document.getElementById("stato").innerText = "Nessun dato";
-    return;
-  }
+  snap.forEach(doc=>{
+    const d = doc.data();
+    const c = calcola(d);
 
-  const d = doc.data();
+    document.getElementById("name").innerText = d.employeeName;
 
-  let percent = Math.round((d.pezziFatti / d.obiettivoMax) * 100);
+    document.getElementById("done").innerText = d.done;
+    document.getElementById("media").innerText = c.media;
+    document.getElementById("mancamin").innerText = c.mancaMin;
+    document.getElementById("mancamax").innerText = c.mancaMax;
+    document.getElementById("ritmo").innerText = c.ritmo;
+    document.getElementById("previsione").innerText = c.previsione;
+    document.getElementById("gruppo").innerText = d.gruppo;
 
-  let giorniRestanti = d.giorniLavorativi - d.giorniPassati;
-  let ritmo = (d.obiettivoMin - d.pezziFatti) / giorniRestanti;
-  ritmo = ritmo > 0 ? ritmo.toFixed(1) : 0;
-
-  /* 🔥 STATO INTELLIGENTE */
-  let stato = "";
-  if(percent >= 70) stato = "Sei in linea 👍";
-  else if(percent >= 40) stato = "Occhio ⚠️";
-  else stato = "Spingi 🚀";
-
-  /* 🔥 BOX INTELLIGENTE */
-  let previsione = d.mediaAttuale * d.giorniLavorativi;
-  previsione = Math.round(previsione);
-
-  let smart = "";
-  if(previsione >= d.obiettivoMax)
-    smart = "Stai andando fortissimo 🔥";
-  else if(previsione >= d.obiettivoMin)
-    smart = "Continua così 👍";
-  else
-    smart = "Aumenta il ritmo 🚀";
-
-  /* GRUPPO */
-  let gruppoPerc = Math.round((d.gruppoFatti / d.gruppoTotale) * 100);
-
-  /* UI */
-  document.getElementById("nome").innerText = d.nome;
-  document.getElementById("pezzi").innerText = d.pezziFatti + " pezzi";
-  document.getElementById("percentuale").innerText = percent + "%";
-  document.getElementById("stato").innerText = stato;
-
-  document.getElementById("min").innerText = d.obiettivoMin;
-  document.getElementById("max").innerText = d.obiettivoMax;
-  document.getElementById("media").innerText = d.mediaAttuale;
-  document.getElementById("ritmo").innerText = ritmo;
-
-  document.getElementById("smartBox").innerText =
-    "Previsione fine mese: " + previsione + " pezzi → " + smart;
-
-  document.getElementById("gruppoTxt").innerText =
-    d.gruppoFatti + " / " + d.gruppoTotale + " (" + gruppoPerc + "%)";
-
-  document.getElementById("gruppoBar").style.width = gruppoPerc + "%";
+  });
 
 });
+
 </script>
 
 </body>
