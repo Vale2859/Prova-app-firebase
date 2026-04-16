@@ -8,11 +8,22 @@
   <style>
     :root{
       --bg:#eef1ef;
-      --panel:#f7f9f8;
-      --panel-2:#f2f5f3;
-      --line:#dfe7e2;
-      --shadow:0 8px 20px rgba(18,48,40,.06);
+      --panel:#f8faf9;
+      --panel-soft:#f2f5f3;
+      --line:#dde5e1;
       --text:#17352f;
+      --muted:#73837d;
+      --shadow:0 8px 20px rgba(18,48,40,.06);
+      --green:#3e8b61;
+      --green-soft:#dff1e7;
+      --blue:#63b6d6;
+      --blue-soft:#ddf4fb;
+      --purple:#8d7ee6;
+      --purple-soft:#ece9ff;
+      --gold:#d7a83e;
+      --gold-soft:#fbf0d4;
+      --danger:#d65d5d;
+      --danger-soft:#f8dddd;
     }
 
     *{
@@ -23,15 +34,10 @@
     html,body{
       margin:0;
       padding:0;
-      background:var(--bg);
+      min-height:100%;
+      background:linear-gradient(180deg,#f3f5f4 0%, #ecefed 100%);
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
       color:var(--text);
-      overflow:hidden;
-      height:100%;
-    }
-
-    body{
-      min-height:100vh;
     }
 
     .app{
@@ -48,70 +54,170 @@
       display:flex;
       align-items:center;
       justify-content:flex-start;
-      padding:2px 2px 0;
-      flex:0 0 auto;
+      padding:2px 0 0;
     }
 
     .logo{
-      width:150px;
-      max-width:48vw;
+      width:142px;
       height:auto;
       display:block;
     }
 
     .calendar-box{
       position:relative;
-      flex:0 0 210px;
-      background:var(--panel);
       border:1px solid var(--line);
-      border-radius:12px;
+      background:rgba(255,255,255,.82);
       box-shadow:var(--shadow);
+      border-radius:12px;
       padding:10px;
       overflow:hidden;
+      min-height:196px;
+      cursor:pointer;
     }
 
-    .calendar-top-line{
-      height:12px;
-      border-radius:8px;
-      background:linear-gradient(90deg,#eef2f0 0%, #e6ebe8 100%);
-      margin-bottom:10px;
-    }
-
-    .calendar-main{
-      height:166px;
+    .widget-shell{
+      min-height:174px;
       border-radius:10px;
       background:
-        linear-gradient(180deg, rgba(241,245,243,.88), rgba(231,237,233,.96)),
-        url("hero-farmacia.jpg") center/cover no-repeat;
-      border:1px solid #e6ece8;
-      position:relative;
+        radial-gradient(circle at top right, rgba(255,255,255,.55), rgba(255,255,255,.06)),
+        linear-gradient(135deg,#1d2128 0%, #252833 100%);
+      color:#fff;
+      padding:14px;
+      display:grid;
+      grid-template-columns:116px 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+
+    .widget-left{
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .weekday{
+      font-size:14px;
+      line-height:1;
+      font-weight:900;
+      color:#ff6a5e;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .day-number{
+      font-size:72px;
+      line-height:.88;
+      font-weight:900;
+      letter-spacing:-.06em;
+      margin-top:4px;
+    }
+
+    .widget-empty{
+      font-size:18px;
+      line-height:1.12;
+      font-weight:700;
+      color:rgba(255,255,255,.72);
+      margin-top:auto;
+      white-space:pre-line;
+    }
+
+    .widget-right{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .widget-title{
+      font-size:14px;
+      line-height:1;
+      font-weight:900;
+      color:rgba(255,255,255,.74);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      text-align:right;
+    }
+
+    .widget-event{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      border-radius:14px;
+      padding:10px 12px;
+      min-height:58px;
       overflow:hidden;
     }
 
-    .calendar-main::after{
-      content:"";
+    .widget-event.client{ background:rgba(99,182,214,.16); border-left:4px solid var(--blue); }
+    .widget-event.farmacia{ background:rgba(62,139,97,.16); border-left:4px solid var(--green); }
+    .widget-event.personale{ background:rgba(141,126,230,.16); border-left:4px solid var(--purple); }
+    .widget-event.default{ background:rgba(215,168,62,.16); border-left:4px solid var(--gold); }
+
+    .widget-event-name{
+      font-size:16px;
+      line-height:1.05;
+      font-weight:900;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:#fff;
+    }
+
+    .widget-event-time{
+      font-size:15px;
+      line-height:1;
+      font-weight:800;
+      color:rgba(255,255,255,.82);
+    }
+
+    .widget-footer{
       position:absolute;
-      inset:0;
-      background:linear-gradient(135deg, rgba(255,255,255,.30), rgba(255,255,255,.06));
+      top:16px;
+      right:16px;
+      font-size:12px;
+      font-weight:900;
+      color:#6d7f79;
+      opacity:.9;
+      z-index:2;
+      pointer-events:none;
+    }
+
+    .widget-actions{
+      display:flex;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .widget-link{
+      flex:1;
+      min-height:36px;
+      border:none;
+      border-radius:10px;
+      background:#edf3ef;
+      color:#173a33;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
     }
 
     .cards-grid{
-      flex:1 1 auto;
       display:grid;
       grid-template-columns:1fr 1fr;
-      grid-template-rows:1fr 1fr;
       gap:8px;
+      flex:1;
       min-height:0;
     }
 
     .card{
-      position:relative;
-      background:var(--panel-2);
+      min-height:118px;
+      border-radius:12px;
       border:1px solid var(--line);
-      border-radius:14px;
+      background:var(--panel-soft);
       box-shadow:var(--shadow);
+      position:relative;
       overflow:hidden;
-      min-height:0;
     }
 
     .card img{
@@ -120,7 +226,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      opacity:.16;
+      opacity:.14;
     }
 
     .card::after{
@@ -129,113 +235,930 @@
       left:10px;
       right:10px;
       bottom:10px;
-      height:42px;
-      border-radius:12px;
-      background:rgba(255,255,255,.24);
-      border:1px solid rgba(255,255,255,.22);
-      backdrop-filter:blur(3px);
+      height:38px;
+      border-radius:10px;
+      background:rgba(255,255,255,.26);
+      border:1px solid rgba(255,255,255,.18);
     }
 
-    .hint{
-      position:absolute;
-      top:10px;
-      right:12px;
-      font-size:11px;
-      color:#6d7f79;
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,14,12,.54);
+      display:none;
+      z-index:9999;
+      padding:14px;
+      align-items:flex-start;
+      justify-content:center;
+      overflow:auto;
+    }
+
+    .overlay.show{
+      display:flex;
+    }
+
+    .sheet{
+      width:min(100%, 430px);
+      background:#0c0f14;
+      color:#fff;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 28px 80px rgba(0,0,0,.35);
+      margin-bottom:20px;
+    }
+
+    .sheet-head{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .head-left,
+    .head-right{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .glass-btn{
+      min-width:44px;
+      height:44px;
+      border:none;
+      border-radius:999px;
+      padding:0 16px;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-size:16px;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .glass-btn.wide{
+      min-width:auto;
+      gap:10px;
+      padding:0 18px;
+    }
+
+    .month-title{
+      padding:0 18px 12px;
+      font-size:54px;
+      line-height:.92;
+      letter-spacing:-.06em;
+      font-weight:900;
+    }
+
+    .days-row{
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:0;
+      padding:0 18px 10px;
+      color:rgba(255,255,255,.78);
+      font-size:14px;
+      font-weight:900;
+      text-align:center;
+    }
+
+    .week-strip{
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:0;
+      padding:0 8px 8px;
+      border-top:1px solid rgba(255,255,255,.08);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .week-day{
+      border:none;
+      background:transparent;
+      color:#fff;
+      min-height:74px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      border-radius:14px;
+    }
+
+    .week-day small{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.62);
+      text-transform:capitalize;
+    }
+
+    .week-day strong{
+      font-size:20px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .week-day.active{
+      background:rgba(255,255,255,.08);
+    }
+
+    .week-day.today strong{
+      background:#ff625c;
+      color:#fff;
+      min-width:38px;
+      height:38px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .week-legend{
+      padding:10px 18px 0;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:12px;
+      font-weight:800;
+      color:rgba(255,255,255,.72);
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      flex:0 0 auto;
+    }
+
+    .dot.client{ background:var(--blue); }
+    .dot.farmacia{ background:var(--green); }
+    .dot.personale{ background:var(--purple); }
+    .dot.default{ background:var(--gold); }
+
+    .week-events{
+      padding:14px 18px 18px;
+      display:grid;
+      gap:10px;
+    }
+
+    .week-event{
+      border:none;
+      text-align:left;
+      border-radius:16px;
+      padding:12px 14px;
+      cursor:pointer;
+      color:#fff;
+      background:#1c2430;
+    }
+
+    .week-event.client{ background:rgba(99,182,214,.18); border-left:4px solid var(--blue); }
+    .week-event.farmacia{ background:rgba(62,139,97,.18); border-left:4px solid var(--green); }
+    .week-event.personale{ background:rgba(141,126,230,.18); border-left:4px solid var(--purple); }
+    .week-event.default{ background:rgba(215,168,62,.18); border-left:4px solid var(--gold); }
+
+    .week-event-time{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,.7);
+      margin-bottom:4px;
+    }
+
+    .week-event-title{
+      font-size:18px;
+      line-height:1.04;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .week-event-sub{
+      font-size:14px;
+      line-height:1.1;
+      color:rgba(255,255,255,.78);
       font-weight:700;
-      letter-spacing:.02em;
-      z-index:2;
-      opacity:.8;
+    }
+
+    .day-sheet{
+      display:none;
+    }
+
+    .day-sheet.show{
+      display:block;
+    }
+
+    .day-top{
+      padding:0 18px 12px;
+      font-size:18px;
+      font-weight:900;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:12px;
+    }
+
+    .day-timeline{
+      padding:0 18px 18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .day-block{
+      display:grid;
+      grid-template-columns:62px 1fr;
+      gap:10px;
+      align-items:start;
+    }
+
+    .day-hour{
+      font-size:18px;
+      font-weight:900;
+      color:rgba(255,255,255,.72);
+      padding-top:8px;
+    }
+
+    .day-card{
+      border:none;
+      text-align:left;
+      border-radius:16px;
+      padding:12px 14px;
+      cursor:pointer;
+      color:#fff;
+    }
+
+    .day-card.client{ background:rgba(99,182,214,.24); border-left:5px solid var(--blue); }
+    .day-card.farmacia{ background:rgba(62,139,97,.24); border-left:5px solid var(--green); }
+    .day-card.personale{ background:rgba(141,126,230,.24); border-left:5px solid var(--purple); }
+    .day-card.default{ background:rgba(215,168,62,.24); border-left:5px solid var(--gold); }
+
+    .day-card-title{
+      font-size:20px;
+      line-height:1.04;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .day-card-meta{
+      font-size:15px;
+      line-height:1.2;
+      color:rgba(255,255,255,.78);
+      font-weight:700;
+    }
+
+    .empty-state{
+      padding:24px 18px 20px;
+      color:rgba(255,255,255,.68);
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .detail-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(8,14,12,.58);
+      display:none;
+      z-index:10001;
+      align-items:flex-end;
+      justify-content:center;
+      padding:14px;
+    }
+
+    .detail-backdrop.show{
+      display:flex;
+    }
+
+    .detail-sheet{
+      width:min(100%, 430px);
+      background:#fff;
+      border-radius:24px 24px 18px 18px;
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+
+    .detail-head{
+      padding:18px 18px 14px;
+      border-bottom:1px solid #edf1ef;
+      background:linear-gradient(180deg,#fbfdfc 0%, #f3f7f5 100%);
+    }
+
+    .detail-badge{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:10px;
+      color:#17352f;
+    }
+
+    .detail-badge.client{ background:var(--blue-soft); }
+    .detail-badge.farmacia{ background:var(--green-soft); }
+    .detail-badge.personale{ background:var(--purple-soft); }
+    .detail-badge.default{ background:var(--gold-soft); }
+
+    .detail-title{
+      font-size:24px;
+      line-height:1;
+      font-weight:900;
+      color:#133730;
+      margin:0 0 8px;
+    }
+
+    .detail-time-big{
+      font-size:42px;
+      line-height:.92;
+      font-weight:900;
+      letter-spacing:-.05em;
+      color:#17352f;
+      margin:0;
+    }
+
+    .detail-body{
+      padding:16px 18px 18px;
+      display:grid;
+      gap:12px;
+    }
+
+    .detail-row{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid #eef2ef;
+    }
+
+    .detail-row:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+
+    .detail-k{
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      color:#7a8b85;
+      letter-spacing:.04em;
+    }
+
+    .detail-v{
+      font-size:15px;
+      font-weight:800;
+      color:#193a33;
+      line-height:1.25;
+      word-break:break-word;
+    }
+
+    .detail-actions{
+      display:flex;
+      gap:10px;
+      padding:0 18px 18px;
+    }
+
+    .detail-btn{
+      flex:1;
+      min-height:46px;
+      border:none;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .detail-btn.soft{
+      background:#eef3f0;
+      color:#173a33;
+    }
+
+    .detail-btn.dark{
+      background:#151922;
+      color:#fff;
     }
 
     @media (max-width:390px){
       .app{
         padding:8px 8px 12px;
-        gap:8px;
       }
 
       .logo{
-        width:138px;
+        width:132px;
       }
 
       .calendar-box{
-        flex-basis:190px;
-        padding:8px;
+        min-height:188px;
       }
 
-      .calendar-main{
-        height:150px;
+      .widget-shell{
+        min-height:166px;
+        grid-template-columns:100px 1fr;
+        padding:12px;
       }
 
-      .card::after{
-        left:8px;
-        right:8px;
-        bottom:8px;
-        height:38px;
+      .day-number{
+        font-size:62px;
+      }
+
+      .month-title{
+        font-size:48px;
+      }
+
+      .week-event-title{
+        font-size:17px;
+      }
+
+      .day-card-title{
+        font-size:18px;
+      }
+
+      .detail-time-big{
+        font-size:36px;
       }
     }
   </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <main class="app" id="swipeArea">
+  <main class="app">
     <div class="logo-wrap">
       <img src="logo.png" alt="Farmacia Montesano" class="logo" />
     </div>
 
-    <section class="calendar-box">
-      <div class="hint">Scorri a sinistra →</div>
-      <div class="calendar-top-line"></div>
-      <div class="calendar-main"></div>
+    <section class="calendar-box" id="calendarWidgetBox">
+      <div class="widget-footer">tocca per aprire</div>
+
+      <div class="widget-shell">
+        <div class="widget-left">
+          <div>
+            <div class="weekday" id="widgetWeekday">GIOVEDÌ</div>
+            <div class="day-number" id="widgetDayNumber">16</div>
+          </div>
+          <div class="widget-empty" id="widgetEmptyLabel">Oggi non ci sono eventi</div>
+        </div>
+
+        <div class="widget-right">
+          <div class="widget-title">Oggi</div>
+          <div id="widgetEventsWrap"></div>
+        </div>
+      </div>
+
+      <div class="widget-actions">
+        <a class="widget-link" id="openAdminCalendarLink" href="calendario-admin.html">Calendario farmacia</a>
+        <a class="widget-link" id="openClientCalendarLink" href="calendario.html">Calendario cliente</a>
+      </div>
     </section>
 
     <section class="cards-grid">
-      <div class="card">
-        <img src="servizi.jpg" alt="">
-      </div>
-
-      <div class="card">
-        <img src="promo.jpg" alt="">
-      </div>
-
-      <div class="card">
-        <img src="beauty.jpg" alt="">
-      </div>
-
-      <div class="card">
-        <img src="turni.jpg" alt="">
-      </div>
+      <div class="card"><img src="servizi.jpg" alt=""></div>
+      <div class="card"><img src="promo.jpg" alt=""></div>
+      <div class="card"><img src="beauty.jpg" alt=""></div>
+      <div class="card"><img src="turni.jpg" alt=""></div>
     </section>
   </main>
 
+  <!-- SETTIMANA -->
+  <div class="overlay" id="weekOverlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div class="head-left">
+          <button class="glass-btn" id="closeWeekBtn">‹</button>
+          <button class="glass-btn wide" id="yearBtn">2026</button>
+        </div>
+        <div class="head-right">
+          <button class="glass-btn" id="openAdminFullBtn">≡</button>
+          <button class="glass-btn" id="openClientFullBtn">⌕</button>
+          <button class="glass-btn" id="plusWeekBtn">＋</button>
+        </div>
+      </div>
+
+      <div class="month-title" id="weekMonthTitle">Aprile</div>
+
+      <div class="days-row">
+        <div>L</div><div>M</div><div>M</div><div>G</div><div>V</div><div>S</div><div>D</div>
+      </div>
+
+      <div class="week-strip" id="weekStrip"></div>
+
+      <div class="week-legend">
+        <span class="chip"><span class="dot client"></span>Clienti</span>
+        <span class="chip"><span class="dot farmacia"></span>Farmacia</span>
+        <span class="chip"><span class="dot personale"></span>Personale</span>
+      </div>
+
+      <div class="week-events" id="weekEvents"></div>
+
+      <div class="day-sheet" id="daySheet">
+        <div class="day-top" id="dayTitle">Venerdì - 17 apr 2026</div>
+        <div class="day-timeline" id="dayTimeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETTAGLIO -->
+  <div class="detail-backdrop" id="detailBackdrop">
+    <div class="detail-sheet">
+      <div class="detail-head">
+        <div class="detail-badge default" id="detailBadge">Prenotazione</div>
+        <h3 class="detail-title" id="detailTitle">Titolo visita</h3>
+        <p class="detail-time-big" id="detailTime">17:00</p>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-row">
+          <div class="detail-k">Cliente</div>
+          <div class="detail-v" id="detailClient">—</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-k">Numero</div>
+          <div class="detail-v" id="detailPhone">—</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-k">Presa da</div>
+          <div class="detail-v" id="detailOperator">—</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-k">Tipo</div>
+          <div class="detail-v" id="detailType">—</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-k">Data</div>
+          <div class="detail-v" id="detailDate">—</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-k">Note</div>
+          <div class="detail-v" id="detailNotes">—</div>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="detail-btn soft" id="closeDetailBtn" type="button">Chiudi</button>
+        <a class="detail-btn dark" id="detailAdminLink" href="calendario-admin.html">Apri in calendario farmacia</a>
+      </div>
+    </div>
+  </div>
+
   <script>
-    (function () {
-      let startX = 0;
-      let startY = 0;
-      let isTouching = false;
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
 
-      document.addEventListener("touchstart", function (e) {
-        if (!e.touches || !e.touches.length) return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        isTouching = true;
-      }, { passive: true });
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
-      document.addEventListener("touchend", function (e) {
-        if (!isTouching || !e.changedTouches || !e.changedTouches.length) return;
+    const db = firebase.firestore();
 
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
+    let appointments = [];
+    let currentWeekDate = new Date();
+    let selectedDayDate = new Date();
+    let selectedAppointment = null;
 
-        const diffX = startX - endX;
-        const diffY = Math.abs(startY - endY);
+    const widgetWeekday = document.getElementById("widgetWeekday");
+    const widgetDayNumber = document.getElementById("widgetDayNumber");
+    const widgetEmptyLabel = document.getElementById("widgetEmptyLabel");
+    const widgetEventsWrap = document.getElementById("widgetEventsWrap");
 
-        if (diffX > 80 && diffY < 40) {
-          window.location.href = "gestione.html";
+    const weekOverlay = document.getElementById("weekOverlay");
+    const closeWeekBtn = document.getElementById("closeWeekBtn");
+    const weekMonthTitle = document.getElementById("weekMonthTitle");
+    const weekStrip = document.getElementById("weekStrip");
+    const weekEvents = document.getElementById("weekEvents");
+    const daySheet = document.getElementById("daySheet");
+    const dayTitle = document.getElementById("dayTitle");
+    const dayTimeline = document.getElementById("dayTimeline");
+
+    const detailBackdrop = document.getElementById("detailBackdrop");
+    const closeDetailBtn = document.getElementById("closeDetailBtn");
+
+    const openAdminCalendarLink = document.getElementById("openAdminCalendarLink");
+    const openClientCalendarLink = document.getElementById("openClientCalendarLink");
+    const openAdminFullBtn = document.getElementById("openAdminFullBtn");
+    const openClientFullBtn = document.getElementById("openClientFullBtn");
+    const plusWeekBtn = document.getElementById("plusWeekBtn");
+
+    function pad(v){
+      return String(v).padStart(2, "0");
+    }
+
+    function toDateKey(date){
+      const y = date.getFullYear();
+      const m = pad(date.getMonth() + 1);
+      const d = pad(date.getDate());
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseDateKey(key){
+      if(!key) return new Date();
+      const [y,m,d] = key.split("-").map(Number);
+      return new Date(y, (m || 1) - 1, d || 1);
+    }
+
+    function sameDay(a,b){
+      return toDateKey(a) === toDateKey(b);
+    }
+
+    function italianWeekday(date){
+      return date.toLocaleDateString("it-IT", { weekday:"long" }).toUpperCase();
+    }
+
+    function italianMonth(date){
+      return date.toLocaleDateString("it-IT", { month:"long" });
+    }
+
+    function italianDayLabel(date){
+      return date.toLocaleDateString("it-IT", {
+        weekday:"long",
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+      });
+    }
+
+    function getTypeClass(app){
+      const raw = String(app.type || "").toLowerCase();
+      const title = String(app.title || "").toLowerCase();
+      if (raw === "personale" || title.includes("personale")) return "personale";
+      if (raw === "farmacia" || raw === "servizio" || raw === "giornata" || raw === "visita") return "farmacia";
+      if (raw === "cliente" || app.clientName || app.clientSurname) return "client";
+      return "default";
+    }
+
+    function getTypeLabel(app){
+      const raw = String(app.type || "").toLowerCase();
+      if (raw === "servizio") return "Servizio";
+      if (raw === "giornata") return "Giornata Beauty";
+      if (raw === "visita") return "Visita";
+      if (raw === "personale") return "Personale";
+      if (raw === "farmacia") return "Farmacia";
+      return "Prenotazione";
+    }
+
+    function eventFullName(app){
+      return `${app.clientName || ""} ${app.clientSurname || ""}`.trim() || "Evento";
+    }
+
+    function sortByStart(a,b){
+      return String(a.startTime || "").localeCompare(String(b.startTime || ""));
+    }
+
+    function getTodayEvents(){
+      const todayKey = toDateKey(new Date());
+      return appointments
+        .filter(app => app.date === todayKey && app.status !== "cancelled")
+        .sort(sortByStart);
+    }
+
+    function getWeekStart(date){
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setDate(d.getDate() + diff);
+      d.setHours(0,0,0,0);
+      return d;
+    }
+
+    function getWeekDays(date){
+      const start = getWeekStart(date);
+      return Array.from({length:7}, (_,i) => {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        return d;
+      });
+    }
+
+    function getEventsForDay(date){
+      const key = toDateKey(date);
+      return appointments
+        .filter(app => app.date === key && app.status !== "cancelled")
+        .sort(sortByStart);
+    }
+
+    function updateExternalLinks(date, appId = ""){
+      const dateKey = toDateKey(date);
+      const adminHref = appId
+        ? `calendario-admin.html?date=${encodeURIComponent(dateKey)}&appointment=${encodeURIComponent(appId)}`
+        : `calendario-admin.html?date=${encodeURIComponent(dateKey)}`;
+
+      const clientHref = `calendario.html?date=${encodeURIComponent(dateKey)}`;
+
+      openAdminCalendarLink.href = adminHref;
+      openClientCalendarLink.href = clientHref;
+      openAdminFullBtn.onclick = () => window.location.href = adminHref;
+      openClientFullBtn.onclick = () => window.location.href = clientHref;
+      plusWeekBtn.onclick = () => window.location.href = `calendario-admin.html?date=${encodeURIComponent(dateKey)}&action=new`;
+    }
+
+    function renderWidget(){
+      const today = new Date();
+      const items = getTodayEvents();
+
+      widgetWeekday.textContent = italianWeekday(today);
+      widgetDayNumber.textContent = today.getDate();
+
+      if(!items.length){
+        widgetEmptyLabel.textContent = "Oggi non ci\nsono eventi";
+        widgetEventsWrap.innerHTML = `
+          <div class="widget-event default">
+            <div class="widget-event-name">Nessuna prenotazione</div>
+            <div class="widget-event-time">Tocca per aprire la settimana</div>
+          </div>
+        `;
+      } else {
+        widgetEmptyLabel.textContent = `Oggi ${items.length} ${items.length === 1 ? "evento" : "eventi"}`;
+        widgetEventsWrap.innerHTML = items.slice(0,2).map(app => `
+          <div class="widget-event ${getTypeClass(app)}">
+            <div class="widget-event-name">${escapeHtml(app.title || "Prenotazione")}</div>
+            <div class="widget-event-time">${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</div>
+          </div>
+        `).join("");
+      }
+
+      updateExternalLinks(today);
+    }
+
+    function renderWeekOverlay(){
+      const days = getWeekDays(currentWeekDate);
+      weekMonthTitle.textContent = italianMonth(days[0]).replace(/^./, c => c.toUpperCase());
+
+      weekStrip.innerHTML = days.map(day => {
+        const isToday = sameDay(day, new Date());
+        const isActive = sameDay(day, selectedDayDate);
+        return `
+          <button class="week-day ${isToday ? "today" : ""} ${isActive ? "active" : ""}" data-day="${toDateKey(day)}">
+            <small>${day.toLocaleDateString("it-IT",{ weekday:"short" })}</small>
+            <strong>${day.getDate()}</strong>
+          </button>
+        `;
+      }).join("");
+
+      weekStrip.querySelectorAll(".week-day").forEach(btn => {
+        btn.addEventListener("click", () => {
+          selectedDayDate = parseDateKey(btn.dataset.day);
+          renderWeekOverlay();
+          renderDaySheet();
+        });
+      });
+
+      const allWeekEvents = days.flatMap(day => getEventsForDay(day).map(app => ({...app, __dateObj: day})));
+      if(!allWeekEvents.length){
+        weekEvents.innerHTML = `<div class="empty-state">Nessun evento in questa settimana.</div>`;
+      } else {
+        weekEvents.innerHTML = allWeekEvents.map(app => `
+          <button class="week-event ${getTypeClass(app)}" data-id="${escapeAttr(app.id)}">
+            <div class="week-event-time">${escapeHtml(app.__dateObj.toLocaleDateString("it-IT",{ weekday:"long", day:"numeric" }))} • ${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</div>
+            <div class="week-event-title">${escapeHtml(app.title || "Prenotazione")}</div>
+            <div class="week-event-sub">${escapeHtml(eventFullName(app))}</div>
+          </button>
+        `).join("");
+
+        weekEvents.querySelectorAll(".week-event").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const found = appointments.find(a => a.id === btn.dataset.id);
+            if(found){
+              selectedAppointment = found;
+              openDetail(found);
+            }
+          });
+        });
+      }
+
+      renderDaySheet();
+      updateExternalLinks(selectedDayDate);
+    }
+
+    function renderDaySheet(){
+      daySheet.classList.add("show");
+      dayTitle.textContent = italianDayLabel(selectedDayDate).replace(/^./, c => c.toUpperCase());
+
+      const items = getEventsForDay(selectedDayDate);
+
+      if(!items.length){
+        dayTimeline.innerHTML = `<div class="empty-state">Nessun evento in questa giornata.</div>`;
+        return;
+      }
+
+      dayTimeline.innerHTML = items.map(app => `
+        <div class="day-block">
+          <div class="day-hour">${escapeHtml(app.startTime || "—")}</div>
+          <button class="day-card ${getTypeClass(app)}" data-id="${escapeAttr(app.id)}">
+            <div class="day-card-title">${escapeHtml(app.title || "Prenotazione")}</div>
+            <div class="day-card-meta">${escapeHtml(eventFullName(app))} • ${escapeHtml(app.startTime || "—")} - ${escapeHtml(app.endTime || "—")}</div>
+          </button>
+        </div>
+      `).join("");
+
+      dayTimeline.querySelectorAll(".day-card").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const found = appointments.find(a => a.id === btn.dataset.id);
+          if(found){
+            selectedAppointment = found;
+            openDetail(found);
+          }
+        });
+      });
+    }
+
+    function openDetail(app){
+      document.getElementById("detailBadge").textContent = getTypeLabel(app);
+      document.getElementById("detailBadge").className = `detail-badge ${getTypeClass(app)}`;
+      document.getElementById("detailTitle").textContent = app.title || "Prenotazione";
+      document.getElementById("detailTime").textContent = `${app.startTime || "—"} - ${app.endTime || "—"}`;
+      document.getElementById("detailClient").textContent = eventFullName(app);
+      document.getElementById("detailPhone").textContent = app.clientPhone || "—";
+      document.getElementById("detailOperator").textContent = app.operatorName || "—";
+      document.getElementById("detailType").textContent = getTypeLabel(app);
+      document.getElementById("detailDate").textContent = app.date || "—";
+      document.getElementById("detailNotes").textContent = app.notes || "—";
+
+      document.getElementById("detailAdminLink").href =
+        `calendario-admin.html?date=${encodeURIComponent(app.date || toDateKey(new Date()))}&appointment=${encodeURIComponent(app.id || "")}`;
+
+      detailBackdrop.classList.add("show");
+    }
+
+    function closeDetail(){
+      detailBackdrop.classList.remove("show");
+    }
+
+    function openWeek(){
+      selectedDayDate = new Date();
+      currentWeekDate = new Date();
+      renderWeekOverlay();
+      weekOverlay.classList.add("show");
+    }
+
+    function closeWeek(){
+      weekOverlay.classList.remove("show");
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function escapeAttr(value){
+      return escapeHtml(value);
+    }
+
+    document.getElementById("calendarWidgetBox").addEventListener("click", openWeek);
+    closeWeekBtn.addEventListener("click", closeWeek);
+    closeDetailBtn.addEventListener("click", closeDetail);
+
+    weekOverlay.addEventListener("click", (e) => {
+      if(e.target === weekOverlay) closeWeek();
+    });
+
+    detailBackdrop.addEventListener("click", (e) => {
+      if(e.target === detailBackdrop) closeDetail();
+    });
+
+    document.getElementById("yearBtn").addEventListener("click", () => {
+      currentWeekDate.setFullYear(currentWeekDate.getFullYear() - 1);
+      selectedDayDate = new Date(currentWeekDate);
+      renderWeekOverlay();
+    });
+
+    db.collection("appointments").onSnapshot(snapshot => {
+      appointments = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      renderWidget();
+
+      if(weekOverlay.classList.contains("show")){
+        renderWeekOverlay();
+      }
+
+      if(detailBackdrop.classList.contains("show") && selectedAppointment){
+        const updated = appointments.find(a => a.id === selectedAppointment.id);
+        if(updated){
+          selectedAppointment = updated;
+          openDetail(updated);
+        } else {
+          closeDetail();
         }
-
-        isTouching = false;
-      }, { passive: true });
-    })();
+      }
+    });
   </script>
 </body>
 </html>
