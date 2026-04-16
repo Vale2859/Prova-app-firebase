@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dipendenti | Farmacia Montesano</title>
+
+  <style>
+    :root{
+      --bg:#eef1ef;
+      --panel:#f7f9f8;
+      --panel-2:#f2f5f3;
+      --line:#dfe7e2;
+      --shadow:0 8px 20px rgba(18,48,40,.06);
+      --text:#17352f;
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      color:var(--text);
+      overflow:hidden;
+      height:100%;
+    }
+
+    .app{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    /* LOGO */
+    .logo{
+      width:130px;
+      margin-bottom:4px;
+    }
+
+    /* CALENDARIO */
+    .calendar{
+      height:190px;
+      background:#f5f7f6;
+      border:1px solid var(--line);
+      border-radius:10px;
+      position:relative;
+    }
+
+    /* GRID */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      flex:1;
+    }
+
+    /* CARD */
+    .card{
+      height:120px;
+      background:var(--panel-2);
+      border:1px solid var(--line);
+      border-radius:12px;
+    }
+
+    /* BLOCCA SCROLL */
+    html,body{
+      overflow:hidden;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="app" id="swipeArea">
+
+  <!-- LOGO -->
+  <img src="logo.png" class="logo">
+
+  <!-- CALENDARIO -->
+  <div class="calendar"></div>
+
+  <!-- CARD -->
+  <div class="grid">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
+
+</div>
+
+<script>
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e => {
+  let endX = e.changedTouches[0].clientX;
+
+  if(startX - endX > 80){
+    window.location.href = "gestione.html";
+  }
+});
+</script>
+
+</body>
+</html>
