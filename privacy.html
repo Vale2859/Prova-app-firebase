@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Privacy Policy | Farmacia Montesano</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
   <style>
     :root{
       --bg:#f4f7f5;
@@ -16,6 +14,8 @@
       --text:#17352f;
       --text-soft:#6c7c76;
       --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#e7f5ef;
       --line:#e4ece8;
       --shadow:0 16px 34px rgba(16,50,42,0.08);
     }
@@ -31,40 +31,24 @@
       min-height:100vh;
     }
 
+    a{text-decoration:none;color:inherit}
     .page{
-      width:min(100%, 900px);
+      width:min(100%, 760px);
       margin:0 auto;
       min-height:100vh;
-      padding:16px 16px 34px;
-    }
-
-    .brand-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      padding:18px;
-      margin-bottom:16px;
-      display:flex;
-      justify-content:center;
-    }
-
-    .brand-logo{
-      width:100%;
-      max-width:220px;
-      display:block;
+      padding:18px 14px 32px;
     }
 
     .topbar{
       display:flex;
       align-items:center;
       gap:10px;
-      margin-bottom:14px;
+      margin-bottom:16px;
     }
 
     .back-btn{
-      width:50px;
-      height:50px;
+      width:44px;
+      height:44px;
       border:none;
       border-radius:14px;
       background:rgba(255,255,255,0.88);
@@ -72,7 +56,7 @@
       font-size:22px;
       color:var(--text);
       cursor:pointer;
-      flex:0 0 50px;
+      flex:0 0 44px;
     }
 
     .title-wrap{
@@ -82,21 +66,64 @@
 
     .page-title{
       margin:0;
-      font-size:1.9rem;
+      font-size:2rem;
       line-height:1;
       font-weight:900;
       letter-spacing:-0.04em;
     }
 
     .page-subtitle{
-      margin:5px 0 0;
-      font-size:.95rem;
+      margin:6px 0 0;
+      font-size:1rem;
       color:var(--text-soft);
       font-weight:600;
-      line-height:1.35;
+      line-height:1.4;
     }
 
-    .panel{
+    .hero-card{
+      background:linear-gradient(135deg,#0f6f57 0%, #1b8769 55%, #58a895 100%);
+      color:#fff;
+      border-radius:30px;
+      box-shadow:0 22px 40px rgba(13,122,95,0.18);
+      padding:22px 20px;
+      margin-bottom:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-10px;
+      width:160px;
+      height:160px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-title{
+      margin:0 0 8px;
+      font-size:1.55rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-text{
+      margin:0;
+      font-size:1rem;
+      line-height:1.55;
+      color:rgba(255,255,255,0.94);
+      font-weight:500;
+      position:relative;
+      z-index:2;
+    }
+
+    .content-card{
       background:#fff;
       border:1px solid var(--line);
       border-radius:28px;
@@ -104,206 +131,219 @@
       padding:22px 18px;
     }
 
-    .update{
-      margin:0 0 18px;
-      font-size:.88rem;
-      color:var(--text-soft);
-      font-weight:800;
+    .section{
+      margin-bottom:22px;
     }
 
-    h2{
-      margin:24px 0 10px;
-      font-size:1.2rem;
-      line-height:1.15;
+    .section:last-child{
+      margin-bottom:0;
+    }
+
+    .section-title{
+      margin:0 0 10px;
+      font-size:1.28rem;
+      line-height:1.05;
       font-weight:900;
       letter-spacing:-0.03em;
-      color:#15362f;
     }
 
-    p{
-      margin:0 0 12px;
-      font-size:.98rem;
-      line-height:1.65;
-      color:var(--text);
+    .section-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.7;
       font-weight:500;
     }
 
-    ul{
-      margin:0 0 14px 18px;
-      padding:0;
-    }
-
-    li{
-      margin-bottom:8px;
-      font-size:.97rem;
-      line-height:1.55;
-      color:var(--text);
+    .list{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.7;
       font-weight:500;
     }
 
-    a{
-      color:var(--green);
-      font-weight:800;
-      text-decoration:none;
+    .list li{
+      margin-bottom:6px;
     }
 
-    strong{
-      font-weight:900;
-    }
-
-    .note{
-      margin-top:20px;
+    .box{
+      margin-top:12px;
       padding:14px;
       border-radius:18px;
-      background:#f8fbf9;
-      border:1px solid #dce8e2;
+      background:linear-gradient(180deg, #f7fbf9 0%, #f1f8f4 100%);
+      border:1px solid #dfece6;
+      color:var(--text);
+      font-size:.98rem;
+      line-height:1.6;
+      font-weight:600;
+    }
+
+    .footer-note{
+      margin-top:18px;
+      text-align:center;
       color:var(--text-soft);
-      font-size:.92rem;
-      line-height:1.55;
-      font-weight:700;
+      font-size:.9rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    @media (max-width:390px){
+      .page-title{font-size:1.72rem}
+      .hero-title{font-size:1.35rem}
+      .content-card{padding:18px 14px}
+      .section-title{font-size:1.18rem}
+      .section-text,.list{font-size:.96rem}
     }
   </style>
 
   <link rel="stylesheet" href="mobile-only.css" />
   <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
 </head>
 <body>
   <main class="page">
-    <header class="brand-card">
-      <img src="logo.png" alt="Logo Farmacia Montesano" class="brand-logo" />
-    </header>
-
     <div class="topbar">
       <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
       <div class="title-wrap">
         <h1 class="page-title">Privacy Policy</h1>
-        <p class="page-subtitle">Informativa sul trattamento dei dati personali</p>
+        <p class="page-subtitle">Informativa sul trattamento dei dati personali per il programma clienti Farmacia Montesano.</p>
       </div>
     </div>
 
-    <section class="panel">
-      <p class="update">Ultimo aggiornamento: 15 aprile 2026</p>
-
-      <p>
-        La presente informativa descrive le modalità di raccolta, utilizzo, conservazione e protezione
-        dei dati personali degli utenti che utilizzano il sito e l’app della Farmacia Montesano
-        per registrarsi, accedere alla propria area personale, ricevere notifiche e prenotare servizi.
+    <section class="hero-card">
+      <h2 class="hero-title">La tua privacy è importante</h2>
+      <p class="hero-text">
+        In questa pagina ti spieghiamo in modo semplice quali dati raccogliamo, perché li utilizziamo e come li proteggiamo all’interno del programma clienti della Farmacia Montesano.
       </p>
+    </section>
 
-      <h2>1. Titolare del trattamento</h2>
-      <p>
-        Il titolare del trattamento è <strong>Farmacia Montesano s.a.s del Dott. Giovanni Montesano &amp; C.</strong>,
-        con <strong>P. IVA / C.F. 01422450773</strong>.<br />
-        Email amministrativa: <a href="mailto:amministrazione@farmaciamontesano.it">amministrazione@farmaciamontesano.it</a>
-      </p>
+    <section class="content-card">
+      <div class="section">
+        <h3 class="section-title">1. Titolare del trattamento</h3>
+        <p class="section-text">
+          Il titolare del trattamento dei dati personali è <strong>Farmacia Montesano</strong>.
+          Per richieste o informazioni relative alla privacy puoi contattare la farmacia tramite i recapiti ufficiali indicati nel sito.
+        </p>
+      </div>
 
-      <h2>2. Dati raccolti</h2>
-      <p>Possiamo raccogliere e trattare le seguenti categorie di dati:</p>
-      <ul>
-        <li>nome e cognome;</li>
-        <li>numero di telefono;</li>
-        <li>indirizzo email, se fornito;</li>
-        <li>dati di accesso e identificazione account;</li>
-        <li>dati relativi alle prenotazioni effettuate tramite app o sito;</li>
-        <li>preferenze relative alle notifiche;</li>
-        <li>dati tecnici indispensabili al funzionamento del servizio, inclusi token notifiche e identificativi tecnici del dispositivo.</li>
-      </ul>
+      <div class="section">
+        <h3 class="section-title">2. Quali dati raccogliamo</h3>
+        <p class="section-text">
+          Nell’ambito della registrazione e dell’utilizzo del programma clienti possiamo raccogliere i seguenti dati:
+        </p>
+        <ul class="list">
+          <li>nome e cognome;</li>
+          <li>indirizzo email;</li>
+          <li>numero di telefono;</li>
+          <li>codice cliente o ID cliente;</li>
+          <li>dati relativi al profilo fidelity, ai punti e ai premi;</li>
+          <li>dati relativi all’accesso all’account.</li>
+        </ul>
+      </div>
 
-      <p>
-        <strong>Non raccogliamo dati sanitari tramite questa app.</strong>
-        Le informazioni trattate riguardano esclusivamente la prenotazione di un servizio
-        e la relativa gestione organizzativa.
-      </p>
+      <div class="section">
+        <h3 class="section-title">3. Finalità del trattamento</h3>
+        <p class="section-text">
+          I dati vengono trattati per permettere:
+        </p>
+        <ul class="list">
+          <li>la creazione e gestione dell’account cliente;</li>
+          <li>l’accesso all’area personale;</li>
+          <li>la gestione della card fidelity;</li>
+          <li>l’accumulo dei punti e l’eventuale riscatto dei premi;</li>
+          <li>l’accesso a funzionalità come premi, vantaggi e iniziative dedicate ai clienti;</li>
+          <li>eventuali comunicazioni promozionali, solo se autorizzate separatamente dall’utente.</li>
+        </ul>
+      </div>
 
-      <h2>3. Finalità del trattamento</h2>
-      <p>I dati vengono trattati per le seguenti finalità:</p>
-      <ul>
-        <li>creazione e gestione dell’account utente;</li>
-        <li>gestione delle prenotazioni e dei relativi promemoria;</li>
-        <li>invio di notifiche di servizio, promemoria, aggiornamenti su turni, appoggi, giornate e offerte;</li>
-        <li>assistenza all’utente e risposta a richieste o segnalazioni;</li>
-        <li>miglioramento delle funzionalità e della sicurezza dell’app e del sito;</li>
-        <li>adempimento di obblighi amministrativi, legali e organizzativi connessi al servizio offerto.</li>
-      </ul>
+      <div class="section">
+        <h3 class="section-title">4. Base giuridica</h3>
+        <p class="section-text">
+          Il trattamento dei dati avviene sulla base del consenso dell’utente e della necessità di erogare i servizi richiesti, come la registrazione all’account e la partecipazione al programma fidelity.
+        </p>
+      </div>
 
-      <h2>4. Base giuridica del trattamento</h2>
-      <p>Il trattamento si basa su una o più delle seguenti basi giuridiche:</p>
-      <ul>
-        <li>esecuzione di misure precontrattuali o contrattuali richieste dall’utente, come registrazione e prenotazione;</li>
-        <li>consenso dell’utente, ove richiesto, in particolare per l’attivazione e gestione delle notifiche;</li>
-        <li>legittimo interesse del titolare alla sicurezza, organizzazione e corretta gestione del servizio.</li>
-      </ul>
+      <div class="section">
+        <h3 class="section-title">5. Come vengono conservati i dati</h3>
+        <p class="section-text">
+          I dati vengono conservati con misure tecniche e organizzative adeguate per garantirne la sicurezza e la riservatezza.
+          Nella fase iniziale del progetto alcuni dati possono essere salvati localmente sul dispositivo a scopo dimostrativo o di test.
+          In una fase successiva i dati potranno essere gestiti tramite servizi cloud sicuri, come ad esempio Firebase o altre piattaforme idonee.
+        </p>
+      </div>
 
-      <h2>5. Modalità di trattamento e sicurezza</h2>
-      <p>
-        I dati sono trattati con strumenti informatici e telematici, mediante misure tecniche
-        e organizzative idonee a proteggerli da accessi non autorizzati, perdita, alterazione
-        o divulgazione impropria.
-      </p>
+      <div class="section">
+        <h3 class="section-title">6. Per quanto tempo conserviamo i dati</h3>
+        <p class="section-text">
+          I dati vengono conservati per il tempo necessario a gestire l’account e il programma clienti, salvo richiesta di cancellazione da parte dell’utente o diversi obblighi di legge.
+        </p>
+      </div>
 
-      <h2>6. Conservazione dei dati</h2>
-      <p>
-        I dati personali vengono conservati per il tempo in cui l’utente mantiene attivo
-        il proprio profilo oppure fino alla richiesta di cancellazione dell’account,
-        salvo eventuali tempi ulteriori necessari per obblighi di legge o per la gestione
-        di contestazioni, sicurezza e continuità del servizio.
-      </p>
+      <div class="section">
+        <h3 class="section-title">7. Comunicazioni promozionali</h3>
+        <p class="section-text">
+          Se l’utente presta uno specifico consenso facoltativo, i dati potranno essere utilizzati anche per l’invio di promozioni, offerte, iniziative o comunicazioni commerciali legate alle attività della farmacia.
+        </p>
+        <div class="box">
+          Il consenso per le comunicazioni promozionali è facoltativo e separato dalla registrazione al programma clienti.
+        </div>
+      </div>
 
-      <h2>7. Notifiche</h2>
-      <p>
-        Durante la registrazione, l’utente prende atto che l’app utilizza notifiche push
-        per finalità funzionali al servizio, incluse comunicazioni relative a prenotazioni,
-        promemoria, offerte, turni, appoggi, giornate e funzionalità dell’app.
-      </p>
-      <p>
-        Dopo la registrazione, le preferenze notifiche possono essere gestite e modificate
-        nell’area profilo, salvo eventuali notifiche strettamente tecniche o indispensabili
-        al corretto utilizzo del servizio.
-      </p>
+      <div class="section">
+        <h3 class="section-title">8. Diritti dell’utente</h3>
+        <p class="section-text">
+          L’utente può in qualsiasi momento chiedere:
+        </p>
+        <ul class="list">
+          <li>l’accesso ai propri dati;</li>
+          <li>la rettifica dei dati inesatti;</li>
+          <li>la cancellazione dell’account e dei dati personali, nei limiti consentiti dalla legge;</li>
+          <li>la limitazione del trattamento;</li>
+          <li>la revoca del consenso precedentemente prestato.</li>
+        </ul>
+      </div>
 
-      <h2>8. Servizi di terze parti</h2>
-      <p>
-        Per il funzionamento dell’app e del sito utilizziamo servizi tecnologici di terze parti,
-        inclusi i servizi <strong>Google Firebase</strong> per autenticazione, database,
-        hosting e notifiche.
-      </p>
+      <div class="section">
+        <h3 class="section-title">9. Eliminazione dell’account</h3>
+        <p class="section-text">
+          L’utente può richiedere la cancellazione del proprio account. Nella versione attuale alcune funzioni possono rimuovere i dati dal dispositivo locale; successivamente, con il collegamento al database definitivo, la cancellazione riguarderà anche i dati memorizzati sul sistema centrale.
+        </p>
+      </div>
 
-      <h2>9. Comunicazione dei dati</h2>
-      <p>
-        I dati non vengono venduti. Possono essere comunicati, nei limiti strettamente necessari,
-        a soggetti che forniscono servizi tecnici o organizzativi collegati al funzionamento
-        dell’app e del sito, nonché a soggetti cui la comunicazione sia dovuta per obblighi di legge.
-      </p>
-
-      <h2>10. Diritti dell’utente</h2>
-      <p>L’utente può in qualsiasi momento chiedere:</p>
-      <ul>
-        <li>accesso ai propri dati;</li>
-        <li>rettifica dei dati inesatti;</li>
-        <li>cancellazione del profilo e dei dati associati, nei limiti consentiti dalla legge;</li>
-        <li>limitazione del trattamento nei casi previsti;</li>
-        <li>informazioni sull’uso dei propri dati.</li>
-      </ul>
-      <p>
-        Per esercitare i propri diritti è possibile scrivere a
-        <a href="mailto:amministrazione@farmaciamontesano.it">amministrazione@farmaciamontesano.it</a>.
-      </p>
-
-      <h2>11. Aggiornamenti</h2>
-      <p>
-        La presente informativa può essere aggiornata nel tempo. Eventuali modifiche rilevanti
-        saranno pubblicate su questa pagina.
-      </p>
-
-      <div class="note">
-        Questa informativa è predisposta sulla base dei dati aziendali che mi hai fornito.
-        Per una validazione legale formale e definitiva prima di una pubblicazione ampia sugli store,
-        il controllo finale di un professionista privacy resta la scelta più prudente.
+      <div class="section">
+        <h3 class="section-title">10. Aggiornamenti</h3>
+        <p class="section-text">
+          La presente informativa può essere aggiornata nel tempo per adeguarsi all’evoluzione del servizio, della normativa o delle tecnologie utilizzate.
+        </p>
       </div>
     </section>
+
+    <p class="footer-note">
+      Ultimo aggiornamento: Aprile 2026
+    </p>
   </main>
 
-  <script src="mobile-only.js"></script>
-  <script src="app-fixes.js"></script>
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
 </body>
 </html>

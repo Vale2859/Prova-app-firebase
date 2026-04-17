@@ -533,24 +533,6 @@
       font-weight:900;
     }
 
-    .week-head.today{
-      background:linear-gradient(180deg,#edf8f1 0%, #e2f2e8 100%);
-      color:#14563f;
-      box-shadow:inset 0 -3px 0 #1b6c56;
-    }
-
-    .week-day-col.today{
-      background:
-        linear-gradient(180deg, rgba(27,108,86,0.05) 0%, rgba(27,108,86,0.03) 100%),
-        repeating-linear-gradient(
-          to bottom,
-          #ffffff 0,
-          #ffffff calc(var(--slot-h) - 1px),
-          #edf2ef calc(var(--slot-h) - 1px),
-          #edf2ef var(--slot-h)
-        );
-    }
-
     .week-head small{
       font-size:12px;
       color:var(--muted);
@@ -636,8 +618,7 @@
     }
 
     .month-cell.today{
-      outline:2px solid rgba(27,108,86,0.28);
-      background:linear-gradient(180deg,#f4fbf7 0%, #ffffff 100%);
+      outline:2px solid rgba(78,134,234,0.18);
     }
 
     .month-cell-head{
@@ -694,78 +675,6 @@
 
     .recall-view.active{
       display:block;
-    }
-
-    .cancelled-view{
-      display:none;
-    }
-
-    .cancelled-view.active{
-      display:block;
-    }
-
-    .cancelled-grid{
-      display:grid;
-      gap:16px;
-    }
-
-    .cancelled-month-card{
-      background:#fff;
-      border:1px solid #e4ebe7;
-      border-radius:24px;
-      padding:18px;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .cancelled-month-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      margin-bottom:14px;
-    }
-
-    .cancelled-month-title{
-      margin:0 0 4px;
-      font-size:24px;
-      line-height:1;
-      font-weight:900;
-      color:#143a33;
-    }
-
-    .cancelled-month-count{
-      margin:0;
-      font-size:13px;
-      font-weight:800;
-      color:#74857e;
-    }
-
-    .cancelled-items{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-
-    .cancelled-item-card{
-      border:1px solid #ead5d5;
-      background:linear-gradient(180deg,#fff6f6 0%, #fff0f0 100%);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .cancelled-item-name{
-      font-size:15px;
-      font-weight:900;
-      color:#8e3232;
-      margin-bottom:4px;
-      text-transform:lowercase;
-    }
-
-    .cancelled-item-meta{
-      font-size:13px;
-      color:#8b5555;
-      font-weight:700;
-      line-height:1.4;
     }
 
     .recall-head{
@@ -1118,8 +1027,6 @@
     .modal-box{
       width:100%;
       max-width:760px;
-      max-height:min(92vh, 920px);
-      overflow:auto;
       background:#fff;
       border-radius:24px;
       box-shadow:0 26px 60px rgba(0,0,0,0.18);
@@ -1209,11 +1116,6 @@
       gap:10px;
       margin-top:18px;
       flex-wrap:wrap;
-      position:sticky;
-      bottom:0;
-      padding-top:12px;
-      background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.98) 28%, #fff 100%);
-      z-index:4;
     }
 
     .ghost-btn,
@@ -1247,14 +1149,9 @@
     .customer-results{
       display:grid;
       gap:8px;
-      max-height:180px;
+      max-height:220px;
       overflow:auto;
       padding:4px 0;
-    }
-
-    .customer-results-wrap-scroll{
-      max-height:240px;
-      overflow:auto;
     }
 
     .customer-result-btn{
@@ -1328,10 +1225,6 @@
       }
 
       .recall-mini-list{
-        grid-template-columns:1fr;
-      }
-
-      .cancelled-items{
         grid-template-columns:1fr;
       }
     }
@@ -1458,16 +1351,6 @@
             </div>
           </div>
           <div id="recallGrid" class="recall-grid"></div>
-        </div>
-
-        <div id="cancelledView" class="cancelled-view">
-          <div class="recall-head">
-            <div>
-              <h2 class="recall-title">Appuntamenti cancellati</h2>
-              <p class="recall-sub">Qui trovi gli appuntamenti annullati o cancellati, ordinati per mese.</p>
-            </div>
-          </div>
-          <div id="cancelledGrid" class="cancelled-grid"></div>
         </div>
       </div>
     </main>
@@ -1666,7 +1549,7 @@
     };
 
     let currentDate = new Date();
-    let currentView = "week";
+    let currentView = "day";
     let currentFilter = "all";
     let miniMonthDate = new Date();
 
@@ -1676,7 +1559,6 @@
     let editingAppointmentId = null;
     let modalMode = "new";
     let selectedCustomer = null;
-    let inactivityTimer = null;
 
     const searchInput = document.getElementById("searchInput");
     const currentLabel = document.getElementById("currentLabel");
@@ -1689,8 +1571,6 @@
     const monthGrid = document.getElementById("monthGrid");
     const recallView = document.getElementById("recallView");
     const recallGrid = document.getElementById("recallGrid");
-    const cancelledView = document.getElementById("cancelledView");
-    const cancelledGrid = document.getElementById("cancelledGrid");
 
     const bookingModal = document.getElementById("bookingModal");
     const modalTitle = document.getElementById("modalTitle");
@@ -1756,53 +1636,6 @@
       today.setHours(0,0,0,0);
       return Math.floor((today - target) / (1000 * 60 * 60 * 24));
     }
-    function isPastAppointment(app){
-      if(!app?.date) return false;
-      const dateTime = `${app.date}T${app.endTime || app.startTime || "23:59"}:00`;
-      const when = new Date(dateTime);
-      return !Number.isNaN(when.getTime()) && when.getTime() < Date.now();
-    }
-
-    function isSameDateKey(dateA, dateB){
-      return formatDateKey(dateA) === formatDateKey(dateB);
-    }
-
-    function formatMonthLabel(monthKey){
-      const [y, m] = String(monthKey).split("-");
-      const d = new Date(Number(y), Number(m) - 1, 1);
-      return d.toLocaleDateString("it-IT", { month:"long", year:"numeric" });
-    }
-
-    function normalizePhone(value){
-      return String(value || "")
-        .replace(/\s+/g, "")
-        .replace(/-/g, "")
-        .replace(/[()]/g, "")
-        .replace(/^\+39/, "")
-        .replace(/^39(?=\d{8,})/, "")
-        .trim();
-    }
-
-    function findRegisteredCustomerByPhone(phone){
-      const normalized = normalizePhone(phone);
-      if(!normalized) return null;
-
-      return registeredCustomers.find(customer => {
-        const candidate = normalizePhone(customer.telefono || "");
-        return candidate && candidate === normalized;
-      }) || null;
-    }
-
-    function resetInactivityTimer(){
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        if(currentFilter === "all" && currentView !== "week"){
-          currentView = "week";
-          syncViewButtons();
-          renderCalendar();
-        }
-      }, 10000);
-    }
 
     function getStatusLabel(status){
       if(status === "cancelled") return "Cancellata";
@@ -1818,7 +1651,6 @@
 
     function getEventColor(app){
       if(app.status === "cancelled") return "red";
-      if(isPastAppointment(app)) return "red";
       if(daysFromToday(app.date) >= 30 && !app.recallManaged) return "yellow";
       return "green";
     }
@@ -1913,7 +1745,7 @@
         if(currentFilter === "recall"){
           return app.status !== "cancelled" && daysFromToday(app.date) >= 30 && !isRecallDone(app);
         }
-        return app.status !== "cancelled";
+        return true;
       });
     }
 
@@ -1927,7 +1759,7 @@
         return !q || name.includes(q) || phone.includes(q) || title.includes(q);
       });
 
-      document.getElementById("countAll").textContent = base.filter(app => app.status !== "cancelled").length;
+      document.getElementById("countAll").textContent = base.length;
       document.getElementById("countRecall").textContent = base.filter(app => app.status !== "cancelled" && daysFromToday(app.date) >= 30 && !isRecallDone(app)).length;
       document.getElementById("countCancelled").textContent = base.filter(app => app.status === "cancelled").length;
     }
@@ -1974,7 +1806,7 @@
 
         el.onclick = () => {
           currentDate = new Date(date);
-          currentView = "week";
+          currentView = "day";
           currentFilter = "all";
           syncFilterButtons();
           syncViewButtons();
@@ -2011,15 +1843,9 @@
       weekView.classList.remove("active");
       monthView.classList.remove("active");
       recallView.classList.remove("active");
-      cancelledView.classList.remove("active");
 
       if(currentFilter === "recall"){
         recallView.classList.add("active");
-        return;
-      }
-
-      if(currentFilter === "cancelled"){
-        cancelledView.classList.add("active");
         return;
       }
 
@@ -2033,14 +1859,6 @@
         currentLabel.textContent = "Da richiamare";
         syncViewButtons();
         renderRecallView();
-        updateCounts();
-        return;
-      }
-
-      if(currentFilter === "cancelled"){
-        currentLabel.textContent = "Cancellate";
-        syncViewButtons();
-        renderCancelledView();
         updateCounts();
         return;
       }
@@ -2165,7 +1983,7 @@
 
       let html = `<div class="week-head-empty"></div>`;
       html += days.map(d => `
-        <div class="week-head ${isSameDateKey(d, new Date()) ? "today" : ""}">
+        <div class="week-head">
           <small>${d.toLocaleDateString("it-IT",{ weekday:"long" })}</small>
           <span>${d.toLocaleDateString("it-IT",{ day:"numeric", month:"short" })}</span>
         </div>
@@ -2177,7 +1995,7 @@
 
       days.forEach(d => {
         const key = formatDateKey(d);
-        html += `<div class="week-day-col ${isSameDateKey(d, new Date()) ? "today" : ""}" data-date="${key}">
+        html += `<div class="week-day-col" data-date="${key}">
           ${Array.from({length: DAY_END - DAY_START}, (_,i) => `<div class="half-line" style="top:${(i * SLOT_HEIGHT) + (SLOT_HEIGHT / 2)}px;"></div>`).join("")}
         </div>`;
       });
@@ -2357,64 +2175,6 @@
       `).join("");
     }
 
-    function renderCancelledView(){
-      const q = searchInput.value.trim().toLowerCase();
-      const items = appointments
-        .filter(app => {
-          if(app.status !== "cancelled") return false;
-          const name = `${app.clientName || ""} ${app.clientSurname || ""}`.trim().toLowerCase();
-          const phone = String(app.clientPhone || "").toLowerCase();
-          const title = String(app.title || "").toLowerCase();
-          return !q || name.includes(q) || phone.includes(q) || title.includes(q);
-        })
-        .sort((a,b) => {
-          const aKey = `${a.date || ""} ${a.startTime || ""}`;
-          const bKey = `${b.date || ""} ${b.startTime || ""}`;
-          return bKey.localeCompare(aKey);
-        });
-
-      if(!items.length){
-        cancelledGrid.innerHTML = `
-          <div style="background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px;text-align:center;color:var(--muted);font-weight:800;box-shadow:var(--shadow-soft);">
-            Nessun appuntamento cancellato al momento.
-          </div>
-        `;
-        return;
-      }
-
-      const groups = {};
-      items.forEach(app => {
-        const monthKey = String(app.date || "").slice(0,7) || "Senza mese";
-        if(!groups[monthKey]) groups[monthKey] = [];
-        groups[monthKey].push(app);
-      });
-
-      const orderedKeys = Object.keys(groups).sort((a,b) => b.localeCompare(a));
-
-      cancelledGrid.innerHTML = orderedKeys.map(monthKey => `
-        <section class="cancelled-month-card">
-          <div class="cancelled-month-head">
-            <div>
-              <h3 class="cancelled-month-title">${escapeHtml(formatMonthLabel(monthKey))}</h3>
-              <p class="cancelled-month-count">${groups[monthKey].length} appuntamenti cancellati</p>
-            </div>
-          </div>
-
-          <div class="cancelled-items">
-            ${groups[monthKey].map(app => `
-              <article class="cancelled-item-card">
-                <div class="cancelled-item-name">${escapeHtml((app.clientName || "") + " " + (app.clientSurname || ""))}</div>
-                <div class="cancelled-item-meta">
-                  ${escapeHtml(app.title || "Prenotazione")}<br>
-                  ${escapeHtml(app.date || "—")} • ${escapeHtml(app.startTime || "--:--")}
-                </div>
-              </article>
-            `).join("")}
-          </div>
-        </section>
-      `).join("");
-    }
-
     function openDetailPopup(app){
       selectedAppointment = app;
 
@@ -2460,7 +2220,6 @@
 
     function openModal(){
       bookingModal.classList.add("show");
-      resetInactivityTimer();
     }
 
     function closeModal(){
@@ -2636,13 +2395,10 @@
     }
 
     async function saveBooking(){
-      const phoneValue = normalizePhone(fPhone.value.trim());
-      const matchedCustomer = selectedCustomer || findRegisteredCustomerByPhone(phoneValue);
-
       const payload = {
-        clientName: (matchedCustomer?.nome || fName.value.trim()),
-        clientSurname: (matchedCustomer?.cognome || fSurname.value.trim()),
-        clientPhone: phoneValue,
+        clientName: fName.value.trim(),
+        clientSurname: fSurname.value.trim(),
+        clientPhone: fPhone.value.trim(),
         operatorName: fOperator.value.trim(),
         date: fDate.value,
         startTime: fStartTime.value,
@@ -2650,10 +2406,10 @@
         type: fType.value,
         title: fTitle.value.trim(),
         notes: fNotes.value.trim(),
-        userId: matchedCustomer?.uid || selectedAppointment?.userId || null,
-        isRegisteredUser: !!(matchedCustomer?.uid || selectedAppointment?.userId),
-        clientSource: matchedCustomer ? "registered_user" : "manual",
-        clientEmail: matchedCustomer?.email || selectedAppointment?.clientEmail || ""
+        userId: selectedCustomer?.uid || selectedAppointment?.userId || null,
+        isRegisteredUser: !!(selectedCustomer?.uid || selectedAppointment?.userId),
+        clientSource: selectedCustomer ? "registered_user" : "manual",
+        clientEmail: selectedCustomer?.email || selectedAppointment?.clientEmail || ""
       };
 
       if(!payload.clientName || !payload.clientPhone || !payload.date || !payload.startTime || !payload.title){
@@ -2751,7 +2507,7 @@
     }
 
     function shiftCurrentDate(step){
-      if(currentFilter === "recall" || currentFilter === "cancelled"){
+      if(currentFilter === "recall"){
         miniMonthDate.setMonth(miniMonthDate.getMonth() + step);
         renderMiniCalendar();
         return;
@@ -2794,10 +2550,6 @@
 
     document.getElementById("newBtn").addEventListener("click", () => openNewBookingModal());
     document.getElementById("todayBtn").addEventListener("click", goToday);
-
-    ["click","touchstart","keydown","mousemove","scroll"].forEach(eventName => {
-      document.addEventListener(eventName, resetInactivityTimer, { passive:true });
-    });
     document.getElementById("prevBtn").addEventListener("click", () => shiftCurrentDate(-1));
     document.getElementById("nextBtn").addEventListener("click", () => shiftCurrentDate(1));
 

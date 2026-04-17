@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Registrati | Farmacia Montesano</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -149,11 +148,6 @@
       box-shadow:0 18px 34px rgba(26,139,108,0.18);
     }
 
-    .action-btn:disabled{
-      opacity:.7;
-      cursor:not-allowed;
-    }
-
     .bottom-link{
       margin-top:14px;
       text-align:center;
@@ -174,7 +168,6 @@
       font-size:.95rem;
       font-weight:800;
       display:none;
-      line-height:1.4;
     }
 
     .status.ok{
@@ -187,51 +180,6 @@
       display:block;
       background:#fff1f1;
       color:var(--danger);
-    }
-
-    .check-card{
-      margin:14px 0 16px;
-      padding:14px;
-      border:1px solid #dbe7e2;
-      border-radius:20px;
-      background:#f8fbf9;
-    }
-
-    .check-row{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      margin-bottom:12px;
-    }
-
-    .check-row:last-child{ margin-bottom:0; }
-
-    .check-row input{
-      margin-top:4px;
-      width:18px;
-      height:18px;
-      flex:0 0 18px;
-    }
-
-    .check-row label{
-      margin:0;
-      font-size:.94rem;
-      line-height:1.45;
-      color:var(--text-soft);
-      font-weight:700;
-    }
-
-    .check-row label a{
-      color:var(--green);
-      font-weight:900;
-    }
-
-    .consent-note{
-      margin-top:10px;
-      font-size:.82rem;
-      line-height:1.45;
-      color:#70827b;
-      font-weight:700;
     }
   </style>
 
@@ -255,51 +203,27 @@
     <section class="panel">
       <div class="field">
         <label for="nome">Nome</label>
-        <input id="nome" type="text" placeholder="Nome" autocomplete="given-name" />
+        <input id="nome" type="text" placeholder="Nome" />
       </div>
 
       <div class="field">
         <label for="cognome">Cognome</label>
-        <input id="cognome" type="text" placeholder="Cognome" autocomplete="family-name" />
+        <input id="cognome" type="text" placeholder="Cognome" />
       </div>
 
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" type="email" placeholder="nome@email.it" autocomplete="email" />
+        <input id="email" type="email" placeholder="nome@email.it" />
       </div>
 
       <div class="field">
         <label for="telefono">Telefono</label>
-        <input id="telefono" type="text" placeholder="Es. 3938866104" autocomplete="tel" />
+        <input id="telefono" type="text" placeholder="Telefono" />
       </div>
 
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="Password" autocomplete="new-password" />
-      </div>
-
-      <div class="check-card">
-        <div class="check-row">
-          <input id="privacyConsent" type="checkbox" />
-          <label for="privacyConsent">
-            Dichiaro di aver letto e accettato la
-            <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-            e i
-            <a href="termini.html" target="_blank" rel="noopener">Termini di Servizio</a>.
-          </label>
-        </div>
-
-        <div class="check-row">
-          <input id="notifConsent" type="checkbox" />
-          <label for="notifConsent">
-            Accetto l’attivazione iniziale delle notifiche dell’app relative a prenotazioni, promemoria, offerte,
-            turni, appoggi, giornate beauty, fortuna e servizi. Successivamente potrò modificarle nel profilo.
-          </label>
-        </div>
-
-        <div class="consent-note">
-          Per completare la registrazione è necessario accettare privacy, termini e attivazione iniziale delle notifiche.
-        </div>
+        <input id="password" type="password" placeholder="Password" />
       </div>
 
       <button class="action-btn" id="registerBtn">Registrati</button>
@@ -319,23 +243,14 @@
       createUserWithEmailAndPassword,
       updateProfile,
       doc,
-      setDoc,
-      syncUserProfileFromFirestore,
-      onAuthStateChanged
+      setDoc
     } from "./firebase.js";
-
-    import {
-      askNotificationPermission,
-      saveNotificationSettings
-    } from "./notification-utils.js";
 
     const nomeEl = document.getElementById("nome");
     const cognomeEl = document.getElementById("cognome");
     const emailEl = document.getElementById("email");
     const telefonoEl = document.getElementById("telefono");
     const passwordEl = document.getElementById("password");
-    const privacyConsentEl = document.getElementById("privacyConsent");
-    const notifConsentEl = document.getElementById("notifConsent");
     const registerBtn = document.getElementById("registerBtn");
     const statusBox = document.getElementById("statusBox");
 
@@ -349,52 +264,23 @@
       statusBox.className = `status ${type}`;
     }
 
-    function normalizePhone(phone) {
-      return String(phone || "")
-        .replace(/\s+/g, "")
-        .replace(/-/g, "")
-        .replace(/\(/g, "")
-        .replace(/\)/g, "")
-        .replace(/^\+39/, "39")
-        .trim();
-    }
-
     function makeClientCode(uid) {
       return "FM" + uid.slice(0, 8).toUpperCase();
     }
-
-    let registerFlowActive = false;
-
-    onAuthStateChanged(auth, (user) => {
-      if (user && !registerFlowActive) {
-        window.location.replace(getRedirectTarget());
-      }
-    });
 
     registerBtn.addEventListener("click", async () => {
       const nome = nomeEl.value.trim();
       const cognome = cognomeEl.value.trim();
       const email = emailEl.value.trim();
-      const telefono = normalizePhone(telefonoEl.value.trim());
+      const telefono = telefonoEl.value.trim();
       const password = passwordEl.value;
 
-      if (!nome || !cognome || !email || !telefono || !password) {
-        showStatus("Compila nome, cognome, email, telefono e password.", "error");
-        return;
-      }
-
-      if (!privacyConsentEl.checked) {
-        showStatus("Devi accettare la Privacy Policy e i Termini di Servizio.", "error");
-        return;
-      }
-
-      if (!notifConsentEl.checked) {
-        showStatus("Devi accettare l’attivazione iniziale delle notifiche.", "error");
+      if (!nome || !cognome || !email || !password) {
+        showStatus("Compila almeno nome, cognome, email e password.", "error");
         return;
       }
 
       registerBtn.disabled = true;
-      registerFlowActive = true;
       showStatus("Registrazione in corso...", "ok");
 
       try {
@@ -404,15 +290,6 @@
         const clientCode = makeClientCode(user.uid);
 
         await updateProfile(user, { displayName: fullName });
-
-        const notificationSettings = {
-          prenotazioni: true,
-          turno: true,
-          appoggio: true,
-          giornate: true,
-          fortuna: true,
-          offerte: true
-        };
 
         await setDoc(doc(firestore, "users", user.uid), {
           nome,
@@ -430,35 +307,13 @@
           passaggiAnnuali: 0,
           spesaAnnuaNumero: 0,
           spesaAnnua: "0,00 €",
-          privacyAccepted: true,
-          privacyAcceptedAt: new Date().toISOString(),
-          notificationConsentAccepted: true,
-          notificationConsentAcceptedAt: new Date().toISOString(),
-          notificationSettings,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        }, { merge: true });
+          createdAt: new Date().toISOString()
+        });
 
-        await syncUserProfileFromFirestore(user);
-
-        await saveNotificationSettings(notificationSettings);
-
-        try {
-          await askNotificationPermission();
-        } catch (notifyError) {
-          console.error(notifyError);
-          showStatus("Account creato, ma devi consentire le notifiche del dispositivo per usare al meglio l’app. Puoi attivarle e riprovare.", "error");
-          registerBtn.disabled = false;
-          registerFlowActive = false;
-          return;
-        }
-
-        showStatus("Registrazione completata con successo.", "ok");
         window.location.replace(getRedirectTarget());
       } catch (error) {
         console.error(error);
         let message = "Registrazione non riuscita. Controlla i dati inseriti.";
-
         if (error?.code === "auth/email-already-in-use") {
           message = "Questa email è già registrata.";
         } else if (error?.code === "auth/invalid-email") {
@@ -472,7 +327,6 @@
         } else if (error?.code === "auth/operation-not-allowed") {
           message = "Metodo email/password non attivo su Firebase Authentication.";
         }
-
         showStatus(message, "error");
       } finally {
         registerBtn.disabled = false;

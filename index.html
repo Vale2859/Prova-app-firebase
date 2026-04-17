@@ -24,16 +24,9 @@
   <meta name="apple-mobile-web-app-title" content="Montesano">
   <link rel="apple-touch-icon" href="icon-192.png">
   <script>document.documentElement.classList.add(window.matchMedia('(display-mode: standalone)').matches ? 'is-standalone' : 'is-browser');</script>
-  <style>
-    html.auth-checking, html.auth-checking body { visibility:hidden; opacity:0; }
-    html.auth-ready, html.auth-ready body { visibility:visible; opacity:1; transition:opacity .18s ease; }
-    .auth-loading-screen{position:fixed;inset:0;background:linear-gradient(180deg,#f8faf9 0%, #eef3f1 100%);display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;color:#1b6c56;font-weight:900;font-size:1.15rem;}
-  </style>
-  <script>document.documentElement.classList.add('auth-checking');</script>
 </head>
 
 <body class="season-primavera">
-  <div id="authLoadingScreen" class="auth-loading-screen">Caricamento account...</div>
   <div class="home-page-bg"></div>
 
   <header class="home-site-header">
@@ -478,23 +471,6 @@
       });
     })();
   </script>
-
-  
-<script type="module">
-  import { auth, onAuthStateChanged, syncUserProfileFromFirestore } from "./firebase.js";
-  const loader = document.getElementById("authLoadingScreen");
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      const redirect = encodeURIComponent("index.html");
-      window.location.replace(`login.html?redirect=${redirect}`);
-      return;
-    }
-    try { await syncUserProfileFromFirestore(user); } catch (e) { console.error(e); }
-    document.documentElement.classList.remove("auth-checking");
-    document.documentElement.classList.add("auth-ready");
-    if (loader) loader.remove();
-  });
-</script>
 
   <script src="mobile-preview.js"></script>
 

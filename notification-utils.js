@@ -38,6 +38,7 @@ export async function askNotificationPermission() {
   }
 
   const registration = await navigator.serviceWorker.ready;
+
   let subscription = await registration.pushManager.getSubscription();
 
   if (!subscription) {
@@ -65,7 +66,7 @@ export async function askNotificationPermission() {
     doc(firestore, "users", user.uid),
     {
       pushDebug: {
-        permission,
+        permission: permission,
         serviceWorkerReady: true,
         subscriptionSaved: true,
         updatedAt: serverTimestamp()
@@ -87,7 +88,6 @@ export async function saveNotificationSettings(settings) {
     doc(firestore, "users", user.uid),
     {
       notificationSettings: {
-        prenotazioni: !!settings.prenotazioni,
         turno: !!settings.turno,
         appoggio: !!settings.appoggio,
         giornate: !!settings.giornate,
