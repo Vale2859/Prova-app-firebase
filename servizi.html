@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Servizi | Farmacia Montesano</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+  <style>
+    .services-page{
+      max-width:1200px;
+      margin:auto;
+      padding:18px 18px 120px;
+    }
+
+    .services-hero{
+      margin-bottom:26px;
+    }
+
+    .services-feature-label{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:64px;
+      padding:0 20px;
+      border-radius:999px;
+      background:#ecd7ca;
+      color:#8f4e2f;
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:.02em;
+      margin-bottom:16px;
+      text-transform:uppercase;
+    }
+
+    .services-feature-card{
+      background:#fff;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid #e5ece8;
+      box-shadow:0 18px 42px rgba(0,0,0,.08);
+    }
+
+    .services-feature-image{
+      width:100%;
+      height:320px;
+      object-fit:cover;
+      display:block;
+      background:#eef3f0;
+    }
+
+    .services-feature-body{
+      padding:22px 20px 24px;
+    }
+
+    .services-feature-title{
+      margin:0 0 10px;
+      font-size:28px;
+      line-height:1.08;
+      color:#17332c;
+    }
+
+    .services-feature-text{
+      margin:0;
+      font-size:18px;
+      line-height:1.5;
+      color:#5f716b;
+    }
+
+    .services-section{
+      margin-top:26px;
+    }
+
+    .services-section h2{
+      margin:0 0 8px;
+      font-size:34px;
+      line-height:1.02;
+      color:#17332c;
+      letter-spacing:-.03em;
+    }
+
+    .services-section p{
+      margin:0 0 18px;
+      font-size:18px;
+      line-height:1.45;
+      color:#6e817b;
+    }
+
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:22px;
+    }
+
+    .service-card{
+      background:#fff;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid #e6eeea;
+      box-shadow:0 14px 34px rgba(0,0,0,.07);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .service-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 38px rgba(0,0,0,.1);
+    }
+
+    .service-card-image{
+      width:100%;
+      height:260px;
+      object-fit:cover;
+      display:block;
+      background:#eef3f0;
+    }
+
+    .service-card-body{
+      padding:20px 18px 22px;
+    }
+
+    .service-card-title{
+      margin:0 0 10px;
+      font-size:28px;
+      line-height:1.08;
+      color:#17332c;
+    }
+
+    .service-card-text{
+      margin:0;
+      font-size:17px;
+      line-height:1.48;
+      color:#61746d;
+    }
+
+    .services-empty{
+      width:100%;
+      text-align:center;
+      padding:42px 20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#f7fbf9 0%, #ffffff 100%);
+      border:1px solid #e4efe9;
+      color:#61746d;
+      box-shadow:0 12px 30px rgba(0,0,0,.05);
+    }
+
+    .services-empty strong{
+      display:block;
+      margin-bottom:8px;
+      font-size:24px;
+      color:#17332c;
+    }
+
+    @media (max-width: 900px){
+      .services-grid{
+        grid-template-columns:1fr;
+      }
+
+      .services-feature-image{
+        height:260px;
+      }
+
+      .service-card-image{
+        height:220px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .services-page{
+        padding:22px 12px 120px;
+      }
+
+      .services-feature-label{
+        min-height:54px;
+        font-size:16px;
+        margin-bottom:14px;
+      }
+
+      .services-feature-card{
+        border-radius:22px;
+      }
+
+      .services-feature-image{
+        height:210px;
+      }
+
+      .services-feature-body{
+        padding:16px 14px 18px;
+      }
+
+      .services-feature-title{
+        font-size:24px;
+      }
+
+      .services-feature-text{
+        font-size:16px;
+      }
+
+      .services-section{
+        margin-top:22px;
+      }
+
+      .services-section h2{
+        font-size:26px;
+      }
+
+      .services-section p{
+        font-size:16px;
+        margin-bottom:14px;
+      }
+
+      .services-grid{
+        gap:14px;
+      }
+
+      .service-card{
+        border-radius:22px;
+      }
+
+      .service-card-image{
+        height:180px;
+      }
+
+      .service-card-body{
+        padding:14px 14px 16px;
+      }
+
+      .service-card-title{
+        font-size:22px;
+      }
+
+      .service-card-text{
+        font-size:15px;
+      }
+    }
+  </style>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+</head>
+
+<body class="season-primavera">
+  <header class="home-site-header">
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <div class="services-page">
+    <div class="page-topbar">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="page-back-btn" aria-label="Torna alla home"><span>←</span></a>
+      <div class="page-topbar-copy">
+        <h1>Servizi</h1>
+        <p>I servizi della farmacia, semplici e sempre a portata di mano.</p>
+      </div>
+    </div>
+
+    <!-- SERVIZIO DEL MOMENTO -->
+    <section class="services-hero" id="serviceMomentSection">
+      <div class="services-feature-label">Servizio del momento</div>
+
+      <article class="services-feature-card">
+        <img id="serviceMomentImage" class="services-feature-image" src="" alt="Servizio del momento">
+        <div class="services-feature-body">
+          <h2 id="serviceMomentTitle" class="services-feature-title">Servizio del momento</h2>
+          <p id="serviceMomentText" class="services-feature-text"></p>
+        </div>
+      </article>
+    </section>
+
+    <!-- TUTTI I SERVIZI -->
+    <section class="services-section" id="allServicesSection">
+      <h2>Tutti i servizi della farmacia</h2>
+      <p>Scopri i servizi disponibili in Farmacia Montesano.</p>
+
+      <div class="services-grid" id="servicesGrid"></div>
+    </section>
+  </div>
+
+  <script src="site-config.js"></script>
+  <script src="services-data.js"></script>
+  <script src="promo-data.js"></script>
+  <script src="giornate-data.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function caricaServiziFirebase() {
+      const querySnapshot = await getDocs(collection(db, "servizi"));
+      const servizi = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        if (data.attivo === true) {
+          servizi.push({
+            id: doc.id,
+            titolo: data.titolo || data.nome || "",
+            descrizione: data.descrizione || "",
+            immagine: data.immagine || data.imageUrl || "",
+            ordine: typeof data.ordine === "number" ? data.ordine : 999,
+            servizioDelMomento: data.servizioDelMomento === true
+          });
+        }
+      });
+
+      servizi.sort((a, b) => a.ordine - b.ordine);
+
+      const servizioDelMomento = servizi.find(s => s.servizioDelMomento === true) || null;
+      const serviziNormali = servizioDelMomento
+        ? servizi.filter(s => s.id !== servizioDelMomento.id)
+        : servizi;
+
+      renderServizioDelMomento(servizioDelMomento);
+      renderServizi(serviziNormali, servizi.length);
+    }
+
+    function renderServizioDelMomento(servizio) {
+      const section = document.getElementById("serviceMomentSection");
+      const img = document.getElementById("serviceMomentImage");
+      const title = document.getElementById("serviceMomentTitle");
+      const text = document.getElementById("serviceMomentText");
+
+      if (!servizio) {
+        if (section) section.style.display = "none";
+        return;
+      }
+
+      if (img) {
+        img.src = servizio.immagine || "";
+        img.alt = servizio.titolo || "Servizio del momento";
+      }
+
+      if (title) title.textContent = servizio.titolo || "";
+      if (text) text.textContent = servizio.descrizione || "";
+    }
+
+    function renderServizi(servizi, totaleServizi) {
+      const grid = document.getElementById("servicesGrid");
+      const section = document.getElementById("allServicesSection");
+
+      if (!grid) return;
+
+      if (totaleServizi === 0) {
+        if (section) {
+          section.innerHTML = `
+            <div class="services-empty">
+              <strong>Al momento non ci sono servizi visibili</strong>
+              Torna presto oppure contattaci in farmacia per maggiori informazioni.
+            </div>
+          `;
+        }
+        return;
+      }
+
+      if (servizi.length === 0) {
+        grid.innerHTML = `
+          <div class="services-empty" style="grid-column:1/-1;">
+            <strong>Nessun altro servizio visibile</strong>
+            Al momento è presente solo il servizio del momento.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = "";
+
+      servizi.forEach(servizio => {
+        grid.innerHTML += `
+          <article class="service-card">
+            <img src="${servizio.immagine || ''}" alt="${servizio.titolo || ''}" class="service-card-image">
+            <div class="service-card-body">
+              <h3 class="service-card-title">${servizio.titolo || ""}</h3>
+              <p class="service-card-text">${servizio.descrizione || ""}</p>
+            </div>
+          </article>
+        `;
+      });
+    }
+
+    caricaServiziFirebase();
+  </script>
+</body>
+</html>

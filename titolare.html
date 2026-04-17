@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard Titolare</title>
+
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --text:#1b463c;
+      --muted:#70837d;
+      --white:#fff;
+      --shadow:0 18px 38px rgba(25,55,45,.10);
+      --red:#ff6f78;
+      --line:#dfe7e3;
+      --panel:#ffffff;
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      height:100%;
+      overflow:hidden;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#fafcfb 0%, #eef3f0 100%);
+      color:var(--text);
+    }
+
+    .app{
+      width:min(100%,430px);
+      height:100vh;
+      margin:0 auto;
+      position:relative;
+      overflow:hidden;
+      background:transparent;
+    }
+
+    .pages{
+      display:flex;
+      width:200%;
+      height:100%;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+
+    .pages::-webkit-scrollbar{ display:none; }
+
+    .page{
+      width:100%;
+      flex:0 0 100%;
+      height:100%;
+      padding:24px 16px 34px;
+      scroll-snap-align:start;
+      overflow-y:auto;
+      scrollbar-width:none;
+    }
+
+    .page::-webkit-scrollbar{ display:none; }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:8px;
+    }
+
+    .hello{
+      margin:0;
+      font-size:32px;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-.06em;
+      color:#1d473d;
+    }
+
+    .sub{
+      margin:10px 0 0;
+      font-size:16px;
+      line-height:1.2;
+      color:var(--muted);
+      font-weight:500;
+    }
+
+    .icons{
+      display:flex;
+      gap:10px;
+      padding-top:4px;
+      flex-shrink:0;
+    }
+
+    .icon-btn{
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:none;
+      background:rgba(255,255,255,.92);
+      box-shadow:0 10px 20px rgba(0,0,0,.06);
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      color:#5f6b67;
+      cursor:pointer;
+    }
+
+    .badge{
+      position:absolute;
+      top:-4px;
+      right:-2px;
+      min-width:23px;
+      height:23px;
+      padding:0 6px;
+      border-radius:999px;
+      background:var(--red);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:900;
+      box-shadow:0 6px 14px rgba(255,111,120,.35);
+    }
+
+    .cards-row{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:12px;
+      width:100%;
+      margin-top:30px;
+      align-items:stretch;
+    }
+
+    .stat-card{
+      min-height:250px;
+      border-radius:30px;
+      padding:18px 14px 16px;
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      text-decoration:none;
+      isolation:isolate;
+    }
+
+    .stat-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.45) 0%, rgba(255,255,255,.08) 18%, transparent 42%),
+        radial-gradient(circle at 82% 20%, rgba(255,255,255,.18) 0%, transparent 28%),
+        radial-gradient(circle at 30% 75%, rgba(255,255,255,.12) 0%, transparent 24%),
+        radial-gradient(circle at 78% 78%, rgba(255,255,255,.10) 0%, transparent 22%);
+      z-index:-2;
+      opacity:.95;
+    }
+
+    .stat-card:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 30%, rgba(0,0,0,.10));
+      z-index:-1;
+    }
+
+    .card-blue{ background:linear-gradient(135deg,#85beff 0%, #5e9ce8 100%); }
+    .card-green{ background:linear-gradient(135deg,#b8e0b0 0%, #8aba6f 100%); }
+    .card-purple{ background:linear-gradient(135deg,#cfb8ff 0%, #9a7bea 100%); }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:8px;
+    }
+
+    .emoji{
+      font-size:34px;
+      line-height:1;
+      filter:drop-shadow(0 6px 8px rgba(0,0,0,.10));
+    }
+
+    .mini-pill{
+      min-width:54px;
+      height:44px;
+      border-radius:999px;
+      background:rgba(255,255,255,.86);
+      color:#5e6468;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      font-weight:900;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      padding:0 14px;
+    }
+
+    .card-body{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .card-title{
+      font-size:24px;
+      line-height:.95;
+      letter-spacing:-.05em;
+      font-weight:900;
+      white-space:pre-line;
+      text-shadow:0 1px 0 rgba(0,0,0,.05);
+    }
+
+    .card-main{
+      font-size:26px;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-.05em;
+    }
+
+    .card-main small{
+      font-size:16px;
+      font-weight:700;
+      opacity:.96;
+    }
+
+    .card-desc{
+      font-size:15px;
+      line-height:1.08;
+      font-weight:700;
+      white-space:pre-line;
+      opacity:.98;
+    }
+
+    .cta-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      padding:0 14px;
+      border-radius:999px;
+      background:rgba(255,239,181,.92);
+      color:#6d5f28;
+      font-size:12px;
+      font-weight:900;
+      align-self:flex-start;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+    }
+
+    .progress{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background:rgba(73,46,138,.25);
+      overflow:hidden;
+      margin-top:2px;
+    }
+
+    .progress > span{
+      display:block;
+      width:73%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#fff,#ebdfff);
+    }
+
+    .edit-header{
+      margin-top:2px;
+      margin-bottom:18px;
+    }
+
+    .edit-title-top{
+      margin:0 0 10px;
+      font-size:32px;
+      line-height:.95;
+      letter-spacing:-.05em;
+      font-weight:900;
+      color:#1d473d;
+    }
+
+    .edit-subtop{
+      margin:0;
+      font-size:17px;
+      line-height:1.22;
+      color:var(--muted);
+      font-weight:500;
+    }
+
+    .edit-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      padding-bottom:28px;
+    }
+
+    .edit-card{
+      min-height:150px;
+      border-radius:28px;
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      text-decoration:none;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      isolation:isolate;
+    }
+
+    .edit-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.30) 0%, transparent 30%),
+        radial-gradient(circle at 78% 20%, rgba(255,255,255,.18) 0%, transparent 22%),
+        radial-gradient(circle at 30% 78%, rgba(255,255,255,.14) 0%, transparent 25%),
+        radial-gradient(circle at 82% 82%, rgba(255,255,255,.10) 0%, transparent 20%);
+      z-index:-2;
+    }
+
+    .edit-card:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.10));
+      z-index:-1;
+    }
+
+    .gold{ background:linear-gradient(135deg,#ffd986 0%, #e6b24a 100%); }
+    .teal{ background:linear-gradient(135deg,#88e0db 0%, #42b8b4 100%); }
+    .pink{ background:linear-gradient(135deg,#ffbfd8 0%, #e681af 100%); }
+    .violet{ background:linear-gradient(135deg,#d7b8ff 0%, #9b6ce8 100%); }
+    .mint{ background:linear-gradient(135deg,#bfead1 0%, #6dc794 100%); }
+    .amber{ background:linear-gradient(135deg,#ffd989 0%, #e0a944 100%); }
+    .sky{ background:linear-gradient(135deg,#b8ddff 0%, #69afe7 100%); }
+    .greenmint{ background:linear-gradient(135deg,#c4ecc7 0%, #6cc28c 100%); }
+
+    .edit-emoji{
+      font-size:30px;
+      line-height:1;
+      filter:drop-shadow(0 6px 8px rgba(0,0,0,.08));
+    }
+
+    .edit-label{
+      font-size:17px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:pre-line;
+      text-shadow:0 1px 0 rgba(0,0,0,.05);
+    }
+
+    .edit-small{
+      font-size:12px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      opacity:.95;
+      margin-top:7px;
+    }
+
+    .edit-fab{
+      position:absolute;
+      right:14px;
+      bottom:14px;
+      width:48px;
+      height:48px;
+      border-radius:999px;
+      background:rgba(255,255,255,.85);
+      color:#7a6630;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      box-shadow:0 8px 18px rgba(0,0,0,.09);
+    }
+
+    .dots{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      display:flex;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.58);
+      backdrop-filter:blur(10px);
+      box-shadow:0 8px 20px rgba(0,0,0,.06);
+      z-index:50;
+    }
+
+    .dot{
+      width:14px;
+      height:14px;
+      border-radius:999px;
+      background:#d5d9d7;
+      transition:all .2s ease;
+    }
+
+    .dot.active{
+      background:#111;
+    }
+
+    .sheet-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(18,28,24,.28);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding:12px;
+      z-index:100;
+    }
+
+    .sheet-backdrop.show{ display:flex; }
+
+    .sheet{
+      width:min(100%,430px);
+      background:#fff;
+      border-radius:28px 28px 20px 20px;
+      box-shadow:0 24px 60px rgba(0,0,0,.18);
+      padding:18px;
+    }
+
+    .sheet h3{
+      margin:0 0 8px;
+      font-size:22px;
+      font-weight:900;
+      color:#1d473d;
+    }
+
+    .sheet p{
+      margin:0 0 14px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:600;
+      line-height:1.3;
+    }
+
+    .pin-input{
+      width:100%;
+      min-height:54px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#f5f8f6;
+      font-size:20px;
+      font-weight:900;
+      color:#1d473d;
+      padding:0 16px;
+      outline:none;
+      margin-bottom:12px;
+      text-align:center;
+      letter-spacing:.15em;
+    }
+
+    .sheet-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      flex:1;
+      min-height:50px;
+      border:none;
+      border-radius:16px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,#3e8b61,#66b187);
+      color:#fff;
+    }
+
+    .btn.secondary{
+      background:#edf3ef;
+      color:#1d473d;
+    }
+
+    .toggle-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #eef2f0;
+    }
+
+    .toggle-row:last-of-type{
+      border-bottom:none;
+    }
+
+    .toggle-label{
+      font-size:15px;
+      font-weight:800;
+      color:#1d473d;
+    }
+
+    .toggle{
+      width:54px;
+      height:32px;
+      border-radius:999px;
+      background:#d8dfdb;
+      position:relative;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .toggle.active{
+      background:#79c593;
+    }
+
+    .toggle::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 4px 8px rgba(0,0,0,.12);
+      transition:.2s ease;
+    }
+
+    .toggle.active::after{
+      left:25px;
+    }
+
+    .profile-name{
+      font-size:18px;
+      font-weight:900;
+      color:#1d473d;
+      margin-bottom:4px;
+    }
+
+    .profile-sub{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+      margin-bottom:16px;
+    }
+
+    @media (max-width:390px){
+      .page{ padding:22px 14px 34px; }
+      .hello{ font-size:29px; }
+      .cards-row{ gap:10px; }
+      .stat-card{ min-height:228px; border-radius:26px; padding:16px 12px 14px; }
+      .card-title{ font-size:22px; }
+      .card-main{ font-size:22px; }
+      .card-desc{ font-size:14px; }
+      .edit-card{ min-height:138px; border-radius:24px; }
+      .edit-title-top{ font-size:29px; }
+      .edit-label{ font-size:16px; }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="app">
+    <div class="pages" id="pages">
+
+      <!-- PAGINA 1 -->
+      <section class="page">
+        <div class="topbar">
+          <div style="min-width:0;">
+            <h1 class="hello" id="helloText">Buongiorno Valerio</h1>
+            <p class="sub">Ecco il riepilogo della tua farmacia</p>
+            <p class="sub" id="lastUpdateText" style="margin-top:8px;">Aggiornato di recente</p>
+          </div>
+
+          <div class="icons">
+            <button class="icon-btn" type="button" id="notifOpenBtn" aria-label="Notifiche">🔔</button>
+            <button class="icon-btn" type="button" id="profileOpenBtn" aria-label="Profilo admin">
+              👤
+              <span class="badge" id="notifBadge">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cards-row">
+          <a href="richieste-dipendenti.html" class="stat-card card-blue">
+            <div class="card-top">
+              <div class="emoji">🗓️</div>
+              <div class="mini-pill" id="permCount">0</div>
+            </div>
+
+            <div class="card-body">
+              <div class="card-title">Permessi /
+Ferie</div>
+              <div class="card-desc">Richieste da
+approvare</div>
+            </div>
+          </a>
+
+          <a href="consumabili-admin.html" class="stat-card card-green">
+            <div class="card-top">
+              <div class="emoji">📦</div>
+              <div class="mini-pill" id="consCount">0</div>
+            </div>
+
+            <div class="card-body">
+              <div class="card-title">Consumabili</div>
+              <div class="card-main"><span id="consActive">0</span> <small>Attivi</small></div>
+            </div>
+
+            <div class="cta-pill">Richieste da gestire</div>
+          </a>
+
+          <a href="ldf-admin.html" class="stat-card card-purple">
+            <div class="card-top">
+              <div class="emoji">📊</div>
+              <div class="mini-pill" id="ldfPerc">0%</div>
+            </div>
+
+            <div class="card-body">
+              <div class="card-title">Obiettivi LDF</div>
+              <div class="card-main"><span id="ldfDone">0</span> <small>pezzi</small></div>
+              <div class="progress"><span id="ldfBar" style="width:0%"></span></div>
+              <div class="card-desc">mancano <span id="ldfDays">0</span> giorni</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- PAGINA 2 -->
+      <section class="page">
+        <div class="edit-header">
+          <h2 class="edit-title-top">Dashboard Titolare</h2>
+          <p class="edit-subtop">Modifica le sezioni visibili della tua app pubblica</p>
+        </div>
+
+        <div class="edit-grid">
+          <a href="edit-giornate.html" class="edit-card gold">
+            <div class="edit-emoji">💆‍♀️</div>
+            <div>
+              <div class="edit-label">Edit
+giornate</div>
+              <div class="edit-small">Beauty</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-servizi.html" class="edit-card teal">
+            <div class="edit-emoji">🏥</div>
+            <div>
+              <div class="edit-label">Edit
+servizi</div>
+              <div class="edit-small">Servizi</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-promo.html" class="edit-card pink">
+            <div class="edit-emoji">🎯</div>
+            <div>
+              <div class="edit-label">Edit
+promo</div>
+              <div class="edit-small">Promo</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-turno.html" class="edit-card violet">
+            <div class="edit-emoji">⏰</div>
+            <div>
+              <div class="edit-label">Edit
+turno</div>
+              <div class="edit-small">Turni</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-fidelity.html" class="edit-card mint">
+            <div class="edit-emoji">💳</div>
+            <div>
+              <div class="edit-label">Edit
+fidelity</div>
+              <div class="edit-small">Fidelity</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-fortuna.html" class="edit-card amber">
+            <div class="edit-emoji">🎁</div>
+            <div>
+              <div class="edit-label">Edit
+fortuna</div>
+              <div class="edit-small">Fortuna</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-premi.html" class="edit-card sky">
+            <div class="edit-emoji">🏆</div>
+            <div>
+              <div class="edit-label">Edit
+premi</div>
+              <div class="edit-small">Premi</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+
+          <a href="edit-profilo.html" class="edit-card greenmint">
+            <div class="edit-emoji">👤</div>
+            <div>
+              <div class="edit-label">Edit
+profilo</div>
+              <div class="edit-small">Profilo</div>
+            </div>
+            <div class="edit-fab">✏️</div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+
+  <!-- LOGIN SHEET -->
+  <div class="sheet-backdrop" id="loginSheet">
+    <div class="sheet">
+      <h3>Accesso titolare</h3>
+      <p>Inserisci il PIN una sola volta su questo dispositivo.</p>
+      <input class="pin-input" id="adminPinInput" inputmode="numeric" maxlength="6" placeholder="PIN admin">
+      <div class="sheet-actions">
+        <button class="btn primary" id="adminPinConfirm">Entra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE / NOTIFICHE SHEET -->
+  <div class="sheet-backdrop" id="profileSheet">
+    <div class="sheet">
+      <h3>Profilo admin</h3>
+      <div class="profile-name">Valerio</div>
+      <div class="profile-sub">Titolare • Accesso salvato sul dispositivo</div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Consenso notifiche</div>
+        <div class="toggle" id="toggleConsent"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche richieste</div>
+        <div class="toggle" id="toggleRequests"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche consumabili</div>
+        <div class="toggle" id="toggleConsumables"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche LDF</div>
+        <div class="toggle" id="toggleLdf"></div>
+      </div>
+
+      <div class="sheet-actions" style="margin-top:14px;">
+        <button class="btn secondary" id="closeProfileSheet">Chiudi</button>
+        <button class="btn primary" id="logoutAdminBtn">Esci</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const ADMIN_STORAGE_KEY = "fm_admin_session_v1";
+    const ADMIN_PIN = "2859";
+    const ADMIN_PROFILE_DOC = "admin_main";
+
+    const pages = document.getElementById("pages");
+    const dots = document.querySelectorAll(".dot");
+    const lastUpdateText = document.getElementById("lastUpdateText");
+
+    const loginSheet = document.getElementById("loginSheet");
+    const profileSheet = document.getElementById("profileSheet");
+
+    const toggleConsent = document.getElementById("toggleConsent");
+    const toggleRequests = document.getElementById("toggleRequests");
+    const toggleConsumables = document.getElementById("toggleConsumables");
+    const toggleLdf = document.getElementById("toggleLdf");
+
+    let adminPrefs = {
+      consent: true,
+      requests: true,
+      consumables: true,
+      ldf: true
+    };
+
+    function saveAdminSession(){
+      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify({
+        ok: true,
+        at: new Date().toISOString()
+      }));
+    }
+
+    function getAdminSession(){
+      try{
+        return JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || "null");
+      }catch(e){
+        return null;
+      }
+    }
+
+    function clearAdminSession(){
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
+    }
+
+    function showLoginSheet(){
+      loginSheet.classList.add("show");
+    }
+
+    function hideLoginSheet(){
+      loginSheet.classList.remove("show");
+    }
+
+    function showProfileSheet(){
+      profileSheet.classList.add("show");
+    }
+
+    function hideProfileSheet(){
+      profileSheet.classList.remove("show");
+    }
+
+    function setToggle(el, active){
+      el.classList.toggle("active", !!active);
+    }
+
+    function greeting(){
+      const h = new Date().getHours();
+      if(h < 12) return "Buongiorno Valerio";
+      if(h < 18) return "Buon pomeriggio Valerio";
+      return "Buonasera Valerio";
+    }
+
+    function monthKey(date = new Date()){
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      return `${y}-${m}`;
+    }
+
+    function relTime(dateStr){
+      if(!dateStr) return "Aggiornato ora";
+      const ts = new Date(dateStr).getTime();
+      if(Number.isNaN(ts)) return "Aggiornato di recente";
+      const diff = Math.floor((Date.now() - ts) / 60000);
+      if(diff <= 0) return "Aggiornato ora";
+      if(diff === 1) return "Aggiornato 1 minuto fa";
+      if(diff < 60) return `Aggiornato ${diff} minuti fa`;
+      const h = Math.floor(diff / 60);
+      if(h === 1) return "Aggiornato 1 ora fa";
+      if(h < 24) return `Aggiornato ${h} ore fa`;
+      return "Aggiornato di recente";
+    }
+
+    function remainingWorkingDays(date = new Date()){
+      const y = date.getFullYear();
+      const m = date.getMonth();
+      const current = date.getDate();
+      const last = new Date(y, m + 1, 0).getDate();
+      let count = 0;
+      for(let d = current + 1; d <= last; d++){
+        const x = new Date(y, m, d);
+        if(x.getDay() !== 0) count++;
+      }
+      return count;
+    }
+
+    document.getElementById("helloText").textContent = greeting();
+
+    pages.addEventListener("scroll", () => {
+      const index = Math.round(pages.scrollLeft / pages.clientWidth);
+      dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+    });
+
+    document.getElementById("profileOpenBtn").addEventListener("click", showProfileSheet);
+    document.getElementById("notifOpenBtn").addEventListener("click", () => {
+      location.href = "notifiche-admin.html";
+    });
+
+    document.getElementById("closeProfileSheet").addEventListener("click", hideProfileSheet);
+    document.getElementById("logoutAdminBtn").addEventListener("click", () => {
+      clearAdminSession();
+      hideProfileSheet();
+      showLoginSheet();
+    });
+
+    document.getElementById("adminPinConfirm").addEventListener("click", () => {
+      const v = (document.getElementById("adminPinInput").value || "").trim();
+      if(v !== ADMIN_PIN){
+        alert("PIN non corretto.");
+        return;
+      }
+      saveAdminSession();
+      hideLoginSheet();
+    });
+
+    [toggleConsent, toggleRequests, toggleConsumables, toggleLdf].forEach((el, idx) => {
+      el.addEventListener("click", async () => {
+        if(el === toggleConsent) adminPrefs.consent = !adminPrefs.consent;
+        if(el === toggleRequests) adminPrefs.requests = !adminPrefs.requests;
+        if(el === toggleConsumables) adminPrefs.consumables = !adminPrefs.consumables;
+        if(el === toggleLdf) adminPrefs.ldf = !adminPrefs.ldf;
+
+        syncPrefsUi();
+        await saveAdminPrefs();
+      });
+    });
+
+    function syncPrefsUi(){
+      setToggle(toggleConsent, adminPrefs.consent);
+      setToggle(toggleRequests, adminPrefs.requests);
+      setToggle(toggleConsumables, adminPrefs.consumables);
+      setToggle(toggleLdf, adminPrefs.ldf);
+    }
+
+    async function saveAdminPrefs(){
+      await db.collection("admin_profiles").doc(ADMIN_PROFILE_DOC).set({
+        name: "Valerio",
+        role: "titolare",
+        notifications: adminPrefs,
+        updatedAt: new Date().toISOString()
+      }, { merge:true });
+    }
+
+    async function loadAdminPrefs(){
+      try{
+        const doc = await db.collection("admin_profiles").doc(ADMIN_PROFILE_DOC).get();
+        if(doc.exists){
+          const d = doc.data() || {};
+          const n = d.notifications || {};
+          adminPrefs = {
+            consent: n.consent !== false,
+            requests: n.requests !== false,
+            consumables: n.consumables !== false,
+            ldf: n.ldf !== false
+          };
+        }
+      }catch(e){}
+      syncPrefsUi();
+    }
+
+    let latestEvents = [];
+
+    function pushDate(v){
+      if(v) latestEvents.push(v);
+      latestEvents = latestEvents.filter(Boolean);
+      latestEvents.sort((a,b) => new Date(b) - new Date(a));
+      if(latestEvents[0]) lastUpdateText.textContent = relTime(latestEvents[0]);
+    }
+
+    db.collection("employee_requests").onSnapshot((snapshot) => {
+      let perm = 0;
+      let cons = 0;
+
+      snapshot.forEach((doc) => {
+        const d = doc.data();
+
+        if(d.type === "ferie_permesso" && d.status === "in_attesa"){
+          perm++;
+          pushDate(d.createdAt);
+        }
+
+        if(d.type === "consumabile" && d.completed !== true){
+          cons++;
+          pushDate(d.createdAt);
+        }
+      });
+
+      document.getElementById("permCount").textContent = perm;
+      document.getElementById("consCount").textContent = cons;
+      document.getElementById("consActive").textContent = cons;
+    });
+
+    db.collection("notifications").where("to","==","titolare").onSnapshot((snapshot) => {
+      let unread = 0;
+      snapshot.forEach((doc) => {
+        const d = doc.data();
+        if(!d.read) unread++;
+        pushDate(d.createdAt);
+      });
+      document.getElementById("notifBadge").textContent = unread || 0;
+    });
+
+    db.collection("ldf_monthly").doc(monthKey()).onSnapshot((doc) => {
+      const d = doc.exists ? doc.data() : {};
+      const done = Number(d.gruppoDone ?? d.groupDone ?? 0);
+      const target = Number(d.obiettivoGruppo ?? d.groupTarget ?? 450);
+      const perc = target > 0 ? Math.min(100, Math.round((done / target) * 100)) : 0;
+
+      document.getElementById("ldfDone").textContent = done;
+      document.getElementById("ldfPerc").textContent = perc + "%";
+      document.getElementById("ldfBar").style.width = perc + "%";
+      document.getElementById("ldfDays").textContent = remainingWorkingDays();
+
+      pushDate(d.updatedAt);
+    });
+
+    (async function init(){
+      await loadAdminPrefs();
+      if(!getAdminSession()){
+        showLoginSheet();
+      }
+    })();
+  </script>
+</body>
+</html>

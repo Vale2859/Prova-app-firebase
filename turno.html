@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmacie di turno | Matera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="home-desktop.css" />
+  <style>
+    :root{
+      --green:#0d7a5f;
+      --green-dark:#085a46;
+      --green-soft:#eaf7f2;
+      --mint:#dff4ec;
+      --blue-soft:#eef5fb;
+      --blue:#4f86c6;
+      --peach-soft:#fff4ee;
+      --peach:#d9865c;
+      --text:#17332c;
+      --text-soft:#62766f;
+      --white:#ffffff;
+      --border:#e4ede8;
+      --shadow:0 20px 50px rgba(0,0,0,0.08);
+      --shadow-soft:0 10px 26px rgba(0,0,0,0.06);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:18px;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, #f8fcfa 0%, #ffffff 42%),
+        linear-gradient(180deg,#fbfffd 0%,#f2f9f6 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    .turni-shell{
+      width:min(1180px, 94%);
+      margin:0 auto;
+      padding:34px 0 90px;
+      position:relative;
+    }
+
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(70px);
+      opacity:.22;
+      pointer-events:none;
+      z-index:0;
+      animation:floatOrb 11s ease-in-out infinite alternate;
+    }
+
+    .bg-orb.orb-1{
+      width:280px;
+      height:280px;
+      top:70px;
+      left:-80px;
+      background:#93d8be;
+    }
+
+    .bg-orb.orb-2{
+      width:260px;
+      height:260px;
+      top:220px;
+      right:-70px;
+      background:#b7d8ff;
+      animation-duration:13s;
+    }
+
+    .bg-orb.orb-3{
+      width:220px;
+      height:220px;
+      bottom:40px;
+      left:12%;
+      background:#ffd7bf;
+      animation-duration:15s;
+    }
+
+    .page-kicker{
+      text-align:center;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#71857d;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-top{
+      position:relative;
+      z-index:2;
+      margin-bottom:26px;
+      border-radius:34px;
+      overflow:hidden;
+      background:
+        linear-gradient(135deg, rgba(13,122,95,0.96) 0%, rgba(38,155,122,0.92) 55%, rgba(107,194,165,0.88) 100%);
+      color:#fff;
+      box-shadow:
+        0 26px 60px rgba(13,122,95,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.18);
+      padding:28px 28px 24px;
+      isolation:isolate;
+    }
+
+    .hero-top::before{
+      content:"";
+      position:absolute;
+      inset:-10% -5% auto auto;
+      width:280px;
+      height:280px;
+      background:radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 66%);
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .hero-top::after{
+      content:"";
+      position:absolute;
+      inset:auto auto -90px -70px;
+      width:240px;
+      height:240px;
+      background:radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%);
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.12fr .88fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .hero-copy h1{
+      margin:0 0 12px;
+      font-size:clamp(2rem, 3vw, 3.25rem);
+      line-height:.98;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .hero-copy p{
+      margin:0;
+      max-width:620px;
+      font-size:1rem;
+      line-height:1.55;
+      color:rgba(255,255,255,0.88);
+      font-weight:500;
+    }
+
+    .hero-side{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .hero-mini-panel{
+      width:100%;
+      max-width:360px;
+      border-radius:24px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.12);
+      padding:18px 18px 16px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+
+    .hero-mini-label{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:32px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.18);
+      font-size:.76rem;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:12px;
+    }
+
+    .hero-mini-date{
+      font-size:1.7rem;
+      line-height:1;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+.hero-clock{
+  margin-top:6px;
+  font-size:2.4rem;
+  font-weight:900;
+  letter-spacing:-0.03em;
+  color:white;
+  line-height:1;
+}
+    .hero-mini-sub{
+      color:rgba(255,255,255,0.84);
+      font-size:.95rem;
+      line-height:1.45;
+      font-weight:500;
+    }
+
+    .today-grid{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      margin-bottom:28px;
+    }
+
+    .today-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:32px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      transition:transform .26s ease, box-shadow .26s ease;
+      border:1px solid rgba(255,255,255,0.42);
+      isolation:isolate;
+      animation:cardRise .6s ease both;
+    }
+
+    .today-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 28px 58px rgba(0,0,0,0.12);
+    }
+
+    .today-card.turno{
+      background:
+        linear-gradient(135deg, #f4fbf7 0%, #ffffff 35%, #edf8f2 100%);
+    }
+
+    .today-card.appoggio{
+      background:
+        linear-gradient(135deg, #f5f9fd 0%, #ffffff 35%, #eef5fb 100%);
+    }
+
+    .today-card::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      right:-38px;
+      top:-38px;
+      opacity:.7;
+      filter:blur(1px);
+      z-index:-1;
+    }
+
+    .today-card.turno::before{
+      background:radial-gradient(circle, rgba(13,122,95,0.16) 0%, rgba(13,122,95,0) 70%);
+    }
+
+    .today-card.appoggio::before{
+      background:radial-gradient(circle, rgba(79,134,198,0.16) 0%, rgba(79,134,198,0) 70%);
+    }
+
+    .card-topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    .card-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:34px;
+      padding:7px 14px;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .turno .card-badge{
+      background:var(--mint);
+      color:var(--green-dark);
+    }
+
+    .appoggio .card-badge{
+      background:#e5eef8;
+      color:#345d8f;
+    }
+
+    .card-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:1.45rem;
+      box-shadow:0 10px 20px rgba(0,0,0,0.06);
+    }
+
+    .turno .card-icon{
+      background:#e8f7f0;
+    }
+
+    .appoggio .card-icon{
+      background:#edf4fb;
+    }
+
+    .card-name{
+      margin:0 0 10px;
+      font-size:clamp(1.9rem, 2.4vw, 2.7rem);
+      line-height:.98;
+      font-weight:900;
+      letter-spacing:-.04em;
+      color:var(--text);
+    }
+
+    .card-subline{
+      margin:0 0 16px;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.5;
+      font-weight:500;
+    }
+
+    .info-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .info-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.84);
+      border:1px solid var(--border);
+      font-size:.9rem;
+      font-weight:700;
+      color:#35524a;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .card-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .action-btn{
+      min-height:56px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-weight:800;
+      font-size:.98rem;
+      text-decoration:none;
+      transition:transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+      box-shadow:0 12px 24px rgba(0,0,0,0.07);
+    }
+
+    .action-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .turno .action-btn.call-btn{
+      background:linear-gradient(135deg, #0d7a5f 0%, #219574 100%);
+      color:#fff;
+    }
+
+    .turno .action-btn.map-btn{
+      background:#eef8f4;
+      color:#17332c;
+    }
+
+    .appoggio .action-btn.call-btn{
+      background:linear-gradient(135deg, #4f86c6 0%, #6798d1 100%);
+      color:#fff;
+    }
+
+    .appoggio .action-btn.map-btn{
+      background:#edf4fb;
+      color:#17332c;
+    }
+
+    .section-head{
+      position:relative;
+      z-index:2;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(1.55rem, 2vw, 2rem);
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.95rem;
+      font-weight:600;
+      text-align:right;
+    }
+
+    .future-grid{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:repeat(7, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .future-card{
+      position:relative;
+      overflow:hidden;
+      background:rgba(255,255,255,0.92);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:16px 14px 15px;
+      box-shadow:var(--shadow-soft);
+      transition:transform .2s ease, box-shadow .2s ease;
+      animation:cardRise .7s ease both;
+    }
+
+    .future-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 18px 32px rgba(0,0,0,0.10);
+    }
+
+    .future-card:nth-child(1){ animation-delay:.03s; }
+    .future-card:nth-child(2){ animation-delay:.06s; }
+    .future-card:nth-child(3){ animation-delay:.09s; }
+    .future-card:nth-child(4){ animation-delay:.12s; }
+    .future-card:nth-child(5){ animation-delay:.15s; }
+    .future-card:nth-child(6){ animation-delay:.18s; }
+    .future-card:nth-child(7){ animation-delay:.21s; }
+
+    .future-card::before{
+      content:"";
+      position:absolute;
+      inset:0 auto auto 0;
+      width:100%;
+      height:5px;
+      background:linear-gradient(90deg, #0d7a5f 0%, #75cdb1 100%);
+    }
+
+    .future-date{
+      font-size:.82rem;
+      font-weight:800;
+      color:#6f827b;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin-bottom:10px;
+    }
+
+    .future-name{
+      font-size:1.02rem;
+      line-height:1.15;
+      font-weight:900;
+      color:var(--text);
+      margin-bottom:8px;
+      min-height:38px;
+    }
+
+    .future-app{
+      font-size:.84rem;
+      line-height:1.35;
+      color:var(--text-soft);
+      font-weight:700;
+    }
+
+    .future-app strong{
+      color:#34524a;
+    }
+
+    .future-mini-actions{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .future-mini-btn{
+      flex:1;
+      min-height:36px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.76rem;
+      font-weight:800;
+      text-decoration:none;
+      background:#f4faf7;
+      color:#17332c;
+      border:1px solid #e2eee8;
+      transition:transform .2s ease, background .2s ease;
+    }
+
+    .future-mini-btn:hover{
+      transform:translateY(-1px);
+      background:#edf7f2;
+    }
+
+    .notice-box{
+      position:relative;
+      z-index:2;
+      margin-top:24px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#f8fcfa 0%,#ffffff 100%);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-soft);
+      padding:18px 18px 17px;
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+    }
+
+    .notice-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:#eef8f4;
+      display:grid;
+      place-items:center;
+      font-size:1.2rem;
+      flex:0 0 auto;
+    }
+
+    .notice-box h3{
+      margin:0 0 4px;
+      font-size:1.02rem;
+      font-weight:900;
+    }
+
+    .notice-box p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:.92rem;
+      line-height:1.5;
+      font-weight:600;
+    }
+
+    @keyframes cardRise{
+      from{
+        opacity:0;
+        transform:translateY(16px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes floatOrb{
+      from{
+        transform:translateY(0) translateX(0) scale(1);
+      }
+      to{
+        transform:translateY(-24px) translateX(18px) scale(1.08);
+      }
+    }
+
+    @media (max-width: 1100px){
+      .future-grid{
+        grid-template-columns:repeat(4, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 860px){
+      .hero-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero-side{
+        justify-content:flex-start;
+      }
+
+      .today-grid{
+        grid-template-columns:1fr;
+      }
+
+      .future-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+
+      .section-head{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .section-head p{
+        text-align:left;
+      }
+    }
+
+    @media (max-width: 560px){
+      body{
+        padding:24px 12px;
+      }
+
+      .turni-shell{
+        width:100%;
+        padding:16px 0 70px;
+      }
+
+      .hero-top{
+        padding:22px 16px 18px;
+        border-radius:26px;
+      }
+
+      .hero-copy h1{
+        font-size:2rem;
+      }
+
+      .hero-copy p{
+        font-size:.95rem;
+      }
+
+      .hero-mini-panel{
+        max-width:none;
+        border-radius:20px;
+        padding:16px;
+      }
+
+      .today-card{
+        padding:18px 16px;
+        border-radius:24px;
+      }
+
+      .card-name{
+        font-size:2rem;
+      }
+
+      .card-actions{
+        grid-template-columns:1fr;
+      }
+
+      .future-grid{
+        grid-template-columns:1fr;
+      }
+
+      .future-card{
+        border-radius:18px;
+      }
+
+      .notice-box{
+        padding:15px;
+        border-radius:18px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<style>
+.page-back-btn{
+  width:50px;
+  height:50px;
+  min-width:50px;
+  min-height:50px;
+  border-radius:14px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#173c36;
+  font-size:22px;
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+.page-turno-topbar{
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  margin:0 0 22px;
+}
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preload" as="image" href="images/fidelity.jpg">
+<link rel="preload" as="image" href="images/fortuna.jpg">
+<link rel="preload" as="image" href="images/premi.jpg">
+<link rel="preload" as="image" href="images/profilo.jpg">
+
+</head>
+<body class="home-desktop season-primavera">
+  <header class="home-site-header">
+  <div class="home-shell home-nav-wrap">
+    <a href="index.html" class="home-brand" aria-label="Farmacia Montesano">
+      <div class="home-brand-logo-box">
+        <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+      </div>
+    </a>
+
+    <nav class="home-desktop-nav">
+      <a href="index.html">Home</a>
+      <a href="chi-siamo.html">Chi siamo</a>
+      <a href="servizi.html">Servizi</a>
+      <a href="promo.html">Promo</a>
+      <a href="giornate.html">Beauty</a>
+      <a class="active" href="turno.html">Turni</a>
+      <a href="contatti.html">Contatti</a>
+    </nav>
+
+    <div class="home-nav-actions">
+      <button class="home-search-btn" type="button" aria-label="Cerca">⌕</button>
+      <a href="giornate.html" class="home-cta-btn">Prenota ora <span>➜</span></a>
+    </div>
+  </div>
+</header>
+  
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <main class="turni-shell">
+  <div class="page-turno-topbar"><a href="index.html" class="page-back-btn" onclick="if(history.length>1){history.back();return false;}" aria-label="Torna alla home"><span>←</span></a></div>
+    <div class="page-kicker">Farmacie di turno a Matera</div>
+
+    <section class="hero-top">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1>Turno e appoggio, subito chiari.</h1>
+          <p>
+            Consulta rapidamente la farmacia di turno e la farmacia di appoggio della giornata,
+            con accesso immediato a chiamata e navigazione.
+          </p>
+        </div>
+
+        <div class="hero-side">
+          <div class="hero-mini-panel">
+            <div class="hero-mini-label">Servizio rapido</div>
+            <div class="hero-mini-date" id="heroDate">--</div>
+            <div class="hero-clock" id="heroClock">--:--</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="today-grid">
+      <article class="today-card turno" id="turnoCard"></article>
+      <article class="today-card appoggio" id="appoggioCard"></article>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Prossimi 7 turni</h2>
+        </div>
+        <p>Le prossime giornate, con turno e appoggio ben evidenziati.</p>
+      </div>
+
+      <div class="future-grid" id="futureGrid"></div>
+    </section>
+
+    <section class="notice-box">
+      <div class="notice-icon">ℹ️</div>
+      <div>
+        <h3>Prima di partire</h3>
+        <p>
+          Ti consigliamo di chiamare sempre la farmacia scelta per confermare disponibilità,
+          orari e modalità del servizio.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const turni = {
+
+"2026-01-01":{turno:"D'ARIA CLAUDIO",appoggio:"UVA SAS"},
+"2026-01-02":{turno:"MATERANA"},
+"2026-01-03":{turno:"MIRAGLIA"},
+"2026-01-04":{turno:"CONIGLIO",appoggio:"MATERANA"},
+"2026-01-05":{turno:"MONTESANO"},
+"2026-01-06":{turno:"VIVALDI",appoggio:"ROMEO"},
+"2026-01-07":{turno:"MOTTA ANTON."},
+"2026-01-08":{turno:"MOTTA SILVIA"},
+"2026-01-09":{turno:"MOTTA UVA T."},
+"2026-01-10":{turno:"PISTONE SAS"},
+"2026-01-11":{turno:"VEZZOSO",appoggio:"MOTTA UVA T."},
+"2026-01-12":{turno:"ROMEO"},
+"2026-01-13":{turno:"SAN GIUSEPPE"},
+"2026-01-14":{turno:"UVA SAS"},
+"2026-01-15":{turno:"VEZZOSO"},
+"2026-01-16":{turno:"VIVALDI"},
+"2026-01-17":{turno:"CONIGLIO"},
+"2026-01-18":{turno:"UVA SAS",appoggio:"D'ARIA CLAUDIO"},
+"2026-01-19":{turno:"D'ARIA CLAUDIO"},
+"2026-01-20":{turno:"D'ARIA GIUSEPP."},
+"2026-01-21":{turno:"DINNELLA"},
+"2026-01-22":{turno:"GUERRICCHIO"},
+"2026-01-23":{turno:"MATERANA"},
+"2026-01-24":{turno:"MIRAGLIA"},
+"2026-01-25":{turno:"SAN GIUSEPPE",appoggio:"MOTTA SILVIA"},
+"2026-01-26":{turno:"MONTESANO"},
+"2026-01-27":{turno:"MOTTA ANTON."},
+"2026-01-28":{turno:"MOTTA SILVIA"},
+"2026-01-29":{turno:"ROMEO"},
+"2026-01-30":{turno:"PISTONE SAS"},
+"2026-01-31":{turno:"MOTTA UVA T."},
+
+"2026-02-01":{turno:"ROMEO",appoggio:"GUERRICCHIO"},
+"2026-02-02":{turno:"SAN GIUSEPPE"},
+"2026-02-03":{turno:"UVA SAS"},
+"2026-02-04":{turno:"VEZZOSO"},
+"2026-02-05":{turno:"VIVALDI"},
+"2026-02-06":{turno:"CONIGLIO"},
+"2026-02-07":{turno:"D'ARIA CLAUDIO"},
+"2026-02-08":{turno:"PISTONE SAS",appoggio:"DINNELLA"},
+"2026-02-09":{turno:"D'ARIA GIUSEPP."},
+"2026-02-10":{turno:"DINNELLA"},
+"2026-02-11":{turno:"GUERRICCHIO"},
+"2026-02-12":{turno:"MATERANA"},
+"2026-02-13":{turno:"MIRAGLIA"},
+"2026-02-14":{turno:"MONTESANO"},
+"2026-02-15":{turno:"MOTTA UVA T.",appoggio:"VEZZOSO"},
+"2026-02-16":{turno:"MOTTA ANTON."},
+"2026-02-17":{turno:"MOTTA SILVIA"},
+"2026-02-18":{turno:"MOTTA UVA T."},
+"2026-02-19":{turno:"PISTONE SAS"},
+"2026-02-20":{turno:"ROMEO"},
+"2026-02-21":{turno:"SAN GIUSEPPE"},
+"2026-02-22":{turno:"MOTTA SILVIA",appoggio:"SAN GIUSEPPE"},
+"2026-02-23":{turno:"UVA SAS"},
+"2026-02-24":{turno:"VEZZOSO"},
+"2026-02-25":{turno:"VIVALDI"},
+"2026-02-26":{turno:"CONIGLIO"},
+"2026-02-27":{turno:"D'ARIA CLAUDIO"},
+"2026-02-28":{turno:"D'ARIA GIUSEPP."},
+
+"2026-03-01":{turno:"MOTTA ANTON.",appoggio:"MIRAGLIA"},
+"2026-03-02":{turno:"DINNELLA"},
+"2026-03-03":{turno:"GUERRICCHIO"},
+"2026-03-04":{turno:"MATERANA"},
+"2026-03-05":{turno:"MONTESANO"},
+"2026-03-06":{turno:"MIRAGLIA"},
+"2026-03-07":{turno:"MOTTA ANTON."},
+"2026-03-08":{turno:"MONTESANO",appoggio:"D'ARIA GIUSEPP."},
+"2026-03-09":{turno:"MOTTA SILVIA"},
+"2026-03-10":{turno:"MOTTA UVA T."},
+"2026-03-11":{turno:"PISTONE SAS"},
+"2026-03-12":{turno:"ROMEO"},
+"2026-03-13":{turno:"UVA SAS"},
+"2026-03-14":{turno:"SAN GIUSEPPE"},
+"2026-03-15":{turno:"VEZZOSO",appoggio:"VIVALDI"},
+"2026-03-16":{turno:"CONIGLIO"},
+"2026-03-17":{turno:"VIVALDI"},
+"2026-03-18":{turno:"VEZZOSO"},
+"2026-03-19":{turno:"D'ARIA CLAUDIO"},
+"2026-03-20":{turno:"D'ARIA GIUSEPP."},
+"2026-03-21":{turno:"DINNELLA"},
+"2026-03-22":{turno:"MIRAGLIA",appoggio:"MOTTA ANTON."},
+"2026-03-23":{turno:"GUERRICCHIO"},
+"2026-03-24":{turno:"MATERANA"},
+"2026-03-25":{turno:"MIRAGLIA"},
+"2026-03-26":{turno:"MONTESANO"},
+"2026-03-27":{turno:"MOTTA ANTON."},
+"2026-03-28":{turno:"MOTTA SILVIA"},
+"2026-03-29":{turno:"MATERANA",appoggio:"CONIGLIO"},
+"2026-03-30":{turno:"MOTTA UVA T."},
+"2026-03-31":{turno:"PISTONE SAS"},
+"2026-04-01":{turno:"ROMEO"},
+"2026-04-02":{turno:"SAN GIUSEPPE"},
+"2026-04-03":{turno:"UVA SAS"},
+"2026-04-04":{turno:"VEZZOSO"},
+"2026-04-05":{turno:"GUERRICCHIO",appoggio:"ROMEO"},
+"2026-04-06":{turno:"DINNELLA",appoggio:"PISTONE SAS"},
+"2026-04-07":{turno:"VIVALDI"},
+"2026-04-08":{turno:"CONIGLIO"},
+"2026-04-09":{turno:"D'ARIA GIUSEPP."},
+"2026-04-10":{turno:"D'ARIA CLAUDIO"},
+"2026-04-11":{turno:"DINNELLA"},
+"2026-04-12":{turno:"D'ARIA GIUSEPP.",appoggio:"MONTESANO"},
+"2026-04-13":{turno:"GUERRICCHIO"},
+"2026-04-14":{turno:"MATERANA"},
+"2026-04-15":{turno:"MONTESANO"},
+"2026-04-16":{turno:"MONTESANO"},
+"2026-04-17":{turno:"MOTTA ANTON."},
+"2026-04-18":{turno:"MOTTA SILVIA"},
+"2026-04-19":{turno:"D'ARIA CLAUDIO",appoggio:"UVA SAS"},
+"2026-04-20":{turno:"MOTTA UVA T."},
+"2026-04-21":{turno:"PISTONE SAS"},
+"2026-04-22":{turno:"ROMEO"},
+"2026-04-23":{turno:"SAN GIUSEPPE"},
+"2026-04-24":{turno:"UVA SAS"},
+"2026-04-25":{turno:"CONIGLIO",appoggio:"MATERANA"},
+"2026-04-26":{turno:"VIVALDI",appoggio:"MOTTA SILVIA"},
+"2026-04-27":{turno:"VEZZOSO"},
+"2026-04-28":{turno:"CONIGLIO"},
+"2026-04-29":{turno:"VIVALDI"},
+"2026-04-30":{turno:"D'ARIA CLAUDIO"},
+
+"2026-05-01":{turno:"VEZZOSO",appoggio:"MOTTA UVA T."},
+"2026-05-02":{turno:"D'ARIA GIUSEPP."},
+"2026-05-03":{turno:"UVA SAS",appoggio:"D'ARIA CLAUDIO"},
+"2026-05-04":{turno:"MATERANA"},
+"2026-05-05":{turno:"GUERRICCHIO"},
+"2026-05-06":{turno:"DINNELLA"},
+"2026-05-07":{turno:"ROMEO"},
+"2026-05-08":{turno:"MONTESANO"},
+"2026-05-09":{turno:"MOTTA ANTON."},
+"2026-05-10":{turno:"SAN GIUSEPPE",appoggio:"MOTTA SILVIA"},
+"2026-05-11":{turno:"MOTTA SILVIA"},
+"2026-05-12":{turno:"MOTTA UVA T."},
+"2026-05-13":{turno:"PISTONE SAS"},
+"2026-05-14":{turno:"MIRAGLIA"},
+"2026-05-15":{turno:"SAN GIUSEPPE"},
+"2026-05-16":{turno:"VIVALDI"},
+"2026-05-17":{turno:"ROMEO",appoggio:"GUERRICCHIO"},
+"2026-05-18":{turno:"VEZZOSO"},
+"2026-05-19":{turno:"UVA SAS"},
+"2026-05-20":{turno:"CONIGLIO"},
+"2026-05-21":{turno:"D'ARIA CLAUDIO"},
+"2026-05-22":{turno:"D'ARIA GIUSEPP."},
+"2026-05-23":{turno:"DINNELLA"},
+"2026-05-24":{turno:"PISTONE SAS",appoggio:"MATERANA"},
+"2026-05-25":{turno:"GUERRICCHIO"},
+"2026-05-26":{turno:"MATERANA"},
+"2026-05-27":{turno:"MIRAGLIA"},
+"2026-05-28":{turno:"MONTESANO"},
+"2026-05-29":{turno:"MOTTA ANTON."},
+"2026-05-30":{turno:"MOTTA SILVIA"},
+"2026-05-31":{turno:"MOTTA UVA T.",appoggio:"VEZZOSO"},
+
+"2026-06-01":{turno:"UVA SAS"},
+"2026-06-02":{turno:"MOTTA SILVIA",appoggio:"SAN GIUSEPPE"},
+"2026-06-03":{turno:"PISTONE SAS"},
+"2026-06-04":{turno:"ROMEO"},
+"2026-06-05":{turno:"SAN GIUSEPPE"},
+"2026-06-06":{turno:"MOTTA UVA T."},
+"2026-06-07":{turno:"MOTTA ANTON.",appoggio:"MIRAGLIA"},
+"2026-06-08":{turno:"VEZZOSO"},
+"2026-06-09":{turno:"VIVALDI"},
+"2026-06-10":{turno:"CONIGLIO"},
+"2026-06-11":{turno:"D'ARIA CLAUDIO"},
+"2026-06-12":{turno:"D'ARIA GIUSEPP."},
+"2026-06-13":{turno:"DINNELLA"},
+"2026-06-14":{turno:"MONTESANO",appoggio:"D'ARIA GIUSEPP."},
+"2026-06-15":{turno:"GUERRICCHIO"},
+"2026-06-16":{turno:"MATERANA"},
+"2026-06-17":{turno:"MIRAGLIA"},
+"2026-06-18":{turno:"MONTESANO"},
+"2026-06-19":{turno:"MOTTA ANTON."},
+"2026-06-20":{turno:"MOTTA SILVIA"},
+"2026-06-21":{turno:"D'ARIA CLAUDIO",appoggio:"VIVALDI"},
+"2026-06-22":{turno:"MOTTA UVA T."},
+"2026-06-23":{turno:"PISTONE SAS"},
+"2026-06-24":{turno:"ROMEO"},
+"2026-06-25":{turno:"SAN GIUSEPPE"},
+"2026-06-26":{turno:"UVA SAS"},
+"2026-06-27":{turno:"VEZZOSO"},
+"2026-06-28":{turno:"MIRAGLIA",appoggio:"MOTTA ANTON."},
+"2026-06-29":{turno:"VIVALDI"},
+"2026-06-30":{turno:"CONIGLIO"},
+"2026-07-01":{turno:"D'ARIA CLAUDIO"},
+"2026-07-02":{turno:"MATERANA",appoggio:"CONIGLIO"},
+"2026-07-03":{turno:"D'ARIA GIUSEPP."},
+"2026-07-04":{turno:"DINNELLA"},
+"2026-07-05":{turno:"GUERRICCHIO",appoggio:"ROMEO"},
+"2026-07-06":{turno:"MIRAGLIA"},
+"2026-07-07":{turno:"MATERANA"},
+"2026-07-08":{turno:"GUERRICCHIO"},
+"2026-07-09":{turno:"MONTESANO"},
+"2026-07-10":{turno:"MOTTA ANTON."},
+"2026-07-11":{turno:"MOTTA SILVIA"},
+"2026-07-12":{turno:"DINNELLA",appoggio:"PISTONE SAS"},
+"2026-07-13":{turno:"MOTTA UVA T."},
+"2026-07-14":{turno:"PISTONE SAS"},
+"2026-07-15":{turno:"ROMEO"},
+"2026-07-16":{turno:"SAN GIUSEPPE"},
+"2026-07-17":{turno:"UVA SAS"},
+"2026-07-18":{turno:"VEZZOSO"},
+"2026-07-19":{turno:"D'ARIA GIUSEPP.",appoggio:"MONTESANO"},
+"2026-07-20":{turno:"VIVALDI"},
+"2026-07-21":{turno:"CONIGLIO"},
+"2026-07-22":{turno:"D'ARIA CLAUDIO"},
+"2026-07-23":{turno:"D'ARIA GIUSEPP."},
+"2026-07-24":{turno:"DINNELLA"},
+"2026-07-25":{turno:"GUERRICCHIO"},
+"2026-07-26":{turno:"D'ARIA CLAUDIO",appoggio:"UVA SAS"},
+"2026-07-27":{turno:"MATERANA"},
+"2026-07-28":{turno:"MIRAGLIA"},
+"2026-07-29":{turno:"MONTESANO"},
+"2026-07-30":{turno:"MOTTA ANTON."},
+"2026-07-31":{turno:"MOTTA SILVIA"},
+
+"2026-08-01":{turno:"MOTTA UVA T."},
+"2026-08-02":{turno:"CONIGLIO",appoggio:"MATERANA"},
+"2026-08-03":{turno:"PISTONE SAS"},
+"2026-08-04":{turno:"ROMEO"},
+"2026-08-05":{turno:"VIVALDI"},
+"2026-08-06":{turno:"UVA SAS"},
+"2026-08-07":{turno:"VEZZOSO"},
+"2026-08-08":{turno:"SAN GIUSEPPE"},
+"2026-08-09":{turno:"VIVALDI",appoggio:"MONTESANO"},
+"2026-08-10":{turno:"CONIGLIO"},
+"2026-08-11":{turno:"D'ARIA CLAUDIO"},
+"2026-08-12":{turno:"D'ARIA GIUSEPP."},
+"2026-08-13":{turno:"DINNELLA"},
+"2026-08-14":{turno:"GUERRICCHIO"},
+"2026-08-15":{turno:"VEZZOSO",appoggio:"MOTTA UVA T."},
+"2026-08-16":{turno:"UVA SAS",appoggio:"D'ARIA CLAUDIO"},
+"2026-08-17":{turno:"MATERANA"},
+"2026-08-18":{turno:"MIRAGLIA"},
+"2026-08-19":{turno:"MONTESANO"},
+"2026-08-20":{turno:"MOTTA ANTON."},
+"2026-08-21":{turno:"MOTTA SILVIA"},
+"2026-08-22":{turno:"MOTTA UVA T."},
+"2026-08-23":{turno:"SAN GIUSEPPE",appoggio:"MOTTA SILVIA"},
+"2026-08-24":{turno:"PISTONE SAS"},
+"2026-08-25":{turno:"ROMEO"},
+"2026-08-26":{turno:"SAN GIUSEPPE"},
+"2026-08-27":{turno:"UVA SAS"},
+"2026-08-28":{turno:"VEZZOSO"},
+"2026-08-29":{turno:"VIVALDI"},
+"2026-08-30":{turno:"ROMEO",appoggio:"GUERRICCHIO"},
+"2026-08-31":{turno:"CONIGLIO"},
+
+"2026-09-01":{turno:"D'ARIA CLAUDIO"},
+"2026-09-02":{turno:"D'ARIA GIUSEPP."},
+"2026-09-03":{turno:"DINNELLA"},
+"2026-09-04":{turno:"GUERRICCHIO"},
+"2026-09-05":{turno:"MATERANA"},
+"2026-09-06":{turno:"PISTONE SAS",appoggio:"DINNELLA"},
+"2026-09-07":{turno:"MIRAGLIA"},
+"2026-09-08":{turno:"MONTESANO"},
+"2026-09-09":{turno:"MOTTA ANTON."},
+"2026-09-10":{turno:"MOTTA UVA T."},
+"2026-09-11":{turno:"MOTTA SILVIA"},
+"2026-09-12":{turno:"PISTONE SAS"},
+"2026-09-13":{turno:"MOTTA UVA T.",appoggio:"VEZZOSO"},
+"2026-09-14":{turno:"ROMEO"},
+"2026-09-15":{turno:"SAN GIUSEPPE"},
+"2026-09-16":{turno:"UVA SAS"},
+"2026-09-17":{turno:"VEZZOSO"},
+"2026-09-18":{turno:"VIVALDI"},
+"2026-09-19":{turno:"CONIGLIO"},
+"2026-09-20":{turno:"MOTTA SILVIA",appoggio:"SAN GIUSEPPE"},
+"2026-09-21":{turno:"D'ARIA CLAUDIO"},
+"2026-09-22":{turno:"D'ARIA GIUSEPP."},
+"2026-09-23":{turno:"DINNELLA"},
+"2026-09-24":{turno:"GUERRICCHIO"},
+"2026-09-25":{turno:"MATERANA"},
+"2026-09-26":{turno:"MIRAGLIA"},
+"2026-09-27":{turno:"MOTTA ANTON.",appoggio:"MIRAGLIA"},
+"2026-09-28":{turno:"MONTESANO"},
+"2026-09-29":{turno:"MOTTA SILVIA"},
+"2026-09-30":{turno:"MOTTA ANTON."},
+"2026-10-01":{turno:"MOTTA UVA T."},
+"2026-10-02":{turno:"ROMEO"},
+"2026-10-03":{turno:"PISTONE SAS"},
+"2026-10-04":{turno:"MONTESANO",appoggio:"D'ARIA GIUSEPP."},
+"2026-10-05":{turno:"SAN GIUSEPPE"},
+"2026-10-06":{turno:"UVA SAS"},
+"2026-10-07":{turno:"VEZZOSO"},
+"2026-10-08":{turno:"VIVALDI"},
+"2026-10-09":{turno:"CONIGLIO"},
+"2026-10-10":{turno:"D'ARIA CLAUDIO"},
+"2026-10-11":{turno:"MOTTA ANTON.",appoggio:"VIVALDI"},
+"2026-10-12":{turno:"D'ARIA GIUSEPP."},
+"2026-10-13":{turno:"DINNELLA"},
+"2026-10-14":{turno:"GUERRICCHIO"},
+"2026-10-15":{turno:"MIRAGLIA"},
+"2026-10-16":{turno:"MATERANA"},
+"2026-10-17":{turno:"MONTESANO"},
+"2026-10-18":{turno:"MIRAGLIA",appoggio:"MOTTA ANTON."},
+"2026-10-19":{turno:"MOTTA ANTON."},
+"2026-10-20":{turno:"MOTTA SILVIA"},
+"2026-10-21":{turno:"MOTTA UVA T."},
+"2026-10-22":{turno:"PISTONE SAS"},
+"2026-10-23":{turno:"ROMEO"},
+"2026-10-24":{turno:"SAN GIUSEPPE"},
+"2026-10-25":{turno:"MATERANA",appoggio:"CONIGLIO"},
+"2026-10-26":{turno:"UVA SAS"},
+"2026-10-27":{turno:"VEZZOSO"},
+"2026-10-28":{turno:"VIVALDI"},
+"2026-10-29":{turno:"CONIGLIO"},
+"2026-10-30":{turno:"D'ARIA CLAUDIO"},
+"2026-10-31":{turno:"D'ARIA GIUSEPP."},
+
+"2026-11-01":{turno:"GUERRICCHIO",appoggio:"ROMEO"},
+"2026-11-02":{turno:"DINNELLA"},
+"2026-11-03":{turno:"MATERANA"},
+"2026-11-04":{turno:"GUERRICCHIO"},
+"2026-11-05":{turno:"MIRAGLIA"},
+"2026-11-06":{turno:"MONTESANO"},
+"2026-11-07":{turno:"MOTTA ANTON."},
+"2026-11-08":{turno:"DINNELLA",appoggio:"PISTONE SAS"},
+"2026-11-09":{turno:"MOTTA SILVIA"},
+"2026-11-10":{turno:"MOTTA UVA T."},
+"2026-11-11":{turno:"PISTONE SAS"},
+"2026-11-12":{turno:"ROMEO"},
+"2026-11-13":{turno:"SAN GIUSEPPE"},
+"2026-11-14":{turno:"VIVALDI"},
+"2026-11-15":{turno:"D'ARIA GIUSEPP.",appoggio:"MONTESANO"},
+"2026-11-16":{turno:"UVA SAS"},
+"2026-11-17":{turno:"VEZZOSO"},
+"2026-11-18":{turno:"CONIGLIO"},
+"2026-11-19":{turno:"D'ARIA CLAUDIO"},
+"2026-11-20":{turno:"D'ARIA GIUSEPP."},
+"2026-11-21":{turno:"DINNELLA"},
+"2026-11-22":{turno:"D'ARIA CLAUDIO",appoggio:"UVA SAS"},
+"2026-11-23":{turno:"GUERRICCHIO"},
+"2026-11-24":{turno:"MATERANA"},
+"2026-11-25":{turno:"MIRAGLIA"},
+"2026-11-26":{turno:"MONTESANO"},
+"2026-11-27":{turno:"MOTTA ANTON."},
+"2026-11-28":{turno:"MOTTA SILVIA"},
+"2026-11-29":{turno:"CONIGLIO",appoggio:"MATERANA"},
+"2026-11-30":{turno:"MOTTA UVA T."},
+
+"2026-12-01":{turno:"PISTONE SAS"},
+"2026-12-02":{turno:"ROMEO"},
+"2026-12-03":{turno:"SAN GIUSEPPE"},
+"2026-12-04":{turno:"UVA SAS"},
+"2026-12-05":{turno:"VEZZOSO"},
+"2026-12-06":{turno:"VIVALDI",appoggio:"CONIGLIO"},
+"2026-12-07":{turno:"CONIGLIO"},
+"2026-12-08":{turno:"VEZZOSO",appoggio:"MOTTA UVA T."},
+"2026-12-09":{turno:"VIVALDI"},
+"2026-12-10":{turno:"D'ARIA CLAUDIO"},
+"2026-12-11":{turno:"D'ARIA GIUSEPP."},
+"2026-12-12":{turno:"DINNELLA"},
+"2026-12-13":{turno:"UVA SAS",appoggio:"D'ARIA CLAUDIO"},
+"2026-12-14":{turno:"GUERRICCHIO"},
+"2026-12-15":{turno:"MATERANA"},
+"2026-12-16":{turno:"MIRAGLIA"},
+"2026-12-17":{turno:"MONTESANO"},
+"2026-12-18":{turno:"MOTTA ANTON."},
+"2026-12-19":{turno:"MOTTA SILVIA"},
+"2026-12-20":{turno:"SAN GIUSEPPE",appoggio:"MOTTA SILVIA"},
+"2026-12-21":{turno:"MOTTA UVA T."},
+"2026-12-22":{turno:"ROMEO"},
+"2026-12-23":{turno:"PISTONE SAS"},
+"2026-12-24":{turno:"SAN GIUSEPPE"},
+"2026-12-25":{turno:"ROMEO",appoggio:"GUERRICCHIO"},
+"2026-12-26":{turno:"PISTONE SAS",appoggio:"DINNELLA"},
+"2026-12-27":{turno:"MOTTA UVA T.",appoggio:"VEZZOSO"},
+"2026-12-28":{turno:"UVA SAS"},
+"2026-12-29":{turno:"VEZZOSO"},
+"2026-12-30":{turno:"VIVALDI"},
+"2026-12-31":{turno:"CONIGLIO"}
+ }
+    
+    const farmacie = {
+  "MONTESANO": {
+    telefono: "0835335921",
+    maps: "https://maps.google.com/?q=Farmacia+Montesano+Matera"
+  },
+  "MATERANA": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Materana+Matera"
+  },
+  "ROMEO": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Romeo+Matera"
+  },
+  "VEZZOSO": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Vezzoso+Matera"
+  },
+  "CONIGLIO": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Coniglio+Matera"
+  },
+  "VIVALDI": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Vivaldi+Matera"
+  },
+  "SAN GIUSEPPE": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+San+Giuseppe+Matera"
+  },
+  "MIRAGLIA": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Miraglia+Matera"
+  },
+  "D'ARIA CLAUDIO": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+D%27Aria+Claudio+Matera"
+  },
+  "D'ARIA GIUSEPP.": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+D%27Aria+Giuseppe+Matera"
+  },
+  "DINNELLA": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Dinnella+Matera"
+  },
+  "GUERRICCHIO": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Guerricchio+Matera"
+  },
+  "MOTTA ANTON.": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Motta+Antonio+Matera"
+  },
+  "MOTTA SILVIA": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Motta+Silvia+Matera"
+  },
+  "MOTTA UVA T.": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Motta+Uva+Matera"
+  },
+  "PISTONE SAS": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Pistone+Matera"
+  },
+  "UVA SAS": {
+    telefono: "",
+    maps: "https://maps.google.com/?q=Farmacia+Uva+Matera"
+  }
+};
+    function todayKey(){
+  const d = new Date();
+
+  if(d.getHours() < 8){
+    d.setDate(d.getDate() - 1);
+  }
+
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2,"0");
+  const g = String(d.getDate()).padStart(2,"0");
+
+  return `${y}-${m}-${g}`;
+}
+    
+    function formatLongDate(key){
+      const d = new Date(key + "T12:00:00");
+      return d.toLocaleDateString("it-IT", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+    }
+
+    function formatShortDate(key){
+      const d = new Date(key + "T12:00:00");
+      return d.toLocaleDateString("it-IT", {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+      });
+    }
+function createActionButtons(farmacia){
+  if(!farmacia) return "";
+
+  let buttons = "";
+
+  if(farmacia.telefono && farmacia.telefono.trim() !== ""){
+    buttons += `
+      <a class="action-btn call-btn" href="tel:${farmacia.telefono}">
+        📞 Chiama
+      </a>
+    `;
+  }
+
+  if(farmacia.maps && farmacia.maps.trim() !== ""){
+    buttons += `
+      <a class="action-btn map-btn" href="${farmacia.maps}" target="_blank">
+        🗺️ Apri Maps
+      </a>
+    `;
+  }
+
+  return buttons;
+}
+    function renderMainCards(todayData){
+  const turnoFarm = farmacie[todayData.turno];
+  const appoggioFarm = todayData.appoggio ? farmacie[todayData.appoggio] : null;
+
+  document.getElementById("turnoCard").innerHTML = `
+    <div class="card-topline">
+      <div class="card-badge">Farmacia di turno</div>
+      <div class="card-icon">🏥</div>
+    </div>
+
+    <h2 class="card-name">${todayData.turno}</h2>
+    <p class="card-subline">
+      Farmacia principale della giornata, con accesso rapido a chiamata e navigazione.
+    </p>
+
+    <div class="info-pills">
+      <span class="info-pill">Linea diretta</span>
+      <span class="info-pill">Accesso rapido</span>
+    </div>
+
+    <div class="card-actions">
+      ${createActionButtons(turnoFarm)}
+    </div>
+  `;
+
+  if(todayData.appoggio && appoggioFarm){
+  document.getElementById("appoggioCard").style.display = "";
+  document.getElementById("appoggioCard").innerHTML = `
+    <div class="card-topline">
+      <div class="card-badge">Farmacia di appoggio</div>
+      <div class="card-icon">📍</div>
+    </div>
+
+    <h2 class="card-name">${todayData.appoggio}</h2>
+    <p class="card-subline">
+      Alternativa utile della stessa giornata, da consultare con la stessa priorità del turno.
+    </p>
+
+    <div class="info-pills">
+      <span class="info-pill">Supporto del giorno</span>
+      <span class="info-pill">Secondo riferimento</span>
+    </div>
+
+    <div class="card-actions">
+      ${createActionButtons(appoggioFarm)}
+    </div>
+  `;
+} else {
+  document.getElementById("appoggioCard").style.display = "none";
+  }
+}
+      function renderFutureTurns(todayKeyValue){
+  const keys = Object.keys(turni).sort();
+  const startIndex = keys.indexOf(todayKeyValue);
+  let html = "";
+
+  for(let i = 1; i <= 7; i++){
+    const key = keys[startIndex + i];
+    if(!key) continue;
+
+    const data = turni[key];
+    const turnoFarm = farmacie[data.turno];
+    const appFarm = data.appoggio ? farmacie[data.appoggio] : null;
+
+    html += `
+      <article class="future-card">
+        <div class="future-date">${formatShortDate(key)}</div>
+        <div class="future-name">${data.turno}</div>
+        <div class="future-app"><strong>Appoggio:</strong> ${data.appoggio ? data.appoggio : "—"}</div>
+
+        <div class="future-mini-actions">
+          ${
+            turnoFarm && turnoFarm.telefono && turnoFarm.telefono.trim() !== ""
+              ? `<a class="future-mini-btn" href="tel:${turnoFarm.telefono}">Chiama</a>`
+              : ``
+          }
+          ${
+            appFarm && appFarm.maps && appFarm.maps.trim() !== ""
+              ? `<a class="future-mini-btn" href="${appFarm.maps}" target="_blank">Appoggio</a>`
+              : ``
+          }
+        </div>
+      </article>
+    `;
+  }
+
+  document.getElementById("futureGrid").innerHTML = html;
+}
+    
+    function renderTurni(){
+      const key = todayKey();
+      const todayData = turni[key];
+
+      const todayReal = new Date();
+const realKey =
+  todayReal.getFullYear() + "-" +
+  String(todayReal.getMonth()+1).padStart(2,"0") + "-" +
+  String(todayReal.getDate()).padStart(2,"0");
+
+document.getElementById("heroDate").textContent = formatLongDate(realKey);
+      
+      if(!todayData){
+        document.getElementById("turnoCard").innerHTML = `
+          <div class="card-topline">
+            <div class="card-badge">Farmacia di turno</div>
+            <div class="card-icon">🏥</div>
+          </div>
+          <h2 class="card-name">Dato non disponibile</h2>
+          <p class="card-subline">Non è presente un turno configurato per la data odierna.</p>
+        `;
+
+        document.getElementById("appoggioCard").innerHTML = `
+          <div class="card-topline">
+            <div class="card-badge">Farmacia di appoggio</div>
+            <div class="card-icon">📍</div>
+          </div>
+          <h2 class="card-name">Dato non disponibile</h2>
+          <p class="card-subline">Aggiungi la giornata corrispondente nel codice dei turni.</p>
+        `;
+
+        document.getElementById("futureGrid").innerHTML = "";
+        return;
+      }
+
+      renderMainCards(todayData);
+      renderFutureTurns(key);
+    }
+function startClock(){
+  function updateClock(){
+    const now = new Date();
+
+    const time = now.toLocaleTimeString("it-IT", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    document.getElementById("heroClock").textContent = time;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+   renderTurni();
+startClock();
+  </script>
+  <script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+</body>
+</html>

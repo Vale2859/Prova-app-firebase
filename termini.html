@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Termini di Servizio | Farmacia Montesano</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    .page{
+      width:min(100%, 900px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:16px 16px 34px;
+    }
+
+    .brand-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:16px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .brand-logo{
+      width:100%;
+      max-width:220px;
+      display:block;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .back-btn{
+      width:50px;
+      height:50px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size:22px;
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 50px;
+    }
+
+    .title-wrap{
+      flex:1;
+      min-width:0;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.9rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .page-subtitle{
+      margin:5px 0 0;
+      font-size:.95rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .panel{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:22px 18px;
+    }
+
+    .update{
+      margin:0 0 18px;
+      font-size:.88rem;
+      color:var(--text-soft);
+      font-weight:800;
+    }
+
+    h2{
+      margin:24px 0 10px;
+      font-size:1.2rem;
+      line-height:1.15;
+      font-weight:900;
+      letter-spacing:-0.03em;
+      color:#15362f;
+    }
+
+    p{
+      margin:0 0 12px;
+      font-size:.98rem;
+      line-height:1.65;
+      color:var(--text);
+      font-weight:500;
+    }
+
+    ul{
+      margin:0 0 14px 18px;
+      padding:0;
+    }
+
+    li{
+      margin-bottom:8px;
+      font-size:.97rem;
+      line-height:1.55;
+      color:var(--text);
+      font-weight:500;
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="brand-card">
+      <img src="logo.png" alt="Logo Farmacia Montesano" class="brand-logo" />
+    </header>
+
+    <div class="topbar">
+      <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <div class="title-wrap">
+        <h1 class="page-title">Termini di Servizio</h1>
+        <p class="page-subtitle">Condizioni di utilizzo dell’app e del sito</p>
+      </div>
+    </div>
+
+    <section class="panel">
+      <p class="update">Ultimo aggiornamento: 15 aprile 2026</p>
+
+      <p>
+        I presenti termini disciplinano l’utilizzo del sito e dell’app della Farmacia Montesano
+        da parte degli utenti che effettuano registrazione, accesso, prenotazioni e utilizzo
+        delle funzionalità disponibili.
+      </p>
+
+      <h2>1. Gestore del servizio</h2>
+      <p>
+        Il servizio è fornito da <strong>Farmacia Montesano s.a.s del Dott. Giovanni Montesano &amp; C.</strong>.
+      </p>
+
+      <h2>2. Finalità dell’app</h2>
+      <p>
+        L’app consente all’utente di registrarsi, accedere alla propria area personale, ricevere notifiche,
+        consultare informazioni e prenotare servizi messi a disposizione dalla farmacia.
+      </p>
+
+      <h2>3. Account utente</h2>
+      <p>
+        L’utente si impegna a fornire dati veritieri, aggiornati e completi.
+        L’utente è responsabile dell’uso del proprio account e delle informazioni inserite tramite lo stesso.
+      </p>
+
+      <h2>4. Prenotazioni</h2>
+      <ul>
+        <li>Le prenotazioni sono richieste effettuate dall’utente attraverso l’app o il sito.</li>
+        <li>La farmacia può organizzare, confermare, modificare o annullare una prenotazione per esigenze operative o organizzative.</li>
+        <li>L’utente può annullare una prenotazione secondo le funzionalità disponibili nell’app.</li>
+      </ul>
+
+      <h2>5. Notifiche</h2>
+      <p>
+        L’utente prende atto che il servizio può inviare notifiche relative a prenotazioni, promemoria,
+        servizi, turni, appoggi, offerte, giornate e funzionamento dell’app.
+        Le preferenze possono essere gestite dall’utente nell’area profilo.
+      </p>
+
+      <h2>6. Uso corretto del servizio</h2>
+      <p>
+        L’utente si impegna a non utilizzare il servizio in modo illecito, fraudolento o contrario alla buona fede
+        e a non inserire dati falsi, incompleti o riferiti a terzi senza autorizzazione.
+      </p>
+
+      <h2>7. Limitazione di responsabilità</h2>
+      <p>
+        Il servizio viene fornito con l’obiettivo di facilitare la gestione delle prenotazioni e delle comunicazioni
+        della farmacia. Potrebbero verificarsi interruzioni, aggiornamenti, ritardi tecnici o limitazioni temporanee.
+        La farmacia non garantisce l’assenza assoluta di errori tecnici o indisponibilità momentanee del sistema.
+      </p>
+
+      <h2>8. Proprietà e contenuti</h2>
+      <p>
+        Il contenuto dell’app e del sito, salvo diversa indicazione, appartiene alla Farmacia Montesano
+        o ai rispettivi titolari dei diritti e non può essere copiato o riutilizzato in modo non autorizzato.
+      </p>
+
+      <h2>9. Modifiche del servizio</h2>
+      <p>
+        La farmacia si riserva il diritto di aggiornare, modificare o sospendere in tutto o in parte il servizio,
+        le funzionalità disponibili e i presenti termini.
+      </p>
+
+      <h2>10. Contatti</h2>
+      <p>
+        Per informazioni relative al servizio è possibile scrivere a
+        <strong>amministrazione@farmaciamontesano.it</strong>.
+      </p>
+    </section>
+  </main>
+
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+</body>
+</html>
