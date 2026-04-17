@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Profilo Admin | Farmacia Montesano</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mobile.css" />
+  <style>
+    :root{--admin-bg:linear-gradient(180deg,#f5f7f6 0%,#eef4f1 100%);--admin-card:rgba(255,255,255,.92);--admin-border:rgba(20,55,48,.08);--admin-text:#16372f;--admin-muted:#6f817b;--admin-green-1:#2f7f5f;--admin-green-2:#86c58b;--admin-shadow:0 18px 44px rgba(16,49,39,.08);}
+    *{box-sizing:border-box} html,body{margin:0;padding:0} body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--admin-bg);color:var(--admin-text)}
+    .admin-shell{width:100%;max-width:920px;margin:0 auto;padding:18px 16px 110px} .card{border:1px solid var(--admin-border);box-shadow:var(--admin-shadow);background:var(--admin-card);border-radius:28px}
+    .brand{padding:22px 20px;margin-bottom:18px} .logo{width:100%;max-width:270px;display:block} .topbar{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+    .back{width:76px;height:76px;border-radius:24px;background:rgba(255,255,255,.92);border:1px solid var(--admin-border);display:flex;align-items:center;justify-content:center;text-decoration:none;color:#16372f;font-size:38px;box-shadow:var(--admin-shadow);flex-shrink:0}
+    .title h1{margin:0 0 8px;font-size:48px;line-height:.96;letter-spacing:-.05em;color:#10352e} .title p{margin:0;font-size:17px;line-height:1.42;color:var(--admin-muted);max-width:580px}
+    .panel{padding:18px;margin-bottom:18px} .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px} .field{display:flex;flex-direction:column;gap:8px} .field.full{grid-column:1/-1}
+    .field label{font-size:14px;font-weight:700;color:#34544b} .field input,.field textarea{width:100%;min-height:52px;padding:12px 14px;border-radius:16px;border:1px solid rgba(20,55,48,.10);background:#fff;font:inherit;color:#16372f;outline:none} .field textarea{min-height:120px;resize:vertical}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px} .btn,.btn2{min-height:52px;padding:0 18px;border:none;border-radius:18px;font-size:16px;font-weight:800;cursor:pointer} .btn{background:linear-gradient(135deg,var(--admin-green-1) 0%,var(--admin-green-2) 100%);color:#fff;box-shadow:0 12px 24px rgba(73,165,120,.22)} .btn2{background:#eef4f1;color:#16372f}
+    .status{margin-top:10px;font-size:14px;color:var(--admin-muted);font-weight:700} .hint{margin-top:10px;font-size:15px;line-height:1.45;color:var(--admin-muted)} .split{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .preview-box{padding:18px} .preview-card{border-radius:24px;overflow:hidden;background:#fff;border:1px solid rgba(20,55,48,.08);box-shadow:0 12px 24px rgba(0,0,0,.05)} .preview-card img{display:block;width:100%;height:210px;object-fit:cover;background:#e8efeb} .preview-content{padding:18px}
+    .pill{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border-radius:999px;background:#efe6f8;color:#7d4ca6;font-size:14px;font-weight:800;margin-bottom:10px} .mini{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border-radius:999px;background:#fff7d8;color:#967100;font-size:14px;font-weight:800;margin-bottom:10px} .preview-card h3{margin:0 0 8px;font-size:28px;line-height:1.08;color:#17332c} .preview-card p{margin:0;font-size:16px;line-height:1.5;color:#61746d}
+    @media (max-width:640px){.admin-shell{padding:16px 12px 90px} .title h1{font-size:34px} .title p{font-size:15px} .grid,.split{grid-template-columns:1fr} .back{width:64px;height:64px;font-size:32px} .brand{padding:18px 16px} .logo{max-width:235px} .preview-card img{height:180px} .preview-card h3{font-size:22px}}
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="card brand"><img src="logo.png" alt="Logo Farmacia Montesano" class="logo" /></header>
+    <section class="topbar"><a href="dashboard-admin.html" class="back" aria-label="Torna indietro">←</a><div class="title"><h1>Profilo farmacia</h1><p>Qui puoi modificare i dati base mostrati nella sezione profilo pubblica della farmacia.</p></div></section>
+
+    <div class="split">
+      <section class="card panel">
+        <div class="grid">
+          <div class="field full"><label for="pharmacyName">Nome farmacia</label><input id="pharmacyName" type="text" placeholder="Es. Farmacia Montesano" /></div>
+          <div class="field"><label for="phone">Telefono</label><input id="phone" type="text" placeholder="Es. 080 123456" /></div>
+          <div class="field"><label for="email">Email</label><input id="email" type="email" placeholder="Es. info@farmaciamontesano.it" /></div>
+          <div class="field full"><label for="address">Indirizzo</label><input id="address" type="text" placeholder="Es. Via Roma 1, Matera" /></div>
+          <div class="field full"><label for="description">Descrizione</label><textarea id="description" placeholder="Presentazione breve della farmacia"></textarea></div>
+        </div>
+        <div class="actions"><button class="btn" type="button" onclick="saveData()">Salva su Firebase</button><button class="btn2" type="button" onclick="loadData()">Ricarica</button></div>
+        <div id="status" class="status">Pronto.</div>
+        <div class="hint">Dati salvati nel documento <strong>pharmacy_profile/main</strong>.</div>
+      </section>
+      <aside class="card preview-box"><div class="preview-card"><img src="images/profilo.jpg" alt="Anteprima profilo"><div class="preview-content"><div class="mini" id="pvBadge">Profilo</div><h3 id="pvTitle">Farmacia Montesano</h3><p id="pvSubtitle">Via Roma 1, Matera</p><p style="margin-top:10px" id="pvDesc">Presentazione della farmacia.</p></div></div></aside>
+    </div>
+  </div>
+<script>
+const firebaseConfig={apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",authDomain:"farmaciamontesano.firebaseapp.com",projectId:"farmaciamontesano",storageBucket:"farmaciamontesano.firebasestorage.app",messagingSenderId:"881461241551",appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig)}
+const db=firebase.firestore(); const docRef=db.collection('pharmacy_profile').doc('main');
+const ids=['pharmacyName','phone','email','address','description'];
+function updatePreview(){pvTitle.textContent=pharmacyName.value||'Farmacia Montesano';pvSubtitle.textContent=address.value||'Indirizzo farmacia';pvDesc.textContent=description.value||'Presentazione della farmacia.';}
+ids.forEach(id=>document.getElementById(id).addEventListener('input',updatePreview));
+async function loadData(){status.textContent='Caricamento...'; const snap=await docRef.get(); const d=snap.exists?snap.data():{}; ids.forEach(id=>document.getElementById(id).value=d[id]||''); updatePreview(); status.textContent=snap.exists?'Dati caricati da Firebase.':'Nessun dato trovato: puoi creare il profilo ora.';}
+async function saveData(){status.textContent='Salvataggio...'; await docRef.set({pharmacyName:pharmacyName.value.trim(),phone:phone.value.trim(),email:email.value.trim(),address:address.value.trim(),description:description.value.trim(),updatedAt:new Date().toISOString()},{merge:true}); status.textContent='Salvato correttamente su Firebase.';}
+window.loadData=loadData; window.saveData=saveData; loadData();
+</script>
+</body>
+</html>
