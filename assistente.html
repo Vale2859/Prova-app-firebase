@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mia | Assistente Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --green:#0d7a5f;
+      --green-dark:#085a46;
+      --green-soft:#eef8f4;
+      --text:#17332c;
+      --text-soft:#6a7f78;
+      --border:#e3ece7;
+      --white:#ffffff;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      width:100%;
+      height:100%;
+      font-family:"Inter",sans-serif;
+      background:#ffffff;
+      color:var(--text);
+    }
+
+    body{
+      display:flex;
+      flex-direction:column;
+    }
+
+   .chat-page{
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  min-height:100dvh;
+  background:#ffffff;
+  overflow:hidden;
+}
+    .chat-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      padding-top:calc(14px + env(safe-area-inset-top));
+      background:#ffffff;
+      border-bottom:1px solid var(--border);
+    }
+
+    .chat-header-left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .chat-back{
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      background:var(--green-soft);
+      color:var(--green-dark);
+      font-size:24px;
+      font-weight:800;
+      flex:0 0 auto;
+    }
+
+    .chat-avatar{
+      width:38px;
+      height:38px;
+      object-fit:contain;
+      flex:0 0 auto;
+    }
+
+    .chat-title{
+      min-width:0;
+    }
+
+    .chat-title strong{
+      display:block;
+      font-size:1.2rem;
+      line-height:1.1;
+    }
+
+    .chat-title span{
+      display:block;
+      font-size:.9rem;
+      color:var(--text-soft);
+      margin-top:3px;
+    }
+
+    .chat-close{
+      text-decoration:none;
+      color:#93a29c;
+      font-size:44px;
+      line-height:1;
+      padding:0 4px;
+      flex:0 0 auto;
+    }
+
+   .chat-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:16px;
+  background:#ffffff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding-bottom:20px;
+}
+    .msg{
+      max-width:86%;
+      padding:14px 16px;
+      border-radius:22px;
+      font-size:1rem;
+      line-height:1.45;
+      word-wrap:break-word;
+    }
+
+    .msg.bot{
+      background:#f4faf7;
+      border:1px solid #e2efe8;
+      align-self:flex-start;
+    }
+
+    .msg.user{
+      background:var(--green);
+      color:#fff;
+      align-self:flex-end;
+    }
+
+    .quick-box{
+      background:#f4faf7;
+      border:1px solid #e2efe8;
+      border-radius:28px;
+      padding:16px;
+    }
+
+    .quick-box strong{
+      display:block;
+      font-size:1.05rem;
+      margin-bottom:10px;
+    }
+
+    .quick-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .quick-pill{
+      border:none;
+      background:#eaf7f2;
+      color:var(--green-dark);
+      border:1px solid #d9ebe3;
+      border-radius:999px;
+      padding:11px 14px;
+      font-size:.95rem;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+   .chat-form{
+  position:relative;
+  z-index:25;
+  display:flex;
+  gap:10px;
+  padding:10px;
+  padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  background:#ffffff;
+  border-top:1px solid var(--border);
+}
+    .chat-input{
+      flex:1;
+      min-width:0;
+      min-height:54px;
+      border:1px solid #dce9e3;
+      border-radius:18px;
+      padding:0 16px;
+      font-size:16px;
+      outline:none;
+    }
+
+    .chat-send{
+      min-width:110px;
+      min-height:54px;
+      border:none;
+      border-radius:18px;
+      background:var(--green);
+      color:#fff;
+      font-size:1.1rem;
+      font-weight:800;
+    }
+
+    .typing{
+      background:#f4faf7;
+      border:1px solid #e2efe8;
+      border-radius:18px;
+      padding:12px 14px;
+      align-self:flex-start;
+      color:var(--text-soft);
+      font-size:.95rem;
+    }
+
+    @media (min-width: 641px){
+      body{
+        background:#f5faf8;
+      }
+
+      .chat-page{
+        width:min(520px, 94%);
+        margin:24px auto;
+        min-height:calc(100vh - 48px);
+        border:1px solid var(--border);
+        border-radius:26px;
+        overflow:hidden;
+        box-shadow:0 18px 40px rgba(0,0,0,0.08);
+      }
+
+      .chat-header{
+        position:relative;
+      }
+
+      .chat-form{
+        position:relative;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f8f55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Montesano">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+</head>
+<body>
+  <main class="chat-page">
+    <header class="chat-header">
+      <div class="chat-header-left">
+<a href="index.html" class="chat-back" onclick="if(!sessionStorage.getItem('miaRitornoMostrato')){sessionStorage.setItem('miaMostraRitorno','1')}">←</a>
+        
+        <img src="farmacista.png" alt="Mia assistente farmacia" class="chat-avatar"/>
+
+        <div class="chat-title">
+          <strong>Mia</strong>
+          <span>Assistente virtuale Farmacia Montesano</span>
+        </div>
+      </div>
+      
+<a href="index.html" class="chat-close" onclick="if(!sessionStorage.getItem('miaRitornoMostrato')){sessionStorage.setItem('miaMostraRitorno','1')}">×</a>
+    </header>
+
+    <section class="chat-body" id="chatBody">
+      <div class="quick-box">
+        <strong>Ciao! Sono Mia, l’assistente virtuale della Farmacia Montesano.</strong>
+        Posso aiutarti con:
+        <div class="quick-pills">
+          <button class="quick-pill" data-question="Consiglio per un sintomo">💊 Consiglio per un sintomo</button>
+          <button class="quick-pill" data-question="Servizi disponibili">🩺 Servizi disponibili</button>
+          <button class="quick-pill" data-question="Promo e offerte">🎁 Promo e offerte</button>
+          <button class="quick-pill" data-question="Giornate Beauty">🙋‍♀️ Giornate Beauty</button>
+          <button class="quick-pill" data-question="Farmacia di turno">🕒 Farmacia di turno</button>
+          <button class="quick-pill" data-question="Orari farmacia">📍 Orari farmacia</button>
+          <button class="quick-pill" data-question="Disponibilità farmaco">📦 Disponibilità farmaco</button>
+          <button class="quick-pill" data-question="Contatta la farmacia">📲 Contatta la farmacia</button>
+        </div>
+      </div>
+    </section>
+
+    <form class="chat-form" id="chatForm">
+      <input
+        type="text"
+        id="chatInput"
+        class="chat-input"
+        placeholder="Scrivi la tua domanda..."
+        autocomplete="off"
+      />
+      <button type="submit" class="chat-send">Invia</button>
+    </form>
+  </main>
+
+  <script src="chatbot/chatbot-config.js"></script>
+  <script src="chatbot/chatbot-medicine.js"></script>
+  <script src="chatbot/chatbot-services.js"></script>
+  <script src="chatbot/chatbot-symptoms.js"></script>
+  <script src="chatbot/chatbot-otc.js"></script>
+  <script src="chatbot/chatbot-safety.js"></script>
+  <script src="chatbot/chatbot-followup.js"></script>
+  <script src="chatbot/chatbot-brain.js"></script>
+
+  <script src="data/site-config.js"></script>
+  <script src="data/services-data.js"></script>
+  <script src="data/promo-data.js"></script>
+  <script src="data/giornate-data.js"></script>
+
+  <script>
+    const chatBody = document.getElementById("chatBody");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const quickPills = document.querySelectorAll(".quick-pill");
+    const sendBtn = document.querySelector(".chat-send");
+
+    function scrollBottom() {
+      if (!chatBody) return;
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function addUserMessage(text) {
+      if (!chatBody) return;
+
+      const msg = document.createElement("div");
+      msg.className = "msg user";
+      msg.textContent = text;
+      chatBody.appendChild(msg);
+      scrollBottom();
+    }
+
+    function addBotMessage(html) {
+      if (!chatBody) return;
+
+      const msg = document.createElement("div");
+      msg.className = "msg bot";
+      msg.innerHTML = html;
+      chatBody.appendChild(msg);
+      scrollBottom();
+    }
+
+    function showTypingAndReply(replyHtml) {
+      if (!chatBody) return;
+
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.textContent = "Sta scrivendo...";
+      chatBody.appendChild(typing);
+      scrollBottom();
+
+      setTimeout(() => {
+        typing.remove();
+        addBotMessage(replyHtml);
+      }, 850);
+    }
+
+    function getBotResponse(text) {
+      try {
+        if (window.ChatbotBrain && typeof window.ChatbotBrain.answer === "function") {
+          return window.ChatbotBrain.answer(text);
+        }
+        return "Assistente non disponibile al momento.";
+      } catch (error) {
+        console.error("Errore ChatbotBrain:", error);
+        return "C’è stato un problema momentaneo. Ti consiglio di contattare direttamente la farmacia.";
+      }
+    }
+
+    function sendMessage() {
+      if (!chatInput) return;
+
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      addUserMessage(text);
+      chatInput.value = "";
+
+      const response = getBotResponse(text);
+      showTypingAndReply(response);
+    }
+
+    if (chatForm) {
+      chatForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        sendMessage();
+      });
+    }
+
+    if (sendBtn) {
+      sendBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        sendMessage();
+      });
+    }
+
+    if (chatInput) {
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      chatInput.addEventListener("focus", () => {
+        setTimeout(() => {
+          scrollBottom();
+        }, 250);
+      });
+    }
+
+    quickPills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const question = pill.getAttribute("data-question") || pill.textContent.trim();
+        if (!question) return;
+
+        addUserMessage(question);
+
+        const response = getBotResponse(question);
+        showTypingAndReply(response);
+      });
+    });
+  </script>
+
+<script src="mobile-only.js"></script>
+<script src="app-fixes.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+
+</body>
+</html>

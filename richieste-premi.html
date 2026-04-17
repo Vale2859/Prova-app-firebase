@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operatori | Richieste Premi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --line:#e4ece8;
+      --text:#17352f;
+      --muted:#6c7c76;
+      --green:#0d7a5f;
+      --green2:#1b8b6d;
+      --gold:#d7a43c;
+      --red:#c94646;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:"Inter",sans-serif;
+      background:linear-gradient(180deg,#f7faf8 0%, #eff4f1 100%);
+      color:var(--text);
+    }
+
+    .page{
+      max-width:1400px;
+      margin:24px auto;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.07);
+      overflow:hidden;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 28px;
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+
+    .brand img{
+      height:54px;
+      width:auto;
+      display:block;
+    }
+
+    .menu{
+      display:flex;
+      gap:34px;
+      align-items:center;
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .menu a{
+      text-decoration:none;
+      color:#334944;
+      padding-bottom:10px;
+      border-bottom:4px solid transparent;
+    }
+
+    .menu a.active{
+      color:var(--green);
+      border-bottom-color:var(--green);
+    }
+
+    .top-actions button{
+      border:none;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .content{
+      padding:26px;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .sidebar-card,
+    .main-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .sidebar-card{
+      padding:18px;
+    }
+
+    .sidebar-title{
+      margin:0 0 14px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .vip-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .vip-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fcfdfc;
+      cursor:pointer;
+    }
+
+    .vip-name{
+      font-size:15px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .vip-sub{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .vip-points{
+      font-size:15px;
+      font-weight:900;
+      color:var(--green);
+      white-space:nowrap;
+    }
+
+    .main-card{
+      padding:22px;
+      min-height:500px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .toolbar input,
+    .toolbar select{
+      min-height:52px;
+      border:1px solid #d7e3de;
+      border-radius:14px;
+      padding:0 16px;
+      font-size:16px;
+      font-weight:600;
+      background:#fff;
+      color:var(--text);
+      outline:none;
+    }
+
+    .toolbar input{
+      flex:1;
+    }
+
+    .toolbar select{
+      width:220px;
+    }
+
+    .table-wrap{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th, td{
+      padding:16px 14px;
+      text-align:left;
+      border-bottom:1px solid #edf2ef;
+      vertical-align:middle;
+    }
+
+    th{
+      font-size:14px;
+      color:#61746e;
+      font-weight:800;
+      background:#fbfcfb;
+    }
+
+    td{
+      font-size:16px;
+      font-weight:600;
+    }
+
+    tr:last-child td{
+      border-bottom:none;
+    }
+
+    .client-name{
+      font-size:17px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .client-sub{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .status-waiting{
+      background:#fff3df;
+      color:#b87900;
+    }
+
+    .status-approved{
+      background:#e8f7ef;
+      color:var(--green);
+    }
+
+    .status-delivered{
+      background:#e6f4fb;
+      color:#2e7194;
+    }
+
+    .status-rejected{
+      background:#fff0f0;
+      color:var(--red);
+    }
+
+    .action-group{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .action-btn{
+      min-height:42px;
+      border:none;
+      border-radius:12px;
+      padding:0 14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .btn-approve{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+    }
+
+    .btn-deliver{
+      background:#e6f4fb;
+      color:#2e7194;
+      border:1px solid #cfe6f3;
+    }
+
+    .btn-reject{
+      background:#fff0f0;
+      color:var(--red);
+      border:1px solid #f3d5d5;
+    }
+
+    .empty{
+      padding:40px 20px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .vip-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(9,20,17,0.55);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index:9999;
+    }
+
+    .vip-modal.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(100%, 560px);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.18);
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 20px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .modal-title{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .close-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:#f2f5f4;
+      font-size:24px;
+      cursor:pointer;
+      color:#22433b;
+    }
+
+    .modal-body{
+      padding:18px 20px 20px;
+    }
+
+    .vip-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:8px;
+    }
+
+    .vip-box{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fbfcfb;
+    }
+
+    .vip-box-label{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .vip-box-value{
+      font-size:24px;
+      font-weight:900;
+      line-height:1.05;
+    }
+
+    @media (max-width: 1180px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+
+      .toolbar{
+        flex-direction:column;
+      }
+
+      .toolbar select{
+        width:100%;
+      }
+
+      .table-wrap{
+        overflow:auto;
+      }
+
+      table{
+        min-width:980px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <img src="logo.png" alt="Logo Farmacia Montesano">
+      </div>
+
+      <nav class="menu">
+        <a href="operatori.html">Accumulo</a>
+        <a href="#" class="active">Richieste Premi</a>
+        <a href="report.html">Report</a>
+      </nav>
+
+      <div class="top-actions">
+        <button type="button">Esci</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="layout">
+        <aside class="sidebar-card">
+          <h3 class="sidebar-title">Top 5 clienti annuali</h3>
+          <div class="vip-list" id="vipList"></div>
+        </aside>
+
+        <main class="main-card">
+          <div class="toolbar">
+            <input id="searchInput" type="text" placeholder="Cerca cliente, card o premio..." />
+            <select id="statusFilter">
+              <option value="all">Tutti gli stati</option>
+              <option value="in_attesa">In attesa</option>
+              <option value="approvata">Approvata</option>
+              <option value="consegnata">Consegnata</option>
+              <option value="rifiutata">Rifiutata</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Premio</th>
+                  <th>Punti spesi</th>
+                  <th>Data richiesta</th>
+                  <th>Stato</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="requestsBody">
+                <tr>
+                  <td colspan="6" class="empty">Caricamento richieste...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="vip-modal" id="vipModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">Dettaglio cliente VIP</h3>
+        <button class="close-btn" type="button" id="closeVipModal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="vipName" style="margin:0 0 16px;font-size:24px;font-weight:900;color:#17352f;"></p>
+
+        <div class="vip-grid">
+          <div class="vip-box">
+            <div class="vip-box-label">Numero card</div>
+            <div class="vip-box-value" id="vipCard"></div>
+          </div>
+
+          <div class="vip-box">
+            <div class="vip-box-label">Punti annuali</div>
+            <div class="vip-box-value" id="vipPoints"></div>
+          </div>
+
+          <div class="vip-box">
+            <div class="vip-box-label">Passaggi annuali</div>
+            <div class="vip-box-value" id="vipOrders"></div>
+          </div>
+
+          <div class="vip-box">
+            <div class="vip-box-label">Premi riscattati</div>
+            <div class="vip-box-value" id="vipPrizes"></div>
+          </div>
+
+          <div class="vip-box" style="grid-column:1 / -1;">
+            <div class="vip-box-label">Spesa annua parafarmaco</div>
+            <div class="vip-box-value" id="vipSpent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      firestore,
+      doc,
+      getDoc,
+      getDocs,
+      updateDoc,
+      collection
+    } from "./firebase.js";
+
+    import {
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const vipList = document.getElementById("vipList");
+    const requestsBody = document.getElementById("requestsBody");
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+
+    const vipModal = document.getElementById("vipModal");
+    const closeVipModal = document.getElementById("closeVipModal");
+
+    let allRequests = [];
+    let allClients = [];
+
+    function openModal(modal){
+      modal.classList.add("open");
+    }
+
+    function closeModal(modal){
+      modal.classList.remove("open");
+    }
+
+    function formatDate(value){
+      if (!value) return "-";
+      const d = new Date(value);
+      if (isNaN(d.getTime())) return value;
+      return d.toLocaleString("it-IT", {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      });
+    }
+
+    function formatStatus(status){
+      switch(status){
+        case "approvata":
+          return `<span class="status status-approved">Approvata</span>`;
+        case "consegnata":
+          return `<span class="status status-delivered">Consegnata</span>`;
+        case "rifiutata":
+          return `<span class="status status-rejected">Rifiutata</span>`;
+        default:
+          return `<span class="status status-waiting">In attesa</span>`;
+      }
+    }
+
+    function renderTopClients(items){
+      vipList.innerHTML = items.map(client => {
+        const fullName = `${client.nome || ""} ${client.cognome || ""}`.trim() || "Cliente";
+        const card = client.clientCode || client.fidelityCard || "-";
+        const annualPoints = Number(client.puntiAnnuali || client.punti || 0);
+
+        return `
+          <div class="vip-item"
+            data-name="${fullName}"
+            data-card="${card}"
+            data-points="${annualPoints}"
+            data-orders="${client.passaggiAnnuali || 0}"
+            data-prizes="${client.premiRiscattati || 0}"
+            data-spent="${client.spesaAnnua || "0,00 €"}"
+          >
+            <div>
+              <div class="vip-name">${fullName}</div>
+              <div class="vip-sub">Card: ${card}</div>
+            </div>
+            <div class="vip-points">${annualPoints} pt</div>
+          </div>
+        `;
+      }).join("");
+
+      vipList.querySelectorAll(".vip-item").forEach(item => {
+        item.addEventListener("click", () => {
+          document.getElementById("vipName").textContent = item.dataset.name || "";
+          document.getElementById("vipCard").textContent = item.dataset.card || "";
+          document.getElementById("vipPoints").textContent = `${item.dataset.points || 0} pt`;
+          document.getElementById("vipOrders").textContent = item.dataset.orders || "0";
+          document.getElementById("vipPrizes").textContent = item.dataset.prizes || "0";
+          document.getElementById("vipSpent").textContent = item.dataset.spent || "0,00 €";
+          openModal(vipModal);
+        });
+      });
+    }
+
+    function buildActions(item){
+      if (item.status === "in_attesa") {
+        return `
+          <div class="action-group">
+            <button class="action-btn btn-approve" data-action="approve" data-id="${item.id}">Approva</button>
+            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
+          </div>
+        `;
+      }
+
+      if (item.status === "approvata") {
+        return `
+          <div class="action-group">
+            <button class="action-btn btn-deliver" data-action="deliver" data-id="${item.id}">Consegnata</button>
+            <button class="action-btn btn-reject" data-action="reject" data-id="${item.id}">Rifiuta</button>
+          </div>
+        `;
+      }
+
+      return `<span style="color:#7b8d88;font-weight:700;">Nessuna azione</span>`;
+    }
+
+    function renderRequests(){
+      const search = searchInput.value.trim().toLowerCase();
+      const filter = statusFilter.value;
+
+      let filtered = allRequests.filter(item => {
+        const text = [
+          item.clienteNome || "",
+          item.card || "",
+          item.premioNome || ""
+        ].join(" ").toLowerCase();
+
+        const matchSearch = text.includes(search);
+        const matchStatus = filter === "all" ? true : item.status === filter;
+
+        return matchSearch && matchStatus;
+      });
+
+      if (!filtered.length) {
+        requestsBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="empty">Nessuna richiesta trovata.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      requestsBody.innerHTML = filtered.map(item => `
+        <tr>
+          <td>
+            <div class="client-name">${item.clienteNome || "Cliente"}</div>
+            <div class="client-sub">${item.card || "-"}</div>
+          </td>
+          <td>${item.premioNome || "-"}</td>
+          <td>${Number(item.puntiSpesi || 0).toLocaleString("it-IT")} pt</td>
+          <td>${formatDate(item.createdAt)}</td>
+          <td>${formatStatus(item.status)}</td>
+          <td>${buildActions(item)}</td>
+        </tr>
+      `).join("");
+
+      requestsBody.querySelectorAll("[data-action]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          await handleRequestAction(id, action);
+        });
+      });
+    }
+
+    async function handleRequestAction(id, action){
+      const requestRef = doc(firestore, "reward_requests", id);
+
+      if (action === "approve") {
+        await updateDoc(requestRef, {
+          status: "approvata",
+          approvedAt: new Date().toISOString()
+        });
+      }
+
+      if (action === "deliver") {
+        await updateDoc(requestRef, {
+          status: "consegnata",
+          deliveredAt: new Date().toISOString()
+        });
+      }
+
+      if (action === "reject") {
+        await updateDoc(requestRef, {
+          status: "rifiutata",
+          rejectedAt: new Date().toISOString()
+        });
+      }
+
+      await loadRequests();
+    }
+
+    async function loadClients(){
+      const snap = await getDocs(collection(firestore, "users"));
+      allClients = [];
+
+      snap.forEach(docSnap => {
+        allClients.push({
+          uid: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
+      const topClients = [...allClients]
+        .sort((a, b) => Number(b.puntiAnnuali || b.punti || 0) - Number(a.puntiAnnuali || a.punti || 0))
+        .slice(0, 5);
+
+      renderTopClients(topClients);
+    }
+
+    async function loadRequests(){
+      const q = query(collection(firestore, "reward_requests"), orderBy("createdAt", "desc"));
+      const snap = await getDocs(q);
+
+      allRequests = [];
+      snap.forEach(docSnap => {
+        allRequests.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
+      renderRequests();
+    }
+
+    searchInput.addEventListener("input", renderRequests);
+    statusFilter.addEventListener("change", renderRequests);
+
+    closeVipModal.addEventListener("click", () => closeModal(vipModal));
+    vipModal.addEventListener("click", (e) => {
+      if (e.target === vipModal) closeModal(vipModal);
+    });
+
+    await loadClients();
+    await loadRequests();
+  </script>
+</body>
+</html>

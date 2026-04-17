@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dipendenti</title>
+<style>
+:root{--bg:#eef3f0;--card:#fff;--card-soft:#f5f8f6;--line:#dfe7e3;--text:#1f3c35;--muted:#6f837c;--green:#3e8b61;--green-2:#66b187;--red:#ff6b5f;--shadow:0 10px 25px rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(180deg,#f4f7f5,#e9efec);color:var(--text)}
+.app{max-width:430px;margin:auto;padding:14px}.logo{width:150px;margin-bottom:12px;display:block}
+.top-box{min-height:132px;border-radius:22px;background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:center;box-shadow:var(--shadow);margin-bottom:14px}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#dcefe5;font-weight:900;margin-bottom:6px}.top-title{font-size:22px;font-weight:900;line-height:1;margin-bottom:8px}.top-sub{font-size:14px;opacity:.95;font-weight:700;line-height:1.25;white-space:pre-line}
+.top-actions{display:flex;gap:8px;margin-top:10px}.btn{width:100%;min-height:46px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;font-size:14px;font-weight:900;cursor:pointer}.btn.secondary{background:#edf3ef;color:var(--text)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card-wrap{position:relative}.badge{position:absolute;top:10px;right:12px;background:var(--red);color:#fff;font-size:12px;padding:4px 8px;border-radius:999px;font-weight:900;z-index:2}
+.card{height:132px;border-radius:22px;background:#fff;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:1px solid var(--line)}.card:active,.btn:active{transform:scale(.98)}.title{font-size:17px;font-weight:900;color:#2c4a43;line-height:1.1}.sub{font-size:14px;color:var(--muted);font-weight:700;line-height:1.2}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",authDomain:"farmaciamontesano.firebaseapp.com",projectId:"farmaciamontesano",storageBucket:"farmaciamontesano.firebasestorage.app",messagingSenderId:"881461241551",appId:"1:881461241551:web:c74d6ee74cb857fa5179ba"};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const EMPLOYEE_STORAGE_KEY="fm_employee_session_v1";
+function getSession(){try{return JSON.parse(localStorage.getItem(EMPLOYEE_STORAGE_KEY)||"null");}catch(e){return null;}}
+function clearSession(){localStorage.removeItem(EMPLOYEE_STORAGE_KEY);}
+function requireSession(){const s=getSession(); if(!s){window.location.href='dipendenti-login.html'; throw new Error('no session');} return s;}
+async function loadEmployeeRequests(employeeId){try{const snap=await db.collection('employee_requests').where('employeeId','==',employeeId).get(); return snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));}catch(e){console.error(e); return [];}}
+</script>
+</head>
+<body>
+<div class="app">
+  <img src="logo.png" class="logo" onerror="this.style.display='none'">
+  <div class="top-box">
+    <div class="kicker">Home dipendenti</div>
+    <div class="top-title" id="welcomeTitle">Benvenuto</div>
+    <div class="top-sub" id="welcomeSub">Gestisci tutto velocemente</div>
+    <div class="top-actions"><button class="btn secondary" id="logoutBtn" type="button">Esci</button><button class="btn" id="refreshBtn" type="button">Aggiorna</button></div>
+  </div>
+  <div class="grid">
+    <div class="card" onclick="window.location.href='ldf.html'"><div class="title">OBBIETTIVI LDF</div><div class="sub">Controlla andamento e riepilogo</div></div>
+    <div class="card-wrap"><div class="badge" id="consumabiliBadge">0</div><div class="card" onclick="window.location.href='consumabili.html'"><div class="title">RICHIESTA CONSUMABILE</div><div class="sub">Invia richiesta in pochi secondi</div></div></div>
+    <div class="card-wrap"><div class="badge" id="ferieBadge">0</div><div class="card" onclick="window.location.href='permessi-ferie.html'"><div class="title">PERMESSI / FERIE</div><div class="sub">Ferie, giornata o permesso a ore</div></div></div>
+    <div class="card" onclick="window.location.href='in-lavorazione.html'"><div class="title">IN LAVORAZIONE</div><div class="sub">Segui stato richieste e motivi</div></div>
+  </div>
+</div>
+<script>
+(async function(){
+  const session=requireSession();
+  async function refreshHome(){
+    const requests=await loadEmployeeRequests(session.id);
+    document.getElementById('consumabiliBadge').textContent=requests.filter(x=>x.type==='consumabile' && x.status==='in_attesa').length;
+    document.getElementById('ferieBadge').textContent=requests.filter(x=>x.type==='ferie_permesso' && x.status==='in_attesa').length;
+    const total=requests.length,pending=requests.filter(x=>x.status==='in_attesa').length,approved=requests.filter(x=>x.status==='approvata').length,rejected=requests.filter(x=>x.status==='negata').length;
+    document.getElementById('welcomeTitle').textContent=`Ciao, ${session.name}`;
+    document.getElementById('welcomeSub').textContent=`Totali: ${total} richieste · In attesa: ${pending} · Accettate: ${approved} · Rifiutate: ${rejected}`;
+  }
+  document.getElementById('logoutBtn').addEventListener('click',()=>{clearSession();window.location.href='dipendenti-login.html';});
+  document.getElementById('refreshBtn').addEventListener('click',refreshHome);
+  refreshHome();
+})();
+</script>
+</body>
+</html>

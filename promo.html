@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Promo | Farmacia Montesano</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css" />
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+  <style>
+    .promo-page{
+      max-width:1200px;
+      margin:auto;
+      padding:18px 18px 120px;
+    }
+
+    .promo-intro{
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .promo-intro h1{
+      margin:0 0 10px;
+      font-size:42px;
+      line-height:1.05;
+      color:#17332c;
+    }
+
+    .promo-intro p{
+      margin:0;
+      font-size:18px;
+      color:#5c6d67;
+    }
+
+    /* HERO FLASH */
+    .flash-hero{
+      display:grid;
+      grid-template-columns:1.15fr 1fr;
+      gap:0;
+      background:#fff;
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:0 18px 40px rgba(0,0,0,0.10);
+      margin-bottom:28px;
+      border:1px solid #e8efeb;
+      animation:heroGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroGlow{
+      0%{ box-shadow:0 18px 40px rgba(0,0,0,0.10); }
+      100%{ box-shadow:0 22px 48px rgba(13,122,95,0.16); }
+    }
+
+    .flash-hero-media{
+      min-height:360px;
+      background:#f6f6f6;
+    }
+
+    .flash-hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .flash-hero-content{
+      padding:34px 30px;
+      background:linear-gradient(135deg,#fff7f2 0%,#fff 100%);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .flash-badge{
+      display:inline-block;
+      width:max-content;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#d62828;
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:16px;
+    }
+
+    .flash-hero-content h2{
+      margin:0 0 12px;
+      font-size:44px;
+      line-height:1;
+      color:#17332c;
+    }
+
+    .flash-hero-content p{
+      margin:0 0 16px;
+      font-size:18px;
+      line-height:1.5;
+      color:#5c6d67;
+      max-width:500px;
+    }
+
+    .flash-meta{
+      font-size:15px;
+      line-height:1.6;
+      color:#6b7671;
+      margin-bottom:18px;
+    }
+
+    .flash-price{
+      margin-bottom:20px;
+    }
+
+    .flash-old{
+      font-size:24px;
+      color:#8e8e8e;
+      text-decoration:line-through;
+      margin-right:12px;
+    }
+
+    .flash-new{
+      font-size:52px;
+      font-weight:800;
+      color:#d62828;
+      line-height:1;
+    }
+
+    .flash-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .flash-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:54px;
+      padding:0 20px;
+      border-radius:14px;
+      font-size:16px;
+      font-weight:800;
+      text-decoration:none;
+      transition:.2s ease;
+    }
+
+    .flash-btn.primary{
+      background:#2e8b57;
+      color:#fff;
+    }
+
+    .flash-btn.primary:hover{
+      background:#256f46;
+      transform:translateY(-1px);
+    }
+
+    .flash-btn.secondary{
+      background:#eef5f1;
+      color:#17332c;
+    }
+
+    .flash-btn.secondary:hover{
+      background:#e3ece8;
+      transform:translateY(-1px);
+    }
+
+    /* MINI CAROSELLO */
+    .promo-strip-wrap{
+      margin-bottom:34px;
+    }
+
+    .promo-strip-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:14px;
+    }
+
+    .promo-strip-head h3{
+      margin:0;
+      font-size:28px;
+      color:#17332c;
+    }
+
+    .promo-strip-head p{
+      margin:0;
+      font-size:15px;
+      color:#688078;
+    }
+
+    .promo-strip{
+      display:flex;
+      gap:14px;
+      overflow-x:auto;
+      padding-bottom:8px;
+      scroll-snap-type:none;
+      -webkit-overflow-scrolling:touch;
+      scroll-behavior:auto;
+    }
+
+    .promo-strip::-webkit-scrollbar{
+      height:8px;
+    }
+
+    .promo-strip::-webkit-scrollbar-thumb{
+      background:#d7e5df;
+      border-radius:999px;
+    }
+
+    .promo-mini-card{
+      min-width:220px;
+      max-width:220px;
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 22px rgba(0,0,0,0.08);
+      border:1px solid #e8efeb;
+      scroll-snap-align:start;
+      transition:.2s ease;
+      flex-shrink:0;
+    }
+
+    .promo-mini-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 14px 28px rgba(0,0,0,0.10);
+    }
+
+    .promo-mini-card img{
+      width:100%;
+      height:130px;
+      object-fit:cover;
+      display:block;
+      background:#eef2ef;
+    }
+
+    .promo-mini-content{
+      padding:14px;
+    }
+
+    .promo-mini-badge{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      background:#eef8f4;
+      color:#0d7a5f;
+      font-size:11px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .promo-mini-content h4{
+      margin:0 0 6px;
+      font-size:18px;
+      line-height:1.15;
+      color:#17332c;
+    }
+
+    .promo-mini-price{
+      margin-top:8px;
+    }
+
+    .promo-mini-old{
+      font-size:13px;
+      color:#8e8e8e;
+      text-decoration:line-through;
+      margin-right:6px;
+    }
+
+    .promo-mini-new{
+      font-size:22px;
+      font-weight:800;
+      color:#d62828;
+    }
+
+    /* TITOLI SEZIONI */
+    .promo-section{
+      margin-top:34px;
+    }
+
+    .promo-section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .promo-section-title h3{
+      margin:0;
+      font-size:30px;
+      color:#17332c;
+    }
+
+    .promo-section-title p{
+      margin:0;
+      font-size:15px;
+      color:#688078;
+    }
+
+    /* STAGIONALI */
+    .seasonal-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:24px;
+    }
+
+    .seasonal-card{
+      background:#fff;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 14px 32px rgba(0,0,0,0.08);
+      border:1px solid #e8efeb;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .seasonal-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 36px rgba(0,0,0,0.11);
+    }
+
+    .seasonal-card img{
+      width:100%;
+      height:230px;
+      object-fit:cover;
+      display:block;
+      background:#eef2ef;
+    }
+
+    .seasonal-card-content{
+      padding:20px;
+    }
+
+    .seasonal-badge{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#eaf7f2;
+      color:#0d7a5f;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .seasonal-card h4{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:1.1;
+      color:#17332c;
+    }
+
+    .seasonal-card p{
+      margin:0 0 14px;
+      font-size:16px;
+      color:#5c6d67;
+      line-height:1.45;
+    }
+
+    .seasonal-price{
+      margin-bottom:14px;
+    }
+
+    .seasonal-old{
+      font-size:18px;
+      color:#8e8e8e;
+      text-decoration:line-through;
+      margin-right:10px;
+    }
+
+    .seasonal-new{
+      font-size:34px;
+      font-weight:800;
+      color:#d62828;
+    }
+
+    .seasonal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* MESE */
+    .month-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+
+    .month-card{
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,0.07);
+      border:1px solid #e8efeb;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .month-card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 14px 30px rgba(0,0,0,0.10);
+    }
+
+    .month-card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+      background:#eef2ef;
+    }
+
+    .month-card-content{
+      padding:16px;
+    }
+
+    .month-badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#eef8f4;
+      color:#0d7a5f;
+      font-size:12px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .month-card h4{
+      margin:0 0 8px;
+      font-size:22px;
+      line-height:1.15;
+      color:#17332c;
+    }
+
+    .month-card p{
+      margin:0 0 12px;
+      font-size:15px;
+      color:#5c6d67;
+      line-height:1.4;
+      min-height:62px;
+    }
+
+    .month-price{
+      margin-bottom:12px;
+    }
+
+    .month-old{
+      font-size:15px;
+      color:#8e8e8e;
+      text-decoration:line-through;
+      margin-right:8px;
+    }
+
+    .month-new{
+      font-size:26px;
+      font-weight:800;
+      color:#d62828;
+    }
+
+    .month-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:0 14px;
+      border-radius:10px;
+      background:#2e8b57;
+      color:#fff;
+      font-size:15px;
+      font-weight:700;
+      text-decoration:none;
+      width:100%;
+    }
+
+    .month-btn:hover{
+      background:#256f46;
+    }
+
+    .promo-final-box{
+      margin-top:36px;
+      padding:22px;
+      border-radius:20px;
+      background:linear-gradient(135deg,#f3faf7 0%,#ffffff 100%);
+      border:1px solid #dfece7;
+      text-align:center;
+    }
+
+    .promo-final-box h3{
+      margin:0 0 8px;
+      font-size:28px;
+      color:#17332c;
+    }
+
+    .promo-final-box p{
+      margin:0 0 16px;
+      font-size:16px;
+      color:#5c6d67;
+    }
+
+    .promo-final-box a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:50px;
+      padding:0 20px;
+      border-radius:12px;
+      background:#25D366;
+      color:#fff;
+      font-size:16px;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    .empty-state{
+      grid-column:1/-1;
+      text-align:center;
+      padding:50px 25px;
+      border-radius:22px;
+      background:linear-gradient(135deg,#f6faf8 0%,#ffffff 100%);
+      border:1px solid #e3efe9;
+      box-shadow:0 14px 32px rgba(0,0,0,0.06);
+      animation:fadeEmpty .5s ease;
+    }
+
+    .empty-icon{
+      font-size:42px;
+      margin-bottom:12px;
+    }
+
+    .empty-state h3{
+      margin:0 0 8px;
+      font-size:24px;
+      font-weight:800;
+      color:#17332c;
+    }
+
+    .empty-state p{
+      margin:0 0 18px;
+      color:#62766f;
+      font-size:15px;
+    }
+
+    .empty-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:0 18px;
+      border-radius:12px;
+      background:#25D366;
+      color:#fff;
+      font-weight:800;
+      box-shadow:0 10px 20px rgba(37,211,102,0.25);
+      text-decoration:none;
+    }
+
+    @keyframes fadeEmpty{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media (max-width: 900px){
+      .flash-hero{
+        grid-template-columns:1fr;
+      }
+
+      .flash-hero-media{
+        min-height:220px;
+      }
+
+      .flash-hero-content h2{
+        font-size:36px;
+      }
+
+      .flash-new{
+        font-size:44px;
+      }
+
+      .seasonal-grid{
+        grid-template-columns:1fr;
+      }
+
+      .month-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 640px){
+      .promo-page{
+        padding:22px 12px 120px;
+      }
+
+      .promo-intro{
+        margin-bottom:18px;
+      }
+
+      .promo-intro h1{
+        font-size:30px;
+      }
+
+      .promo-intro p{
+        font-size:15px;
+      }
+
+      .flash-hero{
+        border-radius:20px;
+        margin-bottom:22px;
+      }
+
+      .flash-hero-media{
+        min-height:180px;
+      }
+
+      .flash-hero-content{
+        padding:18px 14px;
+      }
+
+      .flash-badge{
+        font-size:12px;
+        padding:7px 12px;
+        margin-bottom:12px;
+      }
+
+      .flash-hero-content h2{
+        font-size:28px;
+      }
+
+      .flash-hero-content p{
+        font-size:15px;
+        margin-bottom:12px;
+      }
+
+      .flash-meta{
+        font-size:13px;
+        margin-bottom:14px;
+      }
+
+      .flash-old{
+        font-size:18px;
+      }
+
+      .flash-new{
+        font-size:34px;
+      }
+
+      .flash-actions{
+        flex-direction:column;
+      }
+
+      .flash-btn{
+        width:100%;
+      }
+
+      .promo-strip-wrap{
+        margin-bottom:26px;
+      }
+
+      .promo-strip-head{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+        margin-bottom:10px;
+      }
+
+      .promo-strip-head h3{
+        font-size:22px;
+      }
+
+      .promo-mini-card{
+        min-width:170px;
+        max-width:170px;
+      }
+
+      .promo-mini-card img{
+        height:110px;
+      }
+
+      .promo-mini-content{
+        padding:12px;
+      }
+
+      .promo-mini-content h4{
+        font-size:16px;
+      }
+
+      .promo-mini-new{
+        font-size:18px;
+      }
+
+      .promo-section{
+        margin-top:24px;
+      }
+
+      .promo-section-title{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+        margin-bottom:12px;
+      }
+
+      .promo-section-title h3{
+        font-size:22px;
+      }
+
+      .promo-section-title p{
+        font-size:14px;
+      }
+
+      .seasonal-card img{
+        height:170px;
+      }
+
+      .seasonal-card-content{
+        padding:14px;
+      }
+
+      .seasonal-card h4{
+        font-size:22px;
+      }
+
+      .seasonal-card p{
+        font-size:15px;
+      }
+
+      .seasonal-new{
+        font-size:28px;
+      }
+
+      .seasonal-actions{
+        flex-direction:column;
+      }
+
+      .month-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+      }
+
+      .month-card{
+        border-radius:16px;
+      }
+
+      .month-card img{
+        height:110px;
+      }
+
+      .month-card-content{
+        padding:12px;
+      }
+
+      .month-badge{
+        font-size:10px;
+        padding:5px 8px;
+        margin-bottom:8px;
+      }
+
+      .month-card h4{
+        font-size:15px;
+        margin-bottom:6px;
+      }
+
+      .month-card p{
+        display:none;
+      }
+
+      .month-price{
+        margin-bottom:10px;
+      }
+
+      .month-old{
+        display:block;
+        margin:0 0 2px;
+        font-size:12px;
+      }
+
+      .month-new{
+        font-size:20px;
+      }
+
+      .month-btn{
+        min-height:40px;
+        font-size:13px;
+        padding:0 10px;
+      }
+
+      .promo-final-box{
+        margin-top:28px;
+        padding:18px 14px;
+      }
+
+      .promo-final-box h3{
+        font-size:22px;
+      }
+
+      .promo-final-box p{
+        font-size:15px;
+      }
+    }
+  </style>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+</head>
+
+<body class="season-primavera">
+  <header class="home-site-header">
+    <div class="home-shell home-nav-wrap">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="home-brand" aria-label="Farmacia Montesano">
+        <div class="home-brand-logo-box">
+          <img src="logo.png" alt="Logo Farmacia Montesano" class="home-brand-logo" />
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <div class="promo-page">
+    <div class="page-topbar">
+      <a href="index.html" onclick="if(history.length>1){history.back();return false;}" class="page-back-btn" aria-label="Torna alla home"><span>←</span></a>
+      <div class="page-topbar-copy">
+        <h1>Promo SUPER offerte</h1>
+        <p>Le migliori offerte della Farmacia Montesano, evidenziate in modo chiaro e immediato.</p>
+      </div>
+    </div>
+
+    <!-- HERO FLASH -->
+    <section class="flash-hero">
+      <div class="flash-hero-media">
+        <img src="" alt="Occasione flash Farmacia Montesano">
+      </div>
+
+      <div class="flash-hero-content">
+        <span class="flash-badge">OCCASIONE FLASH</span>
+        <h2>-30% Capelli</h2>
+        <p>Promo speciale per pochi giorni su prodotti selezionati per il benessere e la forza dei capelli.</p>
+
+        <div class="flash-meta">
+          ⚡ Solo per pochi giorni<br>
+          📍 Disponibile in farmacia
+        </div>
+
+        <div class="flash-price">
+          <span class="flash-old">€29,90</span>
+          <span class="flash-new">€20,90</span>
+        </div>
+
+        <div class="flash-actions">
+          <a href="https://wa.me/393927737079" class="flash-btn primary">Scrivici su WhatsApp</a>
+          <a href="#" class="flash-btn secondary">Chiedi in farmacia</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STRIP ORIZZONTALE -->
+    <section class="promo-strip-wrap">
+      <div class="promo-strip-head">
+        <h3>Scorri le occasioni</h3>
+        <p>Una selezione veloce delle promo più interessanti.</p>
+      </div>
+
+      <div class="promo-strip" id="promoStrip"></div>
+    </section>
+
+    <!-- STAGIONALI -->
+    <section class="promo-section" id="stagionaliSection">
+      <div class="promo-section-title">
+        <h3>Promo stagionali</h3>
+        <p>Le offerte più importanti del periodo, messe bene in evidenza.</p>
+      </div>
+
+      <div class="seasonal-grid"></div>
+    </section>
+
+    <!-- OFFERTE DEL MESE -->
+    <section class="promo-section" id="meseSection">
+      <div class="promo-section-title">
+        <h3>Offerte del mese</h3>
+        <p>Una selezione ordinata delle promozioni attive in farmacia.</p>
+      </div>
+
+      <div class="month-grid"></div>
+    </section>
+
+    <div class="promo-final-box">
+      <h3>Vuoi sapere se una promo è disponibile?</h3>
+      <p>Contattaci subito su WhatsApp e ti rispondiamo velocemente.</p>
+      <a href="https://wa.me/393927737079">Apri WhatsApp</a>
+    </div>
+  </div>
+
+  <script src="site-config.js"></script>
+  <script src="services-data.js"></script>
+  <script src="promo-data.js"></script>
+  <script src="giornate-data.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function caricaOfferteFirebase() {
+      const querySnapshot = await getDocs(collection(db, "offers"));
+
+      const offerte = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        if (data.attiva === true) {
+          offerte.push({
+            id: doc.id,
+            tipo: data.tipo || "mese",
+            titolo: data.titolo || data.nome || "",
+            nome: data.nome || data.titolo || "",
+            descrizione: data.descrizione || "",
+            badge: data.badge || "OFFERTA",
+            prezzoVecchio: data.prezzoPrima ? `€${data.prezzoPrima}` : "",
+            prezzoNuovo: data.prezzoOra ? `€${data.prezzoOra}` : "",
+            immagine: data.immagine || data.imageUrl || "",
+            dataInizio: data.dataInizio || "",
+            dataFine: data.dataFine || ""
+          });
+        }
+      });
+
+      const flashPromo = offerte.find(p => p.tipo === "flash");
+      const stripPromo = offerte.filter(p => p.tipo === "strip");
+      const stagionali = offerte.filter(p => p.tipo === "stagionale");
+      const mesePromo = offerte.filter(p => p.tipo === "mese");
+
+      // FLASH HERO
+      const flashHero = document.querySelector(".flash-hero");
+      if (flashPromo) {
+        const flashImg = document.querySelector(".flash-hero-media img");
+        const flashTitle = document.querySelector(".flash-hero-content h2");
+        const flashDesc = document.querySelector(".flash-hero-content p");
+        const flashOld = document.querySelector(".flash-old");
+        const flashNew = document.querySelector(".flash-new");
+        const flashBadge = document.querySelector(".flash-badge");
+
+        if (flashImg) {
+          flashImg.src = flashPromo.immagine || "";
+          flashImg.alt = flashPromo.titolo || "Promo flash";
+        }
+
+        if (flashTitle) flashTitle.innerText = flashPromo.titolo || "";
+        if (flashDesc) flashDesc.innerText = flashPromo.descrizione || "";
+        if (flashOld) flashOld.innerText = flashPromo.prezzoVecchio || "";
+        if (flashNew) flashNew.innerText = flashPromo.prezzoNuovo || "";
+        if (flashBadge) flashBadge.innerText = flashPromo.badge || "OCCASIONE FLASH";
+      } else {
+        if (flashHero) flashHero.style.display = "none";
+      }
+
+      // STRIP
+      const strip = document.getElementById("promoStrip");
+      const stripWrap = document.querySelector(".promo-strip-wrap");
+
+      if (strip) {
+        if (stripPromo.length === 0) {
+          if (stripWrap) stripWrap.style.display = "none";
+        } else {
+          strip.innerHTML = "";
+
+          stripPromo.forEach(promo => {
+            strip.innerHTML += `
+              <article class="promo-mini-card">
+                <img src="${promo.immagine || ""}" alt="${promo.titolo || ""}">
+                <div class="promo-mini-content">
+                  <span class="promo-mini-badge">${promo.badge || "PROMO"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <div class="promo-mini-price">
+                    <span class="promo-mini-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="promo-mini-new">${promo.prezzoNuovo || ""}</span>
+                  </div>
+                </div>
+              </article>
+            `;
+          });
+        }
+      }
+
+      // STAGIONALI
+      const seasonalGrid = document.querySelector(".seasonal-grid");
+      const seasonalSection = document.getElementById("stagionaliSection");
+
+      if (seasonalGrid) {
+        if (stagionali.length === 0) {
+          if (seasonalSection) seasonalSection.style.display = "none";
+        } else {
+          seasonalGrid.innerHTML = "";
+
+          stagionali.forEach(promo => {
+            seasonalGrid.innerHTML += `
+              <article class="seasonal-card">
+                <img src="${promo.immagine || ""}" alt="${promo.titolo || ""}">
+                <div class="seasonal-card-content">
+                  <span class="seasonal-badge">${promo.badge || "PROMO"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <p>${promo.descrizione || ""}</p>
+                  <div class="seasonal-price">
+                    <span class="seasonal-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="seasonal-new">${promo.prezzoNuovo || ""}</span>
+                  </div>
+                  <div class="seasonal-actions">
+                    <a href="https://wa.me/393927737079" class="flash-btn primary">WhatsApp</a>
+                    <a href="#" class="flash-btn secondary">Scopri</a>
+                  </div>
+                </div>
+              </article>
+            `;
+          });
+        }
+      }
+
+      // OFFERTE DEL MESE
+      const monthGrid = document.querySelector(".month-grid");
+      const monthSection = document.getElementById("meseSection");
+
+      if (monthGrid) {
+        if (mesePromo.length === 0) {
+          if (monthSection) {
+            const title = monthSection.querySelector(".promo-section-title");
+            if (title) title.style.display = "none";
+          }
+
+          monthGrid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🎁</div>
+              <h3>Al momento non ci sono promozioni attive</h3>
+              <p>Le nuove promozioni saranno disponibili a breve. Torna presto oppure contattaci per informazioni.</p>
+              <a href="https://wa.me/393927737079" class="empty-btn">Scrivici su WhatsApp</a>
+            </div>
+          `;
+        } else {
+          monthGrid.innerHTML = "";
+
+          mesePromo.forEach(promo => {
+            monthGrid.innerHTML += `
+              <article class="month-card">
+                <img src="${promo.immagine || ''}" alt="${promo.titolo || ''}">
+                <div class="month-card-content">
+                  <span class="month-badge">${promo.badge || "OFFERTA"}</span>
+                  <h4>${promo.titolo || ""}</h4>
+                  <p>${promo.descrizione || ""}</p>
+                  <div class="month-price">
+                    <span class="month-old">${promo.prezzoVecchio || ""}</span>
+                    <span class="month-new">${promo.prezzoNuovo || ""}</span>
+                  </div>
+                  <a href="https://wa.me/393927737079" class="month-btn">WhatsApp</a>
+                </div>
+              </article>
+            `;
+          });
+        }
+      }
+    }
+
+    caricaOfferteFirebase();
+  </script>
+</body>
+</html>

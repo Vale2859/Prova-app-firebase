@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Profilo | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#e7f5ef;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+      --danger:#c94646;
+      --danger-soft:#fff2f2;
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button{font-family:inherit}
+    a{text-decoration:none;color:inherit}
+
+    .page{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:14px 14px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .back-btn{
+      width: 50px;
+      height: 50px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size: 22px;
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 44px;
+    }
+
+    .title-wrap{
+      flex:1;
+      min-width:0;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.8rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .page-subtitle{
+      margin:5px 0 0;
+      font-size:.95rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .hero-card{
+      background:linear-gradient(135deg,#0f6f57 0%, #1b8769 55%, #58a895 100%);
+      color:#fff;
+      border-radius:28px;
+      box-shadow:0 22px 40px rgba(13,122,95,0.18);
+      padding:18px;
+      margin-bottom:16px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-10px;
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .avatar{
+      width:64px;
+      height:64px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.16);
+      display:grid;
+      place-items:center;
+      font-size:1.8rem;
+      flex:0 0 64px;
+    }
+
+    .hero-name{
+      margin:0;
+      font-size:1.45rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .hero-mail{
+      margin:6px 0 0;
+      font-size:.96rem;
+      line-height:1.3;
+      color:rgba(255,255,255,0.92);
+      font-weight:500;
+      word-break:break-word;
+    }
+
+    .section{
+      margin-top:16px;
+    }
+
+    .section-title{
+      margin:0 0 12px;
+      font-size:1.5rem;
+      line-height:1.02;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .data-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .data-row{
+      display:grid;
+      grid-template-columns:42px 92px 1fr;
+      align-items:center;
+      gap:12px;
+      padding:16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .data-row:last-child{
+      border-bottom:none;
+    }
+
+    .data-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:var(--green-3);
+      color:var(--green);
+      display:grid;
+      place-items:center;
+      font-size:1.2rem;
+    }
+
+    .data-label{
+      color:var(--text-soft);
+      font-size:1rem;
+      font-weight:700;
+    }
+
+    .data-value{
+      font-size:1rem;
+      font-weight:800;
+      text-align:right;
+      word-break:break-word;
+    }
+
+    .actions{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .action-btn{
+      width:100%;
+      min-height:58px;
+      border:none;
+      border-radius:18px;
+      padding:12px 16px;
+      font-size:1rem;
+      font-weight:900;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+
+    .logout-btn{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+      box-shadow:0 18px 34px rgba(26,139,108,0.18);
+    }
+
+    .delete-btn{
+      background:var(--danger-soft);
+      color:var(--danger);
+      border:1px solid #f3d2d2;
+    }
+
+    .ghost-btn{
+      background:#eef6f2;
+      color:var(--green);
+      border:1px solid #d6ebe3;
+    }
+
+    .note{
+      margin:14px 4px 0;
+      color:var(--text-soft);
+      font-size:.88rem;
+      line-height:1.45;
+      font-weight:600;
+      text-align:center;
+    }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,20,16,0.66);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .modal-overlay.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(100%, 410px);
+      background:#fff;
+      border-radius:28px;
+      padding:22px 20px;
+      box-shadow:0 24px 48px rgba(0,0,0,0.18);
+    }
+
+    .modal-title{
+      margin:0 0 10px;
+      font-size:1.5rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.55;
+      font-weight:600;
+    }
+
+    .modal-actions{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+    }
+
+    .modal-btn{
+      flex:1;
+      min-height:48px;
+      border:none;
+      border-radius:14px;
+      font-size:.98rem;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .modal-btn.secondary{
+      background:#eef3f1;
+      color:var(--text);
+    }
+
+    .modal-btn.primary{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+    }
+
+    .modal-btn.danger{
+      background:linear-gradient(135deg,#c94646 0%, #de6b6b 100%);
+      color:#fff;
+    }
+
+    .loading-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      text-align:center;
+      font-weight:800;
+      color:var(--text-soft);
+    }
+
+    .barcode-card{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      text-align:center;
+    }
+
+    .barcode-title{
+      margin:0 0 10px;
+      font-size:1.1rem;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .barcode-sub{
+      margin:0 0 10px;
+      font-size:.92rem;
+      color:var(--text-soft);
+      font-weight:600;
+    }
+
+    .barcode-wrap{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      overflow:hidden;
+    }
+
+    .barcode-svg{
+      width:100%;
+      height:90px;
+      display:block;
+    }
+
+    .barcode-code{
+      margin:10px 0 0;
+      font-size:1.02rem;
+      font-weight:900;
+      letter-spacing:.22em;
+      color:var(--text);
+    }
+
+    .notif-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .notif-sub{
+      margin:0 0 14px;
+      font-size:.94rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.45;
+    }
+
+    .notif-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin:14px 0 0;
+    }
+
+    .notif-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fbfdfc;
+    }
+
+    .notif-left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+
+    .notif-name{
+      font-size:1rem;
+      font-weight:800;
+      color:var(--text);
+    }
+
+    .notif-desc{
+      font-size:.86rem;
+      color:var(--text-soft);
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .switch{
+      position:relative;
+      display:inline-block;
+      width:56px;
+      height:32px;
+      flex:0 0 56px;
+    }
+
+    .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+
+    .slider{
+      position:absolute;
+      inset:0;
+      cursor:pointer;
+      background:#d7e2dd;
+      border-radius:999px;
+      transition:.25s ease;
+    }
+
+    .slider:before{
+      content:"";
+      position:absolute;
+      height:24px;
+      width:24px;
+      left:4px;
+      top:4px;
+      background:white;
+      border-radius:50%;
+      transition:.25s ease;
+      box-shadow:0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .switch input:checked + .slider{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+    }
+
+    .switch input:checked + .slider:before{
+      transform:translateX(24px);
+    }
+
+    .notif-actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .notif-status{
+      margin-top:12px;
+      font-size:.9rem;
+      font-weight:700;
+      color:var(--text-soft);
+      text-align:center;
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .data-row{
+        grid-template-columns:38px 86px 1fr;
+        gap:10px;
+        padding:14px;
+      }
+      .page-title{font-size:1.65rem}
+      .hero-name{font-size:1.3rem}
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="back-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <div class="title-wrap">
+        <h1 class="page-title">Profilo</h1>
+        <p class="page-subtitle">I tuoi dati personali e le impostazioni account</p>
+      </div>
+    </div>
+
+    <div id="loadingBox" class="loading-box">Caricamento profilo...</div>
+
+    <div id="profileContent" style="display:none;">
+      <section class="hero-card">
+        <div class="hero-top">
+          <div class="avatar">👤</div>
+          <div>
+            <h2 class="hero-name" id="profileName">Cliente</h2>
+            <p class="hero-mail" id="profileEmail">email@email.com</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3 class="section-title">I tuoi dati</h3>
+
+        <div class="data-card">
+          <div class="data-row">
+            <div class="data-icon">👤</div>
+            <div class="data-label">Nome</div>
+            <div class="data-value" id="nameValue">-</div>
+          </div>
+
+          <div class="data-row">
+            <div class="data-icon">👥</div>
+            <div class="data-label">Cognome</div>
+            <div class="data-value" id="surnameValue">-</div>
+          </div>
+
+          <div class="data-row">
+            <div class="data-icon">✉️</div>
+            <div class="data-label">Email</div>
+            <div class="data-value" id="emailValue">-</div>
+          </div>
+
+          <div class="data-row">
+            <div class="data-icon">📞</div>
+            <div class="data-label">Telefono</div>
+            <div class="data-value" id="phoneValue">-</div>
+          </div>
+
+          <div class="data-row">
+            <div class="data-icon">🪪</div>
+            <div class="data-label">ID cliente</div>
+            <div class="data-value" id="clientIdValue">-</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">La tua card</h2>
+        <div class="barcode-card">
+          <p class="barcode-title">Codice cliente</p>
+          <p class="barcode-sub">Mostra questo barcode alla cassa per farti leggere con la pistola.</p>
+          <div class="barcode-wrap">
+            <svg id="profileBarcodeSvg" class="barcode-svg"></svg>
+            <p class="barcode-code" id="profileBarcodeText">-</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Notifiche</h2>
+        <div class="notif-card">
+          <p class="notif-sub">
+            Attiva le notifiche e scegli cosa vuoi ricevere sul telefono.
+          </p>
+
+          <div class="notif-actions">
+            <button class="action-btn ghost-btn" onclick="attivaNotifiche()">
+              <span>🔔</span>
+              <span>Attiva notifiche</span>
+            </button>
+          </div>
+
+          <div class="notif-list">
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Turno</div>
+                <div class="notif-desc">Ti avvisa quando la Farmacia Montesano è di turno.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-turno">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Appoggio</div>
+                <div class="notif-desc">Ti avvisa quando la Farmacia Montesano è di appoggio.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-appoggio">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Giornate</div>
+                <div class="notif-desc">Ti avvisa quando pubblichiamo una giornata e quando arriva il giorno.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-giornate">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-row">
+              <div class="notif-left">
+                <div class="notif-name">Fortuna</div>
+                <div class="notif-desc">Ti avvisa quando puoi tentare di nuovo la fortuna.</div>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="notif-fortuna">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="notif-actions">
+            <button class="action-btn logout-btn" onclick="salvaPreferenzeNotifiche()">
+              <span>💾</span>
+              <span>Salva preferenze</span>
+            </button>
+          </div>
+
+          <div id="notifStatus" class="notif-status"></div>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button class="action-btn logout-btn" onclick="openLogoutModal()">
+          <span>↩</span>
+          <span>Logout</span>
+        </button>
+
+        <button class="action-btn delete-btn" onclick="openDeleteModal()">
+          <span>🗑️</span>
+          <span>Elimina account</span>
+        </button>
+      </div>
+
+      <p class="note">
+        Il tuo profilo è collegato al sistema cliente della Farmacia Montesano.
+      </p>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Vuoi uscire?</h3>
+      <p class="modal-text">
+        Verrai disconnesso dal tuo profilo cliente.
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeLogoutModal()">Annulla</button>
+        <button class="modal-btn primary" onclick="logoutAccount()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-card">
+      <h3 class="modal-title">Eliminare l’account?</h3>
+      <p class="modal-text">
+        Questa azione eliminerà il tuo account e i dati collegati dal sistema.
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeDeleteModal()">Annulla</button>
+        <button class="modal-btn danger" onclick="deleteAccount()">Elimina</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      firestore,
+      onAuthStateChanged,
+      signOut,
+      doc,
+      getDoc
+    } from "./firebase.js";
+
+    import {
+      deleteUser
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      askNotificationPermission,
+      saveNotificationSettings
+    } from "./notification-utils.js";
+
+    function renderBarcode(svgId, code) {
+      const svg = document.getElementById(svgId);
+      if (!svg) return;
+      try {
+        JsBarcode(svg, String(code || '').trim(), {
+          format: "CODE128",
+          lineColor: "#000000",
+          background: "#ffffff",
+          width: 2,
+          height: 62,
+          margin: 8,
+          displayValue: false
+        });
+      } catch (e) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+      }
+    }
+
+    function setNotifStatus(message, isError = false) {
+      const el = document.getElementById("notifStatus");
+      if (!el) return;
+      el.textContent = message || "";
+      el.style.color = isError ? "#c94646" : "#6c7c76";
+    }
+
+    function applyNotificationSettings(settings = {}) {
+      document.getElementById("notif-turno").checked = !!settings.turno;
+      document.getElementById("notif-appoggio").checked = !!settings.appoggio;
+      document.getElementById("notif-giornate").checked = !!settings.giornate;
+      document.getElementById("notif-fortuna").checked = !!settings.fortuna;
+    }
+
+    async function loadProfile(uid, user) {
+      const userRef = doc(firestore, "users", uid);
+      const snap = await getDoc(userRef);
+
+      const data = snap.exists() ? snap.data() : {};
+
+      const nome = data.nome || "";
+      const cognome = data.cognome || "";
+      const email = user.email || data.email || "";
+      const telefono = data.telefono || "";
+      const clientId = data.clientId || data.clientCode || uid.slice(0, 8).toUpperCase();
+      const clientCode = data.clientCode || data.clientId || clientId;
+
+      const fullName = [nome, cognome].filter(Boolean).join(" ").trim() || "Cliente";
+
+      document.getElementById("profileName").textContent = fullName;
+      document.getElementById("profileEmail").textContent = email || "Nessuna email disponibile";
+
+      document.getElementById("nameValue").textContent = nome || "-";
+      document.getElementById("surnameValue").textContent = cognome || "-";
+      document.getElementById("emailValue").textContent = email || "-";
+      document.getElementById("phoneValue").textContent = telefono || "-";
+      document.getElementById("clientIdValue").textContent = clientId || "-";
+      document.getElementById("profileBarcodeText").textContent = clientCode || "-";
+
+      renderBarcode("profileBarcodeSvg", clientCode || "FM000000");
+      applyNotificationSettings(data.notificationSettings || {});
+
+      document.getElementById("loadingBox").style.display = "none";
+      document.getElementById("profileContent").style.display = "block";
+    }
+
+    window.attivaNotifiche = async function() {
+      try {
+        await askNotificationPermission();
+        setNotifStatus("Notifiche attivate correttamente 🔔");
+        alert("Notifiche attivate 🔔");
+      } catch (e) {
+        console.error(e);
+        setNotifStatus("Errore nell’attivazione delle notifiche", true);
+        alert("Errore notifiche");
+      }
+    };
+
+    window.salvaPreferenzeNotifiche = async function() {
+      try {
+        const settings = {
+          turno: document.getElementById("notif-turno").checked,
+          appoggio: document.getElementById("notif-appoggio").checked,
+          giornate: document.getElementById("notif-giornate").checked,
+          fortuna: document.getElementById("notif-fortuna").checked
+        };
+
+        await saveNotificationSettings(settings);
+        setNotifStatus("Preferenze salvate ✅");
+        alert("Preferenze salvate ✅");
+      } catch (e) {
+        console.error(e);
+        setNotifStatus("Errore nel salvataggio delle preferenze", true);
+        alert("Errore salvataggio");
+      }
+    };
+
+    window.openLogoutModal = function() {
+      document.getElementById("logoutModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    };
+
+    window.closeLogoutModal = function() {
+      document.getElementById("logoutModal").classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    window.openDeleteModal = function() {
+      document.getElementById("deleteModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    };
+
+    window.closeDeleteModal = function() {
+      document.getElementById("deleteModal").classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    window.logoutAccount = async function() {
+      await signOut(auth);
+      window.location.href = "login.html";
+    };
+
+    window.deleteAccount = async function() {
+      const user = auth.currentUser;
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        await deleteDoc(doc(firestore, "users", user.uid));
+      } catch (e) {}
+
+      try {
+        await deleteUser(user);
+      } catch (e) {
+        alert("Per eliminare l’account potrebbe essere necessario rifare l’accesso.");
+        return;
+      }
+
+      window.location.href = "login.html";
+    };
+
+    document.getElementById("logoutModal").addEventListener("click", function(e){
+      if (e.target === this) closeLogoutModal();
+    });
+
+    document.getElementById("deleteModal").addEventListener("click", function(e){
+      if (e.target === this) closeDeleteModal();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      await loadProfile(user.uid, user);
+    });
+  </script>
+
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fortuna | Farmacia Montesano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#f4f7f5;
+      --card:#ffffff;
+      --text:#17352f;
+      --text-soft:#6c7c76;
+      --green:#0d7a5f;
+      --green-2:#1b8b6d;
+      --green-3:#dff2eb;
+      --line:#e4ece8;
+      --shadow:0 16px 34px rgba(16,50,42,0.08);
+      --gold1:#f5e3a0;
+      --gold2:#ddb95b;
+      --gold3:#b98723;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top left, #fcfffd 0%, #f4f8f6 45%, #eef4f1 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button{font-family:inherit}
+    a{text-decoration:none;color:inherit}
+
+    .page{
+      width:min(100%, 430px);
+      margin:0 auto;
+      min-height:100vh;
+      padding:14px 14px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .icon-btn{
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.88);
+      box-shadow:var(--shadow);
+      font-size:22px;
+      color:var(--text);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      flex:0 0 44px;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:1.8rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+      text-align:center;
+      flex:1;
+    }
+
+    .hero{
+      text-align:center;
+      margin-bottom:12px;
+    }
+
+    .hero h2{
+      margin:0 0 8px;
+      font-size:2.1rem;
+      line-height:.95;
+      font-weight:900;
+      letter-spacing:-0.05em;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.45;
+      font-weight:600;
+    }
+
+    .wheel-card{
+      margin-top:16px;
+      background:
+        radial-gradient(circle at 50% 28%, rgba(245,227,160,0.22) 0%, rgba(255,255,255,0) 40%),
+        linear-gradient(180deg,#ffffff 0%, #f5faf7 100%);
+      border:1px solid var(--line);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      padding:18px 14px 16px;
+    }
+
+    .pointer-wrap{
+      display:flex;
+      justify-content:center;
+      margin-bottom:-12px;
+      position:relative;
+      z-index:5;
+    }
+
+    .pointer{
+      width:0;
+      height:0;
+      border-left:18px solid transparent;
+      border-right:18px solid transparent;
+      border-top:30px solid #d4a432;
+      filter:drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+    }
+
+    .wheel-shell{
+      position:relative;
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:6px 0 4px;
+    }
+
+    .wheel-outer{
+      width:320px;
+      height:320px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--gold1) 0%, var(--gold2) 45%, var(--gold3) 100%);
+      padding:12px;
+      box-shadow:
+        inset 0 0 0 3px rgba(255,255,255,0.35),
+        0 18px 30px rgba(0,0,0,0.14);
+      position:relative;
+    }
+
+    .wheel-lights{
+      position:absolute;
+      inset:8px;
+      border-radius:50%;
+      pointer-events:none;
+      background:
+        radial-gradient(circle, rgba(255,255,255,0.95) 0 3px, transparent 4px) 50% 0/34px 34px repeat;
+      opacity:.75;
+      animation:lightsPulse 1.2s linear infinite;
+      mask: radial-gradient(circle at center, transparent 67%, black 68%);
+      -webkit-mask: radial-gradient(circle at center, transparent 67%, black 68%);
+    }
+
+    .wheel{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      overflow:hidden;
+      position:relative;
+      transform:rotate(0deg);
+      transition:transform 6.2s cubic-bezier(0.12, 0.9, 0.18, 1);
+      background:#fff;
+    }
+
+    .wheel-center{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:118px;
+      height:118px;
+      border-radius:50%;
+      z-index:4;
+      background:
+        radial-gradient(circle at 30% 30%, #2ca37d 0%, #146f58 100%);
+      border:8px solid #e6c46a;
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.25),
+        0 10px 16px rgba(0,0,0,0.14);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#fff;
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:-0.03em;
+    }
+
+    .segment{
+      position:absolute;
+      width:50%;
+      height:50%;
+      left:50%;
+      top:50%;
+      transform-origin:0% 0%;
+      clip-path:polygon(0 0, 100% 0, 0 100%);
+    }
+
+    .segment:nth-child(1){ transform:rotate(0deg) skewY(-45deg); background:#1b7d61; }
+    .segment:nth-child(2){ transform:rotate(45deg) skewY(-45deg); background:#f6f0d2; }
+    .segment:nth-child(3){ transform:rotate(90deg) skewY(-45deg); background:#2e8b6e; }
+    .segment:nth-child(4){ transform:rotate(135deg) skewY(-45deg); background:#f7f2dd; }
+    .segment:nth-child(5){ transform:rotate(180deg) skewY(-45deg); background:#207e62; }
+    .segment:nth-child(6){ transform:rotate(225deg) skewY(-45deg); background:#f6f0d2; }
+    .segment:nth-child(7){ transform:rotate(270deg) skewY(-45deg); background:#2b8b6d; }
+    .segment:nth-child(8){ transform:rotate(315deg) skewY(-45deg); background:#f7f2dd; }
+
+    .gift{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:48px;
+      height:48px;
+      transform-origin:0 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:2rem;
+      z-index:3;
+      filter:drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+    }
+
+    .gift.g1{ transform:rotate(0deg) translate(90px, -14px) rotate(22deg); }
+    .gift.g2{ transform:rotate(45deg) translate(90px, -14px) rotate(-24deg); }
+    .gift.g3{ transform:rotate(90deg) translate(90px, -14px) rotate(22deg); }
+    .gift.g4{ transform:rotate(135deg) translate(90px, -14px) rotate(-24deg); }
+    .gift.g5{ transform:rotate(180deg) translate(90px, -14px) rotate(22deg); }
+    .gift.g6{ transform:rotate(225deg) translate(90px, -14px) rotate(-24deg); }
+    .gift.g7{ transform:rotate(270deg) translate(90px, -14px) rotate(22deg); }
+    .gift.g8{ transform:rotate(315deg) translate(90px, -14px) rotate(-24deg); }
+
+    .timer-card{
+      margin-top:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .timer-top{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .timer-icon{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      background:var(--green-3);
+      color:var(--green);
+      display:grid;
+      place-items:center;
+      font-size:1.4rem;
+      flex:0 0 48px;
+    }
+
+    .timer-label{
+      margin:0;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.3;
+      font-weight:600;
+    }
+
+    .timer-value{
+      margin:4px 0 0;
+      font-size:2rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.05em;
+      color:var(--green);
+    }
+
+    .timer-note{
+      margin:0;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+      text-align:center;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.4;
+      font-weight:700;
+    }
+
+    .play-btn{
+      width:100%;
+      min-height:62px;
+      margin-top:16px;
+      border:none;
+      border-radius:20px;
+      background:linear-gradient(135deg,#0f6f57 0%, #1b8769 55%, #2da27a 100%);
+      color:#fff;
+      box-shadow:0 18px 34px rgba(13,122,95,0.18);
+      padding:12px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      cursor:pointer;
+      font-size:1.2rem;
+      font-weight:900;
+    }
+
+    .play-btn[disabled]{
+      opacity:.58;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    .small-note{
+      margin:16px 4px 0;
+      font-size:.88rem;
+      line-height:1.45;
+      color:var(--text-soft);
+      font-weight:600;
+      text-align:center;
+    }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(8,20,16,0.68);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+
+    .modal-overlay.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(100%, 410px);
+      background:#fff;
+      border-radius:30px;
+      padding:22px 20px;
+      box-shadow:0 24px 48px rgba(0,0,0,0.18);
+      text-align:center;
+    }
+
+    .modal-emoji{
+      font-size:4rem;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .modal-title{
+      margin:0 0 10px;
+      font-size:1.7rem;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-0.04em;
+    }
+
+    .modal-text{
+      margin:0;
+      color:var(--text-soft);
+      font-size:1rem;
+      line-height:1.55;
+      font-weight:600;
+    }
+
+    .modal-prize{
+      margin-top:14px;
+      background:linear-gradient(180deg,#f2fbf7 0%, #e7f6ef 100%);
+      border:1px solid #d8ece2;
+      border-radius:18px;
+      padding:14px;
+      font-size:1.05rem;
+      font-weight:900;
+      color:var(--green);
+    }
+
+    .modal-actions{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+    }
+
+    .modal-btn{
+      flex:1;
+      min-height:48px;
+      border:none;
+      border-radius:14px;
+      font-size:.98rem;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .modal-btn.primary{
+      background:linear-gradient(135deg,#1a8b6c 0%, #58a891 100%);
+      color:#fff;
+    }
+
+    .modal-btn.secondary{
+      background:#eef3f1;
+      color:var(--text);
+    }
+
+    @keyframes lightsPulse{
+      0%{opacity:.72}
+      50%{opacity:1}
+      100%{opacity:.72}
+    }
+
+    @media (max-width:390px){
+      .page{padding:12px 12px 24px}
+      .page-title{font-size:1.65rem}
+      .wheel-outer{
+        width:292px;
+        height:292px;
+      }
+      .wheel-center{
+        width:104px;
+        height:104px;
+        font-size:1.7rem;
+      }
+      .gift{
+        width:34px;
+        height:34px;
+        font-size:1.45rem;
+      }
+      .gift.g1{ transform:rotate(0deg) translate(82px, -12px) rotate(22deg); }
+      .gift.g2{ transform:rotate(45deg) translate(82px, -12px) rotate(-24deg); }
+      .gift.g3{ transform:rotate(90deg) translate(82px, -12px) rotate(22deg); }
+      .gift.g4{ transform:rotate(135deg) translate(82px, -12px) rotate(-24deg); }
+      .gift.g5{ transform:rotate(180deg) translate(82px, -12px) rotate(22deg); }
+      .gift.g6{ transform:rotate(225deg) translate(82px, -12px) rotate(-24deg); }
+      .gift.g7{ transform:rotate(270deg) translate(82px, -12px) rotate(22deg); }
+      .gift.g8{ transform:rotate(315deg) translate(82px, -12px) rotate(-24deg); }
+    }
+  </style>
+
+  <link rel="stylesheet" href="mobile-only.css" />
+  <link rel="stylesheet" href="app-fixes.css" />
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f8f55">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Montesano">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <button class="icon-btn" onclick="history.back()" aria-label="Indietro">←</button>
+      <h1 class="page-title">Fortuna</h1>
+      <button class="icon-btn" aria-label="Notifiche">🔔</button>
+    </div>
+
+    <section class="hero">
+      <h2>Tenta la Fortuna!</h2>
+      <p>Hai una sola possibilità al giorno. Gira la ruota e scopri se oggi hai vinto un premio sorpresa.</p>
+    </section>
+
+    <section class="wheel-card">
+      <div class="pointer-wrap">
+        <div class="pointer"></div>
+      </div>
+
+      <div class="wheel-shell">
+        <div class="wheel-outer">
+          <div class="wheel-lights"></div>
+
+          <div class="wheel" id="fortuneWheel">
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+            <div class="segment"></div>
+
+            <div class="gift g1">🎁</div>
+            <div class="gift g2">🎁</div>
+            <div class="gift g3">🎁</div>
+            <div class="gift g4">🎁</div>
+            <div class="gift g5">🎁</div>
+            <div class="gift g6">🎁</div>
+            <div class="gift g7">🎁</div>
+            <div class="gift g8">🎁</div>
+          </div>
+
+          <div class="wheel-center">GIRA!</div>
+        </div>
+      </div>
+
+      <div class="timer-card">
+        <div class="timer-top">
+          <div class="timer-icon">⏳</div>
+          <div>
+            <p class="timer-label">Tempo rimasto al prossimo tentativo</p>
+            <p class="timer-value" id="countdownValue">Disponibile ora</p>
+          </div>
+        </div>
+        <p class="timer-note">Puoi tentare solo <strong>1 volta al giorno</strong></p>
+      </div>
+
+      <button class="play-btn" id="playBtn" onclick="playFortune()">
+        <span>✨</span>
+        <span id="playBtnText">Gioca ora</span>
+      </button>
+
+      <p class="small-note">
+        Il premio resta nascosto fino alla fine del giro. Se oggi non vinci, potrai riprovare domani.
+      </p>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-card">
+      <div class="modal-emoji" id="modalEmoji">🎉</div>
+      <h3 class="modal-title" id="modalTitle">Hai vinto!</h3>
+      <p class="modal-text" id="modalText">
+        Complimenti! Oggi la fortuna è dalla tua parte.
+      </p>
+      <div class="modal-prize" id="modalPrize">Hai vinto: Premio sorpresa</div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeResultModal()">Chiudi</button>
+        <button class="modal-btn primary" onclick="closeResultModal()">Perfetto</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      firestore,
+      onAuthStateChanged,
+      doc,
+      getDoc,
+      setDoc
+    } from "./firebase.js";
+
+    const fortunaConfig = {
+      winChance: 0.32,
+      prizes: [
+        "Voucher beauty",
+        "Mini crema omaggio",
+        "Tisana benessere",
+        "Prodotto doccia",
+        "Campioncino profumo",
+        "Sconto 5%",
+        "Sconto 10%",
+        "Servizio omaggio farmacia"
+      ]
+    };
+
+    let currentUser = null;
+    let wheelRotation = 0;
+    let isSpinning = false;
+    let countdownInterval = null;
+    let playedToday = false;
+
+    function getTodayKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function getTomorrowMidnight() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    }
+
+    function formatCountdown(ms) {
+      const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    async function hasPlayedTodayOnFirebase(uid) {
+      const todayKey = getTodayKey();
+      const spinRef = doc(firestore, "users", uid, "fortune_spins", todayKey);
+      const snap = await getDoc(spinRef);
+      return snap.exists();
+    }
+
+    function updatePlayState() {
+      const playBtn = document.getElementById("playBtn");
+      const playBtnText = document.getElementById("playBtnText");
+
+      if (playedToday) {
+        playBtn.disabled = true;
+        playBtnText.textContent = "Torna domani";
+      } else {
+        playBtn.disabled = false;
+        playBtnText.textContent = "Gioca ora";
+      }
+    }
+
+    function updateCountdown() {
+      const countdownEl = document.getElementById("countdownValue");
+      if (!countdownEl) return;
+
+      if (!playedToday) {
+        countdownEl.textContent = "Disponibile ora";
+        return;
+      }
+
+      const diff = getTomorrowMidnight().getTime() - Date.now();
+      countdownEl.textContent = formatCountdown(diff);
+
+      if (diff <= 0) {
+        playedToday = false;
+        updatePlayState();
+        countdownEl.textContent = "Disponibile ora";
+      }
+    }
+
+    function startCountdown() {
+      updateCountdown();
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    function chooseResult() {
+      const won = Math.random() < fortunaConfig.winChance;
+
+      if (!won) {
+        return {
+          won: false,
+          prize: null,
+          title: "Non hai vinto stavolta",
+          text: "Oggi non è uscito un premio. Riprova domani con un nuovo tentativo."
+        };
+      }
+
+      const randomPrize = fortunaConfig.prizes[Math.floor(Math.random() * fortunaConfig.prizes.length)];
+      return {
+        won: true,
+        prize: randomPrize,
+        title: "Hai vinto!",
+        text: "Complimenti! La ruota si è fermata su un premio sorpresa."
+      };
+    }
+
+    function getRandomSegmentIndex() {
+      return Math.floor(Math.random() * 8);
+    }
+
+    function segmentRotationForPointer(index) {
+      const segmentCenter = index * 45 + 22.5;
+      return 360 - segmentCenter;
+    }
+
+    async function saveFortuneSpin(result) {
+      if (!currentUser) return;
+
+      const todayKey = getTodayKey();
+      const spinRef = doc(firestore, "users", currentUser.uid, "fortune_spins", todayKey);
+
+      await setDoc(spinRef, {
+        date: todayKey,
+        won: result.won,
+        prize: result.prize || "",
+        title: result.title || "",
+        text: result.text || "",
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    window.playFortune = async function() {
+      if (isSpinning || playedToday) return;
+
+      if (!currentUser) {
+        alert("Devi accedere prima di usare Fortuna.");
+        window.location.href = "profilo.html";
+        return;
+      }
+
+      const wheel = document.getElementById("fortuneWheel");
+      const playBtn = document.getElementById("playBtn");
+
+      isSpinning = true;
+      playBtn.disabled = true;
+
+      const result = chooseResult();
+      const targetIndex = getRandomSegmentIndex();
+      const extraTurns = 6 + Math.floor(Math.random() * 3);
+      const finalRotation = wheelRotation + extraTurns * 360 + segmentRotationForPointer(targetIndex);
+
+      wheel.style.transform = `rotate(${finalRotation}deg)`;
+      wheelRotation = finalRotation % 360;
+
+      playedToday = true;
+      updatePlayState();
+      updateCountdown();
+
+      await saveFortuneSpin(result);
+
+      setTimeout(() => {
+        showResultModal(result);
+        isSpinning = false;
+      }, 6400);
+    };
+
+    function showResultModal(result) {
+      const modal = document.getElementById("resultModal");
+      const emoji = document.getElementById("modalEmoji");
+      const title = document.getElementById("modalTitle");
+      const text = document.getElementById("modalText");
+      const prize = document.getElementById("modalPrize");
+
+      if (result.won) {
+        emoji.textContent = "🎉";
+        title.textContent = result.title;
+        text.textContent = result.text;
+        prize.textContent = `Hai vinto: ${result.prize}`;
+        prize.style.display = "block";
+      } else {
+        emoji.textContent = "🍀";
+        title.textContent = result.title;
+        text.textContent = result.text;
+        prize.style.display = "none";
+      }
+
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    window.closeResultModal = function() {
+      document.getElementById("resultModal").classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    document.getElementById("resultModal").addEventListener("click", function(e){
+      if (e.target === this) closeResultModal();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user || null;
+
+      if (!currentUser) {
+        playedToday = false;
+        updatePlayState();
+        startCountdown();
+        return;
+      }
+
+      playedToday = await hasPlayedTodayOnFirebase(currentUser.uid);
+      updatePlayState();
+      startCountdown();
+    });
+  </script>
+
+  <script src="mobile-only.js"></script>
+  <script src="app-fixes.js"></script>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js");
+    });
+  }
+  </script>
+
+</body>
+</html>

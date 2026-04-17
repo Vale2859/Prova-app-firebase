@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Offerte Admin | Farmacia Montesano</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mobile.css" />
+
+  <style>
+    :root{
+      --admin-bg: linear-gradient(180deg, #f5f7f6 0%, #eef4f1 100%);
+      --admin-card: rgba(255,255,255,0.86);
+      --admin-card-strong: rgba(255,255,255,0.96);
+      --admin-border: rgba(20, 55, 48, 0.08);
+      --admin-text: #16372f;
+      --admin-muted: #6f817b;
+      --admin-green-1: #2f7f5f;
+      --admin-green-2: #86c58b;
+      --admin-shadow: 0 18px 44px rgba(16, 49, 39, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: var(--admin-bg);
+      color: var(--admin-text);
+    }
+
+    .admin-shell {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 18px 16px 110px;
+    }
+
+    .admin-brand-card,
+    .admin-panel,
+    .admin-list-card,
+    .admin-form-card {
+      border: 1px solid var(--admin-border);
+      box-shadow: var(--admin-shadow);
+      background: rgba(255,255,255,0.86);
+    }
+
+    .admin-brand-card {
+      border-radius: 34px;
+      padding: 22px 20px;
+      margin-bottom: 18px;
+      background: var(--admin-card-strong);
+    }
+
+    .admin-logo {
+      width: 100%;
+      max-width: 270px;
+      display: block;
+    }
+
+    .admin-topbar {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .admin-back-btn {
+      width: 76px;
+      height: 76px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #16372f;
+      font-size: 38px;
+      box-shadow: var(--admin-shadow);
+      flex-shrink: 0;
+    }
+
+    .admin-title-block {
+      flex: 1;
+    }
+
+    .admin-title-block h1 {
+      margin: 0 0 8px;
+      font-size: 48px;
+      line-height: .96;
+      letter-spacing: -0.05em;
+      color: #10352e;
+    }
+
+    .admin-title-block p {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.42;
+      color: var(--admin-muted);
+      max-width: 560px;
+    }
+
+    .admin-panel {
+      border-radius: 28px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .admin-panel-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .admin-primary-btn,
+    .admin-secondary-btn,
+    .admin-danger-btn {
+      min-height: 52px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 18px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .admin-primary-btn {
+      background: linear-gradient(135deg, var(--admin-green-1) 0%, var(--admin-green-2) 100%);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(73,165,120,0.22);
+    }
+
+    .admin-secondary-btn {
+      background: #eef4f1;
+      color: #16372f;
+    }
+
+    .admin-danger-btn {
+      background: #fff1f3;
+      color: #c15463;
+    }
+
+    .admin-form-card {
+      border-radius: 28px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .admin-form-card.show {
+      display: block;
+    }
+
+    .admin-form-title {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      color: #10352e;
+    }
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .admin-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .admin-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .admin-field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #34544b;
+    }
+
+    .admin-field input,
+    .admin-field textarea,
+    .admin-field select {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(20,55,48,0.10);
+      background: #fff;
+      font: inherit;
+      color: #16372f;
+      outline: none;
+    }
+
+    .admin-field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .admin-preview {
+      width: 100%;
+      max-width: 180px;
+      height: 180px;
+      border-radius: 22px;
+      object-fit: cover;
+      background: #e8efeb;
+      border: 1px solid rgba(20,55,48,0.08);
+      display: block;
+    }
+
+    .admin-form-footer {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .admin-list-card {
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .admin-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      border-bottom: 1px solid rgba(18,55,45,0.06);
+    }
+
+    .admin-item:last-child {
+      border-bottom: 0;
+    }
+
+    .admin-item-image {
+      width: 118px;
+      height: 118px;
+      border-radius: 20px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #e8efeb;
+    }
+
+    .admin-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .admin-item-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.08;
+      color: #16372f;
+    }
+
+    .admin-item-sub {
+      margin: 0 0 10px;
+      font-size: 15px;
+      line-height: 1.4;
+      color: var(--admin-muted);
+    }
+
+    .admin-chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .admin-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #e9f3ec;
+      color: #2d6d56;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .admin-chip.type {
+      background: #eef1ff;
+      color: #5b60aa;
+    }
+
+    .admin-price {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .admin-price-old {
+      text-decoration: line-through;
+      color: #7f8f89;
+      font-size: 16px;
+    }
+
+    .admin-price-new {
+      color: #16372f;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .admin-item-footer {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .admin-toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .admin-toggle-pill.active {
+      background: #e8f3e9;
+      color: #2f7f5f;
+    }
+
+    .admin-toggle-pill.hidden {
+      background: #f0f0f0;
+      color: #6e7b76;
+    }
+
+    .admin-small-btn,
+    .admin-small-btn-danger {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(18,55,45,0.08);
+      background: #f4f6f5;
+      color: #16372f;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .admin-small-btn-danger {
+      color: #c95b67;
+    }
+
+    .admin-empty {
+      padding: 28px 18px;
+      text-align: center;
+      color: var(--admin-muted);
+      font-size: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .admin-shell {
+        padding: 16px 12px 90px;
+      }
+
+      .admin-brand-card {
+        padding: 18px 16px;
+        border-radius: 28px;
+      }
+
+      .admin-logo {
+        max-width: 235px;
+      }
+
+      .admin-title-block h1 {
+        font-size: 34px;
+      }
+
+      .admin-title-block p {
+        font-size: 15px;
+      }
+
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-item {
+        flex-direction: column;
+      }
+
+      .admin-item-image {
+        width: 100%;
+        height: 190px;
+      }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+</head>
+
+<body>
+  <div class="admin-shell">
+
+    <header class="admin-brand-card">
+      <img src="logo.png" alt="Logo Farmacia Montesano" class="admin-logo" />
+    </header>
+
+    <section class="admin-topbar">
+      <a href="dashboard-admin.html" class="admin-back-btn" aria-label="Torna indietro">←</a>
+
+      <div class="admin-title-block">
+        <h1>Offerte</h1>
+        <p>Qui puoi creare offerte flash, strip, stagionali e offerte del mese.</p>
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel-actions">
+        <button class="admin-primary-btn" type="button" onclick="openCreateForm()">+ Nuova offerta</button>
+        <button class="admin-secondary-btn" type="button" onclick="reloadOffers()">Aggiorna elenco</button>
+      </div>
+    </section>
+
+    <section id="offerFormCard" class="admin-form-card">
+      <h2 id="formTitle" class="admin-form-title">Nuova offerta</h2>
+
+      <div class="admin-form-grid">
+        <div class="admin-field">
+          <label for="offerTipo">Tipo promo</label>
+          <select id="offerTipo">
+            <option value="flash">Flash</option>
+            <option value="strip">Strip</option>
+            <option value="stagionale">Stagionale</option>
+            <option value="mese">Mese</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="offerBadge">Badge</label>
+          <input id="offerBadge" type="text" placeholder="Es. OCCASIONE FLASH / ENERGIA / PELLE / OFFERTA" />
+        </div>
+
+        <div class="admin-field full">
+          <label for="offerTitolo">Titolo</label>
+          <input id="offerTitolo" type="text" placeholder="Es. Integratore energia / -30% Capelli" />
+        </div>
+
+        <div class="admin-field full">
+          <label for="offerDescrizione">Descrizione</label>
+          <textarea id="offerDescrizione" placeholder="Descrizione promo"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="offerPrezzoPrima">Prezzo prima</label>
+          <input id="offerPrezzoPrima" type="number" step="0.01" placeholder="19.90" />
+        </div>
+
+        <div class="admin-field">
+          <label for="offerPrezzoOra">Prezzo ora</label>
+          <input id="offerPrezzoOra" type="number" step="0.01" placeholder="14.90" />
+        </div>
+
+        <div class="admin-field">
+          <label for="offerDataInizio">Data inizio</label>
+          <input id="offerDataInizio" type="date" />
+        </div>
+
+        <div class="admin-field">
+          <label for="offerDataFine">Data fine</label>
+          <input id="offerDataFine" type="date" />
+        </div>
+
+        <div class="admin-field full">
+          <label for="offerImage">Immagine</label>
+          <input id="offerImage" type="file" accept="image/*" />
+        </div>
+
+        <div class="admin-field full">
+          <label>Anteprima immagine</label>
+          <img id="offerPreview" class="admin-preview" src="" alt="Anteprima immagine" />
+        </div>
+      </div>
+
+      <div class="admin-form-footer">
+        <button class="admin-primary-btn" type="button" onclick="saveOffer()">Salva offerta</button>
+        <button class="admin-secondary-btn" type="button" onclick="closeForm()">Annulla</button>
+      </div>
+    </section>
+
+    <section class="admin-list-card">
+      <div id="offersList"></div>
+    </section>
+
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
+      authDomain: "farmaciamontesano.firebaseapp.com",
+      projectId: "farmaciamontesano",
+      storageBucket: "farmaciamontesano.firebasestorage.app",
+      messagingSenderId: "881461241551",
+      appId: "1:881461241551:web:c74d6ee74cb857fa5179ba"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    let editingId = null;
+    let existingImageUrl = "";
+
+    const formCard = document.getElementById("offerFormCard");
+    const formTitle = document.getElementById("formTitle");
+    const offersList = document.getElementById("offersList");
+    const preview = document.getElementById("offerPreview");
+    const fileInput = document.getElementById("offerImage");
+
+    const fieldTipo = document.getElementById("offerTipo");
+    const fieldBadge = document.getElementById("offerBadge");
+    const fieldTitolo = document.getElementById("offerTitolo");
+    const fieldDescrizione = document.getElementById("offerDescrizione");
+    const fieldPrezzoPrima = document.getElementById("offerPrezzoPrima");
+    const fieldPrezzoOra = document.getElementById("offerPrezzoOra");
+    const fieldDataInizio = document.getElementById("offerDataInizio");
+    const fieldDataFine = document.getElementById("offerDataFine");
+
+    fileInput.addEventListener("change", function(){
+      const file = this.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e){
+        preview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function openCreateForm(){
+      editingId = null;
+      existingImageUrl = "";
+      formTitle.textContent = "Nuova offerta";
+      clearForm();
+      formCard.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeForm(){
+      formCard.classList.remove("show");
+      clearForm();
+      editingId = null;
+      existingImageUrl = "";
+    }
+
+    function clearForm(){
+      fieldTipo.value = "flash";
+      fieldBadge.value = "";
+      fieldTitolo.value = "";
+      fieldDescrizione.value = "";
+      fieldPrezzoPrima.value = "";
+      fieldPrezzoOra.value = "";
+      fieldDataInizio.value = "";
+      fieldDataFine.value = "";
+      fileInput.value = "";
+      preview.src = "";
+    }
+
+    function fillForm(data){
+      fieldTipo.value = data.tipo || "mese";
+      fieldBadge.value = data.badge || "";
+      fieldTitolo.value = data.titolo || data.nome || "";
+      fieldDescrizione.value = data.descrizione || "";
+      fieldPrezzoPrima.value = data.prezzoPrima ?? "";
+      fieldPrezzoOra.value = data.prezzoOra ?? "";
+      fieldDataInizio.value = data.dataInizio || "";
+      fieldDataFine.value = data.dataFine || "";
+      preview.src = data.immagine || "";
+      existingImageUrl = data.immagine || "";
+    }
+
+    async function uploadImageIfNeeded(){
+      const file = fileInput.files[0];
+      if(!file) return existingImageUrl || "";
+
+      const safeName = Date.now() + "-" + file.name.replace(/\s+/g, "-");
+      const ref = storage.ref("offerte/" + safeName);
+      await ref.put(file);
+      return await ref.getDownloadURL();
+    }
+
+    async function saveOffer(){
+      const tipo = fieldTipo.value;
+      const badge = fieldBadge.value.trim();
+      const titolo = fieldTitolo.value.trim();
+      const descrizione = fieldDescrizione.value.trim();
+      const prezzoPrima = fieldPrezzoPrima.value ? parseFloat(fieldPrezzoPrima.value) : null;
+      const prezzoOra = fieldPrezzoOra.value ? parseFloat(fieldPrezzoOra.value) : null;
+      const dataInizio = fieldDataInizio.value || "";
+      const dataFine = fieldDataFine.value || "";
+
+      if(!titolo){
+        alert("Inserisci il titolo dell'offerta.");
+        return;
+      }
+
+      const immagine = await uploadImageIfNeeded();
+
+      const payload = {
+        tipo,
+        badge,
+        titolo,
+        nome: titolo,
+        descrizione,
+        prezzoPrima,
+        prezzoOra,
+        dataInizio,
+        dataFine,
+        immagine,
+        imageUrl: immagine,
+        prezzoOfferta: prezzoOra,
+        attiva: true
+      };
+
+      if(editingId){
+        const currentDoc = await db.collection("offers").doc(editingId).get();
+        const currentData = currentDoc.data() || {};
+        payload.attiva = typeof currentData.attiva === "boolean" ? currentData.attiva : true;
+
+        await db.collection("offers").doc(editingId).update(payload);
+      } else {
+        await db.collection("offers").add(payload);
+      }
+
+      closeForm();
+    }
+
+    function toggleVisibility(id, currentState){
+      db.collection("offers").doc(id).update({
+        attiva: !currentState
+      });
+    }
+
+    function deleteOffer(id){
+      const ok = confirm("Vuoi eliminare questa offerta?");
+      if(!ok) return;
+
+      db.collection("offers").doc(id).delete();
+    }
+
+    function editOffer(id){
+      db.collection("offers").doc(id).get().then((doc) => {
+        if(!doc.exists) return;
+
+        editingId = id;
+        formTitle.textContent = "Modifica offerta";
+        fillForm(doc.data());
+        formCard.classList.add("show");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function renderOffers(snapshot){
+      if(snapshot.empty){
+        offersList.innerHTML = `<div class="admin-empty">Non ci sono offerte salvate.</div>`;
+        return;
+      }
+
+      let html = "";
+
+      snapshot.forEach((doc) => {
+        const d = doc.data();
+        const isActive = d.attiva === true;
+
+        html += `
+          <article class="admin-item">
+            <img src="${d.immagine || d.imageUrl || ''}" alt="${d.titolo || d.nome || 'Offerta'}" class="admin-item-image" />
+
+            <div class="admin-item-body">
+              <h2 class="admin-item-title">${d.titolo || d.nome || ""}</h2>
+
+              <div class="admin-chip-row">
+                ${d.badge ? `<span class="admin-chip">${d.badge}</span>` : ""}
+                ${d.tipo ? `<span class="admin-chip type">${d.tipo}</span>` : ""}
+                <span class="admin-chip">${isActive ? "Attiva" : "Nascosta"}</span>
+              </div>
+
+              <div class="admin-price">
+                ${d.prezzoPrima !== null && d.prezzoPrima !== undefined ? `<span class="admin-price-old">€ ${d.prezzoPrima}</span>` : ""}
+                ${d.prezzoOra !== null && d.prezzoOra !== undefined ? `<span class="admin-price-new">€ ${d.prezzoOra}</span>` : ""}
+              </div>
+
+              <p class="admin-item-sub">
+                ${d.descrizione || ""}
+                ${(d.dataInizio || d.dataFine) ? `<br>Validità: ${d.dataInizio || "—"} ${d.dataFine ? "→ " + d.dataFine : ""}` : ""}
+              </p>
+
+              <div class="admin-item-footer">
+                <button class="admin-toggle-pill ${isActive ? 'active' : 'hidden'}" type="button" onclick="toggleVisibility('${doc.id}', ${isActive})">
+                  ${isActive ? "Visibile" : "Nascosta"}
+                </button>
+                <button class="admin-small-btn" type="button" onclick="editOffer('${doc.id}')">Modifica</button>
+                <button class="admin-small-btn-danger" type="button" onclick="deleteOffer('${doc.id}')">Elimina</button>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+
+      offersList.innerHTML = html;
+    }
+
+    function reloadOffers(){
+      db.collection("offers").get().then(renderOffers);
+    }
+
+    db.collection("offers").onSnapshot(renderOffers);
+
+    window.openCreateForm = openCreateForm;
+    window.closeForm = closeForm;
+    window.saveOffer = saveOffer;
+    window.toggleVisibility = toggleVisibility;
+    window.deleteOffer = deleteOffer;
+    window.editOffer = editOffer;
+    window.reloadOffers = reloadOffers;
+  </script>
+
+<script type="module">
+  import { requireAuth } from "./auth-guard.js";
+  requireAuth({ redirect: "login.html" });
+</script>
+</body>
+</html>

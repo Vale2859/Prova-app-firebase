@@ -1,0 +1,9 @@
+/* Lightweight helpers only: no global layout forcing */
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+body{min-width:0;}
+img,video,canvas,svg{max-width:100%;}
+input,select,textarea,button{font:inherit;}
+.home-page-bg{pointer-events:none;}
+@supports (padding: max(0px)){
+  body{padding-left:max(0px, env(safe-area-inset-left));padding-right:max(0px, env(safe-area-inset-right));}
+}

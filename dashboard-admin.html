@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dashboard Titolare | Farmacia Montesano</title>
+  <link rel="manifest" href="manifest-admin.json" />
+  <style>
+    :root{
+      --bg:#f2f5f3;
+      --surface:rgba(255,255,255,.78);
+      --text:#17463b;
+      --muted:#75857f;
+      --shadow:0 18px 44px rgba(17,50,40,.10);
+      --radius-xl:34px;
+      --radius-lg:28px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#f7faf8 0%,#eef3f0 100%);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--text);overflow-x:hidden}
+    body{min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+    .shell{width:min(100%,430px);margin:0 auto;min-height:100vh;padding:18px 16px 98px;position:relative}
+    .hero{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .hero h1,.page-title{margin:0;font-size:34px;line-height:.95;letter-spacing:-.06em;font-weight:900;color:#19483d}
+    .hero p,.page-subtitle{margin:12px 0 0;font-size:18px;line-height:1.18;color:var(--muted);font-weight:500}
+    .hero small{display:block;margin-top:10px;font-size:17px;color:#85948f;font-weight:500}
+    .top-icons{display:flex;gap:10px;flex-shrink:0;padding-top:4px}
+    .icon-btn{width:44px;height:44px;border-radius:999px;border:none;background:rgba(255,255,255,.86);box-shadow:0 12px 24px rgba(0,0,0,.08);position:relative;font-size:20px;cursor:pointer}
+    .badge{position:absolute;top:-4px;right:-2px;min-width:24px;height:24px;border-radius:999px;background:#ff6a7a;color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 6px;box-shadow:0 8px 16px rgba(255,106,122,.28)}
+    .viewport{overflow:hidden;margin-top:26px}
+    .track{display:flex;transition:transform .35s ease}
+    .page{width:100%;flex:0 0 100%}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .stat-card,.edit-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:#fff;overflow:hidden;box-shadow:var(--shadow);isolation:isolate}
+    .stat-card{min-height:248px;border-radius:32px;padding:18px 14px 16px}
+    .edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+    .edit-card{min-height:152px;border-radius:30px;padding:16px}
+    .stat-card::before,.edit-card::before{content:"";position:absolute;inset:0;background:
+      radial-gradient(circle at 15% 18%, rgba(255,255,255,.45) 0%, transparent 26%),
+      radial-gradient(circle at 80% 20%, rgba(255,255,255,.18) 0%, transparent 24%),
+      radial-gradient(circle at 32% 80%, rgba(255,255,255,.12) 0%, transparent 26%),
+      radial-gradient(circle at 83% 80%, rgba(255,255,255,.10) 0%, transparent 18%);
+      z-index:-2;opacity:.95}
+    .stat-card::after,.edit-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.12));z-index:-1}
+    .c-blue{background:linear-gradient(135deg,#99c7ff 0%,#6aa2eb 100%)}
+    .c-green{background:linear-gradient(135deg,#cce9bf 0%,#8dc06e 100%)}
+    .c-purple{background:linear-gradient(135deg,#d8c1ff 0%,#a17ce8 100%)}
+    .c-gold{background:linear-gradient(135deg,#f5d98b 0%,#e3b24f 100%)}
+    .c-teal{background:linear-gradient(135deg,#aee9e4 0%,#4dbfbe 100%)}
+    .c-pink{background:linear-gradient(135deg,#ffc5df 0%,#e58db6 100%)}
+    .c-violet{background:linear-gradient(135deg,#d7c0ff 0%,#9f75eb 100%)}
+    .c-mint{background:linear-gradient(135deg,#c3ead8 0%,#74c59b 100%)}
+    .c-amber{background:linear-gradient(135deg,#ffd98f 0%,#dfaa48 100%)}
+    .c-sky{background:linear-gradient(135deg,#cce6ff 0%,#73afe6 100%)}
+    .c-green2{background:linear-gradient(135deg,#d1efd0 0%,#71c28f 100%)}
+    .card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .emoji{font-size:34px;line-height:1;filter:drop-shadow(0 8px 12px rgba(0,0,0,.08))}
+    .pill{min-width:52px;height:42px;border-radius:999px;background:rgba(255,255,255,.86);display:flex;align-items:center;justify-content:center;color:#5c6464;font-size:17px;font-weight:900;padding:0 12px;box-shadow:0 10px 20px rgba(0,0,0,.08)}
+    .card-title{font-size:24px;line-height:.95;font-weight:900;letter-spacing:-.05em;white-space:pre-line;text-shadow:0 1px 0 rgba(0,0,0,.05)}
+    .card-value{font-size:24px;line-height:.95;font-weight:900;letter-spacing:-.05em}
+    .card-value small{font-size:16px;font-weight:700}
+    .card-desc{font-size:15px;line-height:1.08;font-weight:700;white-space:pre-line}
+    .cta{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(255,243,191,.92);color:#6c5c26;font-size:12px;font-weight:900;align-self:flex-start}
+    .progress{width:100%;height:12px;border-radius:999px;background:rgba(83,54,149,.22);overflow:hidden}
+    .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff,#efe5ff);border-radius:999px}
+    .edit-head{margin-top:4px}
+    .edit-head .page-title{font-size:32px}
+    .edit-icon{width:62px;height:62px;border-radius:20px;overflow:hidden;background:rgba(255,255,255,.2);box-shadow:0 10px 20px rgba(0,0,0,.10)}
+    .edit-icon img{width:100%;height:100%;object-fit:cover;display:block}
+    .edit-fab{position:absolute;right:14px;bottom:14px;width:58px;height:58px;border-radius:999px;background:rgba(255,255,255,.86);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 10px 20px rgba(0,0,0,.08)}
+    .edit-label{font-size:18px;line-height:1;font-weight:900;letter-spacing:-.03em;white-space:pre-line;text-shadow:0 1px 0 rgba(0,0,0,.05)}
+    .edit-small{font-size:12px;line-height:1;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-top:7px}
+    .dots{position:fixed;left:50%;bottom:max(16px,calc(env(safe-area-inset-bottom) + 10px));transform:translateX(-50%);display:flex;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);box-shadow:0 10px 22px rgba(0,0,0,.08)}
+    .dot{width:16px;height:16px;border:none;border-radius:999px;background:#d6dbd8;cursor:pointer}.dot.active{background:#111}
+    .edit-card:active,.stat-card:active{transform:scale(.985)}
+    .hidden{display:none!important}
+    @media (max-width:390px){.shell{padding-inline:14px}.hero h1,.page-title{font-size:30px}.hero p,.page-subtitle,.hero small{font-size:16px}.stats{gap:10px}.stat-card{min-height:228px;border-radius:28px}.edit-grid{gap:12px}.edit-card{min-height:142px;border-radius:26px}.edit-fab{width:54px;height:54px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="viewport">
+      <div class="track" id="track">
+        <section class="page">
+          <header class="hero">
+            <div>
+              <h1 id="helloText">Buongiorno Valerio</h1>
+              <p>Ecco il riepilogo della tua farmacia</p>
+              <small id="lastUpdate">Aggiornato ora</small>
+            </div>
+            <div class="top-icons">
+              <button class="icon-btn" type="button" onclick="location.href='admin-profilo.html'">🔔</button>
+              <button class="icon-btn" type="button" onclick="location.href='admin-profilo.html'">👤<span class="badge" id="notifBadge">0</span></button>
+            </div>
+          </header>
+
+          <section class="stats">
+            <a class="stat-card c-blue" href="richieste-dipendenti.html">
+              <div class="card-top"><div class="emoji">🗓️</div><div class="pill" id="permCount">0</div></div>
+              <div><div class="card-title">Permessi /
+Ferie</div><div class="card-desc">Richieste da
+approvare</div></div>
+            </a>
+            <a class="stat-card c-green" href="consumabili-admin.html">
+              <div class="card-top"><div class="emoji">📦</div><div class="pill" id="consCount">0</div></div>
+              <div><div class="card-title">Consumabili</div><div class="card-value"><span id="consActive">0</span> <small>Attivi</small></div></div>
+              <div class="cta">Richieste da gestire</div>
+            </a>
+            <a class="stat-card c-purple" href="ldf-admin.html">
+              <div class="card-top"><div class="emoji">📊</div><div class="pill" id="ldfPerc">0%</div></div>
+              <div><div class="card-title">Obiettivi LDF</div><div class="card-value"><span id="ldfDone">0</span> <small>pezzi</small></div><div class="progress"><span id="ldfBar"></span></div><div class="card-desc">mancano <span id="ldfDays">0</span> giorni</div></div>
+            </a>
+          </section>
+        </section>
+
+        <section class="page">
+          <header class="edit-head">
+            <h2 class="page-title">Dashboard Titolare</h2>
+            <p class="page-subtitle">Modifica le sezioni visibili della tua app pubblica</p>
+          </header>
+          <section class="edit-grid">
+            <a class="edit-card c-gold" href="beauty-admin.html"><div class="card-top"><div class="edit-icon"><img src="images/beauty.jpg" alt="Beauty"></div></div><div><div class="edit-label">Edit
+giornate</div><div class="edit-small">Beauty</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-teal" href="servizi-admin.html"><div class="card-top"><div class="edit-icon"><img src="images/servizi.jpg" alt="Servizi"></div></div><div><div class="edit-label">Edit
+servizi</div><div class="edit-small">Servizi</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-pink" href="offerte-admin.html"><div class="card-top"><div class="edit-icon"><img src="images/promo.jpg" alt="Promo"></div></div><div><div class="edit-label">Edit
+promo</div><div class="edit-small">Promo</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-violet" href="admin-turni.html"><div class="card-top"><div class="edit-icon"><img src="images/turno.jpg" alt="Turni"></div></div><div><div class="edit-label">Edit
+turno</div><div class="edit-small">Turni</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-mint" href="admin-fidelity.html"><div class="card-top"><div class="edit-icon"><img src="images/fidelity.jpg" alt="Fidelity"></div></div><div><div class="edit-label">Edit
+fidelity</div><div class="edit-small">Fidelity</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-amber" href="fortuna-admin.html"><div class="card-top"><div class="edit-icon"><img src="images/fortuna.jpg" alt="Fortuna"></div></div><div><div class="edit-label">Edit
+fortuna</div><div class="edit-small">Fortuna</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-sky" href="premi-admin.html"><div class="card-top"><div class="edit-icon"><img src="images/premi.jpg" alt="Premi"></div></div><div><div class="edit-label">Edit
+premi</div><div class="edit-small">Premi</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-green2" href="admin-profilo.html"><div class="card-top"><div class="edit-icon"><img src="images/profilo.jpg" alt="Profilo"></div></div><div><div class="edit-label">Edit
+profilo</div><div class="edit-small">Profilo</div></div><div class="edit-fab">✏️</div></a>
+            <a class="edit-card c-gold" href="admin-home-cards.html"><div class="card-top"><div class="edit-icon"><img src="images/team.jpg" alt="Card app"></div></div><div><div class="edit-label">Card
+app</div><div class="edit-small">Visibilità</div></div><div class="edit-fab">👁️</div></a>
+          </section>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <nav class="dots" aria-label="Pagine dashboard">
+    <button class="dot active" data-index="0" aria-label="Pagina riepilogo"></button>
+    <button class="dot" data-index="1" aria-label="Pagina modifiche"></button>
+  </nav>
+
+  <script type="module">
+    import { requireAuth, getUserProfile } from './auth-guard.js';
+    import { firestore, collection, getDocs, doc, getDoc } from './firebase.js';
+
+    const authState = await requireAuth({ redirect: 'login.html' });
+    if (!authState) throw new Error('Auth richiesta');
+
+    const { user } = authState;
+    const profile = await getUserProfile(user.uid);
+    const name = String((profile && (profile.nome || profile.name)) || user.displayName || 'Valerio').trim().split(' ')[0] || 'Valerio';
+    const hours = new Date().getHours();
+    const greeting = hours < 12 ? 'Buongiorno' : hours < 18 ? 'Buon pomeriggio' : 'Buonasera';
+    document.getElementById('helloText').textContent = `${greeting} ${name}`;
+
+    const track = document.getElementById('track');
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    function setPage(index){
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot,i)=>dot.classList.toggle('active', i===index));
+    }
+    dots.forEach(dot => dot.addEventListener('click', () => setPage(Number(dot.dataset.index || 0))));
+
+    function relTime(value) {
+      if (!value) return 'Aggiornato ora';
+      const diff = Math.max(0, Date.now() - new Date(value).getTime());
+      const mins = Math.round(diff / 60000);
+      if (mins < 2) return 'Aggiornato ora';
+      if (mins < 60) return `Aggiornato ${mins} minuti fa`;
+      const hrs = Math.round(mins / 60);
+      if (hrs < 24) return `Aggiornato ${hrs} ore fa`;
+      const days = Math.round(hrs / 24);
+      return `Aggiornato ${days} giorni fa`;
+    }
+
+    async function getCollectionCount(name) {
+      try {
+        const snap = await getDocs(collection(firestore, name));
+        return snap.size;
+      } catch (error) {
+        console.error(`Errore conteggio ${name}:`, error);
+        return 0;
+      }
+    }
+
+    async function loadSummary(){
+      const [requestsCount, consumablesCount] = await Promise.all([
+        getCollectionCount('employee_requests'),
+        getCollectionCount('consumabili_requests')
+      ]);
+      document.getElementById('permCount').textContent = String(requestsCount);
+      document.getElementById('consCount').textContent = String(consumablesCount || 0);
+      document.getElementById('consActive').textContent = String(consumablesCount || 0);
+      document.getElementById('notifBadge').textContent = String(requestsCount + consumablesCount);
+
+      try {
+        const ldfSnap = await getDoc(doc(firestore, 'ldf_stats', 'current'));
+        const data = ldfSnap.exists() ? ldfSnap.data() : {};
+        const done = Number(data.done || data.pezzi || 0);
+        const target = Math.max(1, Number(data.target || data.obiettivo || 500));
+        const days = Math.max(0, Number(data.daysLeft || data.giorniRestanti || 0));
+        const pct = Math.min(100, Math.round((done / target) * 100));
+        document.getElementById('ldfDone').textContent = String(done);
+        document.getElementById('ldfPerc').textContent = `${pct}%`;
+        document.getElementById('ldfBar').style.width = `${pct}%`;
+        document.getElementById('ldfDays').textContent = String(days);
+        document.getElementById('lastUpdate').textContent = relTime(data.updatedAt || data.lastUpdatedAt);
+      } catch (error) {
+        console.error('Errore dati LDF:', error);
+      }
+    }
+
+    loadSummary();
+  </script>
+</body>
+</html>

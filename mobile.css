@@ -1,0 +1,1396 @@
+/* =========================
+   MOBILE.CSS COMPLETO
+========================= */
+
+:root{
+  --chat-keyboard-offset: 0px;
+}
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+body{
+  padding-bottom:90px;
+  font-size:16px;
+  line-height:1.4;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  position:static;
+}
+
+.nav{
+  flex-direction:column;
+  gap:10px;
+  padding:12px 0 10px;
+  min-height:auto;
+}
+
+.brand-logo{
+  height:72px;
+}
+
+.top-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+}
+
+.top-links a{
+  font-size:14px;
+  padding:8px 12px;
+}
+
+/* =========================
+   BARRA STAGIONALE
+========================= */
+
+.season-bar-inner{
+  flex-direction:column;
+  gap:6px;
+  padding:10px 12px;
+}
+
+.season-bar-inner p{
+  font-size:.95rem;
+  line-height:1.35;
+  text-align:center;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero-home{
+  padding:10px 0 18px;
+}
+
+.hero-layout{
+  display:block;
+  min-height:auto;
+}
+
+.hero-media{
+  margin-bottom:18px;
+}
+
+.hero-slider{
+  min-height:320px;
+  border-radius:24px;
+}
+
+.media-fade-right{
+  width:34%;
+  right:0;
+}
+
+.media-fade-bottom{
+  height:30%;
+}
+
+.hero-overlay{
+  left:12px;
+  right:12px;
+  bottom:12px;
+  padding:16px;
+  border-radius:20px;
+  max-width:none;
+  min-height:auto;
+}
+
+.hero-chip{
+  font-size:.76rem;
+  padding:7px 12px;
+  margin-bottom:10px;
+}
+
+.hero-overlay h1{
+  font-size:1.45rem;
+  line-height:1.08;
+  margin-bottom:8px;
+}
+
+.hero-overlay p{
+  font-size:.98rem;
+  line-height:1.42;
+}
+
+.slider-dots{
+  right:16px;
+  bottom:16px;
+}
+
+/* =========================
+   PANNELLO DESTRO
+========================= */
+
+.hero-panel{
+  display:block;
+}
+
+.home-right-panel{
+  gap:16px;
+}
+
+.panel-copy h2{
+  font-size:1.9rem;
+  line-height:1.02;
+  margin-bottom:10px;
+}
+
+.panel-copy p{
+  font-size:1rem;
+  line-height:1.45;
+}
+
+/* =========================
+   RIQUADRI
+========================= */
+
+.service-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.service-card{
+  min-height:132px;
+  padding:18px;
+  border-radius:22px;
+}
+
+.service-icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  font-size:1.05rem;
+  margin-bottom:10px;
+}
+
+.service-card h3{
+  font-size:1.35rem;
+  margin-bottom:6px;
+}
+
+.service-card p{
+  font-size:1rem;
+  line-height:1.35;
+}
+
+/* =========================
+   INFO CARDS
+========================= */
+
+.info-strip{
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+.info-card{
+  padding:16px;
+  border-radius:18px;
+}
+
+/* =========================
+   SEZIONI
+========================= */
+
+.section{
+  padding:42px 0;
+}
+
+.section-head{
+  margin-bottom:22px;
+}
+
+.section-head h2{
+  font-size:1.85rem;
+}
+
+.section-head p{
+  font-size:1rem;
+  line-height:1.45;
+}
+
+.easy-grid,
+.contacts-grid{
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.easy-card,
+.contact-card{
+  padding:20px;
+  border-radius:22px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  padding:30px 0 110px;
+}
+
+.footer-inner{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.footer-links{
+  gap:12px;
+}
+
+/* =========================
+   BARRA CONTATTI
+========================= */
+
+.contact-bar{
+  position:fixed;
+  left:8px;
+  right:8px;
+  bottom:8px;
+  min-height:74px;
+  border-radius:20px;
+  padding:8px;
+  gap:8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 10px 24px rgba(0,0,0,0.14);
+  z-index:1000;
+}
+
+.contact-pill{
+  min-height:56px;
+  border-radius:16px;
+  font-size:.95rem;
+  gap:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+}
+
+.contact-pill:last-child{
+  display:none;
+}
+
+/* =========================
+   ASSISTENTE MIA MOBILE
+========================= */
+
+#assistantLauncher{
+  position:fixed;
+  right:0px;
+  bottom:70px;
+  width:138px;
+  height:138px;
+  z-index:1200;
+}
+.assistant-launcher-avatar{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:138px !important;
+  height:auto !important;
+  display:block;
+  z-index:1101;
+}
+.assistant-launcher-bubble{
+  position:absolute;
+  right:95px;
+  bottom:68px;
+  background:#ffffff;
+  color:#222;
+  border-radius:20px;
+  padding:12px 14px;
+  font-size:13px;
+  line-height:1.32;
+  font-weight:600;
+  box-shadow:0 10px 24px rgba(0,0,0,0.15);
+  z-index:1100;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .3s ease, visibility .3s ease;
+  max-width:220px;
+}
+.assistant-launcher-bubble::after{
+  content:"";
+  position:absolute;
+  right:16px;
+  bottom:-8px;
+  width:14px;
+  height:14px;
+  background:#ffffff;
+  transform:rotate(45deg);
+  border-radius:2px;
+}
+
+/* =========================
+   SCELTA LINGUA
+========================= */
+
+.assistant-language{
+  position:fixed;
+  left:50% !important;
+  right:auto !important;
+  bottom:120px !important;
+  width:calc(100vw - 24px) !important;
+  max-width:360px !important;
+  transform:translateX(-50%) !important;
+  padding:22px 16px !important;
+  border-radius:22px !important;
+  box-sizing:border-box;
+  z-index:1300;
+}
+
+.assistant-language h3{
+  font-size:16px !important;
+  line-height:1.3 !important;
+  margin-bottom:16px !important;
+}
+
+.lang-btn{
+  font-size:18px !important;
+  min-height:58px !important;
+  border-radius:14px !important;
+}
+
+/* =========================
+   CHAT MOBILE
+========================= */
+
+.assistant-chat{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100dvh;
+  max-width:none;
+  margin:0;
+  padding:0;
+  background:#ffffff;
+  display:none;
+  overflow:hidden;
+  z-index:99999;
+  border-radius:0;
+  box-shadow:none;
+}
+
+@supports (height: 100dvh){
+  .assistant-chat{
+    height:100dvh;
+  }
+}
+
+.assistant-chat.open{
+  display:flex !important;
+  flex-direction:column;
+}
+
+.assistant-chat,
+.assistant-chat *{
+  box-sizing:border-box;
+}
+
+/* =========================
+   HEADER CHAT
+========================= */
+
+.assistant-chat-header{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:72px;
+  padding:14px 16px;
+  padding-top:calc(14px + env(safe-area-inset-top));
+  border-bottom:1px solid #eef3f0;
+  background:#ffffff;
+}
+
+.assistant-chat-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.assistant-chat-title strong{
+  font-size:1.1rem;
+}
+
+.assistant-chat-title span{
+  font-size:.85rem;
+}
+
+.assistant-chat-mini-avatar{
+  width:36px;
+  height:36px;
+}
+
+.assistant-chat-close{
+  font-size:32px;
+  background:transparent;
+  border:none;
+  color:#7d8c86;
+}
+
+/* =========================
+   AREA MESSAGGI
+========================= */
+
+.assistant-chat-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:14px 14px 16px 14px;
+  background:#ffffff;
+  -webkit-overflow-scrolling:touch;
+  display:flex;
+  flex-direction:column;
+}
+
+/* =========================
+   MESSAGGI
+========================= */
+
+.assistant-msg{
+  max-width:92%;
+  font-size:1rem;
+  line-height:1.42;
+  padding:12px 14px;
+  margin:14px 0 0 0;
+  border-radius:16px;
+}
+
+.assistant-msg-bot{
+  background:#f4faf7;
+  border:1px solid #e4f0ea;
+}
+
+.assistant-msg-user{
+  background:#0d7a5f;
+  color:#fff;
+  margin-left:auto;
+}
+
+.assistant-typing{
+  max-width:92%;
+  font-size:.98rem;
+  line-height:1.4;
+  padding:12px 14px;
+  border-radius:16px;
+  margin:14px 0 0 0;
+  background:#f4faf7;
+  border:1px solid #e4f0ea;
+}
+
+/* =========================
+   BOX INIZIALE
+========================= */
+
+.assistant-welcome{
+  width:100%;
+  margin:0;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  background:#f4faf7;
+  border:1px solid #e4f0ea;
+  border-radius:28px;
+  padding:18px;
+}
+
+.assistant-welcome strong{
+  display:block;
+  font-size:1.02rem;
+  margin-bottom:6px;
+}
+
+/* =========================
+   PILLS
+========================= */
+
+.assistant-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+
+.assistant-pill{
+  border:none;
+  background:linear-gradient(180deg,#eef8f4 0%, #e4f4ed 100%);
+  color:#0d7a5f;
+  font-weight:700;
+  font-size:.92rem;
+  padding:11px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  border:1px solid #d7ebe2;
+  box-shadow:0 4px 10px rgba(13,122,95,0.06);
+  text-align:left;
+}
+
+/* =========================
+   BARRA SCRITTURA
+========================= */
+
+.assistant-chat-form{
+  flex:0 0 auto;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  width:100%;
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom)) 10px;
+  border-top:1px solid #eef3f0;
+  background:#ffffff;
+  z-index:20;
+}
+
+.assistant-chat-input{
+  flex:1;
+  min-width:0;
+  min-height:52px;
+  border:1px solid #dfece7;
+  border-radius:16px;
+  padding:12px 14px;
+  font-size:16px;
+  line-height:1.3;
+  background:#fff;
+  outline:none;
+  -webkit-appearance:none;
+}
+
+.assistant-chat-send{
+  min-width:92px;
+  min-height:52px;
+  border:none;
+  border-radius:16px;
+  background:#0d7a5f;
+  color:#fff;
+  font-weight:800;
+  font-size:1rem;
+}
+
+/* =========================
+   STATO CHAT APERTA
+========================= */
+
+body.chat-open{
+  overflow:hidden !important;
+}
+
+body.chat-open .assistant-chat{
+  display:flex !important;
+}
+
+body.chat-open .contact-bar,
+body.chat-open #assistantLauncher,
+body.chat-open .assistant-launcher-bubble,
+body.chat-open .assistant-language{
+  display:none !important;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+  /* CONTENITORE */
+  .mobile-preview-shell {
+    padding: 8px 10px 14px !important;
+    gap: 8px !important;
+  }
+
+  /* LOGO */
+  .mobile-preview-logo-card {
+    padding: 10px 14px !important;
+    border-radius: 22px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .mobile-preview-logo-card img {
+    max-width: 150px !important; /* metà circa */
+    width: 100% !important;
+  }
+
+  /* SIAMO APERTI */
+  .mobile-preview-status {
+    min-height: 50px !important;
+    padding: 8px 12px !important;
+    border-radius: 16px !important;
+    margin-bottom: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .mobile-preview-status-text {
+    font-size: 13px !important;
+    line-height: 1.1 !important;
+    white-space: normal !important; /* frase completa */
+  }
+
+  .mobile-preview-status-dot {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  /* HERO */
+  .mobile-preview-hero {
+    position: relative !important;
+    min-height: 170px !important;
+    border-radius: 24px !important;
+    margin-bottom: 10px !important;
+    overflow: hidden !important;
+  }
+
+  /* MIA GRANDE */
+  .mobile-preview-hero img,
+  .mobile-preview-hero-figure {
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;  /* 🔥 tutta altezza */
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  /* TESTO */
+  .mobile-preview-hero-bubble {
+    top: 10px !important;
+    left: 10px !important;
+    width: 58% !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .mobile-preview-hero-bubble h2 {
+    font-size: 20px !important;
+  }
+
+  .mobile-preview-hero-bubble p {
+    font-size: 13px !important;
+  }
+
+  /* BOTTONI */
+  .mobile-preview-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-preview-action {
+    height: 48px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+  }
+
+  /* CARD */
+  .mobile-preview-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .mobile-preview-card {
+    min-height: 120px !important;
+    border-radius: 18px !important;
+  }
+
+  /* IMMAGINI PIENE */
+  .mobile-preview-card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .mobile-preview-card-title {
+    font-size: 17px !important;
+  }
+
+  .mobile-preview-card-subtitle {
+    font-size: 12px !important;
+  }
+
+  /* BADGE */
+  .mobile-preview-badge {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 16px !important;
+  }
+
+  /* NASCONDI SOTTO */
+  .mobile-preview-bottom,
+  .mobile-preview-slider-dots {
+    display: none !important;
+  }
+
+}
+(function () {
+  const isMobile = window.innerWidth <= 768;
+  if (!isMobile) return;
+
+  if (document.documentElement.dataset.mobilePreviewApplied === "true") return;
+  document.documentElement.dataset.mobilePreviewApplied = "true";
+
+  const CONFIG = {
+    phone: "+390835335921",
+    whatsapp: "393927737079",
+    email: "info@farmaciamontesano.it",
+    maps: "https://maps.google.com/?q=Farmacia+Montesano+Matera",
+
+    homeLink: "index.html",
+    serviziLink: "servizi.html",
+    promoLink: "promo.html",
+    beautyLink: "giornate.html",
+    turnoLink: "turno.html",
+    prenotaLink: "giornate.html",
+    miaLink: "assistente.html",
+
+    heroImage: "farmacia3.jpg",
+    cardImages: {
+      servizi: "images/servizi.jpg",
+      promo: "images/promo.jpg",
+      beauty: "images/beauty.jpg",
+      turno: "images/turno.jpg"
+    },
+
+    promoBadge: "1",
+    beautyBadge: "2"
+  };
+
+  const existingLogo = document.querySelector(
+    "header img, .logo img, .navbar-brand img, .brand img, img[alt*='logo' i]"
+  );
+
+  const existingMiaImage = document.querySelector(
+    ".assistant-launcher-avatar, img[alt*='mia' i], img[alt*='assistente' i], .assistant-avatar img, .mia img, .chat-avatar img"
+  );
+
+  const logoSrc = existingLogo ? existingLogo.getAttribute("src") : "logo.png";
+  const miaSrc = existingMiaImage ? existingMiaImage.getAttribute("src") : "images/mia.png";
+
+  const style = document.createElement("style");
+  style.id = "mobile-preview-style";
+  style.textContent = `
+    @media (max-width: 768px) {
+      html, body {
+        overflow-x: hidden !important;
+      }
+
+      body.mobile-preview-mode {
+        background:
+          radial-gradient(circle at top left, rgba(255,255,255,0.92), rgba(244,247,245,0.92)),
+          linear-gradient(180deg, #f4f6f5 0%, #eef3f1 100%) !important;
+        font-family: Inter, Arial, sans-serif !important;
+        padding-bottom: 28px !important;
+        color: #1f4a43;
+      }
+
+      body.mobile-preview-mode *,
+      body.mobile-preview-mode *::before,
+      body.mobile-preview-mode *::after {
+        box-sizing: border-box;
+      }
+
+      body.mobile-preview-mode .mobile-preview-original-hide {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      body.mobile-preview-mode .mobile-preview-root {
+        width: 100%;
+        max-width: 460px;
+        margin: 0 auto;
+        padding: calc(env(safe-area-inset-top) + 16px) 16px 28px;
+      }
+
+      body.mobile-preview-mode .glass-card {
+        background: rgba(255,255,255,0.78);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 10px 24px rgba(21, 56, 49, 0.08);
+        border: 1px solid rgba(255,255,255,0.55);
+      }
+
+      body.mobile-preview-mode .mobile-preview-topbar {
+        margin-bottom: 14px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-topbar-inner {
+        min-height: 108px;
+        border-radius: 32px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+      }
+
+      body.mobile-preview-mode .mobile-preview-topbar-inner img {
+        display: block;
+        max-width: 240px;
+        width: 100%;
+        height: auto;
+      }
+
+      body.mobile-preview-mode .mobile-preview-statusbar {
+        margin-bottom: 18px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-statusbar-inner {
+        min-height: 64px;
+        border-radius: 22px;
+        padding: 0 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      body.mobile-preview-mode .status-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #2aa06f;
+        flex: 0 0 18px;
+        box-shadow: 0 0 0 8px rgba(42,160,111,0.10);
+      }
+
+      body.mobile-preview-mode .status-text {
+        min-width: 0;
+        flex: 1;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: 800;
+        color: #264d46;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      body.mobile-preview-mode .status-text .light {
+        font-weight: 500;
+        color: #526e68;
+      }
+
+          body.mobile-preview-mode .mobile-preview-hero {
+        display: block;
+        width: 100%;
+        position: relative;
+        min-height: 258px;
+        border-radius: 34px;
+        overflow: hidden;
+        margin-bottom: 18px;
+        box-shadow: 0 14px 28px rgba(21, 56, 49, 0.09);
+        text-decoration: none;
+        color: inherit;
+      }
+
+      body.mobile-preview-mode .mobile-preview-hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.78) 42%, rgba(255,255,255,0.16) 100%),
+          url('${CONFIG.heroImage}') center/cover no-repeat;
+        filter: saturate(0.96) brightness(1.02);
+      }
+
+      body.mobile-preview-mode .mobile-preview-bubble {
+        position: absolute;
+        left: 16px;
+        top: 18px;
+        width: 58%;
+        z-index: 2;
+        background: rgba(255,255,255,0.93);
+        border-radius: 28px;
+        padding: 18px 18px 20px;
+        box-shadow: 0 12px 24px rgba(21,56,49,0.09);
+      }
+
+      body.mobile-preview-mode .mobile-preview-bubble::after {
+        content: "";
+        position: absolute;
+        right: -16px;
+        top: 40px;
+        width: 34px;
+        height: 24px;
+        background: rgba(255,255,255,0.93);
+        border-radius: 0 0 0 22px;
+        transform: skewX(-24deg);
+      }
+
+      body.mobile-preview-mode .mobile-preview-bubble-title {
+        margin: 0 0 10px;
+        font-size: 24px;
+        line-height: 1.05;
+        font-weight: 900;
+        color: #234942;
+      }
+
+      body.mobile-preview-mode .mobile-preview-bubble-subtitle {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.28;
+        font-weight: 500;
+        color: #3c5f58;
+      }
+
+      body.mobile-preview-mode .mobile-preview-mia {
+        position: absolute;
+        right: 10px;
+        bottom: 0;
+        width: 46%;
+        max-width: 198px;
+        z-index: 2;
+      }
+
+      body.mobile-preview-mode .mobile-preview-mia img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 18px rgba(0,0,0,0.12));
+      }
+
+      body.mobile-preview-mode .mobile-preview-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-action {
+        min-height: 66px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 8px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 800;
+        box-shadow: 0 10px 20px rgba(21,56,49,0.10);
+      }
+
+      body.mobile-preview-mode .mobile-preview-action .icon {
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      body.mobile-preview-mode .action-call {
+        background: linear-gradient(135deg, #18574f 0%, #2f7b70 100%);
+      }
+
+      body.mobile-preview-mode .action-whatsapp {
+        background: linear-gradient(135deg, #6fa65f 0%, #80c76e 100%);
+      }
+
+      body.mobile-preview-mode .action-book {
+        background: linear-gradient(135deg, #69b5af 0%, #47a9b0 100%);
+      }
+
+      body.mobile-preview-mode .mobile-preview-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-card {
+        position: relative;
+        display: block;
+        min-height: 176px;
+        border-radius: 28px;
+        overflow: hidden;
+        text-decoration: none;
+        box-shadow: 0 12px 24px rgba(21,56,49,0.09);
+      }
+
+      body.mobile-preview-mode .mobile-preview-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      body.mobile-preview-mode .mobile-preview-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.26) 100%);
+      }
+
+      body.mobile-preview-mode .mobile-preview-card-content {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 14px;
+        z-index: 2;
+      }
+
+      body.mobile-preview-mode .mobile-preview-card-title {
+        margin: 0 0 6px;
+        font-size: 25px;
+        line-height: 1.02;
+        font-weight: 900;
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.16);
+      }
+
+      body.mobile-preview-mode .mobile-preview-card-text {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.18;
+        font-weight: 500;
+        color: rgba(255,255,255,0.96);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.14);
+      }
+
+      body.mobile-preview-mode .mobile-preview-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #ff6a84;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 900;
+        box-shadow: 0 10px 18px rgba(255,106,132,0.28);
+      }
+
+      body.mobile-preview-mode .mobile-preview-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 0 18px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(215,220,217,0.9);
+      }
+
+      body.mobile-preview-mode .mobile-preview-dots span.active {
+        background: #ffffff;
+      }
+
+      body.mobile-preview-mode .mobile-preview-bottom-links {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+      }
+
+      body.mobile-preview-mode .mobile-preview-bottom-link {
+        width: 138px;
+        min-height: 102px;
+        border-radius: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #27443d;
+      }
+
+      body.mobile-preview-mode .mobile-preview-bottom-link .icon {
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      body.mobile-preview-mode .mobile-preview-bottom-link .label {
+        font-size: 18px;
+        line-height: 1.1;
+        font-weight: 800;
+      }
+
+      @media (max-width: 390px) {
+        body.mobile-preview-mode .mobile-preview-root {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-topbar-inner {
+          min-height: 96px;
+          border-radius: 28px;
+          padding: 16px 18px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-statusbar-inner {
+          min-height: 58px;
+          padding: 0 16px;
+        }
+
+        body.mobile-preview-mode .status-text {
+          font-size: 16px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-hero {
+          min-height: 236px;
+          border-radius: 30px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-bubble {
+          width: 60%;
+          padding: 16px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-bubble-title {
+          font-size: 21px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-bubble-subtitle {
+          font-size: 16px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-mia {
+          width: 44%;
+        }
+
+        body.mobile-preview-mode .mobile-preview-action {
+          min-height: 60px;
+          font-size: 14px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-card {
+          min-height: 160px;
+          border-radius: 24px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-card-title {
+          font-size: 22px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-card-text {
+          font-size: 13px;
+        }
+
+        body.mobile-preview-mode .mobile-preview-bottom-link {
+          width: 132px;
+        }
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.body.classList.add("mobile-preview-mode");
+
+  Array.from(document.body.children).forEach((child) => {
+    if (child.tagName !== "SCRIPT" && child.tagName !== "STYLE" && child.id !== "mobile-preview-root") {
+      child.classList.add("mobile-preview-original-hide");
+    }
+  });
+
+  const root = document.createElement("div");
+  root.id = "mobile-preview-root";
+  root.className = "mobile-preview-root";
+
+  root.innerHTML = `
+    <div class="mobile-preview-topbar">
+      <div class="mobile-preview-topbar-inner glass-card">
+        <img src="${logoSrc}" alt="Logo Farmacia Montesano">
+      </div>
+    </div>
+
+    <div class="mobile-preview-statusbar">
+      <div class="mobile-preview-statusbar-inner glass-card">
+        <span class="status-dot" id="mobilePreviewStatusDot"></span>
+        <div class="status-text" id="mobilePreviewStatusText">Siamo aperti <span class="light">| Chiudiamo alle 20:00</span></div>
+      </div>
+    </div>
+
+    <a href="${CONFIG.miaLink}" class="mobile-preview-hero" aria-label="Apri assistente Mia">
+      <div class="mobile-preview-hero-bg"></div>
+
+      <div class="mobile-preview-bubble">
+        <h2 class="mobile-preview-bubble-title">Ciao, sono MIA❤️❤️</h2>
+        <p class="mobile-preview-bubble-subtitle">Ti aiuto a prenotare<br>esami e servizi in farmacia</p>
+      </div>
+
+      <div class="mobile-preview-mia">
+        <img src="${miaSrc}" alt="MIA assistente farmacia">
+      </div>
+    </a>
+
+    <section class="mobile-preview-actions" aria-label="Azioni rapide">
+      <a href="tel:${CONFIG.phone}" class="mobile-preview-action action-call">
+        <span class="icon">📞</span>
+        <span>Chiama</span>
+      </a>
+
+      <a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener noreferrer" class="mobile-preview-action action-whatsapp">
+        <span class="icon">💬</span>
+        <span>WhatsApp</span>
+      </a>
+
+      <a href="${CONFIG.prenotaLink}" class="mobile-preview-action action-book">
+        <span class="icon">🗓️</span>
+        <span>Prenota</span>
+      </a>
+    </section>
+
+    <section class="mobile-preview-grid" aria-label="Collegamenti rapidi">
+      <a href="${CONFIG.serviziLink}" class="mobile-preview-card">
+        <img src="${CONFIG.cardImages.servizi}" alt="Servizi">
+        <div class="mobile-preview-card-content">
+          <h3 class="mobile-preview-card-title">Servizi</h3>
+          <p class="mobile-preview-card-text">Esami e consulenze</p>
+        </div>
+      </a>
+
+      <a href="${CONFIG.promoLink}" class="mobile-preview-card">
+        <img src="${CONFIG.cardImages.promo}" alt="Offerte">
+        <span class="mobile-preview-badge">${CONFIG.promoBadge}</span>
+        <div class="mobile-preview-card-content">
+          <h3 class="mobile-preview-card-title">Offerte</h3>
+          <p class="mobile-preview-card-text">Promozioni</p>
+        </div>
+      </a>
+
+      <a href="${CONFIG.beautyLink}" class="mobile-preview-card">
+        <img src="${CONFIG.cardImages.beauty}" alt="Giornate Beauty">
+        <span class="mobile-preview-badge">${CONFIG.beautyBadge}</span>
+        <div class="mobile-preview-card-content">
+          <h3 class="mobile-preview-card-title">Giornate<br>Beauty</h3>
+          <p class="mobile-preview-card-text">Eventi benessere</p>
+        </div>
+      </a>
+
+      <a href="${CONFIG.turnoLink}" class="mobile-preview-card">
+        <img src="${CONFIG.cardImages.turno}" alt="Farmacie di turno">
+        <div class="mobile-preview-card-content">
+          <h3 class="mobile-preview-card-title">Farmacie<br>di turno</h3>
+          <p class="mobile-preview-card-text">Trova la farmacia aperta</p>
+        </div>
+      </a>
+    </section>
+
+    <div class="mobile-preview-dots" aria-hidden="true">
+      <span></span>
+      <span class="active"></span>
+      <span></span>
+    </div>
+
+    <section class="mobile-preview-bottom-links" aria-label="Contatti veloci">
+      <a href="mailto:${CONFIG.email}" class="mobile-preview-bottom-link glass-card">
+        <span class="icon">✉️</span>
+        <span class="label">Mail</span>
+      </a>
+
+      <a href="${CONFIG.maps}" target="_blank" rel="noopener noreferrer" class="mobile-preview-bottom-link glass-card">
+        <span class="icon">📍</span>
+        <span class="label">Mappe</span>
+      </a>
+    </section>
+  `;
+
+  document.body.appendChild(root);
+
+  (function updateOpeningStatus() {
+    const dot = document.getElementById("mobilePreviewStatusDot");
+    const text = document.getElementById("mobilePreviewStatusText");
+    if (!dot || !text) return;
+
+    const now = new Date();
+    const day = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+
+    let isOpen = false;
+    let closingText = "Chiudiamo alle 20:00";
+
+    if (day >= 1 && day <= 5) {
+      const morningOpen = 8 * 60 + 30;
+      const morningClose = 13 * 60;
+      const afternoonOpen = 16 * 60;
+      const afternoonClose = 20 * 60;
+
+      if (minutes >= morningOpen && minutes < morningClose) {
+        isOpen = true;
+        closingText = "Chiudiamo alle 13:00";
+      } else if (minutes >= afternoonOpen && minutes < afternoonClose) {
+        isOpen = true;
+        closingText = "Chiudiamo alle 20:00";
+      }
+    } else if (day === 6) {
+      const saturdayOpen = 8 * 60 + 30;
+      const saturdayClose = 13 * 60;
+      if (minutes >= saturdayOpen && minutes < saturdayClose) {
+        isOpen = true;
+        closingText = "Chiudiamo alle 13:00";
+      }
+    }
+
+    if (isOpen) {
+      dot.style.background = "#2aa06f";
+      dot.style.boxShadow = "0 0 0 8px rgba(42,160,111,0.10)";
+      text.innerHTML = `Siamo aperti <span class="light">| ${closingText}</span>`;
+    } else {
+      dot.style.background = "#db6b6b";
+      dot.style.boxShadow = "0 0 0 8px rgba(219,107,107,0.10)";
+      text.innerHTML = `Siamo chiusi <span class="light">| Riapriamo domani</span>`;
+    }
+  })();
+})();    
+@media (max-width: 768px) {
+
+  /* NASCONDE MENU E AZIONI */
+  .home-desktop-nav,
+  .home-nav-actions {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* CENTRA HEADER */
+  .home-shell.home-nav-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  /* LOGO CENTRATO */
+  .home-brand {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+  }
+
+  .home-brand-logo {
+    display: block !important;
+    height: 58px !important;
+    width: auto !important;
+    max-width: 160px !important;
+    margin: 0 auto !important;
+  }
+
+}
