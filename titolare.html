@@ -12,8 +12,9 @@
       --muted:#70837d;
       --white:#fff;
       --shadow:0 18px 38px rgba(25,55,45,.10);
-      --radius:30px;
       --red:#ff6f78;
+      --line:#dfe7e3;
+      --panel:#ffffff;
     }
 
     *{
@@ -57,7 +58,7 @@
       width:100%;
       flex:0 0 100%;
       height:100%;
-      padding:24px 18px 34px;
+      padding:24px 16px 34px;
       scroll-snap-align:start;
       overflow-y:auto;
       scrollbar-width:none;
@@ -75,7 +76,7 @@
 
     .hello{
       margin:0;
-      font-size:33px;
+      font-size:32px;
       line-height:.95;
       font-weight:900;
       letter-spacing:-.06em;
@@ -84,7 +85,7 @@
 
     .sub{
       margin:10px 0 0;
-      font-size:17px;
+      font-size:16px;
       line-height:1.2;
       color:var(--muted);
       font-weight:500;
@@ -94,6 +95,7 @@
       display:flex;
       gap:10px;
       padding-top:4px;
+      flex-shrink:0;
     }
 
     .icon-btn{
@@ -101,14 +103,15 @@
       height:42px;
       border-radius:999px;
       border:none;
-      background:rgba(255,255,255,.85);
+      background:rgba(255,255,255,.92);
       box-shadow:0 10px 20px rgba(0,0,0,.06);
       position:relative;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:22px;
+      font-size:20px;
       color:#5f6b67;
+      cursor:pointer;
     }
 
     .badge{
@@ -131,19 +134,17 @@
 
     .cards-row{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:12px;
       width:100%;
-      margin-top:28px;
-      justify-items:center;
+      margin-top:30px;
       align-items:stretch;
     }
 
     .stat-card{
-      width:100%;
-      min-height:286px;
-      border-radius:34px;
-      padding:18px 16px 16px;
+      min-height:250px;
+      border-radius:30px;
+      padding:18px 14px 16px;
       position:relative;
       overflow:hidden;
       color:#fff;
@@ -172,20 +173,13 @@
       content:"";
       position:absolute;
       inset:0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 30%, rgba(0,0,0,.10));
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02) 30%, rgba(0,0,0,.10));
       z-index:-1;
     }
 
-    .card-blue{
-      background:linear-gradient(135deg,#85beff 0%, #5e9ce8 100%);
-    }
-    .card-green{
-      background:linear-gradient(135deg,#b8e0b0 0%, #8aba6f 100%);
-    }
-    .card-purple{
-      background:linear-gradient(135deg,#cfb8ff 0%, #9a7bea 100%);
-    }
+    .card-blue{ background:linear-gradient(135deg,#85beff 0%, #5e9ce8 100%); }
+    .card-green{ background:linear-gradient(135deg,#b8e0b0 0%, #8aba6f 100%); }
+    .card-purple{ background:linear-gradient(135deg,#cfb8ff 0%, #9a7bea 100%); }
 
     .card-top{
       display:flex;
@@ -195,21 +189,21 @@
     }
 
     .emoji{
-      font-size:40px;
+      font-size:34px;
       line-height:1;
       filter:drop-shadow(0 6px 8px rgba(0,0,0,.10));
     }
 
     .mini-pill{
-      min-width:56px;
-      height:46px;
+      min-width:54px;
+      height:44px;
       border-radius:999px;
       background:rgba(255,255,255,.86);
       color:#5e6468;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:20px;
+      font-size:18px;
       font-weight:900;
       box-shadow:0 10px 18px rgba(0,0,0,.08);
       padding:0 14px;
@@ -223,7 +217,7 @@
     }
 
     .card-title{
-      font-size:27px;
+      font-size:24px;
       line-height:.95;
       letter-spacing:-.05em;
       font-weight:900;
@@ -232,20 +226,20 @@
     }
 
     .card-main{
-      font-size:29px;
+      font-size:26px;
       line-height:.95;
       font-weight:900;
       letter-spacing:-.05em;
     }
 
     .card-main small{
-      font-size:17px;
+      font-size:16px;
       font-weight:700;
       opacity:.96;
     }
 
     .card-desc{
-      font-size:17px;
+      font-size:15px;
       line-height:1.08;
       font-weight:700;
       white-space:pre-line;
@@ -256,12 +250,12 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-height:40px;
+      min-height:38px;
       padding:0 14px;
       border-radius:999px;
       background:rgba(255,239,181,.92);
       color:#6d5f28;
-      font-size:13px;
+      font-size:12px;
       font-weight:900;
       align-self:flex-start;
       box-shadow:0 10px 18px rgba(0,0,0,.08);
@@ -291,7 +285,7 @@
 
     .edit-title-top{
       margin:0 0 10px;
-      font-size:34px;
+      font-size:32px;
       line-height:.95;
       letter-spacing:-.05em;
       font-weight:900;
@@ -300,7 +294,7 @@
 
     .edit-subtop{
       margin:0;
-      font-size:18px;
+      font-size:17px;
       line-height:1.22;
       color:var(--muted);
       font-weight:500;
@@ -309,13 +303,13 @@
     .edit-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:16px;
+      gap:14px;
       padding-bottom:28px;
     }
 
     .edit-card{
-      min-height:166px;
-      border-radius:30px;
+      min-height:150px;
+      border-radius:28px;
       padding:18px;
       position:relative;
       overflow:hidden;
@@ -358,13 +352,13 @@
     .greenmint{ background:linear-gradient(135deg,#c4ecc7 0%, #6cc28c 100%); }
 
     .edit-emoji{
-      font-size:34px;
+      font-size:30px;
       line-height:1;
       filter:drop-shadow(0 6px 8px rgba(0,0,0,.08));
     }
 
     .edit-label{
-      font-size:18px;
+      font-size:17px;
       line-height:1;
       font-weight:900;
       letter-spacing:-.03em;
@@ -386,15 +380,15 @@
       position:absolute;
       right:14px;
       bottom:14px;
-      width:52px;
-      height:52px;
+      width:48px;
+      height:48px;
       border-radius:999px;
       background:rgba(255,255,255,.85);
       color:#7a6630;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:22px;
+      font-size:20px;
       box-shadow:0 8px 18px rgba(0,0,0,.09);
     }
 
@@ -425,16 +419,158 @@
       background:#111;
     }
 
+    .sheet-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(18,28,24,.28);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding:12px;
+      z-index:100;
+    }
+
+    .sheet-backdrop.show{ display:flex; }
+
+    .sheet{
+      width:min(100%,430px);
+      background:#fff;
+      border-radius:28px 28px 20px 20px;
+      box-shadow:0 24px 60px rgba(0,0,0,.18);
+      padding:18px;
+    }
+
+    .sheet h3{
+      margin:0 0 8px;
+      font-size:22px;
+      font-weight:900;
+      color:#1d473d;
+    }
+
+    .sheet p{
+      margin:0 0 14px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:600;
+      line-height:1.3;
+    }
+
+    .pin-input{
+      width:100%;
+      min-height:54px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#f5f8f6;
+      font-size:20px;
+      font-weight:900;
+      color:#1d473d;
+      padding:0 16px;
+      outline:none;
+      margin-bottom:12px;
+      text-align:center;
+      letter-spacing:.15em;
+    }
+
+    .sheet-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn{
+      flex:1;
+      min-height:50px;
+      border:none;
+      border-radius:16px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,#3e8b61,#66b187);
+      color:#fff;
+    }
+
+    .btn.secondary{
+      background:#edf3ef;
+      color:#1d473d;
+    }
+
+    .toggle-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #eef2f0;
+    }
+
+    .toggle-row:last-of-type{
+      border-bottom:none;
+    }
+
+    .toggle-label{
+      font-size:15px;
+      font-weight:800;
+      color:#1d473d;
+    }
+
+    .toggle{
+      width:54px;
+      height:32px;
+      border-radius:999px;
+      background:#d8dfdb;
+      position:relative;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .toggle.active{
+      background:#79c593;
+    }
+
+    .toggle::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 4px 8px rgba(0,0,0,.12);
+      transition:.2s ease;
+    }
+
+    .toggle.active::after{
+      left:25px;
+    }
+
+    .profile-name{
+      font-size:18px;
+      font-weight:900;
+      color:#1d473d;
+      margin-bottom:4px;
+    }
+
+    .profile-sub{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+      margin-bottom:16px;
+    }
+
     @media (max-width:390px){
       .page{ padding:22px 14px 34px; }
-      .hello{ font-size:30px; }
+      .hello{ font-size:29px; }
       .cards-row{ gap:10px; }
-      .stat-card{ min-height:260px; border-radius:28px; }
-      .card-title{ font-size:24px; }
-      .card-main{ font-size:25px; }
-      .card-desc{ font-size:15px; }
-      .edit-card{ min-height:152px; border-radius:26px; }
-      .edit-title-top{ font-size:31px; }
+      .stat-card{ min-height:228px; border-radius:26px; padding:16px 12px 14px; }
+      .card-title{ font-size:22px; }
+      .card-main{ font-size:22px; }
+      .card-desc{ font-size:14px; }
+      .edit-card{ min-height:138px; border-radius:24px; }
+      .edit-title-top{ font-size:29px; }
+      .edit-label{ font-size:16px; }
     }
   </style>
 
@@ -448,17 +584,17 @@
       <!-- PAGINA 1 -->
       <section class="page">
         <div class="topbar">
-          <div>
+          <div style="min-width:0;">
             <h1 class="hello" id="helloText">Buongiorno Valerio</h1>
             <p class="sub">Ecco il riepilogo della tua farmacia</p>
-            <p class="sub" id="lastUpdateText" style="margin-top:8px;">Aggiornato 5 minuti fa</p>
+            <p class="sub" id="lastUpdateText" style="margin-top:8px;">Aggiornato di recente</p>
           </div>
 
           <div class="icons">
-            <button class="icon-btn" type="button">🔔</button>
-            <button class="icon-btn" type="button">
-              🔕
-              <span class="badge" id="notifBadge">3</span>
+            <button class="icon-btn" type="button" id="notifOpenBtn" aria-label="Notifiche">🔔</button>
+            <button class="icon-btn" type="button" id="profileOpenBtn" aria-label="Profilo admin">
+              👤
+              <span class="badge" id="notifBadge">0</span>
             </button>
           </div>
         </div>
@@ -467,7 +603,7 @@
           <a href="richieste-dipendenti.html" class="stat-card card-blue">
             <div class="card-top">
               <div class="emoji">🗓️</div>
-              <div class="mini-pill" id="permCount">5</div>
+              <div class="mini-pill" id="permCount">0</div>
             </div>
 
             <div class="card-body">
@@ -481,12 +617,12 @@ approvare</div>
           <a href="consumabili-admin.html" class="stat-card card-green">
             <div class="card-top">
               <div class="emoji">📦</div>
-              <div class="mini-pill" id="consCount">4</div>
+              <div class="mini-pill" id="consCount">0</div>
             </div>
 
             <div class="card-body">
               <div class="card-title">Consumabili</div>
-              <div class="card-main"><span id="consActive">4</span> <small>Attivi</small></div>
+              <div class="card-main"><span id="consActive">0</span> <small>Attivi</small></div>
             </div>
 
             <div class="cta-pill">Richieste da gestire</div>
@@ -495,14 +631,14 @@ approvare</div>
           <a href="ldf-admin.html" class="stat-card card-purple">
             <div class="card-top">
               <div class="emoji">📊</div>
-              <div class="mini-pill" id="ldfPerc">73%</div>
+              <div class="mini-pill" id="ldfPerc">0%</div>
             </div>
 
             <div class="card-body">
               <div class="card-title">Obiettivi LDF</div>
-              <div class="card-main"><span id="ldfDone">358</span> <small>pezzi</small></div>
-              <div class="progress"><span id="ldfBar"></span></div>
-              <div class="card-desc">mancano <span id="ldfDays">8</span> giorni</div>
+              <div class="card-main"><span id="ldfDone">0</span> <small>pezzi</small></div>
+              <div class="progress"><span id="ldfBar" style="width:0%"></span></div>
+              <div class="card-desc">mancano <span id="ldfDays">0</span> giorni</div>
             </div>
           </a>
         </div>
@@ -606,6 +742,52 @@ profilo</div>
     </div>
   </div>
 
+  <!-- LOGIN SHEET -->
+  <div class="sheet-backdrop" id="loginSheet">
+    <div class="sheet">
+      <h3>Accesso titolare</h3>
+      <p>Inserisci il PIN una sola volta su questo dispositivo.</p>
+      <input class="pin-input" id="adminPinInput" inputmode="numeric" maxlength="6" placeholder="PIN admin">
+      <div class="sheet-actions">
+        <button class="btn primary" id="adminPinConfirm">Entra</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE / NOTIFICHE SHEET -->
+  <div class="sheet-backdrop" id="profileSheet">
+    <div class="sheet">
+      <h3>Profilo admin</h3>
+      <div class="profile-name">Valerio</div>
+      <div class="profile-sub">Titolare • Accesso salvato sul dispositivo</div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Consenso notifiche</div>
+        <div class="toggle" id="toggleConsent"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche richieste</div>
+        <div class="toggle" id="toggleRequests"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche consumabili</div>
+        <div class="toggle" id="toggleConsumables"></div>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-label">Notifiche LDF</div>
+        <div class="toggle" id="toggleLdf"></div>
+      </div>
+
+      <div class="sheet-actions" style="margin-top:14px;">
+        <button class="btn secondary" id="closeProfileSheet">Chiudi</button>
+        <button class="btn primary" id="logoutAdminBtn">Esci</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB7p69J89r5Kwu2YgawkBb9omjojdM4HTM",
@@ -619,14 +801,67 @@ profilo</div>
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    const ADMIN_STORAGE_KEY = "fm_admin_session_v1";
+    const ADMIN_PIN = "2859";
+    const ADMIN_PROFILE_DOC = "admin_main";
+
     const pages = document.getElementById("pages");
     const dots = document.querySelectorAll(".dot");
     const lastUpdateText = document.getElementById("lastUpdateText");
 
-    pages.addEventListener("scroll", () => {
-      const index = Math.round(pages.scrollLeft / pages.clientWidth);
-      dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
-    });
+    const loginSheet = document.getElementById("loginSheet");
+    const profileSheet = document.getElementById("profileSheet");
+
+    const toggleConsent = document.getElementById("toggleConsent");
+    const toggleRequests = document.getElementById("toggleRequests");
+    const toggleConsumables = document.getElementById("toggleConsumables");
+    const toggleLdf = document.getElementById("toggleLdf");
+
+    let adminPrefs = {
+      consent: true,
+      requests: true,
+      consumables: true,
+      ldf: true
+    };
+
+    function saveAdminSession(){
+      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify({
+        ok: true,
+        at: new Date().toISOString()
+      }));
+    }
+
+    function getAdminSession(){
+      try{
+        return JSON.parse(localStorage.getItem(ADMIN_STORAGE_KEY) || "null");
+      }catch(e){
+        return null;
+      }
+    }
+
+    function clearAdminSession(){
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
+    }
+
+    function showLoginSheet(){
+      loginSheet.classList.add("show");
+    }
+
+    function hideLoginSheet(){
+      loginSheet.classList.remove("show");
+    }
+
+    function showProfileSheet(){
+      profileSheet.classList.add("show");
+    }
+
+    function hideProfileSheet(){
+      profileSheet.classList.remove("show");
+    }
+
+    function setToggle(el, active){
+      el.classList.toggle("active", !!active);
+    }
 
     function greeting(){
       const h = new Date().getHours();
@@ -643,7 +878,9 @@ profilo</div>
 
     function relTime(dateStr){
       if(!dateStr) return "Aggiornato ora";
-      const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
+      const ts = new Date(dateStr).getTime();
+      if(Number.isNaN(ts)) return "Aggiornato di recente";
+      const diff = Math.floor((Date.now() - ts) / 60000);
       if(diff <= 0) return "Aggiornato ora";
       if(diff === 1) return "Aggiornato 1 minuto fa";
       if(diff < 60) return `Aggiornato ${diff} minuti fa`;
@@ -668,6 +905,78 @@ profilo</div>
 
     document.getElementById("helloText").textContent = greeting();
 
+    pages.addEventListener("scroll", () => {
+      const index = Math.round(pages.scrollLeft / pages.clientWidth);
+      dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+    });
+
+    document.getElementById("profileOpenBtn").addEventListener("click", showProfileSheet);
+    document.getElementById("notifOpenBtn").addEventListener("click", () => {
+      location.href = "notifiche-admin.html";
+    });
+
+    document.getElementById("closeProfileSheet").addEventListener("click", hideProfileSheet);
+    document.getElementById("logoutAdminBtn").addEventListener("click", () => {
+      clearAdminSession();
+      hideProfileSheet();
+      showLoginSheet();
+    });
+
+    document.getElementById("adminPinConfirm").addEventListener("click", () => {
+      const v = (document.getElementById("adminPinInput").value || "").trim();
+      if(v !== ADMIN_PIN){
+        alert("PIN non corretto.");
+        return;
+      }
+      saveAdminSession();
+      hideLoginSheet();
+    });
+
+    [toggleConsent, toggleRequests, toggleConsumables, toggleLdf].forEach((el, idx) => {
+      el.addEventListener("click", async () => {
+        if(el === toggleConsent) adminPrefs.consent = !adminPrefs.consent;
+        if(el === toggleRequests) adminPrefs.requests = !adminPrefs.requests;
+        if(el === toggleConsumables) adminPrefs.consumables = !adminPrefs.consumables;
+        if(el === toggleLdf) adminPrefs.ldf = !adminPrefs.ldf;
+
+        syncPrefsUi();
+        await saveAdminPrefs();
+      });
+    });
+
+    function syncPrefsUi(){
+      setToggle(toggleConsent, adminPrefs.consent);
+      setToggle(toggleRequests, adminPrefs.requests);
+      setToggle(toggleConsumables, adminPrefs.consumables);
+      setToggle(toggleLdf, adminPrefs.ldf);
+    }
+
+    async function saveAdminPrefs(){
+      await db.collection("admin_profiles").doc(ADMIN_PROFILE_DOC).set({
+        name: "Valerio",
+        role: "titolare",
+        notifications: adminPrefs,
+        updatedAt: new Date().toISOString()
+      }, { merge:true });
+    }
+
+    async function loadAdminPrefs(){
+      try{
+        const doc = await db.collection("admin_profiles").doc(ADMIN_PROFILE_DOC).get();
+        if(doc.exists){
+          const d = doc.data() || {};
+          const n = d.notifications || {};
+          adminPrefs = {
+            consent: n.consent !== false,
+            requests: n.requests !== false,
+            consumables: n.consumables !== false,
+            ldf: n.ldf !== false
+          };
+        }
+      }catch(e){}
+      syncPrefsUi();
+    }
+
     let latestEvents = [];
 
     function pushDate(v){
@@ -683,10 +992,12 @@ profilo</div>
 
       snapshot.forEach((doc) => {
         const d = doc.data();
+
         if(d.type === "ferie_permesso" && d.status === "in_attesa"){
           perm++;
           pushDate(d.createdAt);
         }
+
         if(d.type === "consumabile" && d.completed !== true){
           cons++;
           pushDate(d.createdAt);
@@ -710,8 +1021,8 @@ profilo</div>
 
     db.collection("ldf_monthly").doc(monthKey()).onSnapshot((doc) => {
       const d = doc.exists ? doc.data() : {};
-      const done = Number(d.gruppoDone ?? d.groupDone ?? 358);
-      const target = Number(d.obiettivoGruppo ?? d.groupTarget ?? 490);
+      const done = Number(d.gruppoDone ?? d.groupDone ?? 0);
+      const target = Number(d.obiettivoGruppo ?? d.groupTarget ?? 450);
       const perc = target > 0 ? Math.min(100, Math.round((done / target) * 100)) : 0;
 
       document.getElementById("ldfDone").textContent = done;
@@ -721,6 +1032,13 @@ profilo</div>
 
       pushDate(d.updatedAt);
     });
+
+    (async function init(){
+      await loadAdminPrefs();
+      if(!getAdminSession()){
+        showLoginSheet();
+      }
+    })();
   </script>
 </body>
 </html>
